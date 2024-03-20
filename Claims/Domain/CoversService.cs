@@ -82,7 +82,7 @@ public class CoversService : ICoversService
         }
     }
 
-    public async Task<List<Cover>> GetAllCoversAsync()
+    public async Task<IEnumerable<Cover>> GetAllCoversAsync()
     {
         var query = _container.GetItemQueryIterator<Cover>(new QueryDefinition("SELECT * FROM c"));
         var results = new List<Cover>();
