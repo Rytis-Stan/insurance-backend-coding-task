@@ -8,16 +8,15 @@ namespace Claims.Controllers
     [Route("[controller]")]
     public class ClaimsController : ControllerBase
     {
-        
         private readonly ILogger<ClaimsController> _logger;
         private readonly CosmosDbService _cosmosDbService;
-        private readonly Auditer _auditer;
+        private readonly Auditor _auditor;
 
         public ClaimsController(ILogger<ClaimsController> logger, CosmosDbService cosmosDbService, AuditContext auditContext)
         {
             _logger = logger;
             _cosmosDbService = cosmosDbService;
-            _auditer = new Auditer(auditContext);
+            _auditor = new Auditor(auditContext);
         }
 
         [HttpGet]
@@ -31,14 +30,14 @@ namespace Claims.Controllers
         {
             claim.Id = Guid.NewGuid().ToString();
             await _cosmosDbService.AddItemAsync(claim);
-            _auditer.AuditClaim(claim.Id, "POST");
+            _auditor.AuditClaim(claim.Id, "POST");
             return Ok(claim);
         }
 
         [HttpDelete("{id}")]
         public Task DeleteAsync(string id)
         {
-            _auditer.AuditClaim(id, "DELETE");
+            _auditor.AuditClaim(id, "DELETE");
             return _cosmosDbService.DeleteItemAsync(id);
         }
 
