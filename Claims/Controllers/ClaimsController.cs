@@ -66,12 +66,16 @@ namespace Claims.Controllers
 
         public async Task<IEnumerable<Claim>> GetClaimsAsync()
         {
+            return await GetAllClaimsAsync();
+        }
+
+        private async Task<IEnumerable<Claim>> GetAllClaimsAsync()
+        {
             var query = _container.GetItemQueryIterator<Claim>(new QueryDefinition("SELECT * FROM c"));
             var results = new List<Claim>();
             while (query.HasMoreResults)
             {
                 var response = await query.ReadNextAsync();
-
                 results.AddRange(response.ToList());
             }
             return results;

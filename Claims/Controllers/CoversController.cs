@@ -39,29 +39,41 @@ public class CoversController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Cover>>> GetAsync()
     {
+        var results = await GetAllCoversAsync();
+        return Ok(results);
+    }
+
+    private async Task<List<Cover>> GetAllCoversAsync()
+    {
         var query = _container.GetItemQueryIterator<Cover>(new QueryDefinition("SELECT * FROM c"));
         var results = new List<Cover>();
         while (query.HasMoreResults)
         {
             var response = await query.ReadNextAsync();
-
             results.AddRange(response.ToList());
         }
-
-        return Ok(results);
+        return results;
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Cover>> GetAsync(string id)
     {
+        var cover = await GetCoverAsync(id);
+        return cover != null
+            ? Ok(cover)
+            : NotFound();
+    }
+
+    private async Task<Cover?> GetCoverAsync(string id)
+    {
         try
         {
             var response = await _container.ReadItemAsync<Cover>(id, new (id));
-            return Ok(response.Resource);
+            return response.Resource;
         }
         catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
         {
-            return NotFound();
+            return null;
         }
     }
 
