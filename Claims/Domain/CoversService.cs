@@ -28,28 +28,28 @@ public class CoversService : ICoversService
         var multiplier = Multiplier(coverType);
 
         var premiumPerDay = 1250 * multiplier;
-        var insuranceLength = endDate.DayNumber - startDate.DayNumber;
+        var insuranceDurationInDays = endDate.DayNumber - startDate.DayNumber;
         var totalPremium = 0m;
 
-        for (var i = 0; i < insuranceLength; i++)
+        for (var day = 0; day < insuranceDurationInDays; day++)
         {
-            if (i < 30)
+            if (day < 30)
             {
                 totalPremium += premiumPerDay;
             }
-            if (i < 180 && coverType == CoverType.Yacht)
+            if (day < 180 && coverType == CoverType.Yacht)
             {
                 totalPremium += premiumPerDay - premiumPerDay * 0.05m;
             }
-            else if (i < 180)
+            else if (day < 180)
             {
                 totalPremium += premiumPerDay - premiumPerDay * 0.02m;
             }
-            if (i < 365 && coverType != CoverType.Yacht)
+            if (day < 365 && coverType != CoverType.Yacht)
             {
                 totalPremium += premiumPerDay - premiumPerDay * 0.03m;
             }
-            else if (i < 365)
+            else if (day < 365)
             {
                 totalPremium += premiumPerDay - premiumPerDay * 0.08m;
             }
