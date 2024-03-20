@@ -26,27 +26,48 @@ namespace Claims.Controllers
         [HttpGet]
         public Task<IEnumerable<Claim>> GetAsync()
         {
-            return _cosmosDbService.GetClaimsAsync();
+            return GetAllClaimsAsync();
         }
 
         [HttpPost]
         public async Task<ActionResult> CreateAsync(Claim claim)
         {
-            claim.Id = Guid.NewGuid().ToString();
-            await _cosmosDbService.AddItemAsync(claim);
-            _auditor.AuditClaim(claim.Id, "POST");
+            await CreateClaimAsync(claim);
             return Ok(claim);
         }
 
         [HttpDelete("{id}")]
         public Task DeleteAsync(string id)
         {
-            _auditor.AuditClaim(id, "DELETE");
-            return _cosmosDbService.DeleteItemAsync(id);
+            return DeleteClaimAsync(id);
         }
 
         [HttpGet("{id}")]
         public Task<Claim> GetAsync(string id)
+        {
+            return GetClaimByIdAsync(id);
+        }
+
+        private async Task CreateClaimAsync(Claim claim)
+        {
+            claim.Id = Guid.NewGuid().ToString();
+            await _cosmosDbService.AddItemAsync(claim);
+            _auditor.AuditClaim(claim.Id, "POST");
+        }
+
+        private Task<IEnumerable<Claim>> GetAllClaimsAsync()
+        {
+            return _cosmosDbService.GetClaimsAsync();
+        }
+
+        private Task DeleteClaimAsync(string id)
+        {
+            _auditor.AuditClaim(id, "DELETE");
+            var deletedClaim = _cosmosDbService.DeleteItemAsync(id);
+            return deletedClaim;
+        }
+
+        private Task<Claim> GetClaimByIdAsync(string id)
         {
             return _cosmosDbService.GetClaimAsync(id);
         }
