@@ -12,22 +12,19 @@ public class CoversController : ControllerBase
 {
     private readonly Container _container;
     private readonly ICoverAuditor _auditor;
-    private readonly ILogger<CoversController> _logger;
 
-    public CoversController(CosmosClient cosmosClient, AuditContext auditContext, ILogger<CoversController> logger)
+    public CoversController(CosmosClient cosmosClient, AuditContext auditContext)
         : this(
             cosmosClient?.GetContainer("ClaimDb", "Cover") ?? throw new ArgumentNullException(nameof(cosmosClient)),
-            new Auditor(auditContext, new Clock()),
-            logger
+            new Auditor(auditContext, new Clock())
         )
     {
     }
 
-    public CoversController(Container container, ICoverAuditor auditor, ILogger<CoversController> logger)
+    public CoversController(Container container, ICoverAuditor auditor)
     {
         _container = container;
         _auditor = auditor;
-        _logger = logger;
     }
 
     [HttpPost]

@@ -11,18 +11,16 @@ namespace Claims.Controllers
     {
         private readonly CosmosDbService _cosmosDbService;
         private readonly IClaimAuditor _auditor;
-        private readonly ILogger<ClaimsController> _logger;
 
-        public ClaimsController(CosmosDbService cosmosDbService, AuditContext auditContext, ILogger<ClaimsController> logger)
-            : this(cosmosDbService, new Auditor(auditContext, new Clock()), logger)
+        public ClaimsController(CosmosDbService cosmosDbService, AuditContext auditContext)
+            : this(cosmosDbService, new Auditor(auditContext, new Clock()))
         {
         }
 
-        public ClaimsController(CosmosDbService cosmosDbService, IClaimAuditor auditor, ILogger<ClaimsController> logger)
+        public ClaimsController(CosmosDbService cosmosDbService, IClaimAuditor auditor)
         {
             _cosmosDbService = cosmosDbService;
             _auditor = auditor;
-            _logger = logger;
         }
 
         [HttpGet]
