@@ -1,6 +1,5 @@
 using System.Text.Json.Serialization;
 using Claims.Auditing;
-using Claims.Controllers;
 using Claims.DataAccess;
 using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
@@ -66,11 +65,11 @@ public class Program
         var account = configuration.Account;
         var key = configuration.Key;
         var client = new CosmosClient(account, key);
-        var cosmosDbClaimsRepository = new CosmosDbClaimsRepository(client, databaseName, containerName);
+        var claimsRepository = new CosmosDbClaimsRepository(client, databaseName, containerName);
         var database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
         await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
 
-        return cosmosDbClaimsRepository;
+        return claimsRepository;
     }
 
     private static void MigrateDatabase(WebApplication app)

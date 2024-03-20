@@ -12,10 +12,10 @@ public class ClaimsController : ControllerBase
 {
     private readonly IClaimsService _claimsService;
 
-    public ClaimsController(CosmosDbClaimsRepository cosmosDbClaimsRepository, AuditContext auditContext)
+    public ClaimsController(CosmosDbClaimsRepository claimsRepository, AuditContext auditContext)
         : this(
             new ClaimsService(
-                cosmosDbClaimsRepository, new Auditor(auditContext, new Clock())
+                claimsRepository, new Auditor(auditContext, new Clock())
             )
         )
     {
