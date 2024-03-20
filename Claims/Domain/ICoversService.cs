@@ -1,6 +1,6 @@
 using Microsoft.Azure.Cosmos;
 
-namespace Claims.Controllers;
+namespace Claims.Domain;
 
 public interface ICoversService
 {

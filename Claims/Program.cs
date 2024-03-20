@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using Claims.Auditing;
 using Claims.Controllers;
+using Claims.DataAccess;
 using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
 using ConfigurationManager = Microsoft.Extensions.Configuration.ConfigurationManager;

@@ -2,7 +2,7 @@ using System.Net;
 using Claims.Auditing;
 using Microsoft.Azure.Cosmos;
 
-namespace Claims.Controllers;
+namespace Claims.Domain;
 
 public class CoversService : ICoversService
 {
