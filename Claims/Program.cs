@@ -11,24 +11,34 @@ public class Program
     static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        AddServices(builder);
+        var app = builder.Build();
+        ConfigureApp(app);
+        MigrateDatabase(app);
 
-        // Add services to the container.
-        builder.Services.AddControllers().AddJsonOptions(x =>
+        app.Run();
+    }
+
+    private static void AddServices(WebApplicationBuilder builder)
+    {
+        var services = builder.Services;
+        var configuration = builder.Configuration;
+
+        services.AddControllers().AddJsonOptions(x =>
         {
             x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
 
-        builder.Services.AddSingleton(
-            InitializeCosmosClientInstanceAsync(builder.Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
-
-        builder.Services.AddDbContext<AuditContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+        services.AddSingleton(InitializeCosmosClientInstanceAsync(configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
+        services.AddDbContext<AuditContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
+    }
 
-        var app = builder.Build();
-
+    private static void ConfigureApp(WebApplication app)
+    {
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
@@ -39,10 +49,6 @@ public class Program
         app.UseHttpsRedirection();
         app.UseAuthorization();
         app.MapControllers();
-
-        MigrateDatabase(app);
-
-        app.Run();
     }
 
     private static async Task<CosmosDbService> InitializeCosmosClientInstanceAsync(IConfigurationSection configurationSection)
