@@ -9,15 +9,15 @@ namespace Claims.Controllers
     [Route("[controller]")]
     public class ClaimsController : ControllerBase
     {
-        private readonly ILogger<ClaimsController> _logger;
         private readonly CosmosDbService _cosmosDbService;
         private readonly IClaimAuditor _auditor;
+        private readonly ILogger<ClaimsController> _logger;
 
-        public ClaimsController(ILogger<ClaimsController> logger, CosmosDbService cosmosDbService, AuditContext auditContext)
+        public ClaimsController(CosmosDbService cosmosDbService, AuditContext auditContext, ILogger<ClaimsController> logger)
         {
-            _logger = logger;
             _cosmosDbService = cosmosDbService;
             _auditor = new Auditor(auditContext, new Clock());
+            _logger = logger;
         }
 
         [HttpGet]
