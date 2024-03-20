@@ -39,8 +39,8 @@ public class CoversController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Cover>>> GetAsync()
     {
-        var results = await GetAllCoversAsync();
-        return Ok(results);
+        var covers = await GetAllCoversAsync();
+        return Ok(covers);
     }
 
     private async Task<List<Cover>> GetAllCoversAsync()
@@ -80,18 +80,30 @@ public class CoversController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateAsync(Cover cover)
     {
+        await CreateCoverAsync(cover);
+        return Ok(cover);
+    }
+
+    private async Task CreateCoverAsync(Cover cover)
+    {
         cover.Id = Guid.NewGuid().ToString();
         cover.Premium = ComputePremium(cover.StartDate, cover.EndDate, cover.Type);
         await _container.CreateItemAsync(cover, new PartitionKey(cover.Id));
         _auditor.AuditCover(cover.Id, "POST");
-        return Ok(cover);
     }
 
     [HttpDelete("{id}")]
     public Task DeleteAsync(string id)
     {
+        var deletedCover = DeleteCoverAsync(id);
+        return deletedCover;
+    }
+
+    private Task<ItemResponse<Cover>> DeleteCoverAsync(string id)
+    {
         _auditor.AuditCover(id, "DELETE");
-        return _container.DeleteItemAsync<Cover>(id, new (id));
+        var deletedCover = _container.DeleteItemAsync<Cover>(id, new (id));
+        return deletedCover;
     }
 
     private decimal ComputePremium(DateOnly startDate, DateOnly endDate, CoverType coverType)
