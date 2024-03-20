@@ -1,19 +1,23 @@
-﻿namespace Claims.Auditing;
+﻿using Claims.Infrastructure;
 
-public class Auditor
+namespace Claims.Auditing;
+
+public class Auditor : IClaimAuditor, ICoverAuditor
 {
     private readonly AuditContext _auditContext;
+    private readonly IClock _clock;
 
-    public Auditor(AuditContext auditContext)
+    public Auditor(AuditContext auditContext, IClock clock)
     {
         _auditContext = auditContext;
+        _clock = clock;
     }
 
     public void AuditClaim(string id, string httpRequestType)
     {
         var claimAudit = new ClaimAudit
         {
-            Created = DateTime.Now,
+            Created = _clock.Now(),
             HttpRequestType = httpRequestType,
             ClaimId = id
         };
@@ -26,7 +30,7 @@ public class Auditor
     {
         var coverAudit = new CoverAudit
         {
-            Created = DateTime.Now,
+            Created = _clock.Now(),
             HttpRequestType = httpRequestType,
             CoverId = id
         };

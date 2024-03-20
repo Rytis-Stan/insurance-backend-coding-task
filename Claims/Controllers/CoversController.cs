@@ -1,5 +1,6 @@
 using System.Net;
 using Claims.Auditing;
+using Claims.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Cosmos;
 
@@ -10,14 +11,14 @@ namespace Claims.Controllers;
 public class CoversController : ControllerBase
 {
     private readonly Container _container;
-    private readonly Auditor _auditor;
+    private readonly ICoverAuditor _auditor;
     private readonly ILogger<CoversController> _logger;
 
     public CoversController(CosmosClient cosmosClient, AuditContext auditContext, ILogger<CoversController> logger)
     {
         _container = cosmosClient?.GetContainer("ClaimDb", "Cover")
                      ?? throw new ArgumentNullException(nameof(cosmosClient));
-        _auditor = new Auditor(auditContext);
+        _auditor = new Auditor(auditContext, new Clock());
         _logger = logger;
     }
     
