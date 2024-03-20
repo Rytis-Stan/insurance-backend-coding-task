@@ -52,11 +52,9 @@ namespace Claims.Controllers
     {
         private readonly Container _container;
 
-        public CosmosDbService(CosmosClient dbClient,
-            string databaseName,
-            string containerName)
+        public CosmosDbService(CosmosClient dbClient, string databaseName, string containerName)
         {
-            if (dbClient == null) throw new ArgumentNullException(nameof(dbClient));
+            ArgumentNullException.ThrowIfNull(dbClient, nameof(dbClient));
             _container = dbClient.GetContainer(databaseName, containerName);
         }
 

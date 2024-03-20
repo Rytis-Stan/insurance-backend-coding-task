@@ -37,31 +37,32 @@ public class Program
         }
 
         app.UseHttpsRedirection();
-
         app.UseAuthorization();
-
         app.MapControllers();
 
-        using (var scope = app.Services.CreateScope())
-        {
-            var context = scope.ServiceProvider.GetRequiredService<AuditContext>();
-            context.Database.Migrate();
-        }
+        MigrateDatabase(app);
 
         app.Run();
+    }
 
-        static async Task<CosmosDbService> InitializeCosmosClientInstanceAsync(IConfigurationSection configurationSection)
-        {
-            var databaseName = configurationSection.GetSection("DatabaseName").Value;
-            var containerName = configurationSection.GetSection("ContainerName").Value;
-            var account = configurationSection.GetSection("Account").Value;
-            var key = configurationSection.GetSection("Key").Value;
-            var client = new CosmosClient(account, key);
-            var cosmosDbService = new CosmosDbService(client, databaseName, containerName);
-            var database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
-            await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
+    private static async Task<CosmosDbService> InitializeCosmosClientInstanceAsync(IConfigurationSection configurationSection)
+    {
+        var databaseName = configurationSection.GetSection("DatabaseName").Value;
+        var containerName = configurationSection.GetSection("ContainerName").Value;
+        var account = configurationSection.GetSection("Account").Value;
+        var key = configurationSection.GetSection("Key").Value;
+        var client = new CosmosClient(account, key);
+        var cosmosDbService = new CosmosDbService(client, databaseName, containerName);
+        var database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
+        await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
 
-            return cosmosDbService;
-        }
+        return cosmosDbService;
+    }
+
+    private static void MigrateDatabase(WebApplication app)
+    {
+        using var scope = app.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<AuditContext>();
+        context.Database.Migrate();
     }
 }
