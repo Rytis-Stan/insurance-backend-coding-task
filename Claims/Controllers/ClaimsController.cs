@@ -9,65 +9,87 @@ namespace Claims.Controllers;
 [Route("[controller]")]
 public class ClaimsController : ControllerBase
 {
-    private readonly CosmosDbService _cosmosDbService;
-    private readonly IClaimAuditor _auditor;
+    private readonly IClaimsService _claimsService;
 
     public ClaimsController(CosmosDbService cosmosDbService, AuditContext auditContext)
-        : this(cosmosDbService, new Auditor(auditContext, new Clock()))
+        : this(
+            new ClaimsService(
+                cosmosDbService, new Auditor(auditContext, new Clock())
+            )
+        )
     {
     }
 
-    public ClaimsController(CosmosDbService cosmosDbService, IClaimAuditor auditor)
+    public ClaimsController(IClaimsService claimsService)
     {
-        _cosmosDbService = cosmosDbService;
-        _auditor = auditor;
+        _claimsService = claimsService;
     }
 
     [HttpGet]
     public Task<IEnumerable<Claim>> GetAsync()
     {
-        return GetAllClaimsAsync();
+        return _claimsService.GetAllClaimsAsync();
     }
 
     [HttpPost]
     public async Task<ActionResult> CreateAsync(Claim claim)
     {
-        await CreateClaimAsync(claim);
+        await _claimsService.CreateClaimAsync(claim);
         return Ok(claim);
     }
 
     [HttpDelete("{id}")]
     public Task DeleteAsync(string id)
     {
-        return DeleteClaimAsync(id);
+        return _claimsService.DeleteClaimAsync(id);
     }
 
     [HttpGet("{id}")]
     public Task<Claim> GetAsync(string id)
     {
-        return GetClaimByIdAsync(id);
+        return _claimsService.GetClaimByIdAsync(id);
+    }
+}
+
+public interface IClaimsService
+{
+    Task CreateClaimAsync(Claim claim);
+    Task<IEnumerable<Claim>> GetAllClaimsAsync();
+    Task DeleteClaimAsync(string id);
+    Task<Claim> GetClaimByIdAsync(string id);
+}
+
+public class ClaimsService : IClaimsService
+{
+    private readonly CosmosDbService _cosmosDbService;
+    private readonly IClaimAuditor _auditor;
+
+    public ClaimsService(CosmosDbService cosmosDbService, IClaimAuditor auditor)
+    {
+        _cosmosDbService = cosmosDbService;
+        _auditor = auditor;
     }
 
-    private async Task CreateClaimAsync(Claim claim)
+    public async Task CreateClaimAsync(Claim claim)
     {
         claim.Id = Guid.NewGuid().ToString();
         await _cosmosDbService.AddItemAsync(claim);
         _auditor.AuditClaim(claim.Id, "POST");
     }
 
-    private Task<IEnumerable<Claim>> GetAllClaimsAsync()
+    public Task<IEnumerable<Claim>> GetAllClaimsAsync()
     {
         return _cosmosDbService.GetClaimsAsync();
     }
 
-    private Task DeleteClaimAsync(string id)
+    public Task DeleteClaimAsync(string id)
     {
         _auditor.AuditClaim(id, "DELETE");
         var deletedClaim = _cosmosDbService.DeleteItemAsync(id);
         return deletedClaim;
     }
 
-    private Task<Claim> GetClaimByIdAsync(string id)
+    public Task<Claim> GetClaimByIdAsync(string id)
     {
         return _cosmosDbService.GetClaimAsync(id);
     }
