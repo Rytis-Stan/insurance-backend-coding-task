@@ -9,16 +9,16 @@ namespace Claims.Controllers;
 [Route("[controller]")]
 public class CoversController : ControllerBase
 {
-    private readonly ILogger<CoversController> _logger;
-    private readonly Auditor _auditor;
     private readonly Container _container;
+    private readonly Auditor _auditor;
+    private readonly ILogger<CoversController> _logger;
 
     public CoversController(CosmosClient cosmosClient, AuditContext auditContext, ILogger<CoversController> logger)
     {
-        _logger = logger;
-        _auditor = new Auditor(auditContext);
         _container = cosmosClient?.GetContainer("ClaimDb", "Cover")
                      ?? throw new ArgumentNullException(nameof(cosmosClient));
+        _auditor = new Auditor(auditContext);
+        _logger = logger;
     }
     
     [HttpPost]
