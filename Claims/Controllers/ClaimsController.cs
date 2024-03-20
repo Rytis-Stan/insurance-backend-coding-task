@@ -11,10 +11,10 @@ public class ClaimsController : ControllerBase
 {
     private readonly IClaimsService _claimsService;
 
-    public ClaimsController(CosmosDbService cosmosDbService, AuditContext auditContext)
+    public ClaimsController(CosmosDbClaimsRepository cosmosDbClaimsRepository, AuditContext auditContext)
         : this(
             new ClaimsService(
-                cosmosDbService, new Auditor(auditContext, new Clock())
+                cosmosDbClaimsRepository, new Auditor(auditContext, new Clock())
             )
         )
     {
@@ -61,45 +61,53 @@ public interface IClaimsService
 
 public class ClaimsService : IClaimsService
 {
-    private readonly CosmosDbService _cosmosDbService;
+    private readonly IClaimsRepository _claimsRepository;
     private readonly IClaimAuditor _auditor;
 
-    public ClaimsService(CosmosDbService cosmosDbService, IClaimAuditor auditor)
+    public ClaimsService(IClaimsRepository claimsRepository, IClaimAuditor auditor)
     {
-        _cosmosDbService = cosmosDbService;
+        _claimsRepository = claimsRepository;
         _auditor = auditor;
     }
 
     public async Task CreateClaimAsync(Claim claim)
     {
         claim.Id = Guid.NewGuid().ToString();
-        await _cosmosDbService.AddItemAsync(claim);
+        await _claimsRepository.AddItemAsync(claim);
         _auditor.AuditClaim(claim.Id, "POST");
     }
 
     public Task<IEnumerable<Claim>> GetAllClaimsAsync()
     {
-        return _cosmosDbService.GetClaimsAsync();
+        return _claimsRepository.GetClaimsAsync();
     }
 
     public Task DeleteClaimAsync(string id)
     {
         _auditor.AuditClaim(id, "DELETE");
-        var deletedClaim = _cosmosDbService.DeleteItemAsync(id);
+        var deletedClaim = _claimsRepository.DeleteItemAsync(id);
         return deletedClaim;
     }
 
     public Task<Claim> GetClaimByIdAsync(string id)
     {
-        return _cosmosDbService.GetClaimAsync(id);
+        return _claimsRepository.GetClaimAsync(id);
     }
 }
 
-public class CosmosDbService
+public interface IClaimsRepository
+{
+    Task<IEnumerable<Claim>> GetClaimsAsync();
+    Task<Claim> GetClaimAsync(string id);
+    Task AddItemAsync(Claim item);
+    Task DeleteItemAsync(string id);
+}
+
+public class CosmosDbClaimsRepository : IClaimsRepository
 {
     private readonly Container _container;
 
-    public CosmosDbService(CosmosClient dbClient, string databaseName, string containerName)
+    public CosmosDbClaimsRepository(CosmosClient dbClient, string databaseName, string containerName)
     {
         ArgumentNullException.ThrowIfNull(dbClient, nameof(dbClient));
         _container = dbClient.GetContainer(databaseName, containerName);

@@ -58,18 +58,18 @@ public class Program
         app.MapControllers();
     }
 
-    private static async Task<CosmosDbService> InitializeCosmosClientInstanceAsync(CosmosDbConfiguration configuration)
+    private static async Task<CosmosDbClaimsRepository> InitializeCosmosClientInstanceAsync(CosmosDbConfiguration configuration)
     {
         var databaseName = configuration.DatabaseName;
         var containerName = configuration.ContainerName;
         var account = configuration.Account;
         var key = configuration.Key;
         var client = new CosmosClient(account, key);
-        var cosmosDbService = new CosmosDbService(client, databaseName, containerName);
+        var cosmosDbClaimsRepository = new CosmosDbClaimsRepository(client, databaseName, containerName);
         var database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
         await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
 
-        return cosmosDbService;
+        return cosmosDbClaimsRepository;
     }
 
     private static void MigrateDatabase(WebApplication app)
