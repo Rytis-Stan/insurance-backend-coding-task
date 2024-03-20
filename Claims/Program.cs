@@ -3,6 +3,7 @@ using Claims.Auditing;
 using Claims.Controllers;
 using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
+using ConfigurationManager = Microsoft.Extensions.Configuration.ConfigurationManager;
 
 namespace Claims;
 
@@ -22,15 +23,15 @@ public class Program
     private static void AddServices(WebApplicationBuilder builder)
     {
         var services = builder.Services;
-        var configuration = builder.Configuration;
+        var configuration = new AppConfiguration(builder.Configuration);
 
         services.AddControllers().AddJsonOptions(x =>
         {
             x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
 
-        services.AddSingleton(InitializeCosmosClientInstanceAsync(configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
-        services.AddDbContext<AuditContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+        services.AddSingleton(InitializeCosmosClientInstanceAsync(configuration.CosmosDb).GetAwaiter().GetResult());
+        services.AddDbContext<AuditContext>(options => options.UseSqlServer(configuration.ConnectionString));
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
@@ -51,10 +52,8 @@ public class Program
         app.MapControllers();
     }
 
-    private static async Task<CosmosDbService> InitializeCosmosClientInstanceAsync(IConfigurationSection configurationSection)
+    private static async Task<CosmosDbService> InitializeCosmosClientInstanceAsync(CosmosDbConfiguration configuration)
     {
-        var configuration = new AppConfig(configurationSection);
-
         var databaseName = configuration.DatabaseName;
         var containerName = configuration.ContainerName;
         var account = configuration.Account;
@@ -75,7 +74,20 @@ public class Program
     }
 }
 
-public class AppConfig
+public class AppConfiguration
+{
+    private readonly ConfigurationManager _configuration;
+
+    public AppConfiguration(ConfigurationManager configuration)
+    {
+        _configuration = configuration;
+    }
+
+    public string ConnectionString => _configuration.GetConnectionString("DefaultConnection");
+    public CosmosDbConfiguration CosmosDb => new CosmosDbConfiguration(_configuration.GetSection("CosmosDb"));
+}
+
+public class CosmosDbConfiguration
 {
     private readonly IConfigurationSection _configurationSection;
 
@@ -84,7 +96,7 @@ public class AppConfig
     public string Account => _configurationSection.GetSection("Account").Value;
     public string Key => _configurationSection.GetSection("Key").Value;
 
-    public AppConfig(IConfigurationSection configurationSection)
+    public CosmosDbConfiguration(IConfigurationSection configurationSection)
     {
         _configurationSection = configurationSection;
     }
