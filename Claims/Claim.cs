@@ -21,7 +21,6 @@ public class Claim
 
     [JsonProperty(PropertyName = "damageCost")]
     public decimal DamageCost { get; set; }
-
 }
 
 public enum ClaimType

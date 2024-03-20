@@ -15,13 +15,21 @@ public class CoversController : ControllerBase
     private readonly ILogger<CoversController> _logger;
 
     public CoversController(CosmosClient cosmosClient, AuditContext auditContext, ILogger<CoversController> logger)
+        : this(
+            cosmosClient?.GetContainer("ClaimDb", "Cover") ?? throw new ArgumentNullException(nameof(cosmosClient)),
+            new Auditor(auditContext, new Clock()),
+            logger
+        )
     {
-        _container = cosmosClient?.GetContainer("ClaimDb", "Cover")
-                     ?? throw new ArgumentNullException(nameof(cosmosClient));
-        _auditor = new Auditor(auditContext, new Clock());
+    }
+
+    public CoversController(Container container, ICoverAuditor auditor, ILogger<CoversController> logger)
+    {
+        _container = container;
+        _auditor = auditor;
         _logger = logger;
     }
-    
+
     [HttpPost]
     public async Task<ActionResult> ComputePremiumAsync(DateOnly startDate, DateOnly endDate, CoverType coverType)
     {

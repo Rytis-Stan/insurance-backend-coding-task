@@ -14,9 +14,14 @@ namespace Claims.Controllers
         private readonly ILogger<ClaimsController> _logger;
 
         public ClaimsController(CosmosDbService cosmosDbService, AuditContext auditContext, ILogger<ClaimsController> logger)
+            : this(cosmosDbService, new Auditor(auditContext, new Clock()), logger)
+        {
+        }
+
+        public ClaimsController(CosmosDbService cosmosDbService, IClaimAuditor auditor, ILogger<ClaimsController> logger)
         {
             _cosmosDbService = cosmosDbService;
-            _auditor = new Auditor(auditContext, new Clock());
+            _auditor = auditor;
             _logger = logger;
         }
 
