@@ -1,3 +1,4 @@
+using System.Net;
 using Claims.Auditing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Cosmos;
@@ -49,7 +50,7 @@ public class CoversController : ControllerBase
             var response = await _container.ReadItemAsync<Cover>(id, new (id));
             return Ok(response.Resource);
         }
-        catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+        catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
         {
             return NotFound();
         }
@@ -74,21 +75,7 @@ public class CoversController : ControllerBase
 
     private decimal ComputePremium(DateOnly startDate, DateOnly endDate, CoverType coverType)
     {
-        var multiplier = 1.3m;
-        if (coverType == CoverType.Yacht)
-        {
-            multiplier = 1.1m;
-        }
-
-        if (coverType == CoverType.PassengerShip)
-        {
-            multiplier = 1.2m;
-        }
-
-        if (coverType == CoverType.Tanker)
-        {
-            multiplier = 1.5m;
-        }
+        var multiplier = Multiplier(coverType);
 
         var premiumPerDay = 1250 * multiplier;
         var insuranceLength = endDate.DayNumber - startDate.DayNumber;
@@ -96,13 +83,39 @@ public class CoversController : ControllerBase
 
         for (var i = 0; i < insuranceLength; i++)
         {
-            if (i < 30) totalPremium += premiumPerDay;
-            if (i < 180 && coverType == CoverType.Yacht) totalPremium += premiumPerDay - premiumPerDay * 0.05m;
-            else if (i < 180) totalPremium += premiumPerDay - premiumPerDay * 0.02m;
-            if (i < 365 && coverType != CoverType.Yacht) totalPremium += premiumPerDay - premiumPerDay * 0.03m;
-            else if (i < 365) totalPremium += premiumPerDay - premiumPerDay * 0.08m;
+            if (i < 30)
+            {
+                totalPremium += premiumPerDay;
+            }
+            if (i < 180 && coverType == CoverType.Yacht)
+            {
+                totalPremium += premiumPerDay - premiumPerDay * 0.05m;
+            }
+            else if (i < 180)
+            {
+                totalPremium += premiumPerDay - premiumPerDay * 0.02m;
+            }
+            if (i < 365 && coverType != CoverType.Yacht)
+            {
+                totalPremium += premiumPerDay - premiumPerDay * 0.03m;
+            }
+            else if (i < 365)
+            {
+                totalPremium += premiumPerDay - premiumPerDay * 0.08m;
+            }
         }
 
         return totalPremium;
+    }
+
+    private decimal Multiplier(CoverType coverType)
+    {
+        return coverType switch
+        {
+            CoverType.Yacht => 1.1m,
+            CoverType.PassengerShip => 1.2m,
+            CoverType.Tanker => 1.5m,
+            _ => 1.3m
+        };
     }
 }
