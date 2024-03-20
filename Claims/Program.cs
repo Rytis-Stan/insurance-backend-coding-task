@@ -53,10 +53,12 @@ public class Program
 
     private static async Task<CosmosDbService> InitializeCosmosClientInstanceAsync(IConfigurationSection configurationSection)
     {
-        var databaseName = configurationSection.GetSection("DatabaseName").Value;
-        var containerName = configurationSection.GetSection("ContainerName").Value;
-        var account = configurationSection.GetSection("Account").Value;
-        var key = configurationSection.GetSection("Key").Value;
+        var configuration = new AppConfig(configurationSection);
+
+        var databaseName = configuration.DatabaseName;
+        var containerName = configuration.ContainerName;
+        var account = configuration.Account;
+        var key = configuration.Key;
         var client = new CosmosClient(account, key);
         var cosmosDbService = new CosmosDbService(client, databaseName, containerName);
         var database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
@@ -70,5 +72,20 @@ public class Program
         using var scope = app.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<AuditContext>();
         context.Database.Migrate();
+    }
+}
+
+public class AppConfig
+{
+    private readonly IConfigurationSection _configurationSection;
+
+    public string DatabaseName => _configurationSection.GetSection("DatabaseName").Value;
+    public string ContainerName => _configurationSection.GetSection("ContainerName").Value;
+    public string Account => _configurationSection.GetSection("Account").Value;
+    public string Key => _configurationSection.GetSection("Key").Value;
+
+    public AppConfig(IConfigurationSection configurationSection)
+    {
+        _configurationSection = configurationSection;
     }
 }
