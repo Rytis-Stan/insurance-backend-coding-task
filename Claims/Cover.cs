@@ -16,6 +16,7 @@ public class Cover
     [JsonProperty(PropertyName = "claimType")]
     public CoverType Type { get; set; }
 
+    // TODO: Use decimal???
     [JsonProperty(PropertyName = "premium")]
     public decimal Premium { get; set; }
 }
