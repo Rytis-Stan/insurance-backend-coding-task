@@ -71,6 +71,41 @@ public class CoversService : ICoversService
 
     public async Task<Cover?> GetCoverAsync(string id)
     {
+        return await CoversRepository.GetCoverAsync(id);
+    }
+
+    public async Task<IEnumerable<Cover>> GetAllCoversAsync()
+    {
+        return await CoversRepository.GetAllCoversAsync();
+    }
+
+    public async Task<ItemResponse<Cover>> DeleteCoverAsync(string id)
+    {
+        _auditor.AuditCover(id, "DELETE");
+        return await CoversRepository.DeleteCoverAsync(id);
+    }
+
+    private ICoversRepository CoversRepository => new CoversRepository(_container);
+}
+
+public interface ICoversRepository
+{
+    Task<Cover?> GetCoverAsync(string id);
+    Task<IEnumerable<Cover>> GetAllCoversAsync();
+    Task<ItemResponse<Cover>> DeleteCoverAsync(string id);
+}
+
+public class CoversRepository : ICoversRepository
+{
+    private readonly Container _container;
+
+    public CoversRepository(Container container)
+    {
+        _container = container;
+    }
+
+    public async Task<Cover?> GetCoverAsync(string id)
+    {
         try
         {
             var response = await _container.ReadItemAsync<Cover>(id, new(id));
@@ -96,8 +131,6 @@ public class CoversService : ICoversService
 
     public Task<ItemResponse<Cover>> DeleteCoverAsync(string id)
     {
-        _auditor.AuditCover(id, "DELETE");
-        var deletedCover = _container.DeleteItemAsync<Cover>(id, new(id));
-        return deletedCover;
+        return _container.DeleteItemAsync<Cover>(id, new(id));
     }
 }
