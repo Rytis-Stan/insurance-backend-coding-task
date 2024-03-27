@@ -6,12 +6,12 @@ namespace Claims.Domain;
 
 public class CoversService : ICoversService
 {
-    private readonly Container _container;
+    private readonly ICoversRepository _coversRepository;
     private readonly ICoverAuditor _auditor;
 
-    public CoversService(Container container, ICoverAuditor auditor)
+    public CoversService(ICoversRepository coversRepository, ICoverAuditor auditor)
     {
-        _container = container;
+        _coversRepository = coversRepository;
         _auditor = auditor;
     }
 
@@ -25,7 +25,7 @@ public class CoversService : ICoversService
             Type = request.Type,
             Premium = Cover.ComputePremium(request.StartDate, request.EndDate, request.Type)
         };
-        await CoversRepository.AddItemAsync(cover);
+        await _coversRepository.AddItemAsync(cover);
         _auditor.AuditCover(cover.Id, "POST");
     }
 
@@ -36,21 +36,19 @@ public class CoversService : ICoversService
 
     public async Task<Cover?> GetCoverAsync(string id)
     {
-        return await CoversRepository.GetCoverAsync(id);
+        return await _coversRepository.GetCoverAsync(id);
     }
 
     public async Task<IEnumerable<Cover>> GetAllCoversAsync()
     {
-        return await CoversRepository.GetAllCoversAsync();
+        return await _coversRepository.GetAllCoversAsync();
     }
 
     public async Task<ItemResponse<Cover>> DeleteCoverAsync(string id)
     {
         _auditor.AuditCover(id, "DELETE");
-        return await CoversRepository.DeleteCoverAsync(id);
+        return await _coversRepository.DeleteCoverAsync(id);
     }
-
-    private ICoversRepository CoversRepository => new CoversRepository(_container);
 }
 
 public interface ICreateCoverRequest

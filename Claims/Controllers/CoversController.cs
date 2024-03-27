@@ -16,7 +16,9 @@ public class CoversController : ControllerBase
     public CoversController(CosmosClient cosmosClient, AuditContext auditContext)
         : this(
             new CoversService(
-                cosmosClient?.GetContainer("ClaimDb", "Cover") ?? throw new ArgumentNullException(nameof(cosmosClient)),
+                new CoversRepository(
+                    cosmosClient?.GetContainer("ClaimDb", "Cover") ?? throw new ArgumentNullException(nameof(cosmosClient))
+                ),
                 new Auditor(auditContext, new Clock())
             )
         )
