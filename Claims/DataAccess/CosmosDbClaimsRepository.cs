@@ -18,14 +18,7 @@ public class CosmosDbClaimsRepository : CosmosDbRepository, IClaimsRepository
 
     private async Task<IEnumerable<Claim>> GetAllClaimsAsync()
     {
-        var query = Container.GetItemQueryIterator<Claim>(new QueryDefinition("SELECT * FROM c"));
-        var results = new List<Claim>();
-        while (query.HasMoreResults)
-        {
-            var response = await query.ReadNextAsync();
-            results.AddRange(response.ToList());
-        }
-        return results;
+        return await GetAllAsync<Claim>();
     }
 
     public async Task<Claim> GetClaimAsync(string id)

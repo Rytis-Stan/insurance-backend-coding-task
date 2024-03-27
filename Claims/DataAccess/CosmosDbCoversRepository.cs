@@ -31,14 +31,7 @@ public class CosmosDbCoversRepository : CosmosDbRepository, ICoversRepository
 
     public async Task<IEnumerable<Cover>> GetAllCoversAsync()
     {
-        var query = Container.GetItemQueryIterator<Cover>(new QueryDefinition("SELECT * FROM c"));
-        var results = new List<Cover>();
-        while (query.HasMoreResults)
-        {
-            var response = await query.ReadNextAsync();
-            results.AddRange(response.ToList());
-        }
-        return results;
+        return await GetAllAsync<Cover>();
     }
 
     public Task<ItemResponse<Cover>> DeleteItemAsync(string id)
