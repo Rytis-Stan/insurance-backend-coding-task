@@ -13,9 +13,17 @@ public class ClaimsService : IClaimsService
         _auditor = auditor;
     }
 
-    public async Task CreateClaimAsync(Claim claim)
+    public async Task CreateClaimAsync(ICreateClaimRequest request)
     {
-        claim.Id = Guid.NewGuid().ToString();
+        var claim = new Claim
+        {
+            Id = Guid.NewGuid().ToString(), // TODO: Change the domain object's "Id" to an actual GUID value
+            CoverId = request.CoverId.ToString(), // TODO: Change the domain object's "CoverId" to an actual GUID value
+            Created = DateTime.Now, // TODO: Move "Created" field initialization into the repository
+            Name = request.Name,
+            Type = request.Type,
+            DamageCost = request.DamageCost
+        };
         await _claimsRepository.AddItemAsync(claim);
         _auditor.AuditClaim(claim.Id, "POST");
     }

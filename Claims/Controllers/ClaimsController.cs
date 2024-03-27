@@ -1,6 +1,7 @@
 using Claims.Auditing;
 using Claims.DataAccess;
 using Claims.Domain;
+using Claims.Dto;
 using Claims.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,7 +34,7 @@ public class ClaimsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> CreateAsync(Claim claim)
+    public async Task<ActionResult> CreateAsync(CreateClaimRequestDto claim)
     {
         await _claimsService.CreateClaimAsync(claim);
         return Ok(claim);
