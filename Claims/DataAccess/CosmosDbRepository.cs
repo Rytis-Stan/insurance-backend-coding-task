@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Cosmos;
+﻿using System.Net;
+using Microsoft.Azure.Cosmos;
 
 namespace Claims.DataAccess;
 
@@ -10,6 +11,20 @@ public abstract class CosmosDbRepository
     {
         ArgumentNullException.ThrowIfNull(dbClient, nameof(dbClient));
         Container = dbClient.GetContainer(databaseName, containerName);
+    }
+
+    protected async Task<T?> GetByIdAsync<T>(string id)
+        where T : class
+    {
+        try
+        {
+            var response = await Container.ReadItemAsync<T>(id, new PartitionKey(id));
+            return response.Resource;
+        }
+        catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+        {
+            return null;
+        }
     }
 
     protected async Task<IEnumerable<T>> GetAllAsync<T>()

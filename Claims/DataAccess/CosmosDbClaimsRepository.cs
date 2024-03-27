@@ -1,4 +1,3 @@
-using System.Net;
 using Claims.Domain;
 using Microsoft.Azure.Cosmos;
 
@@ -23,15 +22,7 @@ public class CosmosDbClaimsRepository : CosmosDbRepository, IClaimsRepository
 
     public async Task<Claim> GetClaimAsync(string id)
     {
-        try
-        {
-            var response = await Container.ReadItemAsync<Claim>(id, new PartitionKey(id));
-            return response.Resource;
-        }
-        catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
-        {
-            return null;
-        }
+        return await GetByIdAsync<Claim>(id);
     }
 
     public Task AddItemAsync(Claim item)
