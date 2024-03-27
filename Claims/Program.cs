@@ -40,16 +40,12 @@ public class Program
 
         var cosmosClient = InitializeCosmosClientInstanceAsync(configuration.CosmosDb).GetAwaiter().GetResult();
         var claimsRepository = new CosmosDbClaimsRepository(cosmosClient, configuration.CosmosDb.DatabaseName, configuration.CosmosDb.ContainerName);
+        var coversRepository = new CoversRepository(cosmosClient?.GetContainer("ClaimDb", "Cover") ?? throw new ArgumentNullException(nameof(cosmosClient)));
 
         services.AddSingleton(claimsRepository);
         services.AddDbContext<AuditContext>(options => options.UseSqlServer(configuration.ConnectionString));
         services.AddTransient<IClaimsService>(x => new ClaimsService(claimsRepository, new Auditor(x.GetRequiredService<AuditContext>(), new Clock())));
-        services.AddTransient<ICoversService>(x => new CoversService(
-            new CoversRepository(
-                cosmosClient?.GetContainer("ClaimDb", "Cover") ?? throw new ArgumentNullException(nameof(cosmosClient))
-            ),
-            new Auditor(x.GetRequiredService<AuditContext>(), new Clock())
-        ));
+        services.AddTransient<ICoversService>(x => new CoversService(coversRepository, new Auditor(x.GetRequiredService<AuditContext>(), new Clock())));
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
