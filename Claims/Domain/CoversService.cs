@@ -1,5 +1,4 @@
 using Claims.Auditing;
-using Microsoft.Azure.Cosmos;
 
 namespace Claims.Domain;
 
@@ -43,7 +42,7 @@ public class CoversService : ICoversService
         return await _coversRepository.GetAllCoversAsync();
     }
 
-    public async Task<ItemResponse<Cover>> DeleteCoverAsync(string id)
+    public async Task<Cover> DeleteCoverAsync(string id)
     {
         _auditor.AuditCover(id, "DELETE");
         return await _coversRepository.DeleteItemAsync(id);

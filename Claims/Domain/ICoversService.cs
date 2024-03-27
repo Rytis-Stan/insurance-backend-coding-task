@@ -1,5 +1,3 @@
-using Microsoft.Azure.Cosmos;
-
 namespace Claims.Domain;
 
 public interface ICoversService
@@ -8,5 +6,5 @@ public interface ICoversService
     decimal ComputePremium(DateOnly startDate, DateOnly endDate, CoverType coverType);
     Task<Cover?> GetCoverAsync(string id);
     Task<IEnumerable<Cover>> GetAllCoversAsync();
-    Task<ItemResponse<Cover>> DeleteCoverAsync(string id);
+    Task<Cover> DeleteCoverAsync(string id);
 }
