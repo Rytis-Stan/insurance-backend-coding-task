@@ -30,7 +30,7 @@ public class ClaimsService : IClaimsService
 
     public Task<IEnumerable<Claim>> GetAllClaimsAsync()
     {
-        return _claimsRepository.GetClaimsAsync();
+        return _claimsRepository.GetAllClaimsAsync();
     }
 
     public Task DeleteClaimAsync(string id)

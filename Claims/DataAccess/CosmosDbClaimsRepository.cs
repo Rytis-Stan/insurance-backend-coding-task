@@ -10,12 +10,7 @@ public class CosmosDbClaimsRepository : CosmosDbRepository, IClaimsRepository
     {
     }
 
-    public async Task<IEnumerable<Claim>> GetClaimsAsync()
-    {
-        return await GetAllClaimsAsync();
-    }
-
-    private async Task<IEnumerable<Claim>> GetAllClaimsAsync()
+    public async Task<IEnumerable<Claim>> GetAllClaimsAsync()
     {
         return await GetAllAsync<Claim>();
     }
