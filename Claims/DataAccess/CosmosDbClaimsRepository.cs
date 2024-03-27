@@ -15,7 +15,7 @@ public class CosmosDbClaimsRepository : CosmosDbRepository, IClaimsRepository
         return await GetAllAsync<Claim>();
     }
 
-    public async Task<Claim> GetClaimAsync(string id)
+    public async Task<Claim?> GetClaimAsync(string id)
     {
         return await GetByIdAsync<Claim>(id);
     }

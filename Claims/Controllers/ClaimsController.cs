@@ -38,8 +38,11 @@ public class ClaimsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public Task<Claim> GetAsync(string id)
+    public async Task<ActionResult<Claim>> GetAsync(string id)
     {
-        return _claimsService.GetClaimByIdAsync(id);
+        var claim = await _claimsService.GetClaimByIdAsync(id);
+        return claim != null
+            ? Ok(claim)
+            : NotFound();
     }
 }

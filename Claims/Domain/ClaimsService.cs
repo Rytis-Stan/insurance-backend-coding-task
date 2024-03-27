@@ -40,7 +40,7 @@ public class ClaimsService : IClaimsService
         return deletedClaim;
     }
 
-    public Task<Claim> GetClaimByIdAsync(string id)
+    public Task<Claim?> GetClaimByIdAsync(string id)
     {
         return _claimsRepository.GetClaimAsync(id);
     }
