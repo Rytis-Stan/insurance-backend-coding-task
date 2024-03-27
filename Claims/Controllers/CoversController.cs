@@ -27,7 +27,7 @@ public class CoversController : ControllerBase
         _coversService = coversService;
     }
 
-    [HttpPost]
+    [HttpPost("Premium")]
     public async Task<ActionResult> ComputePremiumAsync(DateOnly startDate, DateOnly endDate, CoverType coverType)
     {
         return Ok(_coversService.ComputePremium(startDate, endDate, coverType));

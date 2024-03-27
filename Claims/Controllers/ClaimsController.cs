@@ -21,7 +21,7 @@ public class ClaimsController : ControllerBase
     {
     }
 
-    public ClaimsController(IClaimsService claimsService)
+    private ClaimsController(IClaimsService claimsService)
     {
         _claimsService = claimsService;
     }
