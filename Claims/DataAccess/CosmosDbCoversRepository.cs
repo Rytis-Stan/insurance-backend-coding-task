@@ -20,13 +20,13 @@ public class CosmosDbCoversRepository : CosmosDbRepository, ICoversRepository
         return await GetAllAsync<Cover>();
     }
 
-    public async Task<ItemResponse<Cover>> AddItemAsync(Cover cover)
+    public async Task<Cover> AddItemAsync(Cover cover)
     {
         return await Container.CreateItemAsync(cover, new PartitionKey(cover.Id));
     }
 
-    public Task<ItemResponse<Cover>> DeleteItemAsync(string id)
+    public async Task<Cover> DeleteItemAsync(string id)
     {
-        return Container.DeleteItemAsync<Cover>(id, new(id));
+        return await Container.DeleteItemAsync<Cover>(id, new PartitionKey(id));
     }
 }
