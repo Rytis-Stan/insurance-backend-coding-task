@@ -4,11 +4,11 @@ using Microsoft.Azure.Cosmos;
 
 namespace Claims.DataAccess;
 
-public class CoversRepository : ICoversRepository
+public class CosmosDbCoversRepository : ICoversRepository
 {
     private readonly Container _container;
 
-    public CoversRepository(Container container)
+    public CosmosDbCoversRepository(Container container)
     {
         _container = container;
     }
