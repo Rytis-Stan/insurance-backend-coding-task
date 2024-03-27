@@ -40,7 +40,7 @@ public class Program
 
         var cosmosClient = InitializeCosmosClientInstanceAsync(configuration.CosmosDb).GetAwaiter().GetResult();
         var claimsRepository = new CosmosDbClaimsRepository(cosmosClient, configuration.CosmosDb.DatabaseName, configuration.CosmosDb.ContainerName);
-        var coversRepository = new CosmosDbCoversRepository(cosmosClient?.GetContainer("ClaimDb", "Cover") ?? throw new ArgumentNullException(nameof(cosmosClient)));
+        var coversRepository = new CosmosDbCoversRepository(cosmosClient?.GetContainer(configuration.CosmosDb.DatabaseName, "Cover") ?? throw new ArgumentNullException(nameof(cosmosClient)));
 
         services.AddSingleton(claimsRepository);
         services.AddDbContext<AuditContext>(options => options.UseSqlServer(configuration.ConnectionString));
