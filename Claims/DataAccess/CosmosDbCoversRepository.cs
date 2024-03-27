@@ -41,7 +41,7 @@ public class CosmosDbCoversRepository : CosmosDbRepository, ICoversRepository
         return results;
     }
 
-    public Task<ItemResponse<Cover>> DeleteCoverAsync(string id)
+    public Task<ItemResponse<Cover>> DeleteItemAsync(string id)
     {
         return Container.DeleteItemAsync<Cover>(id, new(id));
     }

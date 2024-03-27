@@ -46,6 +46,6 @@ public class CoversService : ICoversService
     public async Task<ItemResponse<Cover>> DeleteCoverAsync(string id)
     {
         _auditor.AuditCover(id, "DELETE");
-        return await _coversRepository.DeleteCoverAsync(id);
+        return await _coversRepository.DeleteItemAsync(id);
     }
 }

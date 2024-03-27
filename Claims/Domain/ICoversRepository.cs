@@ -7,5 +7,5 @@ public interface ICoversRepository
     Task<ItemResponse<Cover>> AddItemAsync(Cover cover);
     Task<Cover?> GetCoverAsync(string id);
     Task<IEnumerable<Cover>> GetAllCoversAsync();
-    Task<ItemResponse<Cover>> DeleteCoverAsync(string id);
+    Task<ItemResponse<Cover>> DeleteItemAsync(string id);
 }
