@@ -1,11 +1,11 @@
 using System.Text.Json.Serialization;
 using Claims.Auditing;
+using Claims.Configuration;
 using Claims.DataAccess;
 using Claims.Domain;
 using Claims.Infrastructure;
 using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
-using ConfigurationManager = Microsoft.Extensions.Configuration.ConfigurationManager;
 
 namespace Claims;
 
@@ -79,33 +79,5 @@ public class Program
         using var scope = app.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<AuditContext>();
         context.Database.Migrate();
-    }
-}
-
-public class AppConfiguration
-{
-    private readonly ConfigurationManager _configuration;
-
-    public AppConfiguration(ConfigurationManager configuration)
-    {
-        _configuration = configuration;
-    }
-
-    public string ConnectionString => _configuration.GetConnectionString("DefaultConnection");
-    public CosmosDbConfiguration CosmosDb => new CosmosDbConfiguration(_configuration.GetSection("CosmosDb"));
-}
-
-public class CosmosDbConfiguration
-{
-    private readonly IConfigurationSection _configurationSection;
-
-    public string DatabaseName => _configurationSection.GetSection("DatabaseName").Value;
-    public string ContainerName => _configurationSection.GetSection("ContainerName").Value;
-    public string Account => _configurationSection.GetSection("Account").Value;
-    public string Key => _configurationSection.GetSection("Key").Value;
-
-    public CosmosDbConfiguration(IConfigurationSection configurationSection)
-    {
-        _configurationSection = configurationSection;
     }
 }
