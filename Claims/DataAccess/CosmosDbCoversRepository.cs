@@ -8,6 +8,12 @@ public class CosmosDbCoversRepository : ICoversRepository
 {
     private readonly Container _container;
 
+    public CosmosDbCoversRepository(CosmosClient dbClient, string databaseName, string containerName)
+    {
+        ArgumentNullException.ThrowIfNull(dbClient, nameof(dbClient));
+        _container = dbClient.GetContainer(databaseName, containerName);
+    }
+
     public CosmosDbCoversRepository(Container container)
     {
         _container = container;
