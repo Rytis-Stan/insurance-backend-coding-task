@@ -1,5 +1,6 @@
 using Claims.Auditing;
 using Claims.Domain;
+using Claims.Dto;
 using Claims.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Cosmos;
@@ -50,7 +51,7 @@ public class CoversController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<ActionResult> CreateAsync(Cover cover)
+    public async Task<ActionResult> CreateAsync(CreateCoverRequestDto cover)
     {
         await _coversService.CreateCoverAsync(cover);
         return Ok(cover);

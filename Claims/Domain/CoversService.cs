@@ -15,58 +15,23 @@ public class CoversService : ICoversService
         _auditor = auditor;
     }
 
-    public async Task CreateCoverAsync(Cover cover)
+    public async Task CreateCoverAsync(ICreateCoverRequest request)
     {
-        cover.Id = Guid.NewGuid().ToString();
-        cover.Premium = ComputePremium(cover.StartDate, cover.EndDate, cover.Type);
-        await _container.CreateItemAsync(cover, new PartitionKey(cover.Id));
+        var cover = new Cover
+        {
+            Id = Guid.NewGuid().ToString(),
+            StartDate = request.StartDate,
+            EndDate = request.EndDate,
+            Type = request.Type,
+            Premium = Cover.ComputePremium(request.StartDate, request.EndDate, request.Type)
+        };
+        await _container.CreateItemAsync(request, new PartitionKey(cover.Id));
         _auditor.AuditCover(cover.Id, "POST");
     }
 
     public decimal ComputePremium(DateOnly startDate, DateOnly endDate, CoverType coverType)
     {
-        var multiplier = Multiplier(coverType);
-
-        var premiumPerDay = 1250 * multiplier;
-        var insuranceDurationInDays = endDate.DayNumber - startDate.DayNumber;
-        var totalPremium = 0m;
-
-        for (var day = 0; day < insuranceDurationInDays; day++)
-        {
-            if (day < 30)
-            {
-                totalPremium += premiumPerDay;
-            }
-            if (day < 180 && coverType == CoverType.Yacht)
-            {
-                totalPremium += premiumPerDay - premiumPerDay * 0.05m;
-            }
-            else if (day < 180)
-            {
-                totalPremium += premiumPerDay - premiumPerDay * 0.02m;
-            }
-            if (day < 365 && coverType != CoverType.Yacht)
-            {
-                totalPremium += premiumPerDay - premiumPerDay * 0.03m;
-            }
-            else if (day < 365)
-            {
-                totalPremium += premiumPerDay - premiumPerDay * 0.08m;
-            }
-        }
-
-        return totalPremium;
-    }
-
-    private decimal Multiplier(CoverType coverType)
-    {
-        return coverType switch
-        {
-            CoverType.Yacht => 1.1m,
-            CoverType.PassengerShip => 1.2m,
-            CoverType.Tanker => 1.5m,
-            _ => 1.3m
-        };
+        return Cover.ComputePremium(startDate, endDate, coverType);
     }
 
     public async Task<Cover?> GetCoverAsync(string id)
@@ -86,6 +51,13 @@ public class CoversService : ICoversService
     }
 
     private ICoversRepository CoversRepository => new CoversRepository(_container);
+}
+
+public interface ICreateCoverRequest
+{
+    DateOnly StartDate { get; }
+    DateOnly EndDate { get; }
+    CoverType Type { get; }
 }
 
 public interface ICoversRepository

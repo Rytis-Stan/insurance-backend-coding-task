@@ -4,7 +4,7 @@ namespace Claims.Domain;
 
 public interface ICoversService
 {
-    Task CreateCoverAsync(Cover cover);
+    Task CreateCoverAsync(ICreateCoverRequest request);
     decimal ComputePremium(DateOnly startDate, DateOnly endDate, CoverType coverType);
     Task<Cover?> GetCoverAsync(string id);
     Task<IEnumerable<Cover>> GetAllCoversAsync();
