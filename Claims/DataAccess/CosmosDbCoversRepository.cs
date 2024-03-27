@@ -20,9 +20,9 @@ public class CosmosDbCoversRepository : CosmosDbRepository, ICoversRepository
         return await GetAllAsync<Cover>();
     }
 
-    public async Task<Cover> AddItemAsync(Cover cover)
+    public async Task<Cover> AddItemAsync(Cover item)
     {
-        return await Container.CreateItemAsync(cover, new PartitionKey(cover.Id));
+        return await Container.CreateItemAsync(item, new PartitionKey(item.Id));
     }
 
     public async Task<Cover> DeleteItemAsync(string id)

@@ -1,8 +1,5 @@
-using Claims.Auditing;
-using Claims.DataAccess;
 using Claims.Domain;
 using Claims.Dto;
-using Claims.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Claims.Controllers;
