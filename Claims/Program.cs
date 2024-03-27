@@ -1,6 +1,8 @@
 using System.Text.Json.Serialization;
 using Claims.Auditing;
 using Claims.DataAccess;
+using Claims.Domain;
+using Claims.Infrastructure;
 using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
 using ConfigurationManager = Microsoft.Extensions.Configuration.ConfigurationManager;
@@ -36,8 +38,12 @@ public class Program
             x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
 
-        services.AddSingleton(InitializeCosmosClientInstanceAsync(configuration.CosmosDb).GetAwaiter().GetResult());
+        var cosmosClient = InitializeCosmosClientInstanceAsync(configuration.CosmosDb).GetAwaiter().GetResult();
+        var claimsRepository = new CosmosDbClaimsRepository(cosmosClient, configuration.CosmosDb.DatabaseName, configuration.CosmosDb.ContainerName);
+
+        services.AddSingleton(claimsRepository);
         services.AddDbContext<AuditContext>(options => options.UseSqlServer(configuration.ConnectionString));
+        services.AddTransient<IClaimsService>(x => new ClaimsService(claimsRepository, new Auditor(x.GetRequiredService<AuditContext>(), new Clock())));
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
@@ -58,18 +64,12 @@ public class Program
         app.MapControllers();
     }
 
-    private static async Task<CosmosDbClaimsRepository> InitializeCosmosClientInstanceAsync(CosmosDbConfiguration configuration)
+    private static async Task<CosmosClient> InitializeCosmosClientInstanceAsync(CosmosDbConfiguration configuration)
     {
-        var databaseName = configuration.DatabaseName;
-        var containerName = configuration.ContainerName;
-        var account = configuration.Account;
-        var key = configuration.Key;
-        var client = new CosmosClient(account, key);
-        var claimsRepository = new CosmosDbClaimsRepository(client, databaseName, containerName);
-        var database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
-        await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
-
-        return claimsRepository;
+        var client = new CosmosClient(configuration.Account, configuration.Key);
+        var database = await client.CreateDatabaseIfNotExistsAsync(configuration.DatabaseName);
+        await database.Database.CreateContainerIfNotExistsAsync(configuration.ContainerName, "/id");
+        return client;
     }
 
     private static void MigrateDatabase(WebApplication app)

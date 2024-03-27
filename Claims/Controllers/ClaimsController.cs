@@ -13,16 +13,7 @@ public class ClaimsController : ControllerBase
 {
     private readonly IClaimsService _claimsService;
 
-    public ClaimsController(CosmosDbClaimsRepository claimsRepository, AuditContext auditContext)
-        : this(
-            new ClaimsService(
-                claimsRepository, new Auditor(auditContext, new Clock())
-            )
-        )
-    {
-    }
-
-    private ClaimsController(IClaimsService claimsService)
+    public ClaimsController(IClaimsService claimsService)
     {
         _claimsService = claimsService;
     }
