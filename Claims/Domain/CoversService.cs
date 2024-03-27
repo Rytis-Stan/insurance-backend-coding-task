@@ -25,7 +25,7 @@ public class CoversService : ICoversService
             Type = request.Type,
             Premium = Cover.ComputePremium(request.StartDate, request.EndDate, request.Type)
         };
-        await _container.CreateItemAsync(request, new PartitionKey(cover.Id));
+        await _container.CreateItemAsync(cover, new PartitionKey(cover.Id));
         _auditor.AuditCover(cover.Id, "POST");
     }
 
