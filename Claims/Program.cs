@@ -44,6 +44,12 @@ public class Program
         services.AddSingleton(claimsRepository);
         services.AddDbContext<AuditContext>(options => options.UseSqlServer(configuration.ConnectionString));
         services.AddTransient<IClaimsService>(x => new ClaimsService(claimsRepository, new Auditor(x.GetRequiredService<AuditContext>(), new Clock())));
+        services.AddTransient<ICoversService>(x => new CoversService(
+            new CoversRepository(
+                cosmosClient?.GetContainer("ClaimDb", "Cover") ?? throw new ArgumentNullException(nameof(cosmosClient))
+            ),
+            new Auditor(x.GetRequiredService<AuditContext>(), new Clock())
+        ));
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();

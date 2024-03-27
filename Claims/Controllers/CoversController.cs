@@ -1,9 +1,6 @@
-using Claims.Auditing;
 using Claims.Domain;
 using Claims.Dto;
-using Claims.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Cosmos;
 
 namespace Claims.Controllers;
 
@@ -13,19 +10,7 @@ public class CoversController : ControllerBase
 {
     private readonly ICoversService _coversService;
 
-    public CoversController(CosmosClient cosmosClient, AuditContext auditContext)
-        : this(
-            new CoversService(
-                new CoversRepository(
-                    cosmosClient?.GetContainer("ClaimDb", "Cover") ?? throw new ArgumentNullException(nameof(cosmosClient))
-                ),
-                new Auditor(auditContext, new Clock())
-            )
-        )
-    {
-    }
-
-    private CoversController(ICoversService coversService)
+    public CoversController(ICoversService coversService)
     {
         _coversService = coversService;
     }
