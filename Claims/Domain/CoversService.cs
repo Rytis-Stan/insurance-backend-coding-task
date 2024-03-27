@@ -25,7 +25,7 @@ public class CoversService : ICoversService
             Type = request.Type,
             Premium = Cover.ComputePremium(request.StartDate, request.EndDate, request.Type)
         };
-        await _container.CreateItemAsync(cover, new PartitionKey(cover.Id));
+        await CoversRepository.AddItemAsync(cover);
         _auditor.AuditCover(cover.Id, "POST");
     }
 
@@ -62,6 +62,7 @@ public interface ICreateCoverRequest
 
 public interface ICoversRepository
 {
+    Task<ItemResponse<Cover>> AddItemAsync(Cover cover);
     Task<Cover?> GetCoverAsync(string id);
     Task<IEnumerable<Cover>> GetAllCoversAsync();
     Task<ItemResponse<Cover>> DeleteCoverAsync(string id);
@@ -74,6 +75,11 @@ public class CoversRepository : ICoversRepository
     public CoversRepository(Container container)
     {
         _container = container;
+    }
+
+    public async Task<ItemResponse<Cover>> AddItemAsync(Cover cover)
+    {
+        return await _container.CreateItemAsync(cover, new PartitionKey(cover.Id));
     }
 
     public async Task<Cover?> GetCoverAsync(string id)
