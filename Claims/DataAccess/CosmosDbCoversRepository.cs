@@ -4,31 +4,23 @@ using Microsoft.Azure.Cosmos;
 
 namespace Claims.DataAccess;
 
-public class CosmosDbCoversRepository : ICoversRepository
+public class CosmosDbCoversRepository : CosmosDbRepository, ICoversRepository
 {
-    private readonly Container _container;
-
     public CosmosDbCoversRepository(CosmosClient dbClient, string databaseName, string containerName)
+        : base(dbClient, databaseName, containerName)
     {
-        ArgumentNullException.ThrowIfNull(dbClient, nameof(dbClient));
-        _container = dbClient.GetContainer(databaseName, containerName);
-    }
-
-    public CosmosDbCoversRepository(Container container)
-    {
-        _container = container;
     }
 
     public async Task<ItemResponse<Cover>> AddItemAsync(Cover cover)
     {
-        return await _container.CreateItemAsync(cover, new PartitionKey(cover.Id));
+        return await Container.CreateItemAsync(cover, new PartitionKey(cover.Id));
     }
 
     public async Task<Cover?> GetCoverAsync(string id)
     {
         try
         {
-            var response = await _container.ReadItemAsync<Cover>(id, new(id));
+            var response = await Container.ReadItemAsync<Cover>(id, new(id));
             return response.Resource;
         }
         catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
@@ -39,7 +31,7 @@ public class CosmosDbCoversRepository : ICoversRepository
 
     public async Task<IEnumerable<Cover>> GetAllCoversAsync()
     {
-        var query = _container.GetItemQueryIterator<Cover>(new QueryDefinition("SELECT * FROM c"));
+        var query = Container.GetItemQueryIterator<Cover>(new QueryDefinition("SELECT * FROM c"));
         var results = new List<Cover>();
         while (query.HasMoreResults)
         {
@@ -51,6 +43,6 @@ public class CosmosDbCoversRepository : ICoversRepository
 
     public Task<ItemResponse<Cover>> DeleteCoverAsync(string id)
     {
-        return _container.DeleteItemAsync<Cover>(id, new(id));
+        return Container.DeleteItemAsync<Cover>(id, new(id));
     }
 }
