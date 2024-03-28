@@ -11,14 +11,18 @@ public class ClaimsService : IClaimsService
 
     public async Task<Claim> CreateClaimAsync(ICreateClaimRequest request)
     {
-        var claimToCreate = new NewClaimInfo
+        return await _claimsRepository.AddAsync(ToNewClaimInfo(request));
+    }
+
+    private static NewClaimInfo ToNewClaimInfo(ICreateClaimRequest request)
+    {
+        return new NewClaimInfo
         {
             CoverId = request.CoverId,
             Name = request.Name,
             Type = request.Type,
             DamageCost = request.DamageCost
         };
-        return await _claimsRepository.AddAsync(claimToCreate);
     }
 
     public Task<IEnumerable<Claim>> GetAllClaimsAsync()

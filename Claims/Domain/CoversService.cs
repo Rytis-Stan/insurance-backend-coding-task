@@ -11,8 +11,7 @@ public class CoversService : ICoversService
 
     public async Task<Cover> CreateCoverAsync(ICreateCoverRequest request)
     {
-        var coverToCreate = ToNewCoverInfo(request);
-        return await _coversRepository.AddAsync(coverToCreate);
+        return await _coversRepository.AddAsync(ToNewCoverInfo(request));
     }
 
     private static INewCoverInfo ToNewCoverInfo(ICreateCoverRequest request)
