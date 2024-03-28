@@ -44,7 +44,7 @@ public class CoversController : ControllerBase
     public async Task<ActionResult<Cover>> CreateAsync(CreateCoverRequestDto request)
     {
         var cover = await _coversService.CreateCoverAsync(request);
-        _auditor.AuditCover(Guid.Parse(cover.Id), "POST");
+        _auditor.AuditCover(cover.Id, "POST");
         return Ok(cover);
     }
 

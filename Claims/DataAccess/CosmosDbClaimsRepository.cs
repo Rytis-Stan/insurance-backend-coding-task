@@ -52,8 +52,8 @@ public class CosmosDbClaimsRepository : CosmosDbRepository, IClaimsRepository
     {
         return new Claim
         {
-            Id = json.Id,
-            CoverId = json.CoverId,
+            Id = Guid.Parse(json.Id),
+            CoverId = Guid.Parse(json.CoverId),
             Name = json.Name,
             Type = json.Type,
             DamageCost = json.DamageCost,

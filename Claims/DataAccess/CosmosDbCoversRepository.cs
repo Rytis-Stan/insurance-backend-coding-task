@@ -52,7 +52,7 @@ public class CosmosDbCoversRepository : CosmosDbRepository, ICoversRepository
     {
         return new Cover
         {
-            Id = json.Id,
+            Id = Guid.Parse(json.Id),
             StartDate = json.StartDate,
             EndDate = json.EndDate,
             Type = json.Type,

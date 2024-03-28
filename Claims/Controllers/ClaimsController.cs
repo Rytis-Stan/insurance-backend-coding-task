@@ -28,7 +28,7 @@ public class ClaimsController : ControllerBase
     public async Task<ActionResult<Claim>> CreateAsync(CreateClaimRequestDto request)
     {
         var claim = await _claimsService.CreateClaimAsync(request);
-        _auditor.AuditClaim(Guid.Parse(claim.Id), "POST");
+        _auditor.AuditClaim(claim.Id, "POST");
         return Ok(claim);
     }
 
