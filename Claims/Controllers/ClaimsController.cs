@@ -28,19 +28,19 @@ public class ClaimsController : ControllerBase
     public async Task<ActionResult<Claim>> CreateAsync(CreateClaimRequestDto request)
     {
         var claim = await _claimsService.CreateClaimAsync(request);
-        _auditor.AuditClaim(claim.Id, "POST");
+        _auditor.AuditClaim(Guid.Parse(claim.Id), "POST");
         return Ok(claim);
     }
 
     [HttpDelete("{id}")]
-    public Task DeleteAsync(string id)
+    public Task DeleteAsync(Guid id)
     {
         _auditor.AuditClaim(id, "DELETE");
         return _claimsService.DeleteClaimAsync(id);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Claim>> GetAsync(string id)
+    public async Task<ActionResult<Claim>> GetAsync(Guid id)
     {
         var claim = await _claimsService.GetClaimByIdAsync(id);
         return claim != null

@@ -10,7 +10,7 @@ public class CosmosDbCoversRepository : CosmosDbRepository, ICoversRepository
     {
     }
 
-    public async Task<Cover?> GetCoverAsync(string id)
+    public async Task<Cover?> GetCoverAsync(Guid id)
     {
         return await GetByIdAsync<Cover>(id);
     }
@@ -25,8 +25,8 @@ public class CosmosDbCoversRepository : CosmosDbRepository, ICoversRepository
         return await Container.CreateItemAsync(item, new PartitionKey(item.Id));
     }
 
-    public async Task<Cover> DeleteItemAsync(string id)
+    public async Task<Cover> DeleteItemAsync(Guid id)
     {
-        return await Container.DeleteItemAsync<Cover>(id, new PartitionKey(id));
+        return await Container.DeleteItemAsync<Cover>(id.ToString(), new PartitionKey(id.ToString()));
     }
 }

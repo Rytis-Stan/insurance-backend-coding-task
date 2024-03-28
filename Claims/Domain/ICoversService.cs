@@ -4,7 +4,7 @@ public interface ICoversService
 {
     Task<Cover> CreateCoverAsync(ICreateCoverRequest request);
     decimal ComputePremium(DateOnly startDate, DateOnly endDate, CoverType coverType);
-    Task<Cover?> GetCoverAsync(string id);
+    Task<Cover?> GetCoverAsync(Guid id);
     Task<IEnumerable<Cover>> GetAllCoversAsync();
-    Task<Cover> DeleteCoverAsync(string id);
+    Task<Cover> DeleteCoverAsync(Guid id);
 }

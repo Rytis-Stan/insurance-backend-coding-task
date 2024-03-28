@@ -2,5 +2,5 @@
 
 public interface ICoverAuditor
 {
-    void AuditCover(string id, string httpRequestType);
+    void AuditCover(Guid id, string httpRequestType);
 }

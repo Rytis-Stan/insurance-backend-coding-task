@@ -28,12 +28,12 @@ public class ClaimsService : IClaimsService
         return _claimsRepository.GetAllClaimsAsync();
     }
 
-    public Task DeleteClaimAsync(string id)
+    public Task DeleteClaimAsync(Guid id)
     {
         return _claimsRepository.DeleteItemAsync(id);
     }
 
-    public Task<Claim?> GetClaimByIdAsync(string id)
+    public Task<Claim?> GetClaimByIdAsync(Guid id)
     {
         return _claimsRepository.GetClaimAsync(id);
     }

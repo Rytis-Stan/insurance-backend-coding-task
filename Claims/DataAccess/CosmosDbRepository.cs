@@ -13,12 +13,12 @@ public abstract class CosmosDbRepository
         Container = dbClient.GetContainer(databaseName, containerName);
     }
 
-    protected async Task<T?> GetByIdAsync<T>(string id)
+    protected async Task<T?> GetByIdAsync<T>(Guid id)
         where T : class
     {
         try
         {
-            var response = await Container.ReadItemAsync<T>(id, new PartitionKey(id));
+            var response = await Container.ReadItemAsync<T>(id.ToString(), new PartitionKey(id.ToString()));
             return response.Resource;
         }
         catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)

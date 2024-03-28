@@ -27,7 +27,7 @@ public class CoversService : ICoversService
         return Cover.ComputePremium(startDate, endDate, coverType);
     }
 
-    public async Task<Cover?> GetCoverAsync(string id)
+    public async Task<Cover?> GetCoverAsync(Guid id)
     {
         return await _coversRepository.GetCoverAsync(id);
     }
@@ -37,7 +37,7 @@ public class CoversService : ICoversService
         return await _coversRepository.GetAllCoversAsync();
     }
 
-    public async Task<Cover> DeleteCoverAsync(string id)
+    public async Task<Cover> DeleteCoverAsync(Guid id)
     {
         return await _coversRepository.DeleteItemAsync(id);
     }

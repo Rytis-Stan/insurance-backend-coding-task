@@ -32,7 +32,7 @@ public class CoversController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Cover>> GetAsync(string id)
+    public async Task<ActionResult<Cover>> GetAsync(Guid id)
     {
         var cover = await _coversService.GetCoverAsync(id);
         return cover != null
@@ -44,12 +44,12 @@ public class CoversController : ControllerBase
     public async Task<ActionResult<Cover>> CreateAsync(CreateCoverRequestDto request)
     {
         var cover = await _coversService.CreateCoverAsync(request);
-        _auditor.AuditCover(cover.Id, "POST");
+        _auditor.AuditCover(Guid.Parse(cover.Id), "POST");
         return Ok(cover);
     }
 
     [HttpDelete("{id}")]
-    public Task DeleteAsync(string id)
+    public Task DeleteAsync(Guid id)
     {
         _auditor.AuditCover(id, "DELETE");
         return _coversService.DeleteCoverAsync(id);

@@ -2,5 +2,5 @@
 
 public interface IClaimAuditor
 {
-    void AuditClaim(string id, string httpRequestType);
+    void AuditClaim(Guid id, string httpRequestType);
 }

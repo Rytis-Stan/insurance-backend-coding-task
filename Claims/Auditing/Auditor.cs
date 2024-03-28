@@ -13,26 +13,26 @@ public class Auditor : IClaimAuditor, ICoverAuditor
         _clock = clock;
     }
 
-    public void AuditClaim(string id, string httpRequestType)
+    public void AuditClaim(Guid id, string httpRequestType)
     {
         var claimAudit = new ClaimAudit
         {
             Created = _clock.Now(),
             HttpRequestType = httpRequestType,
-            ClaimId = id
+            ClaimId = id.ToString()
         };
 
         _auditContext.Add(claimAudit);
         _auditContext.SaveChanges();
     }
         
-    public void AuditCover(string id, string httpRequestType)
+    public void AuditCover(Guid id, string httpRequestType)
     {
         var coverAudit = new CoverAudit
         {
             Created = _clock.Now(),
             HttpRequestType = httpRequestType,
-            CoverId = id
+            CoverId = id.ToString()
         };
 
         _auditContext.Add(coverAudit);
