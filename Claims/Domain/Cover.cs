@@ -1,24 +1,12 @@
-using Newtonsoft.Json;
-
 namespace Claims.Domain;
 
 public class Cover
 {
-    [JsonProperty(PropertyName = "id")]
-    public string Id { get; set; }
-
-    [JsonProperty(PropertyName = "startDate")]
-    public DateOnly StartDate { get; set; }
-
-    [JsonProperty(PropertyName = "endDate")]
-    public DateOnly EndDate { get; set; }
-
-    [JsonProperty(PropertyName = "claimType")]
-    public CoverType Type { get; set; }
-
-    // TODO: Use decimal???
-    [JsonProperty(PropertyName = "premium")]
-    public decimal Premium { get; set; }
+    public string Id { get; init; }
+    public DateOnly StartDate { get; init; }
+    public DateOnly EndDate { get; init; }
+    public CoverType Type { get; init; }
+    public decimal Premium { get; init; }
 
     // TODO: Make the "Premium" property call "ComputerPremium".
     public static decimal ComputePremium(DateOnly startDate, DateOnly endDate, CoverType coverType)
