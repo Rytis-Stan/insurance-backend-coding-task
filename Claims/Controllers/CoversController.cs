@@ -1,3 +1,4 @@
+using Claims.Auditing;
 using Claims.Domain;
 using Claims.Dto;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +10,12 @@ namespace Claims.Controllers;
 public class CoversController : ControllerBase
 {
     private readonly ICoversService _coversService;
+    private readonly ICoverAuditor _auditor;
 
-    public CoversController(ICoversService coversService)
+    public CoversController(ICoversService coversService, ICoverAuditor auditor)
     {
         _coversService = coversService;
+        _auditor = auditor;
     }
 
     [HttpPost("Premium")]
@@ -41,12 +44,14 @@ public class CoversController : ControllerBase
     public async Task<ActionResult<Cover>> CreateAsync(CreateCoverRequestDto request)
     {
         var cover = await _coversService.CreateCoverAsync(request);
+        _auditor.AuditCover(cover.Id, "POST");
         return Ok(cover);
     }
 
     [HttpDelete("{id}")]
     public Task DeleteAsync(string id)
     {
+        _auditor.AuditCover(id, "DELETE");
         return _coversService.DeleteCoverAsync(id);
     }
 }

@@ -1,3 +1,4 @@
+using Claims.Auditing;
 using Claims.Domain;
 using Claims.Dto;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +10,12 @@ namespace Claims.Controllers;
 public class ClaimsController : ControllerBase
 {
     private readonly IClaimsService _claimsService;
+    private readonly IClaimAuditor _auditor;
 
-    public ClaimsController(IClaimsService claimsService)
+    public ClaimsController(IClaimsService claimsService, IClaimAuditor auditor)
     {
         _claimsService = claimsService;
+        _auditor = auditor;
     }
 
     [HttpGet]
@@ -25,12 +28,14 @@ public class ClaimsController : ControllerBase
     public async Task<ActionResult<Claim>> CreateAsync(CreateClaimRequestDto request)
     {
         var claim = await _claimsService.CreateClaimAsync(request);
+        _auditor.AuditClaim(claim.Id, "POST");
         return Ok(claim);
     }
 
     [HttpDelete("{id}")]
     public Task DeleteAsync(string id)
     {
+        _auditor.AuditClaim(id, "DELETE");
         return _claimsService.DeleteClaimAsync(id);
     }
 

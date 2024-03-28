@@ -1,16 +1,12 @@
-using Claims.Auditing;
-
 namespace Claims.Domain;
 
 public class CoversService : ICoversService
 {
     private readonly ICoversRepository _coversRepository;
-    private readonly ICoverAuditor _auditor;
 
-    public CoversService(ICoversRepository coversRepository, ICoverAuditor auditor)
+    public CoversService(ICoversRepository coversRepository)
     {
         _coversRepository = coversRepository;
-        _auditor = auditor;
     }
 
     public async Task<Cover> CreateCoverAsync(ICreateCoverRequest request)
@@ -23,9 +19,7 @@ public class CoversService : ICoversService
             Type = request.Type,
             Premium = Cover.ComputePremium(request.StartDate, request.EndDate, request.Type)
         };
-        var cover = await _coversRepository.AddItemAsync(coverToCreate);
-        _auditor.AuditCover(coverToCreate.Id, "POST");
-        return cover;
+        return await _coversRepository.AddItemAsync(coverToCreate);
     }
 
     public decimal ComputePremium(DateOnly startDate, DateOnly endDate, CoverType coverType)
@@ -45,7 +39,6 @@ public class CoversService : ICoversService
 
     public async Task<Cover> DeleteCoverAsync(string id)
     {
-        _auditor.AuditCover(id, "DELETE");
         return await _coversRepository.DeleteItemAsync(id);
     }
 }

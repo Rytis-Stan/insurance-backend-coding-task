@@ -1,16 +1,12 @@
-using Claims.Auditing;
-
 namespace Claims.Domain;
 
 public class ClaimsService : IClaimsService
 {
     private readonly IClaimsRepository _claimsRepository;
-    private readonly IClaimAuditor _auditor;
 
-    public ClaimsService(IClaimsRepository claimsRepository, IClaimAuditor auditor)
+    public ClaimsService(IClaimsRepository claimsRepository)
     {
         _claimsRepository = claimsRepository;
-        _auditor = auditor;
     }
 
     public async Task<Claim> CreateClaimAsync(ICreateClaimRequest request)
@@ -24,9 +20,7 @@ public class ClaimsService : IClaimsService
             Type = request.Type,
             DamageCost = request.DamageCost
         };
-        var claim = await _claimsRepository.AddItemAsync(claimToCreate);
-        _auditor.AuditClaim(claimToCreate.Id, "POST");
-        return claim;
+        return await _claimsRepository.AddItemAsync(claimToCreate);
     }
 
     public Task<IEnumerable<Claim>> GetAllClaimsAsync()
@@ -36,9 +30,7 @@ public class ClaimsService : IClaimsService
 
     public Task DeleteClaimAsync(string id)
     {
-        _auditor.AuditClaim(id, "DELETE");
-        var deletedClaim = _claimsRepository.DeleteItemAsync(id);
-        return deletedClaim;
+        return _claimsRepository.DeleteItemAsync(id);
     }
 
     public Task<Claim?> GetClaimByIdAsync(string id)

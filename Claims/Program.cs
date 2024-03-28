@@ -42,10 +42,15 @@ public class Program
         var claimsRepository = new CosmosDbClaimsRepository(cosmosClient, configuration.CosmosDb.DatabaseName, configuration.CosmosDb.ContainerName);
         var coversRepository = new CosmosDbCoversRepository(cosmosClient, configuration.CosmosDb.DatabaseName, "Cover");
 
-        services.AddSingleton(claimsRepository);
+        services.AddSingleton<IClaimsRepository>(claimsRepository);
+        services.AddSingleton<ICoversRepository>(coversRepository);
         services.AddDbContext<AuditContext>(options => options.UseSqlServer(configuration.ConnectionString));
-        services.AddTransient<IClaimsService>(x => new ClaimsService(claimsRepository, new Auditor(x.GetRequiredService<AuditContext>(), new Clock())));
-        services.AddTransient<ICoversService>(x => new CoversService(coversRepository, new Auditor(x.GetRequiredService<AuditContext>(), new Clock())));
+
+        services.AddTransient<IClock, Clock>();
+        services.AddTransient<IClaimAuditor, Auditor>();
+        services.AddTransient<ICoverAuditor, Auditor>();
+        services.AddTransient<IClaimsService, ClaimsService>();
+        services.AddTransient<ICoversService, CoversService>();
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
