@@ -4,33 +4,14 @@ using Microsoft.Azure.Cosmos;
 
 namespace Claims.DataAccess;
 
-public class CosmosDbCoversRepository : CosmosDbRepository, ICoversRepository
+public class CosmosDbCoversRepository : CosmosDbRepository<Cover, INewCoverInfo, CoverJson>, ICoversRepository
 {
     public CosmosDbCoversRepository(CosmosClient dbClient, string databaseName, string containerName, IClock clock, IIdGenerator idGenerator)
         : base(dbClient, databaseName, containerName, clock, idGenerator)
     {
     }
 
-    public async Task<Cover?> GetByIdAsync(Guid id)
-    {
-        var cover = await GetByIdAsync<CoverJson>(id);
-        return cover != null
-            ? ToItem(cover)
-            : null;
-    }
-
-    public async Task<IEnumerable<Cover>> GetAllAsync()
-    {
-        return (await GetAllAsync<CoverJson>()).Select(ToItem);
-    }
-
-    public async Task<Cover> AddAsync(INewCoverInfo item)
-    {
-        var json = ToNewJson(item);
-        return ToItem(await Container.CreateItemAsync(json, new PartitionKey(json.Id)));
-    }
-
-    private CoverJson ToNewJson(INewCoverInfo item)
+    protected override CoverJson ToNewJson(INewCoverInfo item)
     {
         return new CoverJson
         {
@@ -43,12 +24,7 @@ public class CosmosDbCoversRepository : CosmosDbRepository, ICoversRepository
         };
     }
 
-    public async Task<Cover> DeleteAsync(Guid id)
-    {
-        return ToItem(await Container.DeleteItemAsync<CoverJson>(id.ToString(), new PartitionKey(id.ToString())));
-    }
-
-    private Cover ToItem(CoverJson json)
+    protected override Cover ToItem(CoverJson json)
     {
         return new Cover
         {
