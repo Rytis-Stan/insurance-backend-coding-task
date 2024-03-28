@@ -22,9 +22,9 @@ public class ClaimsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> CreateAsync(CreateClaimRequestDto claim)
+    public async Task<ActionResult<Claim>> CreateAsync(CreateClaimRequestDto request)
     {
-        await _claimsService.CreateClaimAsync(claim);
+        var claim = await _claimsService.CreateClaimAsync(request);
         return Ok(claim);
     }
 

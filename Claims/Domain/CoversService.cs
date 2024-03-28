@@ -13,9 +13,9 @@ public class CoversService : ICoversService
         _auditor = auditor;
     }
 
-    public async Task CreateCoverAsync(ICreateCoverRequest request)
+    public async Task<Cover> CreateCoverAsync(ICreateCoverRequest request)
     {
-        var cover = new Cover
+        var coverToCreate = new Cover
         {
             Id = Guid.NewGuid().ToString(),
             StartDate = request.StartDate,
@@ -23,8 +23,9 @@ public class CoversService : ICoversService
             Type = request.Type,
             Premium = Cover.ComputePremium(request.StartDate, request.EndDate, request.Type)
         };
-        await _coversRepository.AddItemAsync(cover);
-        _auditor.AuditCover(cover.Id, "POST");
+        var cover = await _coversRepository.AddItemAsync(coverToCreate);
+        _auditor.AuditCover(coverToCreate.Id, "POST");
+        return cover;
     }
 
     public decimal ComputePremium(DateOnly startDate, DateOnly endDate, CoverType coverType)

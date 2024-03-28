@@ -38,9 +38,9 @@ public class CoversController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<ActionResult> CreateAsync(CreateCoverRequestDto cover)
+    public async Task<ActionResult<Cover>> CreateAsync(CreateCoverRequestDto request)
     {
-        await _coversService.CreateCoverAsync(cover);
+        var cover = await _coversService.CreateCoverAsync(request);
         return Ok(cover);
     }
 
