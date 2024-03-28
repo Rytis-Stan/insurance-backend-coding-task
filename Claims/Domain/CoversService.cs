@@ -48,9 +48,9 @@ public class CoversService : ICoversService
 
     private class NewCoverInfo : INewCoverInfo
     {
-        public DateOnly StartDate { get; init; }
-        public DateOnly EndDate { get; init; }
-        public CoverType Type { get; init; }
-        public decimal Premium { get; init; }
+        public required DateOnly StartDate { get; init; }
+        public required DateOnly EndDate { get; init; }
+        public required CoverType Type { get; init; }
+        public required decimal Premium { get; init; }
     }
 }
