@@ -11,11 +11,11 @@ public class CosmosDbCoversRepository : CosmosDbRepository<Cover, INewCoverInfo,
     {
     }
 
-    protected override CoverJson ToNewJson(INewCoverInfo item, Guid id, DateTime created)
+    protected override CoverJson ToNewJson(INewCoverInfo item, string id, DateTime created)
     {
         return new CoverJson
         {
-            Id = id.ToString(),
+            Id = id,
             StartDate = item.StartDate,
             EndDate = item.EndDate,
             Type = item.Type,

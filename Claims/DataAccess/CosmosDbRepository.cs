@@ -23,9 +23,9 @@ public abstract class CosmosDbRepository<T, TNewItemInfo, TJson>
 
     public async Task<T> AddAsync(TNewItemInfo item)
     {
-        var id = _idGenerator.NewId();
+        var id = _idGenerator.NewId().ToString();
         var json = ToNewJson(item, id, _clock.UtcNow());
-        return ToItem(await _container.CreateItemAsync(json, new PartitionKey(id.ToString())));
+        return ToItem(await _container.CreateItemAsync(json, new PartitionKey(id)));
     }
 
     public async Task<T?> GetByIdAsync(Guid id)
@@ -58,6 +58,6 @@ public abstract class CosmosDbRepository<T, TNewItemInfo, TJson>
         return ToItem(await _container.DeleteItemAsync<TJson>(id.ToString(), new PartitionKey(id.ToString())));
     }
 
-    protected abstract TJson ToNewJson(TNewItemInfo item, Guid id, DateTime created);
+    protected abstract TJson ToNewJson(TNewItemInfo item, string id, DateTime created);
     protected abstract T ToItem(TJson json);
 }
