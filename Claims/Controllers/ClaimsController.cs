@@ -18,25 +18,12 @@ public class ClaimsController : ControllerBase
         _auditor = auditor;
     }
 
-    [HttpGet]
-    public Task<IEnumerable<Claim>> GetAsync()
-    {
-        return _claimsService.GetAllClaimsAsync();
-    }
-
     [HttpPost]
     public async Task<ActionResult<Claim>> CreateAsync(CreateClaimRequestDto request)
     {
         var claim = await _claimsService.CreateClaimAsync(request);
         _auditor.AuditClaim(claim.Id, "POST");
         return Ok(claim);
-    }
-
-    [HttpDelete("{id}")]
-    public Task DeleteAsync(Guid id)
-    {
-        _auditor.AuditClaim(id, "DELETE");
-        return _claimsService.DeleteClaimAsync(id);
     }
 
     [HttpGet("{id}")]
@@ -46,5 +33,18 @@ public class ClaimsController : ControllerBase
         return claim != null
             ? Ok(claim)
             : NotFound();
+    }
+
+    [HttpGet]
+    public Task<IEnumerable<Claim>> GetAsync()
+    {
+        return _claimsService.GetAllClaimsAsync();
+    }
+
+    [HttpDelete("{id}")]
+    public Task DeleteAsync(Guid id)
+    {
+        _auditor.AuditClaim(id, "DELETE");
+        return _claimsService.DeleteClaimAsync(id);
     }
 }

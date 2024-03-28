@@ -18,17 +18,12 @@ public class CoversController : ControllerBase
         _auditor = auditor;
     }
 
-    [HttpPost("Premium")]
-    public async Task<ActionResult> ComputePremiumAsync(DateOnly startDate, DateOnly endDate, CoverType coverType)
+    [HttpPost]
+    public async Task<ActionResult<Cover>> CreateAsync(CreateCoverRequestDto request)
     {
-        return Ok(_coversService.ComputePremium(startDate, endDate, coverType));
-    }
-
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Cover>>> GetAsync()
-    {
-        var covers = await _coversService.GetAllCoversAsync();
-        return Ok(covers);
+        var cover = await _coversService.CreateCoverAsync(request);
+        _auditor.AuditCover(cover.Id, "POST");
+        return Ok(cover);
     }
 
     [HttpGet("{id}")]
@@ -39,13 +34,12 @@ public class CoversController : ControllerBase
             ? Ok(cover)
             : NotFound();
     }
-    
-    [HttpPost]
-    public async Task<ActionResult<Cover>> CreateAsync(CreateCoverRequestDto request)
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Cover>>> GetAsync()
     {
-        var cover = await _coversService.CreateCoverAsync(request);
-        _auditor.AuditCover(cover.Id, "POST");
-        return Ok(cover);
+        var covers = await _coversService.GetAllCoversAsync();
+        return Ok(covers);
     }
 
     [HttpDelete("{id}")]
@@ -53,5 +47,11 @@ public class CoversController : ControllerBase
     {
         _auditor.AuditCover(id, "DELETE");
         return _coversService.DeleteCoverAsync(id);
+    }
+
+    [HttpPost("Premium")]
+    public async Task<ActionResult> ComputePremiumAsync(DateOnly startDate, DateOnly endDate, CoverType coverType)
+    {
+        return Ok(_coversService.ComputePremium(startDate, endDate, coverType));
     }
 }
