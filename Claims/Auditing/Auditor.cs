@@ -17,7 +17,7 @@ public class Auditor : IClaimAuditor, ICoverAuditor
     {
         var claimAudit = new ClaimAudit
         {
-            Created = _clock.Now(),
+            Created = _clock.UtcNow(),
             HttpRequestType = httpRequestType,
             ClaimId = id.ToString()
         };
@@ -30,7 +30,7 @@ public class Auditor : IClaimAuditor, ICoverAuditor
     {
         var coverAudit = new CoverAudit
         {
-            Created = _clock.Now(),
+            Created = _clock.UtcNow(),
             HttpRequestType = httpRequestType,
             CoverId = id.ToString()
         };

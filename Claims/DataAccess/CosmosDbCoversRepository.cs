@@ -39,7 +39,7 @@ public class CosmosDbCoversRepository : CosmosDbRepository, ICoversRepository
             EndDate = item.EndDate,
             Type = item.Type,
             Premium = item.Premium,
-            Created = Clock.Now()
+            Created = Clock.UtcNow()
         };
     }
 

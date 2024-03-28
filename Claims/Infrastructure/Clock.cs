@@ -2,8 +2,8 @@
 
 public class Clock : IClock
 {
-    public DateTime Now()
+    public DateTime UtcNow()
     {
-        return DateTime.Now;
+        return DateTime.UtcNow;
     }
 }

@@ -39,7 +39,7 @@ public class CosmosDbClaimsRepository : CosmosDbRepository, IClaimsRepository
             Name = item.Name,
             Type = item.Type,
             DamageCost = item.DamageCost,
-            Created = Clock.Now()
+            Created = Clock.UtcNow()
         };
     }
 
