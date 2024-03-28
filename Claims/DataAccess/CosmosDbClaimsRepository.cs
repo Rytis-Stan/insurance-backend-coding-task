@@ -11,7 +11,7 @@ public class CosmosDbClaimsRepository : CosmosDbRepository, IClaimsRepository
     {
     }
 
-    public async Task<Claim?> GetClaimAsync(Guid id)
+    public async Task<Claim?> GetByIdAsync(Guid id)
     {
         var json = await GetByIdAsync<ClaimJson>(id);
         return json != null
@@ -19,12 +19,12 @@ public class CosmosDbClaimsRepository : CosmosDbRepository, IClaimsRepository
             : null;
     }
 
-    public async Task<IEnumerable<Claim>> GetAllClaimsAsync()
+    public async Task<IEnumerable<Claim>> GetAllAsync()
     {
         return (await GetAllAsync<ClaimJson>()).Select(ToItem);
     }
 
-    public async Task<Claim> AddItemAsync(INewClaimInfo item)
+    public async Task<Claim> AddAsync(INewClaimInfo item)
     {
         var json = ToNewJson(item);
         return ToItem(await Container.CreateItemAsync(json, new PartitionKey(json.Id)));
@@ -43,7 +43,7 @@ public class CosmosDbClaimsRepository : CosmosDbRepository, IClaimsRepository
         };
     }
 
-    public async Task<Claim> DeleteItemAsync(Guid id)
+    public async Task<Claim> DeleteAsync(Guid id)
     {
         return ToItem(await Container.DeleteItemAsync<ClaimJson>(id.ToString(), new PartitionKey(id.ToString())));
     }

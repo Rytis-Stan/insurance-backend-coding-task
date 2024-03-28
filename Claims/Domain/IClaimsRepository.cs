@@ -2,10 +2,10 @@ namespace Claims.Domain;
 
 public interface IClaimsRepository
 {
-    Task<Claim> AddItemAsync(INewClaimInfo item);
-    Task<Claim?> GetClaimAsync(Guid id);
-    Task<IEnumerable<Claim>> GetAllClaimsAsync();
-    Task<Claim> DeleteItemAsync(Guid id);
+    Task<Claim> AddAsync(INewClaimInfo item);
+    Task<Claim?> GetByIdAsync(Guid id);
+    Task<IEnumerable<Claim>> GetAllAsync();
+    Task<Claim> DeleteAsync(Guid id);
 }
 
 public interface INewClaimInfo

@@ -12,7 +12,7 @@ public class CoversService : ICoversService
     public async Task<Cover> CreateCoverAsync(ICreateCoverRequest request)
     {
         var coverToCreate = ToNewCoverInfo(request);
-        return await _coversRepository.AddItemAsync(coverToCreate);
+        return await _coversRepository.AddAsync(coverToCreate);
     }
 
     private static INewCoverInfo ToNewCoverInfo(ICreateCoverRequest request)
@@ -33,17 +33,17 @@ public class CoversService : ICoversService
 
     public async Task<Cover?> GetCoverAsync(Guid id)
     {
-        return await _coversRepository.GetCoverAsync(id);
+        return await _coversRepository.GetByIdAsync(id);
     }
 
     public async Task<IEnumerable<Cover>> GetAllCoversAsync()
     {
-        return await _coversRepository.GetAllCoversAsync();
+        return await _coversRepository.GetAllAsync();
     }
 
     public async Task<Cover> DeleteCoverAsync(Guid id)
     {
-        return await _coversRepository.DeleteItemAsync(id);
+        return await _coversRepository.DeleteAsync(id);
     }
 
     private class NewCoverInfo : INewCoverInfo

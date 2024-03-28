@@ -18,22 +18,22 @@ public class ClaimsService : IClaimsService
             Type = request.Type,
             DamageCost = request.DamageCost
         };
-        return await _claimsRepository.AddItemAsync(claimToCreate);
+        return await _claimsRepository.AddAsync(claimToCreate);
     }
 
     public Task<IEnumerable<Claim>> GetAllClaimsAsync()
     {
-        return _claimsRepository.GetAllClaimsAsync();
+        return _claimsRepository.GetAllAsync();
     }
 
     public Task DeleteClaimAsync(Guid id)
     {
-        return _claimsRepository.DeleteItemAsync(id);
+        return _claimsRepository.DeleteAsync(id);
     }
 
     public Task<Claim?> GetClaimByIdAsync(Guid id)
     {
-        return _claimsRepository.GetClaimAsync(id);
+        return _claimsRepository.GetByIdAsync(id);
     }
 }
 

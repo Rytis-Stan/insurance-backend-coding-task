@@ -11,7 +11,7 @@ public class CosmosDbCoversRepository : CosmosDbRepository, ICoversRepository
     {
     }
 
-    public async Task<Cover?> GetCoverAsync(Guid id)
+    public async Task<Cover?> GetByIdAsync(Guid id)
     {
         var cover = await GetByIdAsync<CoverJson>(id);
         return cover != null
@@ -19,12 +19,12 @@ public class CosmosDbCoversRepository : CosmosDbRepository, ICoversRepository
             : null;
     }
 
-    public async Task<IEnumerable<Cover>> GetAllCoversAsync()
+    public async Task<IEnumerable<Cover>> GetAllAsync()
     {
         return (await GetAllAsync<CoverJson>()).Select(ToItem);
     }
 
-    public async Task<Cover> AddItemAsync(INewCoverInfo item)
+    public async Task<Cover> AddAsync(INewCoverInfo item)
     {
         var json = ToNewJson(item);
         return ToItem(await Container.CreateItemAsync(json, new PartitionKey(json.Id)));
@@ -43,7 +43,7 @@ public class CosmosDbCoversRepository : CosmosDbRepository, ICoversRepository
         };
     }
 
-    public async Task<Cover> DeleteItemAsync(Guid id)
+    public async Task<Cover> DeleteAsync(Guid id)
     {
         return ToItem(await Container.DeleteItemAsync<CoverJson>(id.ToString(), new PartitionKey(id.ToString())));
     }

@@ -2,10 +2,10 @@ namespace Claims.Domain;
 
 public interface ICoversRepository
 {
-    Task<Cover> AddItemAsync(INewCoverInfo item);
-    Task<Cover?> GetCoverAsync(Guid id);
-    Task<IEnumerable<Cover>> GetAllCoversAsync();
-    Task<Cover> DeleteItemAsync(Guid id);
+    Task<Cover> AddAsync(INewCoverInfo item);
+    Task<Cover?> GetByIdAsync(Guid id);
+    Task<IEnumerable<Cover>> GetAllAsync();
+    Task<Cover> DeleteAsync(Guid id);
 }
 
 public interface INewCoverInfo
