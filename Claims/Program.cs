@@ -38,8 +38,8 @@ public class Program
 
         var clock = new Clock();
         var cosmosClient = InitializeCosmosClientInstanceAsync(configuration.CosmosDb).GetAwaiter().GetResult();
-        var claimsRepository = new CosmosDbClaimsRepository(cosmosClient, configuration.CosmosDb.DatabaseName, configuration.CosmosDb.ContainerName, clock);
-        var coversRepository = new CosmosDbCoversRepository(cosmosClient, configuration.CosmosDb.DatabaseName, "Cover", clock);
+        var claimsRepository = new CosmosDbClaimsRepository(cosmosClient, configuration.CosmosDb.DatabaseName, configuration.CosmosDb.ContainerNames.Claim, clock);
+        var coversRepository = new CosmosDbCoversRepository(cosmosClient, configuration.CosmosDb.DatabaseName, configuration.CosmosDb.ContainerNames.Cover, clock);
 
         services.AddSingleton<IClaimsRepository>(claimsRepository);
         services.AddSingleton<ICoversRepository>(coversRepository);
@@ -74,8 +74,10 @@ public class Program
     {
         var client = new CosmosClient(configuration.Account, configuration.Key);
         var database = await client.CreateDatabaseIfNotExistsAsync(configuration.DatabaseName);
-        await database.Database.CreateContainerIfNotExistsAsync(configuration.ContainerName, "/id");
-        await database.Database.CreateContainerIfNotExistsAsync("Cover", "/id");
+        foreach (var containerName in configuration.ContainerNames)
+        {
+            await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
+        }
         return client;
     }
 
