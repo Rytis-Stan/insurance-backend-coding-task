@@ -8,12 +8,14 @@ public abstract class CosmosDbRepository
 {
     protected readonly Container Container;
     protected readonly IClock Clock;
+    private readonly IIdGenerator _idGenerator;
 
-    protected CosmosDbRepository(CosmosClient dbClient, string databaseName, string containerName, IClock clock)
+    protected CosmosDbRepository(CosmosClient dbClient, string databaseName, string containerName, IClock clock, IIdGenerator idGenerator)
     {
         ArgumentNullException.ThrowIfNull(dbClient, nameof(dbClient));
         Container = dbClient.GetContainer(databaseName, containerName);
         Clock = clock;
+        _idGenerator = idGenerator;
     }
 
     protected async Task<T?> GetByIdAsync<T>(Guid id)
@@ -40,5 +42,10 @@ public abstract class CosmosDbRepository
             results.AddRange(response.ToList());
         }
         return results;
+    }
+
+    protected Guid NewId()
+    {
+        return _idGenerator.NewId();
     }
 }

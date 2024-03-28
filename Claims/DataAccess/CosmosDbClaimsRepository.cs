@@ -6,8 +6,8 @@ namespace Claims.DataAccess;
 
 public class CosmosDbClaimsRepository : CosmosDbRepository, IClaimsRepository
 {
-    public CosmosDbClaimsRepository(CosmosClient dbClient, string databaseName, string containerName, IClock clock)
-        : base(dbClient, databaseName, containerName, clock)
+    public CosmosDbClaimsRepository(CosmosClient dbClient, string databaseName, string containerName, IClock clock, IIdGenerator idGenerator)
+        : base(dbClient, databaseName, containerName, clock, idGenerator)
     {
     }
 
@@ -34,7 +34,7 @@ public class CosmosDbClaimsRepository : CosmosDbRepository, IClaimsRepository
     {
         return new ClaimJson
         {
-            Id = Guid.NewGuid().ToString(),
+            Id = NewId().ToString(),
             CoverId = item.CoverId.ToString(),
             Name = item.Name,
             Type = item.Type,

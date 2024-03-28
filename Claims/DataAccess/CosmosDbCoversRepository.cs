@@ -6,8 +6,8 @@ namespace Claims.DataAccess;
 
 public class CosmosDbCoversRepository : CosmosDbRepository, ICoversRepository
 {
-    public CosmosDbCoversRepository(CosmosClient dbClient, string databaseName, string containerName, IClock clock)
-        : base(dbClient, databaseName, containerName, clock)
+    public CosmosDbCoversRepository(CosmosClient dbClient, string databaseName, string containerName, IClock clock, IIdGenerator idGenerator)
+        : base(dbClient, databaseName, containerName, clock, idGenerator)
     {
     }
 
@@ -34,7 +34,7 @@ public class CosmosDbCoversRepository : CosmosDbRepository, ICoversRepository
     {
         return new CoverJson
         {
-            Id = Guid.NewGuid().ToString(),
+            Id = NewId().ToString(),
             StartDate = item.StartDate,
             EndDate = item.EndDate,
             Type = item.Type,

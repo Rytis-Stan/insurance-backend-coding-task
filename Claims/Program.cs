@@ -36,11 +36,12 @@ public class Program
             x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
 
-        var clock = new Clock();
         var cosmosDbConfiguration = configuration.CosmosDb;
         var cosmosClient = InitializeCosmosClientInstanceAsync(cosmosDbConfiguration).GetAwaiter().GetResult();
-        var claimsRepository = new CosmosDbClaimsRepository(cosmosClient, cosmosDbConfiguration.DatabaseName, cosmosDbConfiguration.ContainerNames.Claim, clock);
-        var coversRepository = new CosmosDbCoversRepository(cosmosClient, cosmosDbConfiguration.DatabaseName, cosmosDbConfiguration.ContainerNames.Cover, clock);
+        var clock = new Clock();
+        var idGenerator = new IdGenerator();
+        var claimsRepository = new CosmosDbClaimsRepository(cosmosClient, cosmosDbConfiguration.DatabaseName, cosmosDbConfiguration.ContainerNames.Claim, clock, idGenerator);
+        var coversRepository = new CosmosDbCoversRepository(cosmosClient, cosmosDbConfiguration.DatabaseName, cosmosDbConfiguration.ContainerNames.Cover, clock, idGenerator);
 
         services.AddSingleton<IClaimsRepository>(claimsRepository);
         services.AddSingleton<ICoversRepository>(coversRepository);
