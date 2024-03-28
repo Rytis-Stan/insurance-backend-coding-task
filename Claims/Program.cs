@@ -13,11 +13,7 @@ public class Program
 {
     static void Main(string[] args)
     {
-        var app = BuildApp(args);
-        ConfigureApp(app);
-        MigrateDatabase(app);
-
-        app.Run();
+        BuildApp(args).Run();
     }
 
     private static WebApplication BuildApp(string[] args)
@@ -25,6 +21,8 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
         AddServices(builder);
         var app = builder.Build();
+        ConfigureApp(app);
+        MigrateDatabase(app);
         return app;
     }
 
