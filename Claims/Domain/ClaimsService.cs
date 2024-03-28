@@ -14,7 +14,6 @@ public class ClaimsService : IClaimsService
         var claimToCreate = new NewClaimInfo
         {
             CoverId = request.CoverId,
-            Created = DateTime.Now, // TODO: Move "Created" field initialization into the repository
             Name = request.Name,
             Type = request.Type,
             DamageCost = request.DamageCost
@@ -41,7 +40,6 @@ public class ClaimsService : IClaimsService
 public class NewClaimInfo : INewClaimInfo
 {
     public Guid CoverId { get; init; }
-    public DateTime Created { get; init; }
     public string Name { get; init; }
     public ClaimType Type { get; init; }
     public decimal DamageCost { get; init; }

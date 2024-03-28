@@ -1,12 +1,13 @@
 using Claims.Domain;
+using Claims.Infrastructure;
 using Microsoft.Azure.Cosmos;
 
 namespace Claims.DataAccess;
 
 public class CosmosDbClaimsRepository : CosmosDbRepository, IClaimsRepository
 {
-    public CosmosDbClaimsRepository(CosmosClient dbClient, string databaseName, string containerName)
-        : base(dbClient, databaseName, containerName)
+    public CosmosDbClaimsRepository(CosmosClient dbClient, string databaseName, string containerName, IClock clock)
+        : base(dbClient, databaseName, containerName, clock)
     {
     }
 
@@ -35,7 +36,7 @@ public class CosmosDbClaimsRepository : CosmosDbRepository, IClaimsRepository
         {
             Id = Guid.NewGuid().ToString(),
             CoverId = item.CoverId.ToString(),
-            Created = item.Created, // TODO: Inject current moment value here!!!
+            Created = Clock.Now(),
             Name = item.Name,
             Type = item.Type,
             DamageCost = item.DamageCost

@@ -1,12 +1,14 @@
 using Claims.Domain;
+using Claims.Infrastructure;
 using Microsoft.Azure.Cosmos;
 
 namespace Claims.DataAccess;
 
+// TODO: Should there be a "Created" field for covers too???
 public class CosmosDbCoversRepository : CosmosDbRepository, ICoversRepository
 {
-    public CosmosDbCoversRepository(CosmosClient dbClient, string databaseName, string containerName)
-        : base(dbClient, databaseName, containerName)
+    public CosmosDbCoversRepository(CosmosClient dbClient, string databaseName, string containerName, IClock clock)
+        : base(dbClient, databaseName, containerName, clock)
     {
     }
 

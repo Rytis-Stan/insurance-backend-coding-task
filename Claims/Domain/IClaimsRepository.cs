@@ -11,7 +11,6 @@ public interface IClaimsRepository
 public interface INewClaimInfo
 {
     Guid CoverId { get; }
-    DateTime Created { get; }
     string Name { get; }
     ClaimType Type { get; }
     decimal DamageCost { get; }

@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Claims.Infrastructure;
 using Microsoft.Azure.Cosmos;
 
 namespace Claims.DataAccess;
@@ -6,11 +7,13 @@ namespace Claims.DataAccess;
 public abstract class CosmosDbRepository
 {
     protected readonly Container Container;
+    protected readonly IClock Clock;
 
-    protected CosmosDbRepository(CosmosClient dbClient, string databaseName, string containerName)
+    protected CosmosDbRepository(CosmosClient dbClient, string databaseName, string containerName, IClock clock)
     {
         ArgumentNullException.ThrowIfNull(dbClient, nameof(dbClient));
         Container = dbClient.GetContainer(databaseName, containerName);
+        Clock = clock;
     }
 
     protected async Task<T?> GetByIdAsync<T>(Guid id)
