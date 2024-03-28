@@ -4,7 +4,6 @@ using Microsoft.Azure.Cosmos;
 
 namespace Claims.DataAccess;
 
-// TODO: Should there be a "Created" field for covers too???
 public class CosmosDbCoversRepository : CosmosDbRepository, ICoversRepository
 {
     public CosmosDbCoversRepository(CosmosClient dbClient, string databaseName, string containerName, IClock clock)
@@ -39,7 +38,8 @@ public class CosmosDbCoversRepository : CosmosDbRepository, ICoversRepository
             StartDate = item.StartDate,
             EndDate = item.EndDate,
             Type = item.Type,
-            Premium = item.Premium
+            Premium = item.Premium,
+            Created = Clock.Now()
         };
     }
 
@@ -56,19 +56,8 @@ public class CosmosDbCoversRepository : CosmosDbRepository, ICoversRepository
             StartDate = json.StartDate,
             EndDate = json.EndDate,
             Type = json.Type,
-            Premium = json.Premium
-        };
-    }
-
-    private CoverJson ToJson(Cover item)
-    {
-        return new CoverJson
-        {
-            Id = item.Id,
-            StartDate = item.StartDate,
-            EndDate = item.EndDate,
-            Type = item.Type,
-            Premium = item.Premium
+            Premium = json.Premium,
+            Created = json.Created
         };
     }
 }

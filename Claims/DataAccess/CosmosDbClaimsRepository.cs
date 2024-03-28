@@ -36,10 +36,10 @@ public class CosmosDbClaimsRepository : CosmosDbRepository, IClaimsRepository
         {
             Id = Guid.NewGuid().ToString(),
             CoverId = item.CoverId.ToString(),
-            Created = Clock.Now(),
             Name = item.Name,
             Type = item.Type,
-            DamageCost = item.DamageCost
+            DamageCost = item.DamageCost,
+            Created = Clock.Now()
         };
     }
 
@@ -54,23 +54,10 @@ public class CosmosDbClaimsRepository : CosmosDbRepository, IClaimsRepository
         {
             Id = json.Id,
             CoverId = json.CoverId,
-            Created = json.Created,
             Name = json.Name,
             Type = json.Type,
-            DamageCost = json.DamageCost
-        };
-    }
-
-    private ClaimJson ToJson(Claim item)
-    {
-        return new ClaimJson
-        {
-            Id = item.Id,
-            CoverId = item.CoverId,
-            Created = item.Created,
-            Name = item.Name,
-            Type = item.Type,
-            DamageCost = item.DamageCost
+            DamageCost = json.DamageCost,
+            Created = json.Created
         };
     }
 }

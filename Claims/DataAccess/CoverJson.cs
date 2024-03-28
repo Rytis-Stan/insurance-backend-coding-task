@@ -6,18 +6,21 @@ namespace Claims.DataAccess;
 public class CoverJson
 {
     [JsonProperty(PropertyName = "id")]
-    public string Id { get; init; }
+    public required string Id { get; init; }
 
     [JsonProperty(PropertyName = "startDate")]
-    public DateOnly StartDate { get; init; }
+    public required DateOnly StartDate { get; init; }
 
     [JsonProperty(PropertyName = "endDate")]
-    public DateOnly EndDate { get; init; }
+    public required DateOnly EndDate { get; init; }
 
     [JsonProperty(PropertyName = "claimType")]
-    public CoverType Type { get; init; }
+    public required CoverType Type { get; init; }
 
     // TODO: Use decimal???
     [JsonProperty(PropertyName = "premium")]
-    public decimal Premium { get; init; }
+    public required decimal Premium { get; init; }
+
+    [JsonProperty(PropertyName = "created")]
+    public required DateTime Created { get; init; }
 }

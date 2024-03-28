@@ -2,12 +2,12 @@
 
 public class Claim
 {
-    public string Id { get; init; }
-    public string CoverId { get; init; }
-    public DateTime Created { get; init; }
-    public string Name { get; init; }
-    public ClaimType Type { get; init; }
-    public decimal DamageCost { get; init; }
+    public required string Id { get; init; }
+    public required string CoverId { get; init; }
+    public required string Name { get; init; }
+    public required ClaimType Type { get; init; }
+    public required decimal DamageCost { get; init; }
+    public required DateTime Created { get; init; }
 }
 
 public enum ClaimType

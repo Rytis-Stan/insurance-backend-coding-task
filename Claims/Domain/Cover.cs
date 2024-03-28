@@ -2,11 +2,12 @@ namespace Claims.Domain;
 
 public class Cover
 {
-    public string Id { get; init; }
-    public DateOnly StartDate { get; init; }
-    public DateOnly EndDate { get; init; }
-    public CoverType Type { get; init; }
-    public decimal Premium { get; init; }
+    public required string Id { get; init; }
+    public required DateOnly StartDate { get; init; }
+    public required DateOnly EndDate { get; init; }
+    public required CoverType Type { get; init; }
+    public required decimal Premium { get; init; }
+    public required DateTime Created { get; init; }
 
     // TODO: Make the "Premium" property call "ComputerPremium".
     public static decimal ComputePremium(DateOnly startDate, DateOnly endDate, CoverType coverType)
