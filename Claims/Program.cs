@@ -38,7 +38,8 @@ public class Program
 
         var cosmosDbConfiguration = configuration.CosmosDb;
         var cosmosClient = InitializeCosmosClientInstanceAsync(cosmosDbConfiguration).GetAwaiter().GetResult();
-        var clock = AddRepositories(cosmosClient, cosmosDbConfiguration, services);
+        var clock = new Clock();
+        AddRepositories(services, cosmosClient, cosmosDbConfiguration, clock);
         services.AddDbContext<AuditContext>(options => options.UseSqlServer(configuration.ConnectionString));
 
         services.AddSingleton<IClock>(clock);
@@ -52,14 +53,11 @@ public class Program
         services.AddSwaggerGen();
     }
 
-    private static Clock AddRepositories(CosmosClient cosmosClient, CosmosDbConfiguration cosmosDbConfiguration,
-        IServiceCollection services)
+    private static void AddRepositories(IServiceCollection services, CosmosClient cosmosClient, CosmosDbConfiguration configuration, IClock clock)
     {
-        var clock = new Clock();
         var idGenerator = new IdGenerator();
-        services.AddSingleton<IClaimsRepository>(new CosmosDbClaimsRepository(cosmosClient, cosmosDbConfiguration.DatabaseName, cosmosDbConfiguration.ContainerNames.Claim, clock, idGenerator));
-        services.AddSingleton<ICoversRepository>(new CosmosDbCoversRepository(cosmosClient, cosmosDbConfiguration.DatabaseName, cosmosDbConfiguration.ContainerNames.Cover, clock, idGenerator));
-        return clock;
+        services.AddSingleton<IClaimsRepository>(new CosmosDbClaimsRepository(cosmosClient, configuration.DatabaseName, configuration.ContainerNames.Claim, clock, idGenerator));
+        services.AddSingleton<ICoversRepository>(new CosmosDbCoversRepository(cosmosClient, configuration.DatabaseName, configuration.ContainerNames.Cover, clock, idGenerator));
     }
 
     private static void ConfigureApp(WebApplication app)
@@ -79,10 +77,10 @@ public class Program
     private static async Task<CosmosClient> InitializeCosmosClientInstanceAsync(CosmosDbConfiguration configuration)
     {
         var client = new CosmosClient(configuration.Account, configuration.Key);
-        var database = await client.CreateDatabaseIfNotExistsAsync(configuration.DatabaseName);
+        var response = await client.CreateDatabaseIfNotExistsAsync(configuration.DatabaseName);
         foreach (var containerName in configuration.ContainerNames)
         {
-            await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
+            await response.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
         }
         return client;
     }
