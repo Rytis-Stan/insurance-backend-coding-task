@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Claims.DataAccess;
 
-public class ClaimJson : IHasStringId
+public class ClaimJson
 {
     [JsonProperty(PropertyName = "id")]
     public required string Id { get; init; }

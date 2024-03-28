@@ -7,31 +7,32 @@ namespace Claims.DataAccess;
 public abstract class CosmosDbRepository<T, TNewItemInfo, TJson>
     where T : class
     where TNewItemInfo : class
-    where TJson : class, IHasStringId
+    where TJson : class
 {
-    protected readonly Container Container;
-    protected readonly IClock Clock;
+    private readonly Container _container;
+    private readonly IClock _clock;
     private readonly IIdGenerator _idGenerator;
 
     protected CosmosDbRepository(CosmosClient dbClient, string databaseName, string containerName, IClock clock, IIdGenerator idGenerator)
     {
         ArgumentNullException.ThrowIfNull(dbClient, nameof(dbClient));
-        Container = dbClient.GetContainer(databaseName, containerName);
-        Clock = clock;
+        _container = dbClient.GetContainer(databaseName, containerName);
+        _clock = clock;
         _idGenerator = idGenerator;
     }
 
     public async Task<T> AddAsync(TNewItemInfo item)
     {
-        var json = ToNewJson(item);
-        return ToItem(await Container.CreateItemAsync(json, new PartitionKey(json.Id)));
+        var id = _idGenerator.NewId();
+        var json = ToNewJson(item, id, _clock.UtcNow());
+        return ToItem(await _container.CreateItemAsync(json, new PartitionKey(id.ToString())));
     }
 
     public async Task<T?> GetByIdAsync(Guid id)
     {
         try
         {
-            var response = await Container.ReadItemAsync<TJson>(id.ToString(), new PartitionKey(id.ToString()));
+            var response = await _container.ReadItemAsync<TJson>(id.ToString(), new PartitionKey(id.ToString()));
             return ToItem(response.Resource);
         }
         catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
@@ -42,7 +43,7 @@ public abstract class CosmosDbRepository<T, TNewItemInfo, TJson>
 
     public async Task<IEnumerable<T>> GetAllAsync()
     {
-        var query = Container.GetItemQueryIterator<TJson>(new QueryDefinition("SELECT * FROM c"));
+        var query = _container.GetItemQueryIterator<TJson>(new QueryDefinition("SELECT * FROM c"));
         var results = new List<T>();
         while (query.HasMoreResults)
         {
@@ -54,14 +55,9 @@ public abstract class CosmosDbRepository<T, TNewItemInfo, TJson>
 
     public async Task<T> DeleteAsync(Guid id)
     {
-        return ToItem(await Container.DeleteItemAsync<TJson>(id.ToString(), new PartitionKey(id.ToString())));
+        return ToItem(await _container.DeleteItemAsync<TJson>(id.ToString(), new PartitionKey(id.ToString())));
     }
 
-    protected Guid NewId()
-    {
-        return _idGenerator.NewId();
-    }
-
-    protected abstract TJson ToNewJson(TNewItemInfo item);
+    protected abstract TJson ToNewJson(TNewItemInfo item, Guid id, DateTime created);
     protected abstract T ToItem(TJson json);
 }

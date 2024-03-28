@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Claims.DataAccess;
 
-public class CoverJson : IHasStringId
+public class CoverJson
 {
     [JsonProperty(PropertyName = "id")]
     public required string Id { get; init; }

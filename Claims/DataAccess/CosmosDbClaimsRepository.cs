@@ -11,16 +11,16 @@ public class CosmosDbClaimsRepository : CosmosDbRepository<Claim, INewClaimInfo,
     {
     }
 
-    protected override ClaimJson ToNewJson(INewClaimInfo item)
+    protected override ClaimJson ToNewJson(INewClaimInfo item, Guid id, DateTime created)
     {
         return new ClaimJson
         {
-            Id = NewId().ToString(),
+            Id = id.ToString(),
             CoverId = item.CoverId.ToString(),
             Name = item.Name,
             Type = item.Type,
             DamageCost = item.DamageCost,
-            Created = Clock.UtcNow()
+            Created = created
         };
     }
 
