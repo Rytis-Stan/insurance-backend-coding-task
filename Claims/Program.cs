@@ -37,9 +37,10 @@ public class Program
         });
 
         var clock = new Clock();
-        var cosmosClient = InitializeCosmosClientInstanceAsync(configuration.CosmosDb).GetAwaiter().GetResult();
-        var claimsRepository = new CosmosDbClaimsRepository(cosmosClient, configuration.CosmosDb.DatabaseName, configuration.CosmosDb.ContainerNames.Claim, clock);
-        var coversRepository = new CosmosDbCoversRepository(cosmosClient, configuration.CosmosDb.DatabaseName, configuration.CosmosDb.ContainerNames.Cover, clock);
+        var cosmosDbConfiguration = configuration.CosmosDb;
+        var cosmosClient = InitializeCosmosClientInstanceAsync(cosmosDbConfiguration).GetAwaiter().GetResult();
+        var claimsRepository = new CosmosDbClaimsRepository(cosmosClient, cosmosDbConfiguration.DatabaseName, cosmosDbConfiguration.ContainerNames.Claim, clock);
+        var coversRepository = new CosmosDbCoversRepository(cosmosClient, cosmosDbConfiguration.DatabaseName, cosmosDbConfiguration.ContainerNames.Cover, clock);
 
         services.AddSingleton<IClaimsRepository>(claimsRepository);
         services.AddSingleton<ICoversRepository>(coversRepository);
