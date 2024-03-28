@@ -76,6 +76,7 @@ public class Program
         var client = new CosmosClient(configuration.Account, configuration.Key);
         var database = await client.CreateDatabaseIfNotExistsAsync(configuration.DatabaseName);
         await database.Database.CreateContainerIfNotExistsAsync(configuration.ContainerName, "/id");
+        await database.Database.CreateContainerIfNotExistsAsync("Cover", "/id");
         return client;
     }
 
