@@ -38,13 +38,7 @@ public class Program
 
         var cosmosDbConfiguration = configuration.CosmosDb;
         var cosmosClient = InitializeCosmosClientInstanceAsync(cosmosDbConfiguration).GetAwaiter().GetResult();
-        var clock = new Clock();
-        var idGenerator = new IdGenerator();
-        var claimsRepository = new CosmosDbClaimsRepository(cosmosClient, cosmosDbConfiguration.DatabaseName, cosmosDbConfiguration.ContainerNames.Claim, clock, idGenerator);
-        var coversRepository = new CosmosDbCoversRepository(cosmosClient, cosmosDbConfiguration.DatabaseName, cosmosDbConfiguration.ContainerNames.Cover, clock, idGenerator);
-
-        services.AddSingleton<IClaimsRepository>(claimsRepository);
-        services.AddSingleton<ICoversRepository>(coversRepository);
+        var clock = AddRepositories(cosmosClient, cosmosDbConfiguration, services);
         services.AddDbContext<AuditContext>(options => options.UseSqlServer(configuration.ConnectionString));
 
         services.AddSingleton<IClock>(clock);
@@ -56,6 +50,16 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+    }
+
+    private static Clock AddRepositories(CosmosClient cosmosClient, CosmosDbConfiguration cosmosDbConfiguration,
+        IServiceCollection services)
+    {
+        var clock = new Clock();
+        var idGenerator = new IdGenerator();
+        services.AddSingleton<IClaimsRepository>(new CosmosDbClaimsRepository(cosmosClient, cosmosDbConfiguration.DatabaseName, cosmosDbConfiguration.ContainerNames.Claim, clock, idGenerator));
+        services.AddSingleton<ICoversRepository>(new CosmosDbCoversRepository(cosmosClient, cosmosDbConfiguration.DatabaseName, cosmosDbConfiguration.ContainerNames.Cover, clock, idGenerator));
+        return clock;
     }
 
     private static void ConfigureApp(WebApplication app)
