@@ -30,7 +30,7 @@ public class ClaimsService : IClaimsService
         return _claimsRepository.GetAllAsync();
     }
 
-    public Task DeleteClaimAsync(Guid id)
+    public Task<Claim> DeleteClaimAsync(Guid id)
     {
         return _claimsRepository.DeleteAsync(id);
     }
