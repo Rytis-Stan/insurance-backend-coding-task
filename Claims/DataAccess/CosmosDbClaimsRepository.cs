@@ -12,21 +12,50 @@ public class CosmosDbClaimsRepository : CosmosDbRepository, IClaimsRepository
 
     public async Task<Claim?> GetClaimAsync(Guid id)
     {
-        return await GetByIdAsync<Claim>(id);
+        var json = await GetByIdAsync<ClaimJson>(id);
+        return json != null
+            ? ToItem(json)
+            : null;
     }
 
     public async Task<IEnumerable<Claim>> GetAllClaimsAsync()
     {
-        return await GetAllAsync<Claim>();
+        return (await GetAllAsync<ClaimJson>()).Select(ToItem);
     }
 
     public async Task<Claim> AddItemAsync(Claim item)
     {
-        return await Container.CreateItemAsync(item, new PartitionKey(item.Id));
+        return ToItem(await Container.CreateItemAsync(ToJson(item), new PartitionKey(item.Id)));
     }
 
     public async Task<Claim> DeleteItemAsync(Guid id)
     {
-        return await Container.DeleteItemAsync<Claim>(id.ToString(), new PartitionKey(id.ToString()));
+        return ToItem(await Container.DeleteItemAsync<ClaimJson>(id.ToString(), new PartitionKey(id.ToString())));
+    }
+
+    private Claim ToItem(ClaimJson json)
+    {
+        return new Claim
+        {
+            Id = json.Id,
+            CoverId = json.CoverId,
+            Created = json.Created,
+            Name = json.Name,
+            Type = json.Type,
+            DamageCost = json.DamageCost
+        };
+    }
+
+    private ClaimJson ToJson(Claim item)
+    {
+        return new ClaimJson
+        {
+            Id = item.Id,
+            CoverId = item.CoverId,
+            Created = item.Created,
+            Name = item.Name,
+            Type = item.Type,
+            DamageCost = item.DamageCost
+        };
     }
 }
