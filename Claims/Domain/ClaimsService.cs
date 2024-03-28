@@ -11,10 +11,9 @@ public class ClaimsService : IClaimsService
 
     public async Task<Claim> CreateClaimAsync(ICreateClaimRequest request)
     {
-        var claimToCreate = new Claim
+        var claimToCreate = new NewClaimInfo
         {
-            Id = Guid.NewGuid().ToString(), // TODO: Change the domain object's "Id" to an actual GUID value
-            CoverId = request.CoverId.ToString(), // TODO: Change the domain object's "CoverId" to an actual GUID value
+            CoverId = request.CoverId,
             Created = DateTime.Now, // TODO: Move "Created" field initialization into the repository
             Name = request.Name,
             Type = request.Type,
@@ -37,4 +36,13 @@ public class ClaimsService : IClaimsService
     {
         return _claimsRepository.GetClaimAsync(id);
     }
+}
+
+public class NewClaimInfo : INewClaimInfo
+{
+    public Guid CoverId { get; init; }
+    public DateTime Created { get; init; }
+    public string Name { get; init; }
+    public ClaimType Type { get; init; }
+    public decimal DamageCost { get; init; }
 }

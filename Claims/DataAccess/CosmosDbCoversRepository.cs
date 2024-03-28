@@ -23,9 +23,22 @@ public class CosmosDbCoversRepository : CosmosDbRepository, ICoversRepository
         return (await GetAllAsync<CoverJson>()).Select(ToItem);
     }
 
-    public async Task<Cover> AddItemAsync(Cover item)
+    public async Task<Cover> AddItemAsync(INewCoverInfo item)
     {
-        return ToItem(await Container.CreateItemAsync(ToJson(item), new PartitionKey(item.Id)));
+        var json = ToNewJson(item);
+        return ToItem(await Container.CreateItemAsync(json, new PartitionKey(json.Id)));
+    }
+
+    private CoverJson ToNewJson(INewCoverInfo item)
+    {
+        return new CoverJson
+        {
+            Id = Guid.NewGuid().ToString(),
+            StartDate = item.StartDate,
+            EndDate = item.EndDate,
+            Type = item.Type,
+            Premium = item.Premium
+        };
     }
 
     public async Task<Cover> DeleteItemAsync(Guid id)

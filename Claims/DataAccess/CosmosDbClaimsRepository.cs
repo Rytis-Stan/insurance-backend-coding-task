@@ -23,9 +23,23 @@ public class CosmosDbClaimsRepository : CosmosDbRepository, IClaimsRepository
         return (await GetAllAsync<ClaimJson>()).Select(ToItem);
     }
 
-    public async Task<Claim> AddItemAsync(Claim item)
+    public async Task<Claim> AddItemAsync(INewClaimInfo item)
     {
-        return ToItem(await Container.CreateItemAsync(ToJson(item), new PartitionKey(item.Id)));
+        var json = ToNewJson(item);
+        return ToItem(await Container.CreateItemAsync(json, new PartitionKey(json.Id)));
+    }
+
+    private ClaimJson ToNewJson(INewClaimInfo item)
+    {
+        return new ClaimJson
+        {
+            Id = Guid.NewGuid().ToString(),
+            CoverId = item.CoverId.ToString(),
+            Created = item.Created, // TODO: Inject current moment value here!!!
+            Name = item.Name,
+            Type = item.Type,
+            DamageCost = item.DamageCost
+        };
     }
 
     public async Task<Claim> DeleteItemAsync(Guid id)

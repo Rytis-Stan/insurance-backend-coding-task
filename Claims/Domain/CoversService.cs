@@ -11,15 +11,19 @@ public class CoversService : ICoversService
 
     public async Task<Cover> CreateCoverAsync(ICreateCoverRequest request)
     {
-        var coverToCreate = new Cover
+        var coverToCreate = ToNewCoverInfo(request);
+        return await _coversRepository.AddItemAsync(coverToCreate);
+    }
+
+    private static INewCoverInfo ToNewCoverInfo(ICreateCoverRequest request)
+    {
+        return new NewCoverInfo
         {
-            Id = Guid.NewGuid().ToString(),
             StartDate = request.StartDate,
             EndDate = request.EndDate,
             Type = request.Type,
             Premium = Cover.ComputePremium(request.StartDate, request.EndDate, request.Type)
         };
-        return await _coversRepository.AddItemAsync(coverToCreate);
     }
 
     public decimal ComputePremium(DateOnly startDate, DateOnly endDate, CoverType coverType)
@@ -40,5 +44,13 @@ public class CoversService : ICoversService
     public async Task<Cover> DeleteCoverAsync(Guid id)
     {
         return await _coversRepository.DeleteItemAsync(id);
+    }
+
+    private class NewCoverInfo : INewCoverInfo
+    {
+        public DateOnly StartDate { get; init; }
+        public DateOnly EndDate { get; init; }
+        public CoverType Type { get; init; }
+        public decimal Premium { get; init; }
     }
 }
