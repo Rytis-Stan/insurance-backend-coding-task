@@ -3,15 +3,23 @@ namespace Claims.Domain;
 public class ClaimsService : IClaimsService
 {
     private readonly IClaimsRepository _claimsRepository;
+    private readonly ICoversRepository _coversRepository;
 
-    public ClaimsService(IClaimsRepository claimsRepository)
+    public ClaimsService(IClaimsRepository claimsRepository, ICoversRepository coversRepository)
     {
         _claimsRepository = claimsRepository;
+        _coversRepository = coversRepository;
     }
 
     public async Task<Claim> CreateClaimAsync(ICreateClaimRequest request)
     {
-        throw new ArgumentException("Damage cost cannot exceed 100.000.");
+        if (request.DamageCost > 100)
+        {
+            throw new ArgumentException("Damage cost cannot exceed 100.000.");
+        }
+
+        throw new ArgumentException("Cover references a non-existing claim via the claim ID.");
+
         return await _claimsRepository.AddAsync(ToNewClaimInfo(request));
     }
 

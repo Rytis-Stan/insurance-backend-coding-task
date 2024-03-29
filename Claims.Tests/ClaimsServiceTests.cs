@@ -16,11 +16,25 @@ public class ClaimsServiceTests
     {
         var coverId = Guid.NewGuid();
         var request = new CreateClaimRequestDto(coverId, "anyName", AnyClaimType, damageCost);
-        var service = new ClaimsService(new ClaimsRepositoryStub());
+        var service = new ClaimsService(new ClaimsRepositoryStub(), new CoversRepositoryStub());
 
         await AssertExtended.ThrowsArgumentExceptionAsync(
             () => service.CreateClaimAsync(request),
             "Damage cost cannot exceed 100.000."
+        );
+    }
+
+    // TODO: Should the thrown exception be an ArgumentException?
+    [Fact]
+    public async Task ThrowsExceptionWhenCreatingAClaimWithNonExistingCoverId()
+    {
+        var coverId = Guid.NewGuid();
+        var request = new CreateClaimRequestDto(coverId, "anyName", AnyClaimType, 100);
+        var service = new ClaimsService(new ClaimsRepositoryStub(), new CoversRepositoryStub(coverId, null));
+
+        await AssertExtended.ThrowsArgumentExceptionAsync(
+            () => service.CreateClaimAsync(request),
+            "Cover references a non-existing claim via the claim ID."
         );
     }
 

@@ -76,29 +76,6 @@ public class CoverServiceTests
         return new DateTime(year, month, day, 0, 0, 0, DateTimeKind.Utc);
     }
 
-    private class CoversRepositoryStub : ICoversRepository
-    {
-        public Task<Cover> AddAsync(INewCoverInfo item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Cover?> GetByIdAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Cover>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Cover> DeleteAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
     private class ClockStub : IClock
     {
         private readonly DateTime _utcNow;
