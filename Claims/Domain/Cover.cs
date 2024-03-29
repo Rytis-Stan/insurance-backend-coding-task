@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Claims.Domain;
 
 public class Cover
@@ -21,25 +23,35 @@ public class Cover
 
         for (var day = 0; day < insuranceDurationInDays; day++)
         {
-            if (day < 30)
-            {
-                totalPremium += premiumPerDay;
-            }
-            else if (day < 180)
-            {
-                totalPremium += coverType == CoverType.Yacht
-                    ? premiumPerDay * (1.00m - 0.05m)
-                    : premiumPerDay * (1.00m - 0.02m);
-            }
-            else if (day < 365)
-            {
-                totalPremium += coverType == CoverType.Yacht
-                    ? premiumPerDay * (1.00m - 0.08m)
-                    : premiumPerDay * (1.00m - 0.03m);
-            }
+            totalPremium += premiumPerDay * PremiumMultiplier(day, coverType);
         }
 
         return totalPremium;
+    }
+
+    private static decimal PremiumMultiplier(int day, CoverType coverType)
+    {
+        if (day < 30)
+        {
+            return 1.00m;
+        }
+
+        if (day < 180)
+        {
+            return coverType == CoverType.Yacht
+                ? 1.00m - 0.05m
+                : 1.00m - 0.02m;
+        }
+
+        if (day < 365)
+        {
+            return coverType == CoverType.Yacht
+                ? 1.00m - 0.08m
+                : 1.00m - 0.03m;
+        }
+
+        // TODO: Add proper handling of this exception somewhere (need to fix the max period for the premium calculations).
+        throw new UnreachableException("This code should not be reached.");
     }
 
     private static decimal Multiplier(CoverType coverType)
