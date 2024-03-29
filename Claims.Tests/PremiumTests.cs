@@ -64,10 +64,15 @@ public class PremiumTests
     [InlineData(CoverType.Yacht, 179, 235881.25)]
     [InlineData(CoverType.Yacht, 180, 237187.50)]
 
-    [InlineData(CoverType.PassengerShip, 31, 46470)] // Base Passenger Ship's premium for days between 31st to 180th (inclusively) is 95% of 1250 = 1470
+    [InlineData(CoverType.PassengerShip, 31, 46470)] // Base Passenger Ship's premium for days between 31st to 180th (inclusively) is 98% of 1250 = 1470
     [InlineData(CoverType.PassengerShip, 32, 47940)]
     [InlineData(CoverType.PassengerShip, 179, 264030)]
     [InlineData(CoverType.PassengerShip, 180, 265500)]
+
+    [InlineData(CoverType.Tanker, 31, 58087.50)] // Base Tanker's premium for days between 31st to 180th (inclusively) is 98% of 1250 = 1837.50
+    [InlineData(CoverType.Tanker, 32, 59925.00)]
+    [InlineData(CoverType.Tanker, 179, 330037.50)]
+    [InlineData(CoverType.Tanker, 180, 331875.00)]
     public void PremiumForNext150DaysAfterThe30ThIsEqualTo30DayPremiumPlusTheExtraDayBaseRateCalculatedWithADiscount(
         CoverType coverType, int periodDurationInDays, decimal expectedPremium)
     {
