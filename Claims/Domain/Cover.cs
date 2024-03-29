@@ -9,7 +9,6 @@ public class Cover
     public required DateOnly EndDate { get; init; }
     public required CoverType Type { get; init; }
     public required decimal Premium { get; init; }
-    public required DateTime Created { get; init; }
 
     // TODO: Make the "Premium" property call "ComputerPremium".
     public static decimal ComputePremium(DateOnly startDate, DateOnly endDate, CoverType coverType)

@@ -6,12 +6,12 @@ namespace Claims.DataAccess;
 
 public class CosmosDbCoversRepository : CosmosDbRepository<Cover, INewCoverInfo, CoverJson>, ICoversRepository
 {
-    public CosmosDbCoversRepository(CosmosClient dbClient, string databaseName, string containerName, IClock clock, IIdGenerator idGenerator)
-        : base(dbClient, databaseName, containerName, clock, idGenerator)
+    public CosmosDbCoversRepository(CosmosClient dbClient, string databaseName, string containerName, IIdGenerator idGenerator)
+        : base(dbClient, databaseName, containerName, idGenerator)
     {
     }
 
-    protected override CoverJson ToNewJson(INewCoverInfo item, string id, DateTime created)
+    protected override CoverJson ToNewJson(INewCoverInfo item, string id)
     {
         return new CoverJson
         {
@@ -19,8 +19,7 @@ public class CosmosDbCoversRepository : CosmosDbRepository<Cover, INewCoverInfo,
             StartDate = item.StartDate,
             EndDate = item.EndDate,
             Type = item.Type,
-            Premium = item.Premium,
-            Created = created
+            Premium = item.Premium
         };
     }
 
@@ -32,8 +31,7 @@ public class CosmosDbCoversRepository : CosmosDbRepository<Cover, INewCoverInfo,
             StartDate = json.StartDate,
             EndDate = json.EndDate,
             Type = json.Type,
-            Premium = json.Premium,
-            Created = json.Created
+            Premium = json.Premium
         };
     }
 }

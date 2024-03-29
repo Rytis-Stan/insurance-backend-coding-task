@@ -14,4 +14,5 @@ public interface ICreateClaimRequest
     string Name { get; }
     ClaimType Type { get; }
     decimal DamageCost { get; }
+    DateTime Created { get; }
 }

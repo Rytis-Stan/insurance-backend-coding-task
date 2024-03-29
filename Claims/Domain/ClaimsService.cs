@@ -30,7 +30,8 @@ public class ClaimsService : IClaimsService
             CoverId = request.CoverId,
             Name = request.Name,
             Type = request.Type,
-            DamageCost = request.DamageCost
+            DamageCost = request.DamageCost,
+            Created = request.Created
         };
     }
 
@@ -55,5 +56,6 @@ public class ClaimsService : IClaimsService
         public required string Name { get; init; }
         public required ClaimType Type { get; init; }
         public required decimal DamageCost { get; init; }
+        public required DateTime Created { get; init; }
     }
 }

@@ -10,21 +10,19 @@ public abstract class CosmosDbRepository<T, TNewItemInfo, TJson>
     where TJson : class
 {
     private readonly Container _container;
-    private readonly IClock _clock;
     private readonly IIdGenerator _idGenerator;
 
-    protected CosmosDbRepository(CosmosClient dbClient, string databaseName, string containerName, IClock clock, IIdGenerator idGenerator)
+    protected CosmosDbRepository(CosmosClient dbClient, string databaseName, string containerName, IIdGenerator idGenerator)
     {
         ArgumentNullException.ThrowIfNull(dbClient, nameof(dbClient));
         _container = dbClient.GetContainer(databaseName, containerName);
-        _clock = clock;
         _idGenerator = idGenerator;
     }
 
     public async Task<T> AddAsync(TNewItemInfo item)
     {
         var id = _idGenerator.NewId().ToString();
-        var json = ToNewJson(item, id, _clock.UtcNow());
+        var json = ToNewJson(item, id);
         return ToItem(await _container.CreateItemAsync(json, new PartitionKey(id)));
     }
 
@@ -58,6 +56,6 @@ public abstract class CosmosDbRepository<T, TNewItemInfo, TJson>
         return ToItem(await _container.DeleteItemAsync<TJson>(id.ToString(), new PartitionKey(id.ToString())));
     }
 
-    protected abstract TJson ToNewJson(TNewItemInfo item, string id, DateTime created);
+    protected abstract TJson ToNewJson(TNewItemInfo item, string id);
     protected abstract T ToItem(TJson json);
 }

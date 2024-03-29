@@ -6,5 +6,6 @@ public record CreateClaimRequestDto(
     Guid CoverId,
     string Name,
     ClaimType Type,
-    decimal DamageCost
+    decimal DamageCost,
+    DateTime Created
 ) : ICreateClaimRequest;

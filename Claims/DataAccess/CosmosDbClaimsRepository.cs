@@ -6,12 +6,12 @@ namespace Claims.DataAccess;
 
 public class CosmosDbClaimsRepository : CosmosDbRepository<Claim, INewClaimInfo, ClaimJson>, IClaimsRepository
 {
-    public CosmosDbClaimsRepository(CosmosClient dbClient, string databaseName, string containerName, IClock clock, IIdGenerator idGenerator)
-        : base(dbClient, databaseName, containerName, clock, idGenerator)
+    public CosmosDbClaimsRepository(CosmosClient dbClient, string databaseName, string containerName, IIdGenerator idGenerator)
+        : base(dbClient, databaseName, containerName, idGenerator)
     {
     }
 
-    protected override ClaimJson ToNewJson(INewClaimInfo item, string id, DateTime created)
+    protected override ClaimJson ToNewJson(INewClaimInfo item, string id)
     {
         return new ClaimJson
         {
@@ -20,7 +20,7 @@ public class CosmosDbClaimsRepository : CosmosDbRepository<Claim, INewClaimInfo,
             Name = item.Name,
             Type = item.Type,
             DamageCost = item.DamageCost,
-            Created = created
+            Created = item.Created
         };
     }
 

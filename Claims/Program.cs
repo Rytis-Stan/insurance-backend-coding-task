@@ -38,11 +38,10 @@ public class Program
 
         var cosmosDbConfiguration = configuration.CosmosDb;
         var cosmosClient = InitializeCosmosClientInstanceAsync(cosmosDbConfiguration).GetAwaiter().GetResult();
-        var clock = new Clock();
-        AddRepositories(services, cosmosClient, cosmosDbConfiguration, clock);
+        AddRepositories(services, cosmosClient, cosmosDbConfiguration);
         services.AddDbContext<AuditContext>(options => options.UseSqlServer(configuration.ConnectionString));
 
-        services.AddSingleton<IClock>(clock);
+        services.AddSingleton<IClock, Clock>();
         services.AddTransient<IClaimAuditor, Auditor>();
         services.AddTransient<ICoverAuditor, Auditor>();
         services.AddTransient<IClaimsService, ClaimsService>();
@@ -53,11 +52,11 @@ public class Program
         services.AddSwaggerGen();
     }
 
-    private static void AddRepositories(IServiceCollection services, CosmosClient cosmosClient, CosmosDbConfiguration configuration, IClock clock)
+    private static void AddRepositories(IServiceCollection services, CosmosClient cosmosClient, CosmosDbConfiguration configuration)
     {
         var idGenerator = new IdGenerator();
-        services.AddSingleton<IClaimsRepository>(new CosmosDbClaimsRepository(cosmosClient, configuration.DatabaseName, configuration.ContainerNames.Claim, clock, idGenerator));
-        services.AddSingleton<ICoversRepository>(new CosmosDbCoversRepository(cosmosClient, configuration.DatabaseName, configuration.ContainerNames.Cover, clock, idGenerator));
+        services.AddSingleton<IClaimsRepository>(new CosmosDbClaimsRepository(cosmosClient, configuration.DatabaseName, configuration.ContainerNames.Claim, idGenerator));
+        services.AddSingleton<ICoversRepository>(new CosmosDbCoversRepository(cosmosClient, configuration.DatabaseName, configuration.ContainerNames.Cover, idGenerator));
     }
 
     private static void ConfigureApp(WebApplication app)
