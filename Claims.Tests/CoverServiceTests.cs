@@ -10,34 +10,38 @@ public class CoverServiceTests
     private const CoverType AnyCoverType = CoverType.PassengerShip;
 
     [Fact]
-    public async Task ThrowsExceptionWhenCreatingACoverWithAStartDateThatIsInThePast()
+    public async Task ThrowsExceptionWhenCreatingACoverWithStartDateThatIsInThePast()
     {
         await Test(
             UtcDateTime(2000, 01, 10),
-            new DateOnly(2000, 01, 08),
-            new DateOnly(2000, 01, 10)
+            new DateOnly(2000, 01, 08)
         );
         await Test(
             UtcDateTime(2000, 01, 10),
-            new DateOnly(2000, 01, 09),
-            new DateOnly(2000, 01, 10)
+            new DateOnly(2000, 01, 09)
         );
         await Test(
             UtcDateTime(2000, 01, 11),
-            new DateOnly(2000, 01, 10),
-            new DateOnly(2000, 01, 11)
+            new DateOnly(2000, 01, 10)
         );
 
-        async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate)
+        async Task Test(DateTime utcNow, DateOnly startDate)
         {
+            var endDate = DateOnly.FromDateTime(utcNow);
             var request = new CreateCoverRequestDto(startDate, endDate, AnyCoverType);
             var service = new CoversService(new CoversRepositoryStub(), new ClockStub(utcNow));
 
-            var exception = await Assert.ThrowsAsync<ArgumentException>(
-                () => service.CreateCoverAsync(request)
+            await AssertThrowsArgumentExceptionAsync(
+                () => service.CreateCoverAsync(request),
+                "Start date cannot be in the past."
             );
-            Assert.Equal("Start date cannot be in the past.", exception.Message);
         }
+    }
+
+    private async Task AssertThrowsArgumentExceptionAsync(Func<Task> action, string expectedMessage)
+    {
+        var exception = await Assert.ThrowsAsync<ArgumentException>(action);
+        Assert.Equal(expectedMessage, exception.Message);
     }
 
     private DateTime UtcDateTime(int year, int month, int day)
