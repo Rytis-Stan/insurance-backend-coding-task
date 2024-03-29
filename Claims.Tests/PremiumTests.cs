@@ -48,7 +48,7 @@ public class PremiumTests
     [InlineData(CoverType.BulkCarrier, 3, 4875)]
     [InlineData(CoverType.BulkCarrier, 29, 47125)]
     [InlineData(CoverType.BulkCarrier, 30, 48750)]
-    public void PremiumForMultipleDaysWithinTheFirst30DayPeriodIsEqualToBaseDayRateForTheSpecificCoverTypeMultipliedByNumberOfPeriodDays(
+    public void PremiumForFirst30DaysIsEqualToBaseDayRateForTheSpecificCoverTypeMultipliedByNumberOfPeriodDays(
         CoverType coverType, int periodDurationInDays, decimal expectedPremium)
     {
         var (startDate, endDate) = RandomPeriod(periodDurationInDays);
