@@ -35,9 +35,9 @@ public class Cover
              }
              else if (day < 365)
              {
-                 totalPremium += coverType != CoverType.Yacht
-                     ? premiumPerDay - premiumPerDay * 0.03m
-                     : premiumPerDay - premiumPerDay * 0.08m;
+                 totalPremium += coverType == CoverType.Yacht
+                     ? premiumPerDay - premiumPerDay * 0.08m
+                     : premiumPerDay - premiumPerDay * 0.03m;
              }
          } 
         return totalPremium;
