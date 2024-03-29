@@ -38,6 +38,37 @@ public class CoverServiceTests
         }
     }
 
+    [Fact]
+    public async Task ThrowsExceptionWhenCreatingACoverWithEndDateThatIsInThePast()
+    {
+        await Test(
+            UtcDateTime(2000, 01, 10),
+            new DateOnly(2000, 01, 10),
+            new DateOnly(2000, 01, 08)
+        );
+        await Test(
+            UtcDateTime(2000, 01, 10),
+            new DateOnly(2000, 01, 10),
+            new DateOnly(2000, 01, 09)
+        );
+        await Test(
+            UtcDateTime(2000, 01, 11),
+            new DateOnly(2000, 01, 11),
+            new DateOnly(2000, 01, 10)
+        );
+
+        async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate)
+        {
+            var request = new CreateCoverRequestDto(startDate, endDate, AnyCoverType);
+            var service = new CoversService(new CoversRepositoryStub(), new ClockStub(utcNow));
+
+            await AssertThrowsArgumentExceptionAsync(
+                () => service.CreateCoverAsync(request),
+                "End date cannot be in the past."
+            );
+        }
+    }
+
     private async Task AssertThrowsArgumentExceptionAsync(Func<Task> action, string expectedMessage)
     {
         var exception = await Assert.ThrowsAsync<ArgumentException>(action);
