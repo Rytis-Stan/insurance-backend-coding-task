@@ -97,6 +97,10 @@ public class PremiumTests
     [InlineData(CoverType.ContainerShip, 181, 289201.25)] // Base Container Ship's premium starting from the 181st (inclusively) is 97% of 1625 = 1576.25
     [InlineData(CoverType.ContainerShip, 182, 290777.50)]
     [InlineData(CoverType.ContainerShip, 183, 292353.75)]
+
+    [InlineData(CoverType.BulkCarrier, 181, 289201.25)] // Base Bulk Carrier's premium starting from the 181st (inclusively) is 97% of 1625 = 1576.25
+    [InlineData(CoverType.BulkCarrier, 182, 290777.5)]
+    [InlineData(CoverType.BulkCarrier, 183, 292353.75)]
     public void PremiumForAllDaysAfterThe180ThIsEqualTo180DayPremiumPlusTheExtraDayBaseRateCalculatedWithADiscount(
         CoverType coverType, int periodDurationInDays, decimal expectedPremium)
     {
