@@ -14,34 +14,32 @@ public class Cover
     {
         var multiplier = Multiplier(coverType);
 
-        var premiumPerDay = 1250 * multiplier;
-        var insuranceDurationInDays = endDate.DayNumber - startDate.DayNumber;
+        var baseDayRate = 1250;
+        var premiumPerDay = baseDayRate * multiplier;
+        var insuranceDurationInDays = endDate.DayNumber + 1 - startDate.DayNumber;
         var totalPremium = 0m;
 
-        for (var day = 0; day < insuranceDurationInDays; day++)
-        {
-            if (day < 30)
-            {
-                totalPremium += premiumPerDay;
-            }
-            if (day < 180 && coverType == CoverType.Yacht)
-            {
-                totalPremium += premiumPerDay - premiumPerDay * 0.05m;
-            }
-            else if (day < 180)
-            {
-                totalPremium += premiumPerDay - premiumPerDay * 0.02m;
-            }
-            if (day < 365 && coverType != CoverType.Yacht)
-            {
-                totalPremium += premiumPerDay - premiumPerDay * 0.03m;
-            }
-            else if (day < 365)
-            {
-                totalPremium += premiumPerDay - premiumPerDay * 0.08m;
-            }
-        }
+        // return premiumPerDay;
 
+         for (var day = 0; day < insuranceDurationInDays; day++)
+         {
+             if (day < 30)
+             {
+                 totalPremium += premiumPerDay;
+             }
+             else if (day < 180)
+             {
+                 totalPremium += coverType == CoverType.Yacht
+                     ? premiumPerDay - premiumPerDay * 0.05m
+                     : premiumPerDay - premiumPerDay * 0.02m;
+             }
+             else if (day < 365)
+             {
+                 totalPremium += coverType != CoverType.Yacht
+                     ? premiumPerDay - premiumPerDay * 0.03m
+                     : premiumPerDay - premiumPerDay * 0.08m;
+             }
+         } 
         return totalPremium;
     }
 

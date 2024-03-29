@@ -23,8 +23,50 @@ public class PremiumTests
         );
     }
 
+    [Theory]
+    [InlineData(CoverType.Yacht, 2, 2750)]
+    [InlineData(CoverType.Yacht, 3, 4125)]
+    [InlineData(CoverType.Yacht, 29, 39875)]
+    [InlineData(CoverType.Yacht, 30, 41250)]
+
+    [InlineData(CoverType.PassengerShip, 2, 3000)]
+    [InlineData(CoverType.PassengerShip, 3, 4500)]
+    [InlineData(CoverType.PassengerShip, 29, 43500)]
+    [InlineData(CoverType.PassengerShip, 30, 45000)]
+
+    [InlineData(CoverType.Tanker, 2, 3750)]
+    [InlineData(CoverType.Tanker, 3, 5625)]
+    [InlineData(CoverType.Tanker, 29, 54375)]
+    [InlineData(CoverType.Tanker, 30, 56250)]
+
+    [InlineData(CoverType.ContainerShip, 2, 3250)]
+    [InlineData(CoverType.ContainerShip, 3, 4875)]
+    [InlineData(CoverType.ContainerShip, 29, 47125)]
+    [InlineData(CoverType.ContainerShip, 30, 48750)]
+
+    [InlineData(CoverType.BulkCarrier, 2, 3250)]
+    [InlineData(CoverType.BulkCarrier, 3, 4875)]
+    [InlineData(CoverType.BulkCarrier, 29, 47125)]
+    [InlineData(CoverType.BulkCarrier, 30, 48750)]
+    public void PremiumForMultipleDaysWithinTheFirst30DayPeriodIsEqualToBaseDayRateForTheSpecificCoverTypeMultipliedByNumberOfPeriodDays(
+        CoverType coverType, int periodDurationInDays, decimal expectedPremium)
+    {
+        var (startDate, endDate) = RandomPeriod(periodDurationInDays);
+        Assert.Equal(
+            expectedPremium,
+            Cover.ComputePremium(startDate, endDate, coverType)
+        );
+    }
+
     private DateOnly RandomDate()
     {
         return new DateOnly(2000, 01, 01).AddDays(Random.Next(10_000));
+    }
+
+    private (DateOnly Start, DateOnly End) RandomPeriod(int durationInDays)
+    {
+        var startDate = RandomDate();
+        var endDate = startDate.AddDays(durationInDays - 1);
+        return (startDate, endDate);
     }
 }
