@@ -14,10 +14,7 @@ public class Cover
     // TODO: Make the "Premium" property call "ComputerPremium".
     public static decimal ComputePremium(DateOnly startDate, DateOnly endDate, CoverType coverType)
     {
-        var multiplier = Multiplier(coverType);
-
-        var baseDayRate = 1250;
-        var premiumPerDay = baseDayRate * multiplier;
+        var premiumPerDay = PremiumPerDay(coverType);
         var insuranceDurationInDays = endDate.DayNumber + 1 - startDate.DayNumber;
         var totalPremium = 0m;
 
@@ -27,6 +24,13 @@ public class Cover
         }
 
         return totalPremium;
+    }
+
+    private static decimal PremiumPerDay(CoverType coverType)
+    {
+        var multiplier = Multiplier(coverType);
+        var baseDayRate = 1250;
+        return baseDayRate * multiplier;
     }
 
     private static decimal PremiumMultiplier(int day, CoverType coverType)
