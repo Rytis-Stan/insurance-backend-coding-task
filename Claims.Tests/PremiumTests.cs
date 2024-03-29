@@ -58,6 +58,21 @@ public class PremiumTests
         );
     }
 
+    [Theory]
+    [InlineData(CoverType.Yacht, 31, 42556.25)] // Base Yacht's premium for days for the next 150 days is 95% of 1250 = 1306.25
+    [InlineData(CoverType.Yacht, 32, 43862.50)]
+    [InlineData(CoverType.Yacht, 179, 235881.25)]
+    [InlineData(CoverType.Yacht, 180, 237187.50)]
+    public void PremiumForNext150DaysAfterThe30ThIsEqualTo30DayPremiumPlusTheExtraDayBaseRateCalculatedWithADiscount(
+        CoverType coverType, int periodDurationInDays, decimal expectedPremium)
+    {
+        var (startDate, endDate) = RandomPeriod(periodDurationInDays);
+        Assert.Equal(
+            expectedPremium,
+            Cover.ComputePremium(startDate, endDate, coverType)
+        );
+    }
+
     private DateOnly RandomDate()
     {
         return new DateOnly(2000, 01, 01).AddDays(Random.Next(10_000));
