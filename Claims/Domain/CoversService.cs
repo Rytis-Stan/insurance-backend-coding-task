@@ -1,16 +1,21 @@
+using Claims.Infrastructure;
+
 namespace Claims.Domain;
 
 public class CoversService : ICoversService
 {
     private readonly ICoversRepository _coversRepository;
+    private readonly IClock _clock;
 
-    public CoversService(ICoversRepository coversRepository)
+    public CoversService(ICoversRepository coversRepository, IClock clock)
     {
         _coversRepository = coversRepository;
+        _clock = clock;
     }
 
     public async Task<Cover> CreateCoverAsync(ICreateCoverRequest request)
     {
+        throw new ArgumentException("Start date cannot be in the past.");
         return await _coversRepository.AddAsync(ToNewCoverInfo(request));
     }
 
