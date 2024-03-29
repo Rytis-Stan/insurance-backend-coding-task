@@ -16,11 +16,7 @@ public class PremiumTests
     [InlineData(CoverType.BulkCarrier, 1625)]   // 30% of 1250
     public void PremiumForASingleDayIsEqualToBaseDayRateForTheSpecificCoverType(CoverType coverType, decimal expectedPremium)
     {
-        var startAndEndDate = RandomDate();
-        Assert.Equal(
-            expectedPremium,
-            Cover.ComputePremium(startAndEndDate, startAndEndDate, coverType)
-        );
+        AssertComputersCorrectPremium(coverType, 1, expectedPremium);
     }
 
     [Theory]
@@ -51,11 +47,7 @@ public class PremiumTests
     public void PremiumForFirst30DaysIsEqualToBaseDayRateForTheSpecificCoverTypeMultipliedByNumberOfPeriodDays(
         CoverType coverType, int periodDurationInDays, decimal expectedPremium)
     {
-        var (startDate, endDate) = RandomPeriod(periodDurationInDays);
-        Assert.Equal(
-            expectedPremium,
-            Cover.ComputePremium(startDate, endDate, coverType)
-        );
+        AssertComputersCorrectPremium(coverType, periodDurationInDays, expectedPremium);
     }
 
     [Theory]
@@ -85,6 +77,11 @@ public class PremiumTests
     [InlineData(CoverType.BulkCarrier, 180, 287625.00)]
     public void PremiumForNext150DaysAfterThe30ThIsEqualTo30DayPremiumPlusTheExtraDayBaseRateCalculatedWithADiscount(
         CoverType coverType, int periodDurationInDays, decimal expectedPremium)
+    {
+        AssertComputersCorrectPremium(coverType, periodDurationInDays, expectedPremium);
+    }
+
+    private void AssertComputersCorrectPremium(CoverType coverType, int periodDurationInDays, decimal expectedPremium)
     {
         var (startDate, endDate) = RandomPeriod(periodDurationInDays);
         Assert.Equal(
