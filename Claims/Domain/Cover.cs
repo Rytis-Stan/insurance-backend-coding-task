@@ -38,6 +38,17 @@ public class Cover
         return baseDayRate * multiplier;
     }
 
+    private static decimal Multiplier(CoverType coverType)
+    {
+        return coverType switch
+        {
+            CoverType.Yacht => 1.1m,
+            CoverType.PassengerShip => 1.2m,
+            CoverType.Tanker => 1.5m,
+            _ => 1.3m
+        };
+    }
+
     private static decimal PremiumMultiplier(int day, CoverType coverType)
     {
         if (day < 30)
@@ -61,17 +72,6 @@ public class Cover
 
         // TODO: Add proper handling of this exception somewhere (need to fix the max period for the premium calculations).
         throw new UnreachableException("This code should not be reached.");
-    }
-
-    private static decimal Multiplier(CoverType coverType)
-    {
-        return coverType switch
-        {
-            CoverType.Yacht => 1.1m,
-            CoverType.PassengerShip => 1.2m,
-            CoverType.Tanker => 1.5m,
-            _ => 1.3m
-        };
     }
 }
 
