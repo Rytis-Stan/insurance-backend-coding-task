@@ -11,6 +11,7 @@ public class ClaimsService : IClaimsService
 
     public async Task<Claim> CreateClaimAsync(ICreateClaimRequest request)
     {
+        throw new ArgumentException("Damage cost cannot exceed 100.000.");
         return await _claimsRepository.AddAsync(ToNewClaimInfo(request));
     }
 

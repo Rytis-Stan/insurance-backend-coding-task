@@ -31,7 +31,7 @@ public class CoverServiceTests
             var request = new CreateCoverRequestDto(startDate, endDate, AnyCoverType);
             var service = new CoversService(new CoversRepositoryStub(), new ClockStub(utcNow));
 
-            await AssertThrowsArgumentExceptionAsync(
+            await AssertExtended.ThrowsArgumentExceptionAsync(
                 () => service.CreateCoverAsync(request),
                 "Start date cannot be in the past."
             );
@@ -62,18 +62,14 @@ public class CoverServiceTests
             var request = new CreateCoverRequestDto(startDate, endDate, AnyCoverType);
             var service = new CoversService(new CoversRepositoryStub(), new ClockStub(utcNow));
 
-            await AssertThrowsArgumentExceptionAsync(
+            await AssertExtended.ThrowsArgumentExceptionAsync(
                 () => service.CreateCoverAsync(request),
                 "End date cannot be in the past."
             );
         }
     }
 
-    private async Task AssertThrowsArgumentExceptionAsync(Func<Task> action, string expectedMessage)
-    {
-        var exception = await Assert.ThrowsAsync<ArgumentException>(action);
-        Assert.Equal(expectedMessage, exception.Message);
-    }
+
 
     private DateTime UtcDateTime(int year, int month, int day)
     {
