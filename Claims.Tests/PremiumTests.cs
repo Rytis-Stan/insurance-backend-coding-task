@@ -51,7 +51,7 @@ public class PremiumTests
     }
 
     [Theory]
-    [InlineData(CoverType.Yacht, 31, 42556.25)] // Base Yacht's premium for days between 31st to 180th (inclusively) is 95% of 1250 = 1306.25
+    [InlineData(CoverType.Yacht, 31, 42556.25)] // Base Yacht's premium for days between 31st to 180th (inclusively) is 95% of 1375 = 1306.25
     [InlineData(CoverType.Yacht, 32, 43862.50)]
     [InlineData(CoverType.Yacht, 179, 235881.25)]
     [InlineData(CoverType.Yacht, 180, 237187.50)]
@@ -76,6 +76,16 @@ public class PremiumTests
     [InlineData(CoverType.BulkCarrier, 179, 286032.50)]
     [InlineData(CoverType.BulkCarrier, 180, 287625.00)]
     public void PremiumForNext150DaysAfterThe30ThIsEqualTo30DayPremiumPlusTheExtraDayBaseRateCalculatedWithADiscount(
+        CoverType coverType, int periodDurationInDays, decimal expectedPremium)
+    {
+        AssertComputersCorrectPremium(coverType, periodDurationInDays, expectedPremium);
+    }
+
+    [Theory]
+    [InlineData(CoverType.Yacht, 181, 238452.50)] // Base Yacht's premium starting from the 181st (inclusively) is 92% of 1375 = 1265
+    [InlineData(CoverType.Yacht, 182, 239717.50)]
+    [InlineData(CoverType.Yacht, 183, 240982.50)]
+    public void PremiumForAllDaysAfterThe180ThIsEqualTo180DayPremiumPlusTheExtraDayBaseRateCalculatedWithADiscount(
         CoverType coverType, int periodDurationInDays, decimal expectedPremium)
     {
         AssertComputersCorrectPremium(coverType, periodDurationInDays, expectedPremium);
