@@ -33,12 +33,11 @@ public class Cover
 
     private static decimal DayRateFor(CoverType coverType)
     {
-        var multiplier = Multiplier(coverType);
-        var baseDayRate = 1250;
-        return baseDayRate * multiplier;
+        const decimal baseDayRate = 1250.00m;
+        return baseDayRate * DayRateCoefficientFor(coverType);
     }
 
-    private static decimal Multiplier(CoverType coverType)
+    private static decimal DayRateCoefficientFor(CoverType coverType)
     {
         return coverType switch
         {
