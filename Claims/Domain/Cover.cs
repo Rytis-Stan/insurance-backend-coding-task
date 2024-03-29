@@ -28,7 +28,7 @@ public class Cover
     private static decimal PremiumPerDay(CoverType coverType, int day)
     {
         var dayRate = DayRateFor(coverType);
-        return dayRate * PremiumMultiplier(day, coverType);
+        return dayRate * DayBasedRateCoefficientFor(day, coverType);
     }
 
     private static decimal DayRateFor(CoverType coverType)
@@ -48,7 +48,7 @@ public class Cover
         };
     }
 
-    private static decimal PremiumMultiplier(int day, CoverType coverType)
+    private static decimal DayBasedRateCoefficientFor(int day, CoverType coverType)
     {
         if (day < 30)
         {
