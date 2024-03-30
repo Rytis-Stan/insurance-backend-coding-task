@@ -42,7 +42,7 @@ public class ClaimsServiceTests
     [InlineData(100_001.00)]
     [InlineData(100_002.00)]
     [InlineData(100_003.00)]
-    public async Task ThrowsExceptionWhenCreatingAClaimWithDamageCostExceedingMaxAllowed(decimal damageCost)
+    public async Task ThrowsExceptionWhenCreatingAClaimWithDamageCostExceedingMaxAllowedValueOfAHundredThousand(decimal damageCost)
     {
         var coverId = Guid.NewGuid();
         var created = UtcDateTime(2000, 01, 01); // TODO: Random date-time value within a valid range?
