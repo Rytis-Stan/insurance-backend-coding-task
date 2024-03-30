@@ -13,26 +13,21 @@ public class ClaimsService : IClaimsService
 
     public async Task<Claim> CreateClaimAsync(ICreateClaimRequest request)
     {
-        if (request.DamageCost > 100)
-        {
-            throw new ArgumentException("Damage cost cannot exceed 100.000.");
-        }
+        // if (request.DamageCost > 100)
+        // {
+        //     throw new ArgumentException("Damage cost cannot exceed 100.000.");
+        // }
+        //
+        // throw new ArgumentException("Claim references a non-existing cover via the cover ID.");
 
-        throw new ArgumentException("Claim references a non-existing cover via the cover ID.");
+        // throw new ArgumentException("Claim is outside of related cover period.");
 
         return await _claimsRepository.AddAsync(ToNewClaimInfo(request));
     }
 
-    private static NewClaimInfo ToNewClaimInfo(ICreateClaimRequest request)
+    private static INewClaimInfo ToNewClaimInfo(ICreateClaimRequest request)
     {
-        return new NewClaimInfo
-        {
-            CoverId = request.CoverId,
-            Name = request.Name,
-            Type = request.Type,
-            DamageCost = request.DamageCost,
-            Created = request.Created
-        };
+        return new NewClaimInfo(request.CoverId, request.Name, request.Type, request.DamageCost, request.Created);
     }
 
     public Task<IEnumerable<Claim>> GetAllClaimsAsync()
@@ -48,14 +43,5 @@ public class ClaimsService : IClaimsService
     public Task<Claim?> GetClaimByIdAsync(Guid id)
     {
         return _claimsRepository.GetByIdAsync(id);
-    }
-
-    private class NewClaimInfo : INewClaimInfo
-    {
-        public required Guid CoverId { get; init; }
-        public required string Name { get; init; }
-        public required ClaimType Type { get; init; }
-        public required decimal DamageCost { get; init; }
-        public required DateTime Created { get; init; }
     }
 }
