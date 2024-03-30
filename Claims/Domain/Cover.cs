@@ -9,7 +9,7 @@ public class Cover
     public required decimal Premium { get; init; }
 
     // TODO: Make the "Premium" property call "ComputerPremium".
-    public static decimal ComputePremium(DateOnly startDate, DateOnly endDate, CoverType coverType)
+    public static decimal CalculatePremium(DateOnly startDate, DateOnly endDate, CoverType coverType)
     {
         var insurancePeriodInDays = endDate.DayNumber + 1 - startDate.DayNumber;
 

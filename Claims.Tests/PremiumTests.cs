@@ -110,7 +110,7 @@ public class PremiumTests
         var (startDate, endDate) = TestData.RandomPeriod(periodDurationInDays);
         Assert.Equal(
             expectedPremium,
-            Cover.ComputePremium(startDate, endDate, coverType)
+            Cover.CalculatePremium(startDate, endDate, coverType)
         );
     }
 }

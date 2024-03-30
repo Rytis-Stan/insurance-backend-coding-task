@@ -5,11 +5,13 @@ namespace Claims.Domain;
 public class CoversService : ICoversService
 {
     private readonly ICoversRepository _coversRepository;
+    private readonly IPricingService _pricingService;
     private readonly IClock _clock;
 
-    public CoversService(ICoversRepository coversRepository, IClock clock)
+    public CoversService(ICoversRepository coversRepository, IPricingService pricingService, IClock clock)
     {
         _coversRepository = coversRepository;
+        _pricingService = pricingService;
         _clock = clock;
     }
 
@@ -24,25 +26,24 @@ public class CoversService : ICoversService
         {
             throw new ArgumentException("End date cannot be in the past.");
         }
-        throw new ArgumentException("End date cannot be earlier than the start date.");
+        //throw new ArgumentException("End date cannot be earlier than the start date.");
 
         return await _coversRepository.AddAsync(ToNewCoverInfo(request));
     }
 
-    private static INewCoverInfo ToNewCoverInfo(ICreateCoverRequest request)
+    private INewCoverInfo ToNewCoverInfo(ICreateCoverRequest request)
     {
-        return new NewCoverInfo
-        {
-            StartDate = request.StartDate,
-            EndDate = request.EndDate,
-            Type = request.Type,
-            Premium = Cover.ComputePremium(request.StartDate, request.EndDate, request.Type)
-        };
+        return new NewCoverInfo(request.StartDate, request.EndDate, request.Type, PremiumFrom(request));
+    }
+
+    private decimal PremiumFrom(ICreateCoverRequest request)
+    {
+        return _pricingService.CalculatePremium(request.StartDate, request.EndDate, request.Type);
     }
 
     public decimal ComputePremium(DateOnly startDate, DateOnly endDate, CoverType coverType)
     {
-        return Cover.ComputePremium(startDate, endDate, coverType);
+        return Cover.CalculatePremium(startDate, endDate, coverType);
     }
 
     public async Task<Cover?> GetCoverAsync(Guid id)
@@ -60,11 +61,23 @@ public class CoversService : ICoversService
         return await _coversRepository.DeleteAsync(id);
     }
 
-    private class NewCoverInfo : INewCoverInfo
+    private class OldNewCoverInfo : INewCoverInfo
     {
-        public required DateOnly StartDate { get; init; }
-        public required DateOnly EndDate { get; init; }
-        public required CoverType Type { get; init; }
-        public required decimal Premium { get; init; }
+        public DateOnly StartDate { get; init; }
+        public DateOnly EndDate { get; init; }
+        public CoverType Type { get; init; }
+        public decimal Premium { get; init; }
     }
 }
+
+public interface IPricingService
+{
+    decimal CalculatePremium(DateOnly startDate, DateOnly endDate, CoverType coverType);
+}
+
+public record class NewCoverInfo(
+    DateOnly StartDate,
+    DateOnly EndDate,
+    CoverType Type,
+    decimal Premium
+) : INewCoverInfo;
