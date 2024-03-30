@@ -69,8 +69,6 @@ public class CoverServiceTests
         }
     }
 
-
-
     private DateTime UtcDateTime(int year, int month, int day)
     {
         return new DateTime(year, month, day, 0, 0, 0, DateTimeKind.Utc);

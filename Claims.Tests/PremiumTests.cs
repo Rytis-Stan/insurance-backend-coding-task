@@ -6,8 +6,6 @@ namespace Claims.Tests;
 // TODO: Rename the test class when the premium calculation logic gets placed in its proper place.
 public class PremiumTests
 {
-    private static readonly Random Random = new Random();
-
     [Theory]
     [InlineData(CoverType.Yacht, 1375)]         // 10% of 1250
     [InlineData(CoverType.PassengerShip, 1500)] // 20% of 1250
@@ -109,22 +107,10 @@ public class PremiumTests
 
     private void AssertComputersCorrectPremium(CoverType coverType, int periodDurationInDays, decimal expectedPremium)
     {
-        var (startDate, endDate) = RandomPeriod(periodDurationInDays);
+        var (startDate, endDate) = TestData.RandomPeriod(periodDurationInDays);
         Assert.Equal(
             expectedPremium,
             Cover.ComputePremium(startDate, endDate, coverType)
         );
-    }
-
-    private DateOnly RandomDate()
-    {
-        return new DateOnly(2000, 01, 01).AddDays(Random.Next(10_000));
-    }
-
-    private (DateOnly Start, DateOnly End) RandomPeriod(int durationInDays)
-    {
-        var startDate = RandomDate();
-        var endDate = startDate.AddDays(durationInDays - 1);
-        return (startDate, endDate);
     }
 }

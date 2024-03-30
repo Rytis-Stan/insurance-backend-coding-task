@@ -42,10 +42,10 @@ public class ClaimsControllerTests : ControllerTests
     public async Task ClaimsPostReturnsNewlyCreatedClaim()
     {
         var coverId = Guid.NewGuid();
-        var name = "someRandomName";
-        var claimType = ClaimType.BadWeather;
-        var damageCost = 123;
-        var dateTime = new DateTime(2000, 01, 01);
+        var name = TestData.RandomString("name");
+        var claimType = TestData.RandomEnum<ClaimType>();
+        var damageCost = TestData.RandomInt(10_000);
+        var dateTime = TestData.RandomUtcDateTime();
 
         var response = await Client.PostAsync("/Claims", new CreateClaimRequestDto(coverId, name, claimType, damageCost, dateTime));
 
