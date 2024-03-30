@@ -11,11 +11,11 @@ public class Cover
     // TODO: Make the "Premium" property call "ComputerPremium".
     public static decimal ComputePremium(DateOnly startDate, DateOnly endDate, CoverType coverType)
     {
-        var insuranceDurationInDays = endDate.DayNumber + 1 - startDate.DayNumber;
+        var insurancePeriodInDays = endDate.DayNumber + 1 - startDate.DayNumber;
 
-        var daysInInitial30DayPeriod = Math.Min(insuranceDurationInDays, 30);
-        var daysInLater150DayPeriod = Math.Clamp(insuranceDurationInDays - 30, 0, 150);
-        var daysInRemainingPeriod = Math.Max(insuranceDurationInDays - 30 - 150, 0);
+        var daysInInitial30DayPeriod = Math.Min(insurancePeriodInDays, 30);
+        var daysInLater150DayPeriod = Math.Clamp(insurancePeriodInDays - 30, 0, 150);
+        var daysInRemainingPeriod = Math.Max(insurancePeriodInDays - 30 - 150, 0);
 
         var premiumForInitial30Days = daysInInitial30DayPeriod * DayRateFor(coverType);
         var premiumForLater150Days = daysInLater150DayPeriod * DayRateFor(coverType) * DayBaseRateCoefficientForDay31To180(coverType);
