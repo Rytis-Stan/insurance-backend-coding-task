@@ -2,6 +2,7 @@
 using Claims.Dto;
 using Moq;
 using Xunit;
+using static Claims.Tests.TestValueBuilder;
 
 namespace Claims.Tests;
 
@@ -102,14 +103,14 @@ public class ClaimsServiceTests
     public async Task AddsClaimToRepositoryWhenCreatingAValidClaim()
     {
         // TODO: Use UTC datetime!!!
-        await Test(new DateOnly(2000, 10, 10), new DateOnly(2000, 10, 15), "someClaim", ClaimType.BadWeather, 123.45m, new DateTime(2000, 10, 10));
-        await Test(new DateOnly(2000, 10, 10), new DateOnly(2000, 10, 15), "claimNo1", ClaimType.BadWeather, 123.45m, new DateTime(2000, 10, 10));
-        await Test(new DateOnly(2000, 10, 10), new DateOnly(2000, 10, 15), "claimNo1", ClaimType.Fire, 123.45m, new DateTime(2000, 10, 10));
-        await Test(new DateOnly(2000, 10, 10), new DateOnly(2000, 10, 15), "claimNo1", ClaimType.Fire, 67.89m, new DateTime(2000, 10, 10));
-        await Test(new DateOnly(2000, 10, 10), new DateOnly(2000, 10, 15), "claimNo1", ClaimType.Fire, 67.89m, new DateTime(2000, 10, 11));
-        await Test(new DateOnly(2000, 10, 10), new DateOnly(2000, 10, 15), "claimNo1", ClaimType.Fire, 100000.00m, new DateTime(2000, 10, 11));
-        await Test(new DateOnly(2000, 10, 10), new DateOnly(2000, 10, 15), "claimNo1", ClaimType.Fire, 100000.00m, new DateTime(2000, 10, 14));
-        await Test(new DateOnly(1996, 03, 04), new DateOnly(1996, 05, 06), "claimB", ClaimType.Collision, 0.01m, new DateTime(1996, 03, 04));
+        await Test(Date(2000, 10, 10), Date(2000, 10, 15), "someClaim", ClaimType.BadWeather, 123.45m, new DateTime(2000, 10, 10));
+        await Test(Date(2000, 10, 10), Date(2000, 10, 15), "claimNo1", ClaimType.BadWeather, 123.45m, new DateTime(2000, 10, 10));
+        await Test(Date(2000, 10, 10), Date(2000, 10, 15), "claimNo1", ClaimType.Fire, 123.45m, new DateTime(2000, 10, 10));
+        await Test(Date(2000, 10, 10), Date(2000, 10, 15), "claimNo1", ClaimType.Fire, 67.89m, new DateTime(2000, 10, 10));
+        await Test(Date(2000, 10, 10), Date(2000, 10, 15), "claimNo1", ClaimType.Fire, 67.89m, new DateTime(2000, 10, 11));
+        await Test(Date(2000, 10, 10), Date(2000, 10, 15), "claimNo1", ClaimType.Fire, 100000.00m, new DateTime(2000, 10, 11));
+        await Test(Date(2000, 10, 10), Date(2000, 10, 15), "claimNo1", ClaimType.Fire, 100000.00m, new DateTime(2000, 10, 14));
+        await Test(Date(1996, 03, 04), Date(1996, 05, 06), "claimB", ClaimType.Collision, 0.01m, new DateTime(1996, 03, 04));
 
         async Task Test(DateOnly coverStartDate, DateOnly coverEndDate, string claimName, ClaimType claimType, decimal claimDamageCost, DateTime claimCreated)
         {
