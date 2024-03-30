@@ -36,7 +36,7 @@ public class ClaimsServiceTests
 
         await AssertExtended.ThrowsArgumentExceptionAsync(
             () => service.CreateClaimAsync(request),
-            "Cover references a non-existing claim via the claim ID."
+            "Claim references a non-existing cover via the cover ID."
         );
     }
 
