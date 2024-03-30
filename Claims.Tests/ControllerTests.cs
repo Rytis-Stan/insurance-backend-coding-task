@@ -33,7 +33,8 @@ public abstract class ControllerTests : IDisposable
             {
                 var testConfig = new Dictionary<string, string?>
                 {
-                    {"CosmosDb:DatabaseName", "ClaimTestDb"}
+                    { "CosmosDb:DatabaseName", "ClaimTestDb" },
+                    { "ConnectionStrings:DefaultConnection", "Server=localhost\\SQLEXPRESS;Database=AuditTestDb;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True" }
                 };
                 config.AddInMemoryCollection(testConfig);
             });
