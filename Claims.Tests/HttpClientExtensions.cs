@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace Claims.Tests;
 
@@ -8,7 +8,7 @@ public static class HttpClientExtensions
 {
     public static async Task<HttpResponseMessage> PostAsync<T>(this HttpClient client, [StringSyntax(StringSyntaxAttribute.Uri)] string requestUri, T content)
     {
-        string json = JsonConvert.SerializeObject(content);
+        string json = JsonSerializer.Serialize(content);
         var response = await client.PostAsync(requestUri, JsonContent(json));
         return response;
     }
@@ -22,6 +22,6 @@ public static class HttpClientExtensions
         where T : class
     {
         var content = await response.Content.ReadAsStringAsync();
-        return JsonConvert.DeserializeObject<T>(content);
+        return JsonSerializer.Deserialize<T>(content);
     }
 }

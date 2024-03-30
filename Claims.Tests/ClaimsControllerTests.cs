@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using Claims.Domain;
 using Claims.Dto;
-using Newtonsoft.Json;
 using Xunit;
 
 namespace Claims.Tests;
