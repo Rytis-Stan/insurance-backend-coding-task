@@ -51,7 +51,7 @@ public static class HttpClientExtensions
     public static async Task<HttpResponseMessage> PostAsync<T>(this HttpClient client, [StringSyntax(StringSyntaxAttribute.Uri)] string requestUri, T content)
     {
         string json = JsonConvert.SerializeObject(content);
-        var response = await client.PostAsync("/Claims", JsonContent(json));
+        var response = await client.PostAsync(requestUri, JsonContent(json));
         return response;
     }
 
