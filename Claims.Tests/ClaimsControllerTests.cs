@@ -27,6 +27,17 @@ public class ClaimsControllerTests : ControllerTests
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
+    [Theory]
+    [InlineData("2000-01-01", "2002-02-02", CoverType.ContainerShip, 123.00)]
+    public async Task CoverPremiumGetReturnsCalculatedPremiumForGivenPeriodBasedOnCoverType(string startDate, string endDate, CoverType coverType, decimal expectedPremium)
+    {
+        var response = await Client.GetAsync($"/Covers/Premium/?startDate={startDate}&endDate={endDate}&coverType={coverType}");
+
+        response.EnsureSuccessStatusCode();
+        var premium = await response.ReadContentAsync<decimal>();
+        Assert.Equal(expectedPremium, premium);
+    }
+
     [Fact]
     public async Task ClaimsPostReturnsNewlyCreatedClaim()
     {
