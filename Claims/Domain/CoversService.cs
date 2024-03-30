@@ -15,7 +15,17 @@ public class CoversService : ICoversService
 
     public async Task<Cover> CreateCoverAsync(ICreateCoverRequest request)
     {
-        throw new ArgumentException("Start date cannot be in the past.");
+        var utcNow = _clock.UtcNow();
+        if (request.StartDate < DateOnly.FromDateTime(utcNow))
+        {
+            throw new ArgumentException("Start date cannot be in the past.");
+        }
+        if (request.EndDate < DateOnly.FromDateTime(utcNow))
+        {
+            throw new ArgumentException("End date cannot be in the past.");
+        }
+        throw new ArgumentException("End date cannot be earlier than the start date.");
+
         return await _coversRepository.AddAsync(ToNewCoverInfo(request));
     }
 
