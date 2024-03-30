@@ -15,12 +15,12 @@ public class CoversService : ICoversService
 
     public async Task<Cover> CreateCoverAsync(ICreateCoverRequest request)
     {
-        var utcNow = _clock.UtcNow();
-        if (request.StartDate < DateOnly.FromDateTime(utcNow))
+        var utcToday = DateOnly.FromDateTime(_clock.UtcNow());
+        if (request.StartDate < utcToday)
         {
             throw new ArgumentException("Start date cannot be in the past.");
         }
-        if (request.EndDate < DateOnly.FromDateTime(utcNow))
+        if (request.EndDate < utcToday)
         {
             throw new ArgumentException("End date cannot be in the past.");
         }
