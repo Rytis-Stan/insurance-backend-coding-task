@@ -8,6 +8,20 @@ namespace Claims.Tests;
 public class ClaimsControllerTests : ControllerTests
 {
     [Fact]
+    public async Task CoversPostReturnsNewlyCreatedClaim()
+    {
+        var startDate = TestData.RandomDate();
+        var dateOnly = TestData.RandomDate();
+        var coverType = TestData.RandomEnum<CoverType>();
+        
+        var response = await Client.PostAsync("/Covers", new CreateCoverRequestDto(startDate, dateOnly, coverType));
+
+        response.EnsureSuccessStatusCode();
+        var claim = response.ReadContentAsync<object>();
+        Assert.NotNull(claim);
+    }
+
+    [Fact]
     public async Task CoversGetReturnEmptyCoverCollectionWhenNoClaimsAdded()
     {
         var response = await Client.GetAsync("/Covers");
