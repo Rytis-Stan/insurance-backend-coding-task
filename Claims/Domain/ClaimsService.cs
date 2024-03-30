@@ -18,7 +18,7 @@ public class ClaimsService : IClaimsService
             throw new ArgumentException("Damage cost cannot exceed 100.000.");
         }
 
-        throw new ArgumentException("Cover references a non-existing claim via the claim ID.");
+        throw new ArgumentException("Claim references a non-existing cover via the cover ID.");
 
         return await _claimsRepository.AddAsync(ToNewClaimInfo(request));
     }
