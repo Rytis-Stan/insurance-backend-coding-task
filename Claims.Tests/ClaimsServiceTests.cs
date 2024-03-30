@@ -15,11 +15,13 @@ public class ClaimsServiceTests
 
     private readonly Mock<IClaimsRepository> _claimsRepositoryMock;
     private readonly Mock<ICoversRepository> _coversRepositoryMock;
+    private readonly ClaimsService _claimsService;
 
     public ClaimsServiceTests()
     {
         _claimsRepositoryMock = new Mock<IClaimsRepository>();
         _coversRepositoryMock = new Mock<ICoversRepository>();
+        _claimsService = new ClaimsService(_claimsRepositoryMock.Object, _coversRepositoryMock.Object);
     }
 
     [Fact]
@@ -45,10 +47,9 @@ public class ClaimsServiceTests
         var coverId = Guid.NewGuid();
         var created = UtcDateTime(2000, 01, 01); // TODO: Random date-time value within a valid range?
         var request = new CreateClaimRequestDto(coverId, "anyName", AnyClaimType, damageCost, created);
-        var service = new ClaimsService(_claimsRepositoryMock.Object, _coversRepositoryMock.Object);
-    
+
         await AssertExtended.ThrowsArgumentExceptionAsync(
-            () => service.CreateClaimAsync(request),
+            () => _claimsService.CreateClaimAsync(request),
             "Damage cost cannot exceed 100.000."
         );
     }
@@ -62,10 +63,8 @@ public class ClaimsServiceTests
         var request = new CreateClaimRequestDto(coverId, "anyName", AnyClaimType, AnyDamageCost, created);
         StubGetCoverById(coverId, null);
 
-        var service = new ClaimsService(_claimsRepositoryMock.Object, _coversRepositoryMock.Object);
-    
         await AssertExtended.ThrowsArgumentExceptionAsync(
-            () => service.CreateClaimAsync(request),
+            () => _claimsService.CreateClaimAsync(request),
             "Claim references a non-existing cover via the cover ID."
         );
     }
@@ -75,13 +74,13 @@ public class ClaimsServiceTests
     // {
     //     // TODO: Use UTC datetime!!!
     //     await Test(
-    //         new DateOnly(2000, 10, 20),
-    //         new DateOnly(2000, 10, 20),
+    //         Date(2000, 10, 20),
+    //         Date(2000, 10, 20),
     //         UtcDateTime(2000, 10, 18)
     //     );
     //     // await Test(
-    //     //     new DateOnly(2000, 10, 20),
-    //     //     new DateOnly(2000, 10, 20),
+    //     //     Date(2000, 10, 20),
+    //     //     Date(2000, 10, 20),
     //     //     UtcDateTime(2000, 10, 19)
     //     // );
     //
@@ -118,9 +117,7 @@ public class ClaimsServiceTests
             var request = new CreateClaimRequestDto(cover.Id, claimName, claimType, claimDamageCost, claimCreated);
             StubGetCoverById(cover.Id, cover);
 
-            var service = new ClaimsService(_claimsRepositoryMock.Object, _coversRepositoryMock.Object);
-
-            await service.CreateClaimAsync(request);
+            await _claimsService.CreateClaimAsync(request);
 
             _claimsRepositoryMock.Verify(x => x.AddAsync(new NewClaimInfo(cover.Id, claimName, claimType, claimDamageCost, claimCreated)));
         }
@@ -143,28 +140,5 @@ public class ClaimsServiceTests
         _coversRepositoryMock
             .Setup(x => x.GetByIdAsync(coverId))
             .ReturnsAsync(cover);
-    }
-
-    private class ClaimsRepositoryStub : IClaimsRepository
-    {
-        public Task<Claim> AddAsync(INewClaimInfo item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Claim?> GetByIdAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Claim>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Claim> DeleteAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
