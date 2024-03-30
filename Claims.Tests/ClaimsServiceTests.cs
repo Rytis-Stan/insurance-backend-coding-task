@@ -69,39 +69,56 @@ public class ClaimsServiceTests
         );
     }
 
-    // [Fact]
-    // public async Task ThrowsExceptionWhenCreatingAClaimForADateOutsideOfRelatedCoverPeriod()
-    // {
-    //     // TODO: Use UTC datetime!!!
-    //     await Test(
-    //         Date(2000, 10, 20),
-    //         Date(2000, 10, 20),
-    //         UtcDateTime(2000, 10, 18)
-    //     );
-    //     // await Test(
-    //     //     Date(2000, 10, 20),
-    //     //     Date(2000, 10, 20),
-    //     //     UtcDateTime(2000, 10, 19)
-    //     // );
-    //
-    //     async Task Test(DateOnly coverStartDate, DateOnly coverEndDate, DateTime claimCreated)
-    //     {
-    //         var cover = CreateCoverForPeriod(coverStartDate, coverEndDate);
-    //         var request = new CreateClaimRequestDto(cover.Id, "anyName", AnyClaimType, AnyDamageCost, claimCreated);
-    //
-    //         var service = new ClaimsService(new ClaimsRepositoryStub(), new CoversRepositoryStub(cover.Id, cover));
-    //
-    //         await AssertExtended.ThrowsArgumentExceptionAsync(
-    //             () => service.CreateClaimAsync(request),
-    //             "Claim is outside of the related cover period."
-    //         );
-    //     }
-    // }
+    [Fact]
+    public async Task ThrowsExceptionWhenCreatingAClaimForADateOutsideOfRelatedCoverPeriod()
+    {
+        await Test(
+            Date(2000, 10, 20),
+            Date(2000, 10, 20),
+            UtcDateTime(2000, 10, 18)
+        );
+        await Test(
+            Date(2000, 10, 20),
+            Date(2000, 10, 20),
+            UtcDateTime(2000, 10, 19)
+        );
+        await Test(
+            Date(1987, 06, 05),
+            Date(1987, 06, 05),
+            UtcDateTime(1987, 06, 04)
+        );
+        await Test(
+            Date(1987, 06, 05),
+            Date(1987, 06, 05),
+            UtcDateTime(1987, 06, 06)
+        );
+        await Test(
+            Date(1987, 06, 05),
+            Date(1987, 06, 05),
+            UtcDateTime(1987, 06, 07)
+        );
+        await Test(
+            Date(1987, 06, 05),
+            Date(1987, 06, 06),
+            UtcDateTime(1987, 06, 07)
+        );
+
+        async Task Test(DateOnly coverStartDate, DateOnly coverEndDate, DateTime claimCreated)
+        {
+            var cover = CreateCoverForPeriod(coverStartDate, coverEndDate);
+            var request = new CreateClaimRequestDto(cover.Id, "anyName", AnyClaimType, AnyDamageCost, claimCreated);
+            StubGetCoverById(cover.Id, cover);
+
+            await AssertExtended.ThrowsArgumentExceptionAsync(
+                () => _claimsService.CreateClaimAsync(request),
+                "Claim is outside the related cover period."
+            );
+        }
+    }
 
     [Fact]
     public async Task AddsClaimToRepositoryWhenCreatingAValidClaim()
     {
-        // TODO: Use UTC datetime!!!
         await Test(Date(2000, 10, 10), Date(2000, 10, 15), "someClaim", ClaimType.BadWeather, 123.45m, UtcDateTime(2000, 10, 10));
         await Test(Date(2000, 10, 10), Date(2000, 10, 15), "claimNo1", ClaimType.BadWeather, 123.45m, UtcDateTime(2000, 10, 10));
         await Test(Date(2000, 10, 10), Date(2000, 10, 15), "claimNo1", ClaimType.Fire, 123.45m, UtcDateTime(2000, 10, 10));
@@ -109,16 +126,17 @@ public class ClaimsServiceTests
         await Test(Date(2000, 10, 10), Date(2000, 10, 15), "claimNo1", ClaimType.Fire, 67.89m, UtcDateTime(2000, 10, 11));
         await Test(Date(2000, 10, 10), Date(2000, 10, 15), "claimNo1", ClaimType.Fire, 100000.00m, UtcDateTime(2000, 10, 11));
         await Test(Date(2000, 10, 10), Date(2000, 10, 15), "claimNo1", ClaimType.Fire, 100000.00m, UtcDateTime(2000, 10, 14));
+        await Test(Date(2000, 10, 10), Date(2000, 10, 15), "claimNo1", ClaimType.Fire, 100000.00m, UtcDateTime(2000, 10, 15));
         await Test(Date(1996, 03, 04), Date(1996, 05, 06), "claimB", ClaimType.Collision, 0.01m, UtcDateTime(1996, 03, 04));
-
+    
         async Task Test(DateOnly coverStartDate, DateOnly coverEndDate, string claimName, ClaimType claimType, decimal claimDamageCost, DateTime claimCreated)
         {
             var cover = CreateCoverForPeriod(coverStartDate, coverEndDate);
             var request = new CreateClaimRequestDto(cover.Id, claimName, claimType, claimDamageCost, claimCreated);
             StubGetCoverById(cover.Id, cover);
-
+    
             await _claimsService.CreateClaimAsync(request);
-
+    
             _claimsRepositoryMock.Verify(x => x.AddAsync(new NewClaimInfo(cover.Id, claimName, claimType, claimDamageCost, claimCreated)));
         }
     }
