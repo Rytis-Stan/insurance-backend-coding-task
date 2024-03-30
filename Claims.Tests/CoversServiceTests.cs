@@ -1,6 +1,7 @@
 ﻿using Claims.Domain;
 using Claims.Dto;
 using Claims.Infrastructure;
+using Moq;
 using Xunit;
 using static Claims.Tests.TestValueBuilder;
 
@@ -9,6 +10,16 @@ namespace Claims.Tests;
 public class CoversServiceTests
 {
     private const CoverType AnyCoverType = CoverType.PassengerShip;
+
+    private readonly Mock<IClock> _clockMock;
+    private readonly CoversService _coversService;
+
+    public CoversServiceTests()
+    {
+        var coversRepositoryMock = new Mock<ICoversRepository>();
+        _clockMock = new Mock<IClock>();
+        _coversService = new CoversService(coversRepositoryMock.Object, _clockMock.Object);
+    }
 
     [Fact]
     public async Task ThrowsExceptionWhenCreatingACoverWithStartDateThatIsInThePast()
@@ -34,10 +45,10 @@ public class CoversServiceTests
         {
             var endDate = DateOnly.FromDateTime(utcNow);
             var request = new CreateCoverRequestDto(startDate, endDate, AnyCoverType);
-            var service = new CoversService(new CoversRepositoryStub(), new ClockStub(utcNow));
+            StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsArgumentExceptionAsync(
-                () => service.CreateCoverAsync(request),
+                () => _coversService.CreateCoverAsync(request),
                 "Start date cannot be in the past."
             );
         }
@@ -67,10 +78,10 @@ public class CoversServiceTests
         {
             var startDate = DateOnly.FromDateTime(utcNow);
             var request = new CreateCoverRequestDto(startDate, endDate, AnyCoverType);
-            var service = new CoversService(new CoversRepositoryStub(), new ClockStub(utcNow));
+            StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsArgumentExceptionAsync(
-                () => service.CreateCoverAsync(request),
+                () => _coversService.CreateCoverAsync(request),
                 "End date cannot be in the past."
             );
         }
@@ -108,27 +119,19 @@ public class CoversServiceTests
         async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate)
         {
             var request = new CreateCoverRequestDto(startDate, endDate, AnyCoverType);
-            var service = new CoversService(new CoversRepositoryStub(), new ClockStub(utcNow));
+            StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsArgumentExceptionAsync(
-                () => service.CreateCoverAsync(request),
+                () => _coversService.CreateCoverAsync(request),
                 "End date cannot be earlier than the start date."
             );
         }
     }
 
-    private class ClockStub : IClock
+    private void StubUtcNow(DateTime utcNow)
     {
-        private readonly DateTime _utcNow;
-
-        public ClockStub(DateTime utcNow)
-        {
-            _utcNow = utcNow;
-        }
-
-        public DateTime UtcNow()
-        {
-            return _utcNow;
-        }
+        _clockMock
+            .Setup(x => x.UtcNow())
+            .Returns(utcNow);
     }
 }
