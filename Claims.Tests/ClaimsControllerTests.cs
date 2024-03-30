@@ -31,12 +31,12 @@ public class ClaimsControllerTests : ControllerTests
         var response = await Client.GetAsync("/Covers");
         
         response.EnsureSuccessStatusCode();
-        var covers = await response.ReadContentAsync<object[]>();
+        var covers = await response.ReadContentAsync<CoverDto[]>();
         Assert.Empty(covers);
     }
 
     [Fact]
-    public async Task CoverGetWithIdReturnsNotFoundWhenNoCoverExistsWithGivenId()
+    public async Task CoversGetWithIdReturnsNotFoundWhenNoCoverExistsWithGivenId()
     {
         var id = Guid.NewGuid();
 
@@ -47,7 +47,7 @@ public class ClaimsControllerTests : ControllerTests
 
     [Theory]
     [InlineData("2001-01-01", "2001-01-01", CoverType.Yacht, 1375.00)]
-    public async Task CoverPremiumGetReturnsCalculatedPremiumForGivenPeriodBasedOnCoverType(
+    public async Task CoversPremiumGetReturnsCalculatedPremiumForGivenPeriodBasedOnCoverType(
         string startDate, string endDate, CoverType coverType, decimal expectedPremium)
     {
         var response = await Client.GetAsync($"/Covers/Premium/?startDate={startDate}&endDate={endDate}&coverType={coverType}");
