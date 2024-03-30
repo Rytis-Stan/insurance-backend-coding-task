@@ -11,14 +11,15 @@ public class CoversServiceTests
 {
     private const CoverType AnyCoverType = CoverType.PassengerShip;
 
+    private readonly Mock<ICoversRepository> _coversRepositoryMock;
     private readonly Mock<IClock> _clockMock;
     private readonly CoversService _coversService;
 
     public CoversServiceTests()
     {
-        var coversRepositoryMock = new Mock<ICoversRepository>();
+        _coversRepositoryMock = new Mock<ICoversRepository>();
         _clockMock = new Mock<IClock>();
-        _coversService = new CoversService(coversRepositoryMock.Object, _clockMock.Object);
+        _coversService = new CoversService(_coversRepositoryMock.Object, _clockMock.Object);
     }
 
     [Fact]
@@ -125,6 +126,22 @@ public class CoversServiceTests
                 () => _coversService.CreateCoverAsync(request),
                 "End date cannot be earlier than the start date."
             );
+        }
+    }
+
+    [Fact]
+    public async Task AddsCoverToRepositoryWhenCreatingAValidCover()
+    {
+        await Test(UtcDateTime(2000, 10, 10), Date(2000, 10, 20), Date(2000, 10, 20), CoverType.BulkCarrier, 123.45m);
+
+        async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate, CoverType coverType, decimal premium)
+        {
+            var request = new CreateCoverRequestDto(startDate, endDate, AnyCoverType);
+            StubUtcNow(utcNow);
+
+            await _coversService.CreateCoverAsync(request);
+
+            _coversRepositoryMock.Verify(x => x.AddAsync(new NewCoverInfo(startDate, endDate, coverType, premium);
         }
     }
 
