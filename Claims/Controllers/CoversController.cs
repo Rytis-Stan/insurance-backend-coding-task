@@ -10,6 +10,7 @@ namespace Claims.Controllers;
 public class CoversController : ControllerBase
 {
     private readonly ICoversService _coversService;
+    private readonly IPricingService _pricingService;
     private readonly ICoverAuditor _auditor;
 
     public CoversController(ICoversService coversService, ICoverAuditor auditor)
@@ -43,9 +44,9 @@ public class CoversController : ControllerBase
     }
 
     [HttpGet("Premium")]
-    public async Task<ActionResult> ComputePremiumAsync(DateOnly startDate, DateOnly endDate, CoverType coverType)
+    public async Task<ActionResult<decimal>> ComputePremiumAsync(DateOnly startDate, DateOnly endDate, CoverType coverType)
     {
-        return Ok(_coversService.ComputePremium(startDate, endDate, coverType));
+        return Ok(_pricingService.CalculatePremium(startDate, endDate, coverType));
     }
 
     [HttpDelete("{id}")]

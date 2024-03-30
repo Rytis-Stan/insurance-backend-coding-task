@@ -3,8 +3,7 @@ using Xunit;
 
 namespace Claims.Tests;
 
-// TODO: Rename the test class when the premium calculation logic gets placed in its proper place.
-public class PremiumTests
+public class PricingServiceTests
 {
     [Theory]
     [InlineData(CoverType.Yacht, 1375)]         // 10% of 1250
@@ -110,7 +109,7 @@ public class PremiumTests
         var (startDate, endDate) = TestData.RandomPeriod(periodDurationInDays);
         Assert.Equal(
             expectedPremium,
-            Cover.CalculatePremium(startDate, endDate, coverType)
+            new PricingService().CalculatePremium(startDate, endDate, coverType)
         );
     }
 }

@@ -41,11 +41,6 @@ public class CoversService : ICoversService
         return _pricingService.CalculatePremium(request.StartDate, request.EndDate, request.Type);
     }
 
-    public decimal ComputePremium(DateOnly startDate, DateOnly endDate, CoverType coverType)
-    {
-        return Cover.CalculatePremium(startDate, endDate, coverType);
-    }
-
     public async Task<Cover?> GetCoverAsync(Guid id)
     {
         return await _coversRepository.GetByIdAsync(id);
