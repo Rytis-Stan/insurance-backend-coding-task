@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Claims.Tests;
 
-public class CoverServiceTests
+public class CoversServiceTests
 {
     private const CoverType AnyCoverType = CoverType.PassengerShip;
 
