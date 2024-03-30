@@ -8,6 +8,27 @@ namespace Claims.Tests;
 public class ClaimsControllerTests : ControllerTests
 {
     [Fact]
+    public async Task CoversGetReturnEmptyCoverCollectionWhenNoClaimsAdded()
+    {
+        var response = await Client.GetAsync("/Covers");
+
+        response.EnsureSuccessStatusCode();
+
+        var covers = await response.ReadContentAsync<object[]>();
+
+        Assert.Empty(covers);
+    }
+
+    [Fact]
+    public async Task CoverGetWithIdReturnsNotFoundWhenNoCoverExistsWithGivenId()
+    {
+        var id = Guid.NewGuid();
+        var response = await Client.GetAsync($"/Covers/{id}");
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
     public async Task ClaimsPostReturnsNewlyCreatedClaim()
     {
         var coverId = Guid.NewGuid();
