@@ -2,6 +2,7 @@
 using Claims.Dto;
 using Claims.Infrastructure;
 using Xunit;
+using static Claims.Tests.TestValueBuilder;
 
 namespace Claims.Tests;
 
@@ -14,19 +15,19 @@ public class CoversServiceTests
     {
         await Test(
             UtcDateTime(2000, 01, 10),
-            new DateOnly(2000, 01, 08)
+            Date(2000, 01, 08)
         );
         await Test(
             UtcDateTime(2000, 01, 10),
-            new DateOnly(2000, 01, 09)
+            Date(2000, 01, 09)
         );
         await Test(
             UtcDateTime(1998, 07, 06),
-            new DateOnly(1998, 07, 05)
+            Date(1998, 07, 05)
         );
         await Test(
             UtcDateTime(1998, 07, 06),
-            new DateOnly(1996, 05, 04)
+            Date(1996, 05, 04)
         );
 
         async Task Test(DateTime utcNow, DateOnly startDate)
@@ -47,19 +48,19 @@ public class CoversServiceTests
     {
         await Test(
             UtcDateTime(2000, 01, 10),
-            new DateOnly(2000, 01, 08)
+            Date(2000, 01, 08)
         );
         await Test(
             UtcDateTime(2000, 01, 10),
-            new DateOnly(2000, 01, 09)
+            Date(2000, 01, 09)
         );
         await Test(
             UtcDateTime(1998, 07, 06),
-            new DateOnly(1998, 07, 05)
+            Date(1998, 07, 05)
         );
         await Test(
             UtcDateTime(1998, 07, 06),
-            new DateOnly(1996, 05, 04)
+            Date(1996, 05, 04)
         );
 
         async Task Test(DateTime utcNow, DateOnly endDate)
@@ -80,28 +81,28 @@ public class CoversServiceTests
     {
         await Test(
             UtcDateTime(2000, 01, 10),
-            new DateOnly(2010, 01, 10),
-            new DateOnly(2010, 01, 08)
+            Date(2010, 01, 10),
+            Date(2010, 01, 08)
         );
         await Test(
             UtcDateTime(2000, 01, 10),
-            new DateOnly(2010, 01, 10),
-            new DateOnly(2010, 01, 09)
+            Date(2010, 01, 10),
+            Date(2010, 01, 09)
         );
         await Test(
             UtcDateTime(1981, 06, 07),
-            new DateOnly(2010, 01, 10),
-            new DateOnly(2010, 01, 09)
+            Date(2010, 01, 10),
+            Date(2010, 01, 09)
         );
         await Test(
             UtcDateTime(1981, 06, 07),
-            new DateOnly(1981, 06, 10),
-            new DateOnly(1981, 06, 09)
+            Date(1981, 06, 10),
+            Date(1981, 06, 09)
         );
         await Test(
             UtcDateTime(1981, 06, 07),
-            new DateOnly(1981, 06, 11),
-            new DateOnly(1981, 06, 10)
+            Date(1981, 06, 11),
+            Date(1981, 06, 10)
         );
 
         async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate)
@@ -114,11 +115,6 @@ public class CoversServiceTests
                 "End date cannot be earlier than the start date."
             );
         }
-    }
-
-    private DateTime UtcDateTime(int year, int month, int day)
-    {
-        return new DateTime(year, month, day, 0, 0, 0, DateTimeKind.Utc);
     }
 
     private class ClockStub : IClock

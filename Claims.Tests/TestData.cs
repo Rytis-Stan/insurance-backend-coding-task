@@ -1,4 +1,6 @@
-﻿namespace Claims.Tests;
+﻿using static Claims.Tests.TestValueBuilder;
+
+namespace Claims.Tests;
 
 public class TestData
 {
@@ -29,11 +31,6 @@ public class TestData
     public static DateTime RandomUtcDateTime()
     {
         return UtcDateTime(2000, 01, 01).AddDays(Random.Next(10_000));
-    }
-
-    private static DateTime UtcDateTime(int year, int month, int day)
-    {
-        return new DateTime(year, month, day, 0, 0, 0, DateTimeKind.Utc);
     }
 
     public static DateOnly RandomDate()
