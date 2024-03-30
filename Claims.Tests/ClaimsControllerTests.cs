@@ -69,7 +69,7 @@ public class ClaimsControllerTests : ControllerTests
         var response = await Client.PostAsync("/Claims", new CreateClaimRequestDto(coverId, name, claimType, damageCost, dateTime));
 
         response.EnsureSuccessStatusCode();
-        var claim = response.ReadContentAsync<object>();
+        var claim = response.ReadContentAsync<ClaimDto>();
         Assert.NotNull(claim);
     }
 
@@ -79,7 +79,7 @@ public class ClaimsControllerTests : ControllerTests
         var response = await Client.GetAsync("/Claims");
 
         response.EnsureSuccessStatusCode();
-        var claims = await response.ReadContentAsync<object[]>();
+        var claims = await response.ReadContentAsync<ClaimDto[]>();
         Assert.Empty(claims);
     }
 
