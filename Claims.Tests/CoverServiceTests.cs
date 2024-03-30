@@ -21,8 +21,12 @@ public class CoverServiceTests
             new DateOnly(2000, 01, 09)
         );
         await Test(
-            UtcDateTime(2000, 01, 11),
-            new DateOnly(2000, 01, 10)
+            UtcDateTime(1998, 07, 06),
+            new DateOnly(1998, 07, 05)
+        );
+        await Test(
+            UtcDateTime(1998, 07, 06),
+            new DateOnly(1996, 05, 04)
         );
 
         async Task Test(DateTime utcNow, DateOnly startDate)
@@ -43,22 +47,24 @@ public class CoverServiceTests
     {
         await Test(
             UtcDateTime(2000, 01, 10),
-            new DateOnly(2000, 01, 10),
             new DateOnly(2000, 01, 08)
         );
         await Test(
             UtcDateTime(2000, 01, 10),
-            new DateOnly(2000, 01, 10),
             new DateOnly(2000, 01, 09)
         );
         await Test(
-            UtcDateTime(2000, 01, 11),
-            new DateOnly(2000, 01, 11),
-            new DateOnly(2000, 01, 10)
+            UtcDateTime(1998, 07, 06),
+            new DateOnly(1998, 07, 05)
+        );
+        await Test(
+            UtcDateTime(1998, 07, 06),
+            new DateOnly(1996, 05, 04)
         );
 
-        async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate)
+        async Task Test(DateTime utcNow, DateOnly endDate)
         {
+            var startDate = DateOnly.FromDateTime(utcNow);
             var request = new CreateCoverRequestDto(startDate, endDate, AnyCoverType);
             var service = new CoversService(new CoversRepositoryStub(), new ClockStub(utcNow));
 
