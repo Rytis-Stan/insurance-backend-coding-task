@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Xunit;
 
 namespace Claims.Tests;
@@ -8,7 +6,7 @@ namespace Claims.Tests;
 public class ClaimsControllerTests : ControllerTests
 {
     [Fact]
-    public async Task Get_Claims()
+    public async Task ClaimsGetReturnEmptyClaimCollectionWhenNoClaimsAdded()
     {
         var response = await Client.GetAsync("/Claims");
 
