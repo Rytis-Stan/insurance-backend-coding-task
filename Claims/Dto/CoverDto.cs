@@ -3,7 +3,7 @@ using Claims.Domain;
 namespace Claims.Dto;
 
 public record CoverDto(
-    string Id,
+    Guid Id,
     DateOnly StartDate,
     DateOnly EndDate,
     CoverType Type,

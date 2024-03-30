@@ -11,14 +11,18 @@ public class ClaimsControllerTests : ControllerTests
     public async Task CoversPostReturnsNewlyCreatedCover()
     {
         var startDate = TestData.RandomDate();
-        var dateOnly = TestData.RandomDate();
+        var endDate = TestData.RandomDate();
         var coverType = TestData.RandomEnum<CoverType>();
         
-        var response = await Client.PostAsync("/Covers", new CreateCoverRequestDto(startDate, dateOnly, coverType));
+        var response = await Client.PostAsync("/Covers", new CreateCoverRequestDto(startDate, endDate, coverType));
 
         response.EnsureSuccessStatusCode();
-        var claim = response.ReadContentAsync<object>();
-        Assert.NotNull(claim);
+        var cover = await response.ReadContentAsync<CoverDto>();
+
+        Assert.Equal(
+            new CoverDto(Guid.NewGuid(), startDate, endDate, coverType, 100.00m),
+            cover
+        );
     }
 
     [Fact]
