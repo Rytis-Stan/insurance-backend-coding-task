@@ -13,10 +13,19 @@ public class ClaimsService : IClaimsService
 
     public async Task<Claim> CreateClaimAsync(ICreateClaimRequest request)
     {
-        // if (request.DamageCost > 100)
-        // {
-        //     throw new ArgumentException("Damage cost cannot exceed 100.000.");
-        // }
+        if (request.DamageCost == 0.00m)
+        {
+            throw new ArgumentException("Damage cost must be a positive value.");
+        }
+        if (request.DamageCost > 100_000)
+        {
+            throw new ArgumentException("Damage cost cannot exceed 100.000.");
+        }
+
+        if (await _coversRepository.GetByIdAsync(request.CoverId) == null)
+        {
+            throw new ArgumentException("Claim references a non-existing cover via the cover ID.");
+        }
         //
         // throw new ArgumentException("Claim references a non-existing cover via the cover ID.");
 
