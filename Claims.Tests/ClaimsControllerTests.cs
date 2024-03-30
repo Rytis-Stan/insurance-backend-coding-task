@@ -1,27 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace Claims.Tests;
 
-public class ClaimsControllerTests
+public class ClaimsControllerTests : ControllerTests
 {
     [Fact]
     public async Task Get_Claims()
     {
-        var client = CreateClient();
-
-        var response = await client.GetAsync("/Claims");
+        var response = await Client.GetAsync("/Claims");
 
         response.EnsureSuccessStatusCode();
 
-        //TODO: Apart from ensuring 200 OK being returned, what else can be asserted?
-    }
+        var content = await response.Content.ReadAsStringAsync();
+        var claims = JsonConvert.DeserializeObject<object[]>(content);
 
-    private HttpClient CreateClient()
-    {
-        var application = new WebApplicationFactory<Program>()
-            .WithWebHostBuilder(_ => {});
-
-        return application.CreateClient();
+        Assert.Empty(claims);
     }
 }
