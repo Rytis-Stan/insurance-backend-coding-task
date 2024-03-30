@@ -75,6 +75,47 @@ public class CoversServiceTests
         }
     }
 
+    [Fact]
+    public async Task ThrowsExceptionWhenEndDateNotItThePastButGoesBeforeStartDate()
+    {
+        await Test(
+            UtcDateTime(2000, 01, 10),
+            new DateOnly(2010, 01, 10),
+            new DateOnly(2010, 01, 08)
+        );
+        await Test(
+            UtcDateTime(2000, 01, 10),
+            new DateOnly(2010, 01, 10),
+            new DateOnly(2010, 01, 09)
+        );
+        await Test(
+            UtcDateTime(1981, 06, 07),
+            new DateOnly(2010, 01, 10),
+            new DateOnly(2010, 01, 09)
+        );
+        await Test(
+            UtcDateTime(1981, 06, 07),
+            new DateOnly(1981, 06, 10),
+            new DateOnly(1981, 06, 09)
+        );
+        await Test(
+            UtcDateTime(1981, 06, 07),
+            new DateOnly(1981, 06, 11),
+            new DateOnly(1981, 06, 10)
+        );
+
+        async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate)
+        {
+            var request = new CreateCoverRequestDto(startDate, endDate, AnyCoverType);
+            var service = new CoversService(new CoversRepositoryStub(), new ClockStub(utcNow));
+
+            await AssertExtended.ThrowsArgumentExceptionAsync(
+                () => service.CreateCoverAsync(request),
+                "End date cannot be earlier than the start date."
+            );
+        }
+    }
+
     private DateTime UtcDateTime(int year, int month, int day)
     {
         return new DateTime(year, month, day, 0, 0, 0, DateTimeKind.Utc);
