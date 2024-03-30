@@ -51,9 +51,13 @@ public static class HttpClientExtensions
     public static async Task<HttpResponseMessage> PostAsync<T>(this HttpClient client, [StringSyntax(StringSyntaxAttribute.Uri)] string requestUri, T content)
     {
         string json = JsonConvert.SerializeObject(content);
-        var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-        var response = await client.PostAsync("/Claims", httpContent);
+        var response = await client.PostAsync("/Claims", JsonContent(json));
         return response;
+    }
+
+    private static StringContent JsonContent(string json)
+    {
+        return new StringContent(json, Encoding.UTF8, "application/json");
     }
 
     public static async Task<T?> ReadContentAsync<T>(this HttpResponseMessage response)
