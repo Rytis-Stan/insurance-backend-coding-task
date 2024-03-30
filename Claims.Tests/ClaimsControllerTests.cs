@@ -11,11 +11,9 @@ public class ClaimsControllerTests : ControllerTests
     public async Task CoversGetReturnEmptyCoverCollectionWhenNoClaimsAdded()
     {
         var response = await Client.GetAsync("/Covers");
-
+        
         response.EnsureSuccessStatusCode();
-
         var covers = await response.ReadContentAsync<object[]>();
-
         Assert.Empty(covers);
     }
 
@@ -23,6 +21,7 @@ public class ClaimsControllerTests : ControllerTests
     public async Task CoverGetWithIdReturnsNotFoundWhenNoCoverExistsWithGivenId()
     {
         var id = Guid.NewGuid();
+
         var response = await Client.GetAsync($"/Covers/{id}");
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -40,9 +39,7 @@ public class ClaimsControllerTests : ControllerTests
         var response = await Client.PostAsync("/Claims", new CreateClaimRequestDto(coverId, name, claimType, damageCost, dateTime));
 
         response.EnsureSuccessStatusCode();
-
         var claim = response.ReadContentAsync<object>();
-
         Assert.NotNull(claim);
     }
 
@@ -52,9 +49,7 @@ public class ClaimsControllerTests : ControllerTests
         var response = await Client.GetAsync("/Claims");
 
         response.EnsureSuccessStatusCode();
-
         var claims = await response.ReadContentAsync<object[]>();
-
         Assert.Empty(claims);
     }
 
@@ -62,6 +57,7 @@ public class ClaimsControllerTests : ControllerTests
     public async Task ClaimsGetWithIdReturnsNotFoundWhenNoClaimExistsWithGivenId()
     {
         var id = Guid.NewGuid();
+
         var response = await Client.GetAsync($"/Claims/{id}");
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
