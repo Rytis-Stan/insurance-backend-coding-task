@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace Claims.Domain;
 
 public class Cover
@@ -14,20 +12,17 @@ public class Cover
     public static decimal ComputePremium(DateOnly startDate, DateOnly endDate, CoverType coverType)
     {
         var insuranceDurationInDays = endDate.DayNumber + 1 - startDate.DayNumber;
-        var totalPremium = 0m;
 
-        for (var day = 0; day < insuranceDurationInDays; day++)
-        {
-            totalPremium += PremiumPerDay(coverType, day);
-        }
+        var daysInInitial30DayPeriod = Math.Min(insuranceDurationInDays, 30);
+        var daysInLater150DayPeriod = Math.Clamp(insuranceDurationInDays - 30, 0, 150);
+        var daysInRemainingPeriod = Math.Max(insuranceDurationInDays - 30 - 150, 0);
+
+        var premiumForInitial30Days = daysInInitial30DayPeriod * DayRateFor(coverType);
+        var premiumForLater150Days = daysInLater150DayPeriod * DayRateFor(coverType) * DayBaseRateCoefficientForDay31To180(coverType);
+        var premiumForRemainingDays = daysInRemainingPeriod * DayRateFor(coverType) * DayBaseRateCoefficientForDaysAfter180(coverType);
+        var totalPremium = premiumForInitial30Days + premiumForLater150Days + premiumForRemainingDays;
 
         return totalPremium;
-    }
-
-    private static decimal PremiumPerDay(CoverType coverType, int day)
-    {
-        var dayRate = DayRateFor(coverType);
-        return dayRate * DayBasedRateCoefficientFor(day, coverType);
     }
 
     private static decimal DayRateFor(CoverType coverType)
@@ -47,29 +42,18 @@ public class Cover
         };
     }
 
-    private static decimal DayBasedRateCoefficientFor(int day, CoverType coverType)
+    private static decimal DayBaseRateCoefficientForDay31To180(CoverType coverType)
     {
-        if (day < 30)
-        {
-            return 1.00m;
-        }
+        return coverType == CoverType.Yacht
+            ? 1.00m - 0.05m
+            : 1.00m - 0.02m;
+    }
 
-        if (day < 180)
-        {
-            return coverType == CoverType.Yacht
-                ? 1.00m - 0.05m
-                : 1.00m - 0.02m;
-        }
-
-        if (day < 365)
-        {
-            return coverType == CoverType.Yacht
-                ? 1.00m - 0.08m
-                : 1.00m - 0.03m;
-        }
-
-        // TODO: Add proper handling of this exception somewhere (need to fix the max period for the premium calculations).
-        throw new UnreachableException("This code should not be reached.");
+    private static decimal DayBaseRateCoefficientForDaysAfter180(CoverType coverType)
+    {
+        return coverType == CoverType.Yacht
+            ? 1.00m - 0.08m
+            : 1.00m - 0.03m;
     }
 }
 
