@@ -11,17 +11,17 @@ public class ClaimsControllerTests : ControllerTests
     [Fact]
     public async Task ClaimsPostReturnsNewlyCreatedClaim()
     {
+        var coverId = Guid.NewGuid();
         var name = "someRandomName";
         var claimType = ClaimType.BadWeather;
         var damageCost = 123;
         var dateTime = new DateTime(2000, 01, 01);
 
-        var response = await Client.PostAsync("/Claims", new CreateClaimRequestDto(Guid.NewGuid(), name, claimType, damageCost, dateTime));
+        var response = await Client.PostAsync("/Claims", new CreateClaimRequestDto(coverId, name, claimType, damageCost, dateTime));
 
         response.EnsureSuccessStatusCode();
 
-        var content = await response.Content.ReadAsStringAsync();
-        var claim = JsonConvert.DeserializeObject<object>(content);
+        var claim = response.ReadContentAsync<object>();
 
         Assert.NotNull(claim);
     }
@@ -33,8 +33,7 @@ public class ClaimsControllerTests : ControllerTests
 
         response.EnsureSuccessStatusCode();
 
-        var content = await response.Content.ReadAsStringAsync();
-        var claims = JsonConvert.DeserializeObject<object[]>(content);
+        var claims = await response.ReadContentAsync<object[]>();
 
         Assert.Empty(claims);
     }

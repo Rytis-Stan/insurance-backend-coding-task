@@ -1,7 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using Claims.Domain;
-using Claims.Dto;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
@@ -57,5 +54,12 @@ public static class HttpClientExtensions
         var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
         var response = await client.PostAsync("/Claims", httpContent);
         return response;
+    }
+
+    public static async Task<T?> ReadContentAsync<T>(this HttpResponseMessage response)
+        where T : class
+    {
+        var content = await response.Content.ReadAsStringAsync();
+        return JsonConvert.DeserializeObject<T>(content);
     }
 }
