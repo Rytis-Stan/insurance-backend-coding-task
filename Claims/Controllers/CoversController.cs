@@ -42,16 +42,16 @@ public class CoversController : ControllerBase
         return Ok(covers);
     }
 
+    [HttpGet("Premium")]
+    public async Task<ActionResult> ComputePremiumAsync(DateOnly startDate, DateOnly endDate, CoverType coverType)
+    {
+        return Ok(_coversService.ComputePremium(startDate, endDate, coverType));
+    }
+
     [HttpDelete("{id}")]
     public Task<Cover> DeleteAsync(Guid id)
     {
         _auditor.AuditCover(id, "DELETE");
         return _coversService.DeleteCoverAsync(id);
-    }
-
-    [HttpPost("Premium")]
-    public async Task<ActionResult> ComputePremiumAsync(DateOnly startDate, DateOnly endDate, CoverType coverType)
-    {
-        return Ok(_coversService.ComputePremium(startDate, endDate, coverType));
     }
 }

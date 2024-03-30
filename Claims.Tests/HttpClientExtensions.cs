@@ -19,7 +19,6 @@ public static class HttpClientExtensions
     }
 
     public static async Task<T?> ReadContentAsync<T>(this HttpResponseMessage response)
-        where T : class
     {
         var content = await response.Content.ReadAsStringAsync();
         return JsonSerializer.Deserialize<T>(content);

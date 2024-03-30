@@ -28,7 +28,7 @@ public class ClaimsControllerTests : ControllerTests
     }
 
     [Theory]
-    [InlineData("2000-01-01", "2002-02-02", CoverType.ContainerShip, 123.00)]
+    [InlineData("2001-01-01", "2001-01-01", CoverType.Yacht, 1375.00)]
     public async Task CoverPremiumGetReturnsCalculatedPremiumForGivenPeriodBasedOnCoverType(string startDate, string endDate, CoverType coverType, decimal expectedPremium)
     {
         var response = await Client.GetAsync($"/Covers/Premium/?startDate={startDate}&endDate={endDate}&coverType={coverType}");
