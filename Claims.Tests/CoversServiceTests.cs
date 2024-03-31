@@ -90,46 +90,46 @@ public class CoversServiceTests
         }
     }
 
-    // [Fact]
-    // public async Task ThrowsExceptionWhenEndDateNotItThePastButGoesBeforeStartDate()
-    // {
-    //     await Test(
-    //         UtcDateTime(2000, 01, 10),
-    //         Date(2010, 01, 10),
-    //         Date(2010, 01, 08)
-    //     );
-    //     await Test(
-    //         UtcDateTime(2000, 01, 10),
-    //         Date(2010, 01, 10),
-    //         Date(2010, 01, 09)
-    //     );
-    //     await Test(
-    //         UtcDateTime(1981, 06, 07),
-    //         Date(2010, 01, 10),
-    //         Date(2010, 01, 09)
-    //     );
-    //     await Test(
-    //         UtcDateTime(1981, 06, 07),
-    //         Date(1981, 06, 10),
-    //         Date(1981, 06, 09)
-    //     );
-    //     await Test(
-    //         UtcDateTime(1981, 06, 07),
-    //         Date(1981, 06, 11),
-    //         Date(1981, 06, 10)
-    //     );
-    //
-    //     async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate)
-    //     {
-    //         var request = new CreateCoverRequestDto(startDate, endDate, AnyCoverType);
-    //         StubUtcNow(utcNow);
-    //
-    //         await AssertExtended.ThrowsArgumentExceptionAsync(
-    //             () => _coversService.CreateCoverAsync(request),
-    //             "End date cannot be earlier than the start date."
-    //         );
-    //     }
-    // }
+    [Fact]
+    public async Task ThrowsExceptionWhenEndDateNotItThePastButGoesBeforeStartDate()
+    {
+        await Test(
+            UtcDateTime(2000, 01, 10),
+            Date(2010, 01, 10),
+            Date(2010, 01, 08)
+        );
+        await Test(
+            UtcDateTime(2000, 01, 10),
+            Date(2010, 01, 10),
+            Date(2010, 01, 09)
+        );
+        await Test(
+            UtcDateTime(1981, 06, 07),
+            Date(2010, 01, 10),
+            Date(2010, 01, 09)
+        );
+        await Test(
+            UtcDateTime(1981, 06, 07),
+            Date(1981, 06, 10),
+            Date(1981, 06, 09)
+        );
+        await Test(
+            UtcDateTime(1981, 06, 07),
+            Date(1981, 06, 11),
+            Date(1981, 06, 10)
+        );
+    
+        async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate)
+        {
+            var request = new CreateCoverRequestDto(startDate, endDate, AnyCoverType);
+            StubUtcNow(utcNow);
+    
+            await AssertExtended.ThrowsArgumentExceptionAsync(
+                () => _coversService.CreateCoverAsync(request),
+                "End date cannot be earlier than the start date."
+            );
+        }
+    }
 
     [Fact]
     public async Task AddsCoverToRepositoryWhenCreatingAValidCover()

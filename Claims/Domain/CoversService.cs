@@ -26,8 +26,10 @@ public class CoversService : ICoversService
         {
             throw new ArgumentException("End date cannot be in the past.");
         }
-        //throw new ArgumentException("End date cannot be earlier than the start date.");
-
+        if (request.EndDate < request.StartDate)
+        {
+            throw new ArgumentException("End date cannot be earlier than the start date.");
+        }
         return await _coversRepository.AddAsync(ToNewCoverInfo(request));
     }
 
