@@ -56,15 +56,3 @@ public class CoversService : ICoversService
         return await _coversRepository.DeleteAsync(id);
     }
 }
-
-public interface IPricingService
-{
-    decimal CalculatePremium(DateOnly startDate, DateOnly endDate, CoverType coverType);
-}
-
-public record NewCoverInfo(
-    DateOnly StartDate,
-    DateOnly EndDate,
-    CoverType Type,
-    decimal Premium
-) : INewCoverInfo;
