@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Claims.Tests;
 
@@ -20,7 +21,9 @@ public static class HttpClientExtensions
 
     public static async Task<T?> ReadContentAsync<T>(this HttpResponseMessage response)
     {
-        var content = await response.Content.ReadAsStringAsync();
-        return JsonSerializer.Deserialize<T>(content);
+        var contentJson = await response.Content.ReadAsStringAsync();
+        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        options.Converters.Add(new JsonStringEnumConverter());
+        return JsonSerializer.Deserialize<T?>(contentJson, options);
     }
 }
