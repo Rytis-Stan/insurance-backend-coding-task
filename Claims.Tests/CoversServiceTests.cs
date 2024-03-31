@@ -152,6 +152,16 @@ public class CoversServiceTests
         }
     }
 
+    [Fact]
+    public async Task GetsCoverFromRepositoryWhenGettingItById()
+    {
+        var id = Guid.NewGuid();
+
+        await _coversService.GetCoverAsync(id);
+
+        _coversRepositoryMock.Verify(x => x.GetByIdAsync(id));
+    }
+
     private void StubUtcNow(DateTime utcNow)
     {
         _clockMock

@@ -141,6 +141,16 @@ public class ClaimsServiceTests
         }
     }
 
+    [Fact]
+    public async Task GetsClaimFromRepositoryWhenGettingItById()
+    {
+        var id = Guid.NewGuid();
+
+        await _claimsService.GetClaimByIdAsync(id);
+
+        _claimsRepositoryMock.Verify(x => x.GetByIdAsync(id));
+    }
+
     private Cover CreateCoverForPeriod(DateOnly coverStartDate, DateOnly coverEndDate)
     {
         return new Cover
