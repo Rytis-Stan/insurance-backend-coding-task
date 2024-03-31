@@ -46,9 +46,9 @@ public class ClaimsService : IClaimsService
         return new NewClaimInfo(request.CoverId, request.Name, request.Type, request.DamageCost, request.Created);
     }
 
-    public Task<Claim> DeleteClaimAsync(Guid id)
+    public async Task<Claim> DeleteClaimAsync(Guid id)
     {
-        return _claimsRepository.DeleteAsync(id);
+        return await _claimsRepository.DeleteAsync(id);
     }
 
     public async Task<Claim?> GetClaimByIdAsync(Guid id)

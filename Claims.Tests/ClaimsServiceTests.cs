@@ -142,7 +142,7 @@ public class ClaimsServiceTests
     }
 
     [Fact]
-    public async Task GetsClaimFromRepositoryWhenGettingItById()
+    public async Task ReturnsClaimByIdFromRepository()
     {
         var id = Guid.NewGuid();
         var claim = RandomClaim();
@@ -162,6 +162,16 @@ public class ClaimsServiceTests
         var returnedClaims = await _claimsService.GetAllClaimsAsync();
 
         Assert.Equal(claims, returnedClaims);
+    }
+
+    [Fact]
+    public async Task DeletesClaimByIdInRepository()
+    {
+        var id = Guid.NewGuid();
+
+        await _claimsService.DeleteClaimAsync(id);
+
+        _claimsRepositoryMock.Verify(x => x.DeleteAsync(id));
     }
 
     private void StubGetClaimById(Guid id, Claim claim)

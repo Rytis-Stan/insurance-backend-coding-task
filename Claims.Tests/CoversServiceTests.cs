@@ -153,7 +153,7 @@ public class CoversServiceTests
     }
 
     [Fact]
-    public async Task ReturnsCoverFromRepositoryWhenGettingItById()
+    public async Task ReturnsCoverByIdFromRepository()
     {
         var id = Guid.NewGuid();
         var cover = RandomCover();
@@ -173,6 +173,16 @@ public class CoversServiceTests
         var returnedCovers = await _coversService.GetAllCoversAsync();
 
         Assert.Equal(covers, returnedCovers);
+    }
+
+    [Fact]
+    public async Task DeletesCoverByIdInRepository()
+    {
+        var id = Guid.NewGuid();
+
+        await _coversService.DeleteCoverAsync(id);
+
+        _coversRepositoryMock.Verify(x => x.DeleteAsync(id));
     }
 
     private void StubGetCoverById(Guid id, Cover? coverToReturn)
