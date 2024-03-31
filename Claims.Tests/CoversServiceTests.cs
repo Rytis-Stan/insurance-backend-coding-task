@@ -164,11 +164,29 @@ public class CoversServiceTests
         Assert.Equal(cover, returnedCover);
     }
 
+    [Fact]
+    public async Task ReturnsCoversFromRepositoryWhenAllOfThem()
+    {
+        var covers = new[] { RandomCover(), RandomCover() };
+        StubGetAllCovers(covers);
+
+        var returnedCovers = await _coversService.GetAllCoversAsync();
+
+        Assert.Equal(covers, returnedCovers);
+    }
+
     private void StubGetCoverById(Guid id, Cover? coverToReturn)
     {
         _coversRepositoryMock
             .Setup(x => x.GetByIdAsync(id))
             .ReturnsAsync(coverToReturn);
+    }
+
+    private void StubGetAllCovers(IEnumerable<Cover> coversToReturn)
+    {
+        _coversRepositoryMock
+            .Setup(x => x.GetAllAsync())
+            .ReturnsAsync(coversToReturn);
     }
 
     private Cover RandomCover()
