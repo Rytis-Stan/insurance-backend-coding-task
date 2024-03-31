@@ -10,13 +10,7 @@ public abstract class ControllerTests : IDisposable
 
     protected ControllerTests()
     {
-        Client = CreateClient();
-    }
-
-    private HttpClient CreateClient()
-    {
-        var factory = new CustomWebApplicationFactory<Program>();
-        return factory.CreateClient();
+        Client = new CustomWebApplicationFactory<Program>().CreateClient();
     }
 
     public void Dispose()
