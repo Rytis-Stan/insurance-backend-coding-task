@@ -6,6 +6,11 @@ public class TestData
 {
     private static readonly Random Random = new Random();
 
+    public static int RandomInt(int inclusiveMinValue, int inclusiveMaxValue)
+    {
+        return Random.Next(inclusiveMinValue, inclusiveMaxValue + 1);
+    }
+
     public static int RandomInt(int inclusiveMaxValue)
     {
         return Random.Next(inclusiveMaxValue + 1);

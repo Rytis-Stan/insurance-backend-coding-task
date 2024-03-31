@@ -10,8 +10,12 @@ public class ClaimsControllerTests : ControllerTests
     [Fact]
     public async Task CoversPostReturnsNewlyCreatedCover()
     {
-        var startDate = TestData.RandomDate();
-        var endDate = TestData.RandomDate();
+        var utcNow = DateTime.UtcNow;
+        // NOTE: Start and end date should start at least 1 day after UTC Now to avoid the
+        // current date changing while the endpoint is being called (can happen if the
+        // test starts running just before a day's end).
+        var startDate = DateOnly.FromDateTime(utcNow).AddDays(TestData.RandomInt(1, 10));
+        var endDate = startDate.AddDays(TestData.RandomInt(100));
         var coverType = TestData.RandomEnum<CoverType>();
         
         var response = await Client.PostAsync("/Covers", new CreateCoverRequestDto(startDate, endDate, coverType));
