@@ -23,10 +23,12 @@ public class ClaimsControllerTests : ControllerTests
         response.EnsureSuccessStatusCode();
         var cover = await response.ReadContentAsync<CoverDto>();
 
-        Assert.Equal(
-            new CoverDto(Guid.NewGuid(), startDate, endDate, coverType, 100.00m),
-            cover
-        );
+        Assert.NotNull(cover);
+        Assert.NotEqual(Guid.Empty, cover.Id);
+        Assert.Equal(startDate, cover.StartDate);
+        Assert.Equal(endDate, cover.EndDate);
+        Assert.Equal(coverType, cover.Type);
+        Assert.Equal(100.00m, cover.Premium);
     }
 
     [Fact]
