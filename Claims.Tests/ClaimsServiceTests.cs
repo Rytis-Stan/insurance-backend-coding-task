@@ -153,11 +153,29 @@ public class ClaimsServiceTests
         Assert.Equal(claim, returnedClaim);
     }
 
+    [Fact]
+    public async Task ReturnsAllClaimsFromRepository()
+    {
+        var claims = new[] { RandomClaim(), RandomClaim() };
+        StubGetAllClaims(claims);
+
+        var returnedClaims = await _claimsService.GetAllClaimsAsync();
+
+        Assert.Equal(claims, returnedClaims);
+    }
+
     private void StubGetClaimById(Guid id, Claim claim)
     {
         _claimsRepositoryMock
             .Setup(x => x.GetByIdAsync(id))
             .ReturnsAsync(claim);
+    }
+
+    private void StubGetAllClaims(IEnumerable<Claim> claimsToReturn)
+    {
+        _claimsRepositoryMock
+            .Setup(x => x.GetAllAsync())
+            .ReturnsAsync(claimsToReturn);
     }
 
     private Cover CreateCoverForPeriod(DateOnly coverStartDate, DateOnly coverEndDate)

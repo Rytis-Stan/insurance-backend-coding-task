@@ -56,8 +56,8 @@ public class ClaimsService : IClaimsService
         return await _claimsRepository.GetByIdAsync(id);
     }
 
-    public Task<IEnumerable<Claim>> GetAllClaimsAsync()
+    public async Task<IEnumerable<Claim>> GetAllClaimsAsync()
     {
-        return _claimsRepository.GetAllAsync();
+        return await _claimsRepository.GetAllAsync();
     }
 }

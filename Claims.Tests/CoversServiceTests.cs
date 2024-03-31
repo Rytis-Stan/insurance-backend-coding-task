@@ -165,7 +165,7 @@ public class CoversServiceTests
     }
 
     [Fact]
-    public async Task ReturnsCoversFromRepositoryWhenAllOfThem()
+    public async Task ReturnsAllCoversFromRepository()
     {
         var covers = new[] { RandomCover(), RandomCover() };
         StubGetAllCovers(covers);
