@@ -153,13 +153,34 @@ public class CoversServiceTests
     }
 
     [Fact]
-    public async Task GetsCoverFromRepositoryWhenGettingItById()
+    public async Task ReturnsCoverFromRepositoryWhenGettingItById()
     {
         var id = Guid.NewGuid();
+        var cover = RandomCover();
+        StubGetCoverById(id, cover);
 
-        await _coversService.GetCoverAsync(id);
+        var returnedCover = await _coversService.GetCoverAsync(id);
 
-        _coversRepositoryMock.Verify(x => x.GetByIdAsync(id));
+        Assert.Equal(cover, returnedCover);
+    }
+
+    private void StubGetCoverById(Guid id, Cover? coverToReturn)
+    {
+        _coversRepositoryMock
+            .Setup(x => x.GetByIdAsync(id))
+            .ReturnsAsync(coverToReturn);
+    }
+
+    private Cover RandomCover()
+    {
+        return new Cover
+        {
+            Id = Guid.NewGuid(),
+            StartDate = TestData.RandomDate(),
+            EndDate = TestData.RandomDate(),
+            Type = TestData.RandomEnum<CoverType>(),
+            Premium = TestData.RandomInt(100)
+        };
     }
 
     private void StubUtcNow(DateTime utcNow)

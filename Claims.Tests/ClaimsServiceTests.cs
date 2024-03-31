@@ -145,10 +145,19 @@ public class ClaimsServiceTests
     public async Task GetsClaimFromRepositoryWhenGettingItById()
     {
         var id = Guid.NewGuid();
+        var claim = RandomClaim();
+        StubGetClaimById(id, claim);
 
-        await _claimsService.GetClaimByIdAsync(id);
+        var returnedClaim = await _claimsService.GetClaimByIdAsync(id);
 
-        _claimsRepositoryMock.Verify(x => x.GetByIdAsync(id));
+        Assert.Equal(claim, returnedClaim);
+    }
+
+    private void StubGetClaimById(Guid id, Claim claim)
+    {
+        _claimsRepositoryMock
+            .Setup(x => x.GetByIdAsync(id))
+            .ReturnsAsync(claim);
     }
 
     private Cover CreateCoverForPeriod(DateOnly coverStartDate, DateOnly coverEndDate)
@@ -168,5 +177,18 @@ public class ClaimsServiceTests
         _coversRepositoryMock
             .Setup(x => x.GetByIdAsync(coverId))
             .ReturnsAsync(cover);
+    }
+
+    private Claim RandomClaim()
+    {
+        return new Claim
+        {
+            Id = Guid.NewGuid(),
+            CoverId = Guid.NewGuid(),
+            Name = TestData.RandomString("name"),
+            Type = TestData.RandomEnum<ClaimType>(),
+            DamageCost = TestData.RandomInt(100),
+            Created = TestData.RandomUtcDateTime()
+        };
     }
 }

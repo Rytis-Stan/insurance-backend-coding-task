@@ -7,8 +7,6 @@ public class Cover
     public required DateOnly EndDate { get; init; }
     public required CoverType Type { get; init; }
     public required decimal Premium { get; init; }
-
-
 }
 
 public enum CoverType
