@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Text;
 using System.Text.Json.Serialization;
 using Claims.Auditing;
 using Claims.Configuration;
@@ -6,6 +8,7 @@ using Claims.Domain;
 using Claims.Infrastructure;
 using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
+using RabbitMQ.Client;
 
 namespace Claims;
 
@@ -23,7 +26,37 @@ public class Program
         var app = builder.Build();
         ConfigureApp(app);
         MigrateDatabase(app);
+
+        // TODO: Uncomment.
+        // InitializeMessageQueues();
+
         return app;
+    }
+
+    private static void InitializeMessageQueues()
+    {
+        var factory = new ConnectionFactory { HostName = "localhost" };
+        using var connection = factory.CreateConnection();
+        using var channel = connection.CreateModel();
+
+        // TODO: Move the queue name (and some options???) to the configuration file!
+        const string queueName = "Claims.AuditQueue";
+        channel.QueueDeclare(
+            queue: queueName,
+            durable: false,
+            exclusive: false,
+            autoDelete: false,
+            arguments: null
+        );
+
+        string message = $"MY_MESSAGE: {DateTime.UtcNow}";
+        var body = Encoding.UTF8.GetBytes(message);
+
+        channel.BasicPublish(
+            exchange: string.Empty,
+            routingKey: queueName,
+            basicProperties: null,
+            body: body);
     }
 
     private static void AddServices(WebApplicationBuilder builder)
@@ -46,6 +79,7 @@ public class Program
         services.AddTransient<ICoverAuditor, Auditor>();
         services.AddTransient<IClaimsService, ClaimsService>();
         services.AddTransient<ICoversService, CoversService>();
+        services.AddTransient<IPricingService, PricingService>();
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
@@ -54,6 +88,10 @@ public class Program
 
     private static void AddRepositories(IServiceCollection services, CosmosClient cosmosClient, CosmosDbConfiguration configuration)
     {
+        Trace.WriteLine("DB Name: " + configuration.DatabaseName);
+
+        // throw new Exception("The database name is: " + configuration.DatabaseName);
+
         var idGenerator = new IdGenerator();
         services.AddSingleton<IClaimsRepository>(new CosmosDbClaimsRepository(cosmosClient, configuration.DatabaseName, configuration.ContainerNames.Claim, idGenerator));
         services.AddSingleton<ICoversRepository>(new CosmosDbCoversRepository(cosmosClient, configuration.DatabaseName, configuration.ContainerNames.Cover, idGenerator));

@@ -39,3 +39,16 @@ public class Auditor : IClaimAuditor, ICoverAuditor
         _auditContext.SaveChanges();
     }
 }
+
+public class RabbitMqAuditor : IClaimAuditor, ICoverAuditor
+{
+    public void AuditClaim(Guid id, string httpRequestType)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void AuditCover(Guid id, string httpRequestType)
+    {
+        throw new NotImplementedException();
+    }
+}
