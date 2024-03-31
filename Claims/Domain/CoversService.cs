@@ -24,17 +24,24 @@ public class CoversService : ICoversService
     private void Validate(ICreateCoverRequest request)
     {
         var utcToday = DateOnly.FromDateTime(_clock.UtcNow());
-        if (request.StartDate < utcToday)
+        var startDate = request.StartDate;
+        var endDate = request.EndDate;
+
+        if (startDate < utcToday)
         {
             throw new ArgumentException("Start date cannot be in the past.");
         }
-        if (request.EndDate < utcToday)
+        if (endDate < utcToday)
         {
             throw new ArgumentException("End date cannot be in the past.");
         }
-        if (request.EndDate < request.StartDate)
+        if (endDate < startDate)
         {
             throw new ArgumentException("End date cannot be earlier than the start date.");
+        }
+        if (startDate.AddYears(1) <= endDate)
+        {
+            throw new ArgumentException("Total insurance period cannot exceed 1 year.");
         }
     }
 

@@ -132,6 +132,51 @@ public class CoversServiceTests
     }
 
     [Fact]
+    public async Task ThrowsExceptionWhenCoverPeriodExceedsASingleYear()
+    {
+        // NOTE: Making an assumption that a 1-year period for insurance takes
+        // into consideration the fact that different years might have a different
+        // number of days. In this situation, the insurance is considered valid
+        // right until the same day happens the next year after the insurance start.
+        await Test(
+            UtcDateTime(2000, 01, 01),
+            Date(2000, 01, 01),
+            Date(2001, 01, 01)
+        );
+        await Test(
+            UtcDateTime(1972, 01, 01),
+            Date(1972, 01, 01),
+            Date(1973, 01, 01)
+        );
+        await Test(
+            UtcDateTime(1972, 01, 01),
+            Date(1972, 01, 01),
+            Date(1999, 01, 01)
+        );
+        await Test(
+            UtcDateTime(1972, 01, 01),
+            Date(1972, 01, 01),
+            Date(1999, 02, 03)
+        );
+        await Test(
+            UtcDateTime(1972, 01, 01),
+            Date(1998, 02, 03),
+            Date(1999, 02, 03)
+        );
+
+        async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate)
+        {
+            var request = new CreateCoverRequestDto(startDate, endDate, AnyCoverType);
+            StubUtcNow(utcNow);
+
+            await AssertExtended.ThrowsArgumentExceptionAsync(
+                () => _coversService.CreateCoverAsync(request),
+                "Total insurance period cannot exceed 1 year."
+            );
+        }
+    }
+
+    [Fact]
     public async Task AddsCoverToRepositoryWhenCreatingAValidCover()
     {
         await Test(UtcDateTime(2000, 10, 10), Date(2000, 10, 10), Date(2000, 10, 20), CoverType.BulkCarrier, 123.45m);
@@ -140,6 +185,7 @@ public class CoversServiceTests
         await Test(UtcDateTime(2000, 10, 10), Date(2000, 10, 11), Date(2000, 10, 19), CoverType.Tanker, 123.45m);
         await Test(UtcDateTime(2000, 10, 10), Date(2000, 10, 11), Date(2000, 10, 19), CoverType.Tanker, 98.76m);
         await Test(UtcDateTime(1971, 03, 04), Date(1971, 03, 04), Date(1971, 05, 06), CoverType.Yacht, 101.00m);
+        await Test(UtcDateTime(1971, 03, 04), Date(1971, 03, 04), Date(1972, 03, 03), CoverType.Yacht, 101.00m);
 
         async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate, CoverType coverType, decimal premium)
         {
