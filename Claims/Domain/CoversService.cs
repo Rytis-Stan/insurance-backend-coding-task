@@ -17,6 +17,12 @@ public class CoversService : ICoversService
 
     public async Task<Cover> CreateCoverAsync(ICreateCoverRequest request)
     {
+        Validate(request);
+        return await _coversRepository.AddAsync(ToNewCoverInfo(request));
+    }
+
+    private void Validate(ICreateCoverRequest request)
+    {
         var utcToday = DateOnly.FromDateTime(_clock.UtcNow());
         if (request.StartDate < utcToday)
         {
@@ -30,7 +36,6 @@ public class CoversService : ICoversService
         {
             throw new ArgumentException("End date cannot be earlier than the start date.");
         }
-        return await _coversRepository.AddAsync(ToNewCoverInfo(request));
     }
 
     private INewCoverInfo ToNewCoverInfo(ICreateCoverRequest request)
