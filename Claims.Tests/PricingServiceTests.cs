@@ -106,7 +106,7 @@ public class PricingServiceTests
 
     private void AssertComputersCorrectPremium(CoverType coverType, int periodDurationInDays, decimal expectedPremium)
     {
-        var (startDate, endDate) = TestData.RandomPeriod(periodDurationInDays);
+        var (startDate, endDate) = TestData.RandomFixedLengthPeriod(periodDurationInDays);
         Assert.Equal(
             expectedPremium,
             new PricingService().CalculatePremium(startDate, endDate, coverType)

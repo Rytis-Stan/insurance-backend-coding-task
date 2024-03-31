@@ -38,7 +38,7 @@ public class TestData
         return new DateOnly(2000, 01, 01).AddDays(Random.Next(10_000));
     }
 
-    public static (DateOnly Start, DateOnly End) RandomPeriod(int durationInDays)
+    public static (DateOnly Start, DateOnly End) RandomFixedLengthPeriod(int durationInDays)
     {
         var startDate = RandomDate();
         var endDate = startDate.AddDays(durationInDays - 1);
