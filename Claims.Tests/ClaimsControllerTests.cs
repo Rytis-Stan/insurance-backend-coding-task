@@ -45,6 +45,16 @@ public class ClaimsControllerTests : ControllerTests
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
+    [Fact]
+    public async Task CoversDeleteWithIdReturnsNotFoundWhenNoCoverExistsWithGivenId()
+    {
+        var id = Guid.NewGuid();
+
+        var response = await Client.DeleteAsync($"/Covers/{id}");
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
     [Theory]
     [InlineData("2001-01-01", "2001-01-01", CoverType.Yacht, 1375.00)]
     public async Task CoversPremiumGetReturnsCalculatedPremiumForGivenPeriodBasedOnCoverType(
@@ -89,6 +99,16 @@ public class ClaimsControllerTests : ControllerTests
         var id = Guid.NewGuid();
 
         var response = await Client.GetAsync($"/Claims/{id}");
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task ClaimsDeleteWithIdReturnsNotFoundWhenNoClaimExistsWithGivenId()
+    {
+        var id = Guid.NewGuid();
+
+        var response = await Client.DeleteAsync($"/Claims/{id}");
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
