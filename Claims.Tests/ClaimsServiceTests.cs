@@ -200,10 +200,10 @@ public class ClaimsServiceTests
         };
     }
 
-    private void StubFindCoverById(Guid coverId, Cover? cover)
+    private void StubFindCoverById(Guid id, Cover? cover)
     {
         _coversRepositoryMock
-            .Setup(x => x.FindByIdAsync(coverId))
+            .Setup(x => x.FindByIdAsync(id))
             .ReturnsAsync(cover);
     }
 
