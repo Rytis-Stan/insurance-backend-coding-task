@@ -93,8 +93,8 @@ public class Program
         // throw new Exception("The database name is: " + configuration.DatabaseName);
 
         var idGenerator = new IdGenerator();
-        services.AddSingleton<IClaimsRepository>(new CosmosDbClaimsRepository(cosmosClient, configuration.DatabaseName, ContainerNames.Claim, idGenerator));
-        services.AddSingleton<ICoversRepository>(new CosmosDbCoversRepository(cosmosClient, configuration.DatabaseName, ContainerNames.Cover, idGenerator));
+        services.AddSingleton<IClaimsRepository>(new CosmosDbClaimsRepository(cosmosClient, configuration.DatabaseName, idGenerator));
+        services.AddSingleton<ICoversRepository>(new CosmosDbCoversRepository(cosmosClient, configuration.DatabaseName, idGenerator));
     }
 
     private static void ConfigureApp(WebApplication app)

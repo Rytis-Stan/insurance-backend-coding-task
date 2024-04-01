@@ -6,8 +6,8 @@ namespace Claims.Persistence.CosmosDb;
 
 public class CosmosDbClaimsRepository : CosmosDbRepository<Claim, INewClaimInfo, ClaimJson>, IClaimsRepository
 {
-    public CosmosDbClaimsRepository(CosmosClient dbClient, string databaseName, string containerName, IIdGenerator idGenerator)
-        : base(dbClient, databaseName, containerName, idGenerator)
+    public CosmosDbClaimsRepository(CosmosClient dbClient, string databaseName, IIdGenerator idGenerator)
+        : base(dbClient, databaseName, ContainerNames.Claim, idGenerator)
     {
     }
 
