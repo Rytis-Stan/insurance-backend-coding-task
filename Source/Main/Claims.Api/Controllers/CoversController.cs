@@ -51,7 +51,7 @@ public class CoversController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<Cover?>> DeleteAsync(Guid id)
+    public async Task<ActionResult<CoverDto?>> DeleteAsync(Guid id)
     {
         _auditor.AuditCoverDelete(id);
         var deletedCover = await _coversService.DeleteCoverAsync(id);
