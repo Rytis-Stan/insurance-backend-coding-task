@@ -2,8 +2,8 @@ namespace Claims.Api.Configuration;
 
 public class AppConfiguration
 {
-    public string ConnectionString { get; set; }
-    public CosmosDbConfiguration CosmosDb { get; set; }
+    public string ConnectionString { get; init; }
+    public CosmosDbConfiguration CosmosDb { get; init; }
 
     public static AppConfiguration FromConfiguration(IConfiguration configuration)
     {

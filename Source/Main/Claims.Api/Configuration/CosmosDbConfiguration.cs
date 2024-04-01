@@ -2,7 +2,7 @@ namespace Claims.Api.Configuration;
 
 public class CosmosDbConfiguration
 {
-    public string DatabaseName { get; set; }
-    public string Account { get; set; }
-    public string Key { get; set; }
+    public string DatabaseName { get; init; }
+    public string Account { get; init; }
+    public string Key { get; init; }
 }
