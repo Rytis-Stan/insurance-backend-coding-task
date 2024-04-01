@@ -1,4 +1,6 @@
-﻿namespace Claims.Api.Dto;
+﻿using Claims.Domain;
+
+namespace Claims.Api.Dto;
 
 public record CreateCoverRequestDto(
     DateOnly StartDate,

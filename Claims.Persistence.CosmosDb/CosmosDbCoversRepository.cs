@@ -1,5 +1,6 @@
+using Claims.Domain;
+using Claims.Domain.Repositories;
 using Claims.Infrastructure;
-using Claims.Repositories;
 using Microsoft.Azure.Cosmos;
 
 namespace Claims.Persistence.CosmosDb;

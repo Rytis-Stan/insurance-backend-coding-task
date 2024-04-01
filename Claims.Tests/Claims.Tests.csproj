@@ -18,9 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Claims.Domain\Claims.Domain.csproj" />
     <ProjectReference Include="..\Claims.Infrastructure\Claims.Infrastructure.csproj" />
     <ProjectReference Include="..\Claims.Testing\Claims.Testing.csproj" />
-    <ProjectReference Include="..\Claims\Claims.csproj" />
   </ItemGroup>
 
 </Project>

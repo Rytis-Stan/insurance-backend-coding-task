@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Claims.Domain;
+using Newtonsoft.Json;
 
 namespace Claims.Persistence.CosmosDb;
 

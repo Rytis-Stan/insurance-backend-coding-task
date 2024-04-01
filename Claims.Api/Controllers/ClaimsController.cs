@@ -1,5 +1,6 @@
 using Claims.Api.Dto;
 using Claims.Auditing;
+using Claims.Domain;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Claims.Api.Controllers;

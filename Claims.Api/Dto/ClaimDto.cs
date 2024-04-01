@@ -1,4 +1,6 @@
-﻿namespace Claims.Api.Dto;
+﻿using Claims.Domain;
+
+namespace Claims.Api.Dto;
 
 public record ClaimDto(
     Guid Id,

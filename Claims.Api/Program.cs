@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using Claims.Api.Configuration;
 using Claims.Auditing;
+using Claims.Domain;
 using Claims.Infrastructure;
 using Claims.Persistence.CosmosDb;
 using Microsoft.Azure.Cosmos;

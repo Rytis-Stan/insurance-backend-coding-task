@@ -7,11 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.38.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Claims.Domain\Claims.Domain.csproj" />
     <ProjectReference Include="..\Claims.Infrastructure\Claims.Infrastructure.csproj" />
   </ItemGroup>
 
