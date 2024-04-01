@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.38.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.17">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -19,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Claims.Infrastructure\Claims.Infrastructure.csproj" />
+    <ProjectReference Include="..\Claims.Repositories.CosmosDb\Claims.Repositories.CosmosDb.csproj" />
     <ProjectReference Include="..\Claims\Claims.csproj" />
   </ItemGroup>
 

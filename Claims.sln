@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Api", "Claims.Api\Cl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claims", "Claims\Claims.csproj", "{B37AA5E2-2415-467A-AD44-04C86BC8D04B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claims.Repositories.CosmosDb", "Claims.Repositories.CosmosDb\Claims.Repositories.CosmosDb.csproj", "{6984422F-3AD4-4F96-B057-9604282707D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{B37AA5E2-2415-467A-AD44-04C86BC8D04B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B37AA5E2-2415-467A-AD44-04C86BC8D04B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B37AA5E2-2415-467A-AD44-04C86BC8D04B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6984422F-3AD4-4F96-B057-9604282707D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6984422F-3AD4-4F96-B057-9604282707D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6984422F-3AD4-4F96-B057-9604282707D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6984422F-3AD4-4F96-B057-9604282707D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

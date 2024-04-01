@@ -1,8 +1,7 @@
 using Claims.Infrastructure;
-using Claims.Repositories;
 using Microsoft.Azure.Cosmos;
 
-namespace Claims.Api.DataAccess;
+namespace Claims.Repositories.CosmosDb;
 
 public class CosmosDbCoversRepository : CosmosDbRepository<Cover, INewCoverInfo, CoverJson>, ICoversRepository
 {

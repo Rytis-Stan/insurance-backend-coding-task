@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Claims.Api.DataAccess;
+namespace Claims.Repositories.CosmosDb;
 
 public class CoverJson
 {
