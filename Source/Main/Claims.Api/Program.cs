@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Text;
 using System.Text.Json.Serialization;
 using Claims.Api.Configuration;
@@ -61,14 +60,7 @@ public class Program
 
     private static void AddServices(WebApplicationBuilder builder)
     {
-        AddServices(builder.Services, AppConfigurationFrom(builder));
-    }
-
-    private static AppConfiguration AppConfigurationFrom(WebApplicationBuilder builder)
-    {
-        var configuration = new AppConfiguration();
-        builder.Configuration.Bind(configuration);
-        return configuration;
+        AddServices(builder.Services, AppConfiguration.FromConfiguration(builder.Configuration));
     }
 
     private static void AddServices(IServiceCollection services, AppConfiguration configuration)
