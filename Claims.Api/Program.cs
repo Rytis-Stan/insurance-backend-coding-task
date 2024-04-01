@@ -60,21 +60,25 @@ public class Program
 
     private static void AddServices(WebApplicationBuilder builder)
     {
-        var configuration = AppConfigurationFrom(builder);
+        AddServices(builder.Services, AppConfigurationFrom(builder));
+    }
 
-        var services = builder.Services;
-        services.AddControllers().AddJsonOptions(x =>
-        {
-            x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-        });
-
-        var database = InitializeCosmosDb(configuration.CosmosDb);
-
-        AddRepositories(services, database);
+    private static void AddServices(IServiceCollection services, AppConfiguration configuration)
+    {
+        AddControllers(services);
+        AddRepositories(services, InitializeCosmosDb(configuration.CosmosDb));
         AddInfrastructure(services);
         AddDomainServices(services);
         AddAuditing(services, configuration.ConnectionString);
         AddSwagger(services);
+    }
+
+    private static void AddControllers(IServiceCollection services)
+    {
+        services.AddControllers().AddJsonOptions(x =>
+        {
+            x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        });
     }
 
     private static ClaimsDatabase InitializeCosmosDb(CosmosDbConfiguration configuration)
@@ -91,9 +95,9 @@ public class Program
 
     private static AppConfiguration AppConfigurationFrom(WebApplicationBuilder builder)
     {
-        var appConfiguration = new AppConfiguration();
-        builder.Configuration.Bind(appConfiguration);
-        return appConfiguration;
+        var configuration = new AppConfiguration();
+        builder.Configuration.Bind(configuration);
+        return configuration;
     }
 
     private static void AddInfrastructure(IServiceCollection services)
