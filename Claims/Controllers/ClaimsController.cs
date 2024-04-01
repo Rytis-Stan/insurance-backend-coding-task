@@ -42,7 +42,7 @@ public class ClaimsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<Claim> DeleteAsync(Guid id)
+    public async Task<Claim?> DeleteAsync(Guid id)
     {
         _auditor.AuditClaim(id, "DELETE");
         return await _claimsService.DeleteClaimAsync(id);
