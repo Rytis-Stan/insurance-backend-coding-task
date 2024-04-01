@@ -22,6 +22,7 @@ public class ApiTests : IDisposable
     {
         _client.Dispose();
         DeleteCosmosDbIfExists();
+        DeleteSqlServerDatabaseIfExists();
     }
 
     private void DeleteCosmosDbIfExists()
@@ -36,6 +37,11 @@ public class ApiTests : IDisposable
         {
             // Database was not found. Do nothing.
         }
+    }
+
+    private void DeleteSqlServerDatabaseIfExists()
+    {
+        // TODO: Implement database deletion logic.
     }
 
     private CosmosDbConfiguration CosmosDbConfiguration()
