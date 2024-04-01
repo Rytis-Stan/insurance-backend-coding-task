@@ -5,8 +5,6 @@ VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{003F7774-8202-4837-8C40-72297F3876C1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Tests", "Claims.Tests\Claims.Tests.csproj", "{EC846D1B-22B5-4CED-B0CB-778EBFEE1C33}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.AuditDaemon", "Claims.AuditDaemon\Claims.AuditDaemon.csproj", "{DF671599-0840-4F39-BD77-B6DE7499B8AE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Api.Tests", "Claims.Api.Tests\Claims.Api.Tests.csproj", "{BE8555FB-FE71-4BF0-8CCA-AA41E1CE17E2}"
@@ -31,10 +29,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EC846D1B-22B5-4CED-B0CB-778EBFEE1C33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EC846D1B-22B5-4CED-B0CB-778EBFEE1C33}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EC846D1B-22B5-4CED-B0CB-778EBFEE1C33}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EC846D1B-22B5-4CED-B0CB-778EBFEE1C33}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DF671599-0840-4F39-BD77-B6DE7499B8AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DF671599-0840-4F39-BD77-B6DE7499B8AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF671599-0840-4F39-BD77-B6DE7499B8AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -76,7 +70,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{EC846D1B-22B5-4CED-B0CB-778EBFEE1C33} = {003F7774-8202-4837-8C40-72297F3876C1}
 		{BE8555FB-FE71-4BF0-8CCA-AA41E1CE17E2} = {003F7774-8202-4837-8C40-72297F3876C1}
 		{3CB367D5-18DC-4B80-9860-3B79797956EF} = {003F7774-8202-4837-8C40-72297F3876C1}
 		{EFD0CF37-586B-4632-9311-A6C2266F56E0} = {003F7774-8202-4837-8C40-72297F3876C1}
