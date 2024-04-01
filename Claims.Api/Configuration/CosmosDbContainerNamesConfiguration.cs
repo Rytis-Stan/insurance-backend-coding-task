@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace Claims.Configuration;
+namespace Claims.Api.Configuration;
 
 public class CosmosDbContainerNamesConfiguration : IEnumerable<string>
 {

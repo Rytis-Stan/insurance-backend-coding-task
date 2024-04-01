@@ -1,6 +1,6 @@
 ﻿using System.Net;
+using Claims.Api.Dto;
 using Claims.Domain;
-using Claims.Dto;
 using Claims.Testing;
 using Xunit;
 

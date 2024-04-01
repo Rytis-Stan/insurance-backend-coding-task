@@ -2,7 +2,7 @@ using Claims.Domain;
 using Claims.Infrastructure;
 using Microsoft.Azure.Cosmos;
 
-namespace Claims.DataAccess;
+namespace Claims.Api.DataAccess;
 
 public class CosmosDbClaimsRepository : CosmosDbRepository<Claim, INewClaimInfo, ClaimJson>, IClaimsRepository
 {

@@ -2,7 +2,7 @@
 using Claims.Infrastructure;
 using Microsoft.Azure.Cosmos;
 
-namespace Claims.DataAccess;
+namespace Claims.Api.DataAccess;
 
 public abstract class CosmosDbRepository<T, TNewItemInfo, TJson>
     where T : class

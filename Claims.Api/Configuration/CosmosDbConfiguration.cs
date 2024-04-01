@@ -1,4 +1,4 @@
-namespace Claims.Configuration;
+namespace Claims.Api.Configuration;
 
 public class CosmosDbConfiguration
 {

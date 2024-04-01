@@ -1,7 +1,7 @@
 ﻿using Claims.Domain;
 using Newtonsoft.Json;
 
-namespace Claims.DataAccess;
+namespace Claims.Api.DataAccess;
 
 public class ClaimJson
 {

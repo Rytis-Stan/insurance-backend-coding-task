@@ -1,6 +1,6 @@
 ﻿using Claims.Domain;
 
-namespace Claims.Dto;
+namespace Claims.Api.Dto;
 
 public record ClaimDto(
     Guid Id,

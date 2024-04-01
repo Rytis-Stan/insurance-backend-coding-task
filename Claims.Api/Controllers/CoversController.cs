@@ -1,9 +1,9 @@
-using Claims.Auditing;
+using Claims.Api.Auditing;
+using Claims.Api.Dto;
 using Claims.Domain;
-using Claims.Dto;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Claims.Controllers;
+namespace Claims.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]

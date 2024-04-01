@@ -1,4 +1,4 @@
-﻿namespace Claims.Auditing;
+﻿namespace Claims.Api.Auditing;
 
 public interface ICoverAuditor
 {

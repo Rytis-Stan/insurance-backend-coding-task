@@ -1,16 +1,16 @@
 using System.Diagnostics;
 using System.Text;
 using System.Text.Json.Serialization;
-using Claims.Auditing;
-using Claims.Configuration;
-using Claims.DataAccess;
+using Claims.Api.Auditing;
+using Claims.Api.Configuration;
+using Claims.Api.DataAccess;
 using Claims.Domain;
 using Claims.Infrastructure;
 using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
 using RabbitMQ.Client;
 
-namespace Claims;
+namespace Claims.Api;
 
 public class Program
 {
