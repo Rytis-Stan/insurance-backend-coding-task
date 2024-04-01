@@ -1,5 +1,4 @@
-﻿using Claims.Domain;
-using Claims.Infrastructure;
+﻿using Claims.Infrastructure;
 using Claims.Testing;
 using Moq;
 using Xunit;

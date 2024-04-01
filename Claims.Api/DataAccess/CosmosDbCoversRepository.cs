@@ -1,4 +1,3 @@
-using Claims.Domain;
 using Claims.Infrastructure;
 using Microsoft.Azure.Cosmos;
 

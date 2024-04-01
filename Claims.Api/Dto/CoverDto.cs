@@ -1,5 +1,3 @@
-using Claims.Domain;
-
 namespace Claims.Api.Dto;
 
 public record CoverDto(

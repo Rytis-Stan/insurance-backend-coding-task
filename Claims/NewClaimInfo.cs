@@ -1,4 +1,4 @@
-namespace Claims.Domain;
+namespace Claims;
 
 public record NewClaimInfo(
     Guid CoverId,

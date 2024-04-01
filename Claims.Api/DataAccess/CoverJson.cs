@@ -1,5 +1,4 @@
-﻿using Claims.Domain;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Claims.Api.DataAccess;
 

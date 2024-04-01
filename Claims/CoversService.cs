@@ -1,6 +1,6 @@
 using Claims.Infrastructure;
 
-namespace Claims.Domain;
+namespace Claims;
 
 public class CoversService : ICoversService
 {

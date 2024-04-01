@@ -4,7 +4,6 @@ using System.Text.Json.Serialization;
 using Claims.Api.Auditing;
 using Claims.Api.Configuration;
 using Claims.Api.DataAccess;
-using Claims.Domain;
 using Claims.Infrastructure;
 using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;

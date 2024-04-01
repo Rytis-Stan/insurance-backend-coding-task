@@ -1,5 +1,4 @@
-﻿using Claims.Domain;
-using Claims.Testing;
+﻿using Claims.Testing;
 using Moq;
 using Xunit;
 using static Claims.Testing.TestValueBuilder;
