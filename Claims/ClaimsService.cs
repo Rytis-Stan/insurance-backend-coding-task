@@ -1,3 +1,5 @@
+using Claims.Repositories;
+
 namespace Claims;
 
 public class ClaimsService : IClaimsService

@@ -5,6 +5,7 @@ using Claims.Api.Auditing;
 using Claims.Api.Configuration;
 using Claims.Api.DataAccess;
 using Claims.Infrastructure;
+using Claims.Repositories;
 using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
 using RabbitMQ.Client;

@@ -1,4 +1,5 @@
 using Claims.Infrastructure;
+using Claims.Repositories;
 using Microsoft.Azure.Cosmos;
 
 namespace Claims.Api.DataAccess;
