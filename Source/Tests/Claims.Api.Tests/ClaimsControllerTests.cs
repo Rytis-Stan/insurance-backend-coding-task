@@ -6,8 +6,20 @@ using Xunit;
 
 namespace Claims.Api.Tests;
 
-public class ClaimsControllerTests : ControllerTests
+public class ClaimsControllerTests : IDisposable
 {
+    protected readonly HttpClient Client;
+
+    public ClaimsControllerTests()
+    {
+        Client = new CustomWebApplicationFactory<Program>().CreateClient();
+    }
+
+    public void Dispose()
+    {
+        Client.Dispose();
+    }
+
     [Theory]
     [InlineData(1, CoverType.BulkCarrier, 1625.00)]
     [InlineData(179, CoverType.Tanker, 330037.50)]
