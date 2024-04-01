@@ -93,8 +93,8 @@ public class Program
         // throw new Exception("The database name is: " + configuration.DatabaseName);
 
         var idGenerator = new IdGenerator();
-        services.AddSingleton<IClaimsRepository>(new CosmosDbClaimsRepository(cosmosClient, configuration.DatabaseName, configuration.ContainerNames.Claim, idGenerator));
-        services.AddSingleton<ICoversRepository>(new CosmosDbCoversRepository(cosmosClient, configuration.DatabaseName, configuration.ContainerNames.Cover, idGenerator));
+        services.AddSingleton<IClaimsRepository>(new CosmosDbClaimsRepository(cosmosClient, configuration.DatabaseName, ContainerNames.Claim, idGenerator));
+        services.AddSingleton<ICoversRepository>(new CosmosDbCoversRepository(cosmosClient, configuration.DatabaseName, ContainerNames.Cover, idGenerator));
     }
 
     private static void ConfigureApp(WebApplication app)
@@ -115,7 +115,7 @@ public class Program
     {
         var client = new CosmosClient(configuration.Account, configuration.Key);
         var response = await client.CreateDatabaseIfNotExistsAsync(configuration.DatabaseName);
-        foreach (var containerName in configuration.ContainerNames)
+        foreach (var containerName in ContainerNames.All)
         {
             await response.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
         }
@@ -128,4 +128,12 @@ public class Program
         var context = scope.ServiceProvider.GetRequiredService<AuditContext>();
         context.Database.Migrate();
     }
+}
+
+public class ContainerNames
+{
+    public static readonly string Claim = nameof(Claim);
+    public static readonly string Cover = nameof(Cover);
+
+    public static readonly IEnumerable<string> All = new[] { Claim, Cover };
 }
