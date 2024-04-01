@@ -24,12 +24,16 @@ public class ClaimsServiceTests
         _claimsService = new ClaimsService(_claimsRepositoryMock.Object, _coversRepositoryMock.Object);
     }
 
-    [Fact]
-    public async Task ThrowsExceptionWhenCreatingAClaimWithZeroDamageCost()
+    [Theory]
+    [InlineData(-2.00)]
+    [InlineData(-1.00)]
+    [InlineData(-0.01)]
+    [InlineData(0.00)]
+    public async Task ThrowsExceptionWhenCreatingAClaimWithNonPositiveDamageCost(decimal damageCost)
     {
         var coverId = Guid.NewGuid();
         var created = TestData.RandomUtcDateTime();
-        var request = new CreateClaimRequest(coverId, "anyName", AnyClaimType, 0, created);
+        var request = new CreateClaimRequest(coverId, "anyName", AnyClaimType, damageCost, created);
 
         await AssertExtended.ThrowsArgumentExceptionAsync(
             () => _claimsService.CreateClaimAsync(request),

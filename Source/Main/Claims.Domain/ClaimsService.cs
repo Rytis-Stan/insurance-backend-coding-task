@@ -22,7 +22,7 @@ public class ClaimsService : IClaimsService
     private async Task Validate(CreateClaimRequest request)
     {
         var damageCost = request.DamageCost;
-        if (damageCost == 0.00m)
+        if (damageCost <= 0.00m)
         {
             throw new ArgumentException("Damage cost must be a positive value.");
         }
