@@ -71,11 +71,9 @@ public class Program
         var database = InitializeCosmosDb(configuration.CosmosDb);
 
         AddRepositories(services, database);
-        services.AddDbContext<AuditContext>(options => options.UseSqlServer(configuration.ConnectionString));
-
         AddInfrastructure(services);
         AddDomainServices(services);
-        AddAuditing(services);
+        AddAuditing(services, configuration.ConnectionString);
         AddSwagger(services);
     }
 
@@ -116,8 +114,9 @@ public class Program
         services.AddTransient<IPricingService, PricingService>();
     }
 
-    private static void AddAuditing(IServiceCollection services)
+    private static void AddAuditing(IServiceCollection services, string connectionString)
     {
+        services.AddDbContext<AuditContext>(options => options.UseSqlServer(connectionString));
         services.AddTransient<IClaimAuditor, Auditor>();
         services.AddTransient<ICoverAuditor, Auditor>();
     }
