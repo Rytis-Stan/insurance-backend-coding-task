@@ -1,5 +1,5 @@
-using Claims.Api.Auditing;
 using Claims.Api.Dto;
+using Claims.Auditing;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Claims.Api.Controllers;

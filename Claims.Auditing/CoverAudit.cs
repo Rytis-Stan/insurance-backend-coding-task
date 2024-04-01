@@ -1,4 +1,4 @@
-﻿namespace Claims.Api.Auditing;
+﻿namespace Claims.Auditing;
 
 public class CoverAudit
 {

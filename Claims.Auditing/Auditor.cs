@@ -1,6 +1,6 @@
 ﻿using Claims.Infrastructure;
 
-namespace Claims.Api.Auditing;
+namespace Claims.Auditing;
 
 public class Auditor : IClaimAuditor, ICoverAuditor
 {

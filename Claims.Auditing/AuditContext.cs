@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Claims.Api.Auditing;
+namespace Claims.Auditing;
 
 public class AuditContext : DbContext
 {
