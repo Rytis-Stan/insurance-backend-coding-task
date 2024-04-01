@@ -30,10 +30,9 @@ public class ClaimsServiceTests
         var coverId = Guid.NewGuid();
         var created = UtcDateTime(2000, 01, 01); // TODO: Random date-time value within a valid range?
         var request = new CreateClaimRequestDto(coverId, "anyName", AnyClaimType, 0, created);
-        var service = new ClaimsService(_claimsRepositoryMock.Object, _coversRepositoryMock.Object);
 
         await AssertExtended.ThrowsArgumentExceptionAsync(
-            () => service.CreateClaimAsync(request),
+            () => _claimsService.CreateClaimAsync(request),
             "Damage cost must be a positive value."
         );
     }
