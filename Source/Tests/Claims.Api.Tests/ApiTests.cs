@@ -12,7 +12,7 @@ public class ApiTests : IDisposable
 
     public ApiTests()
     {
-        _client = new CustomWebApplicationFactory<Program>().CreateClient();
+        _client = new TestWebApplicationFactory<Program>().CreateClient();
     }
 
     public void Dispose()
