@@ -232,6 +232,18 @@ public class CoversServiceTests
         _coversRepositoryMock.Verify(x => x.DeleteAsync(id));
     }
 
+    private Cover RandomCover()
+    {
+        return new Cover
+        {
+            Id = Guid.NewGuid(),
+            StartDate = TestData.RandomDate(),
+            EndDate = TestData.RandomDate(),
+            Type = TestData.RandomEnum<CoverType>(),
+            Premium = TestData.RandomInt(100)
+        };
+    }
+
     private void StubFindCoverById(Guid id, Cover? coverToReturn)
     {
         _coversRepositoryMock
@@ -244,18 +256,6 @@ public class CoversServiceTests
         _coversRepositoryMock
             .Setup(x => x.GetAllAsync())
             .ReturnsAsync(coversToReturn);
-    }
-
-    private Cover RandomCover()
-    {
-        return new Cover
-        {
-            Id = Guid.NewGuid(),
-            StartDate = TestData.RandomDate(),
-            EndDate = TestData.RandomDate(),
-            Type = TestData.RandomEnum<CoverType>(),
-            Premium = TestData.RandomInt(100)
-        };
     }
 
     private void StubUtcNow(DateTime utcNow)
