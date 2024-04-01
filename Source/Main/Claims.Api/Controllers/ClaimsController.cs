@@ -26,13 +26,8 @@ public class ClaimsController : ControllerBase
         return Ok(claim);
     }
 
-    private CreateClaimRequest ToDomainRequest(CreateClaimRequestDto request)
-    {
-        return new CreateClaimRequest(request.CoverId, request.Name, request.Type, request.DamageCost, request.Created);
-    }
-
     [HttpGet("{id}")]
-    public async Task<ActionResult<Claim>> GetAsync(Guid id)
+    public async Task<ActionResult<ClaimDto>> GetAsync(Guid id)
     {
         var claim = await _claimsService.GetClaimByIdAsync(id);
         return claim != null
@@ -41,15 +36,29 @@ public class ClaimsController : ControllerBase
     }
 
     [HttpGet]
-    public Task<IEnumerable<Claim>> GetAsync()
+    public async Task<ActionResult<IEnumerable<ClaimDto>>> GetAsync()
     {
-        return _claimsService.GetAllClaimsAsync();
+        var claims = await _claimsService.GetAllClaimsAsync();
+        return Ok(claims.Select(ToDto));
     }
 
     [HttpDelete("{id}")]
-    public async Task<Claim?> DeleteAsync(Guid id)
+    public async Task<ActionResult<ClaimDto?>> DeleteAsync(Guid id)
     {
         _auditor.AuditClaimDelete(id);
-        return await _claimsService.DeleteClaimAsync(id);
+        var deletedClaim = await _claimsService.DeleteClaimAsync(id);
+        return Ok(ToDto(deletedClaim));
+    }
+
+    private CreateClaimRequest ToDomainRequest(CreateClaimRequestDto request)
+    {
+        return new CreateClaimRequest(request.CoverId, request.Name, request.Type, request.DamageCost, request.Created);
+    }
+
+    private ClaimDto? ToDto(Claim? claim)
+    {
+        return claim != null
+            ? new ClaimDto(claim.Id, claim.CoverId, claim.Created, claim.Name, claim.Type, claim.DamageCost)
+            : null;
     }
 }

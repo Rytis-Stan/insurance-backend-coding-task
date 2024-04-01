@@ -21,11 +21,41 @@ public class CoversController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Cover>> CreateAsync(CreateCoverRequestDto request)
+    public async Task<ActionResult<CoverDto>> CreateAsync(CreateCoverRequestDto request)
     {
         var cover = await _coversService.CreateCoverAsync(ToDomainRequest(request));
         _auditor.AuditCoverPost(cover.Id);
-        return Ok(cover);
+        return Ok(ToDto(cover));
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<CoverDto>> GetAsync(Guid id)
+    {
+        var cover = ToDto(await _coversService.GetCoverAsync(id));
+        return cover != null
+            ? Ok(cover)
+            : NotFound();
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<CoverDto>>> GetAsync()
+    {
+        var covers = await _coversService.GetAllCoversAsync();
+        return Ok(covers);
+    }
+
+    [HttpGet("Premium")]
+    public ActionResult<decimal> ComputePremiumAsync(DateOnly startDate, DateOnly endDate, CoverType coverType)
+    {
+        return Ok(_pricingService.CalculatePremium(startDate, endDate, coverType));
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Cover?>> DeleteAsync(Guid id)
+    {
+        _auditor.AuditCoverDelete(id);
+        var deletedCover = await _coversService.DeleteCoverAsync(id);
+        return Ok(ToDto(deletedCover));
     }
 
     private CreateCoverRequest ToDomainRequest(CreateCoverRequestDto request)
@@ -33,32 +63,10 @@ public class CoversController : ControllerBase
         return new CreateCoverRequest(request.StartDate, request.EndDate, request.Type);
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<Cover>> GetAsync(Guid id)
+    private CoverDto? ToDto(Cover? cover)
     {
-        var cover = await _coversService.GetCoverAsync(id);
         return cover != null
-            ? Ok(cover)
-            : NotFound();
-    }
-
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Cover>>> GetAsync()
-    {
-        var covers = await _coversService.GetAllCoversAsync();
-        return Ok(covers);
-    }
-
-    [HttpGet("Premium")]
-    public async Task<ActionResult<decimal>> ComputePremiumAsync(DateOnly startDate, DateOnly endDate, CoverType coverType)
-    {
-        return Ok(_pricingService.CalculatePremium(startDate, endDate, coverType));
-    }
-
-    [HttpDelete("{id}")]
-    public Task<Cover?> DeleteAsync(Guid id)
-    {
-        _auditor.AuditCoverDelete(id);
-        return _coversService.DeleteCoverAsync(id);
+            ? new CoverDto(cover.Id, cover.StartDate, cover.EndDate, cover.Type, cover.Premium)
+            : null;
     }
 }
