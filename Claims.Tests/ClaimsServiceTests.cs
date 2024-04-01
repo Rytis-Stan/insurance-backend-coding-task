@@ -1,5 +1,4 @@
 ﻿using Claims.Domain;
-using Claims.Dto;
 using Claims.Testing;
 using Moq;
 using Xunit;
@@ -30,7 +29,7 @@ public class ClaimsServiceTests
     {
         var coverId = Guid.NewGuid();
         var created = UtcDateTime(2000, 01, 01); // TODO: Random date-time value within a valid range?
-        var request = new CreateClaimRequestDto(coverId, "anyName", AnyClaimType, 0, created);
+        var request = new CreateClaimRequest(coverId, "anyName", AnyClaimType, 0, created);
 
         await AssertExtended.ThrowsArgumentExceptionAsync(
             () => _claimsService.CreateClaimAsync(request),
@@ -46,7 +45,7 @@ public class ClaimsServiceTests
     {
         var coverId = Guid.NewGuid();
         var created = UtcDateTime(2000, 01, 01); // TODO: Random date-time value within a valid range?
-        var request = new CreateClaimRequestDto(coverId, "anyName", AnyClaimType, damageCost, created);
+        var request = new CreateClaimRequest(coverId, "anyName", AnyClaimType, damageCost, created);
 
         await AssertExtended.ThrowsArgumentExceptionAsync(
             () => _claimsService.CreateClaimAsync(request),
@@ -60,7 +59,7 @@ public class ClaimsServiceTests
     {
         var coverId = Guid.NewGuid();
         var created = UtcDateTime(2000, 01, 01); // TODO: Random date-time value within a valid range?
-        var request = new CreateClaimRequestDto(coverId, "anyName", AnyClaimType, AnyDamageCost, created);
+        var request = new CreateClaimRequest(coverId, "anyName", AnyClaimType, AnyDamageCost, created);
         StubFindCoverById(coverId, null);
 
         await AssertExtended.ThrowsArgumentExceptionAsync(
@@ -106,7 +105,7 @@ public class ClaimsServiceTests
         async Task Test(DateOnly coverStartDate, DateOnly coverEndDate, DateTime claimCreated)
         {
             var cover = CreateCoverForPeriod(coverStartDate, coverEndDate);
-            var request = new CreateClaimRequestDto(cover.Id, "anyName", AnyClaimType, AnyDamageCost, claimCreated);
+            var request = new CreateClaimRequest(cover.Id, "anyName", AnyClaimType, AnyDamageCost, claimCreated);
             StubFindCoverById(cover.Id, cover);
 
             await AssertExtended.ThrowsArgumentExceptionAsync(
@@ -132,7 +131,7 @@ public class ClaimsServiceTests
         async Task Test(DateOnly coverStartDate, DateOnly coverEndDate, string claimName, ClaimType claimType, decimal claimDamageCost, DateTime claimCreated)
         {
             var cover = CreateCoverForPeriod(coverStartDate, coverEndDate);
-            var request = new CreateClaimRequestDto(cover.Id, claimName, claimType, claimDamageCost, claimCreated);
+            var request = new CreateClaimRequest(cover.Id, claimName, claimType, claimDamageCost, claimCreated);
             StubFindCoverById(cover.Id, cover);
     
             await _claimsService.CreateClaimAsync(request);

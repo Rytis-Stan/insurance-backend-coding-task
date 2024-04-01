@@ -16,3 +16,11 @@ public interface ICreateClaimRequest
     decimal DamageCost { get; }
     DateTime Created { get; }
 }
+
+public record CreateClaimRequest(
+    Guid CoverId,
+    string Name,
+    ClaimType Type,
+    decimal DamageCost,
+    DateTime Created
+) : ICreateClaimRequest;
