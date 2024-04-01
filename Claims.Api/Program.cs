@@ -63,6 +63,13 @@ public class Program
         AddServices(builder.Services, AppConfigurationFrom(builder));
     }
 
+    private static AppConfiguration AppConfigurationFrom(WebApplicationBuilder builder)
+    {
+        var configuration = new AppConfiguration();
+        builder.Configuration.Bind(configuration);
+        return configuration;
+    }
+
     private static void AddServices(IServiceCollection services, AppConfiguration configuration)
     {
         AddControllers(services);
@@ -81,6 +88,17 @@ public class Program
         });
     }
 
+    private static void AddInfrastructure(IServiceCollection services)
+    {
+        services.AddSingleton<IClock, Clock>();
+    }
+
+    private static void AddRepositories(IServiceCollection services, IClaimsDatabase database)
+    {
+        services.AddScoped(_ => database.ClaimsRepository);
+        services.AddScoped(_ => database.CoversRepository);
+    }
+
     private static ClaimsDatabase InitializeCosmosDb(CosmosDbConfiguration configuration)
     {
         Trace.WriteLine("DB Name: " + configuration.DatabaseName);
@@ -91,24 +109,6 @@ public class Program
         var database = new ClaimsDatabase(cosmosClient, configuration.DatabaseName, new IdGenerator());
         database.InitializeAsync().GetAwaiter().GetResult();
         return database;
-    }
-
-    private static AppConfiguration AppConfigurationFrom(WebApplicationBuilder builder)
-    {
-        var configuration = new AppConfiguration();
-        builder.Configuration.Bind(configuration);
-        return configuration;
-    }
-
-    private static void AddInfrastructure(IServiceCollection services)
-    {
-        services.AddSingleton<IClock, Clock>();
-    }
-
-    private static void AddRepositories(IServiceCollection services, IClaimsDatabase database)
-    {
-        services.AddScoped(_ => database.ClaimsRepository);
-        services.AddScoped(_ => database.CoversRepository);
     }
 
     private static void AddDomainServices(IServiceCollection services)
