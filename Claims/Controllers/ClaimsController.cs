@@ -22,7 +22,7 @@ public class ClaimsController : ControllerBase
     public async Task<ActionResult<Claim>> CreateAsync(CreateClaimRequestDto request)
     {
         var claim = await _claimsService.CreateClaimAsync(request);
-        _auditor.AuditClaim(claim.Id, "POST");
+        _auditor.AuditClaimPost(claim.Id);
         return Ok(claim);
     }
 
@@ -44,7 +44,7 @@ public class ClaimsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<Claim?> DeleteAsync(Guid id)
     {
-        _auditor.AuditClaim(id, "DELETE");
+        _auditor.AuditClaimDelete(id);
         return await _claimsService.DeleteClaimAsync(id);
     }
 }

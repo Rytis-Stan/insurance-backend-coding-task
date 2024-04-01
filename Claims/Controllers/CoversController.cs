@@ -24,7 +24,7 @@ public class CoversController : ControllerBase
     public async Task<ActionResult<Cover>> CreateAsync(CreateCoverRequestDto request)
     {
         var cover = await _coversService.CreateCoverAsync(request);
-        _auditor.AuditCover(cover.Id, "POST");
+        _auditor.AuditCoverPost(cover.Id);
         return Ok(cover);
     }
 
@@ -53,7 +53,7 @@ public class CoversController : ControllerBase
     [HttpDelete("{id}")]
     public Task<Cover?> DeleteAsync(Guid id)
     {
-        _auditor.AuditCover(id, "DELETE");
+        _auditor.AuditCoverDelete(id);
         return _coversService.DeleteCoverAsync(id);
     }
 }
