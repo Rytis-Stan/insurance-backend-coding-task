@@ -174,6 +174,18 @@ public class ClaimsServiceTests
         _claimsRepositoryMock.Verify(x => x.DeleteAsync(id));
     }
 
+    private Cover CreateCoverForPeriod(DateOnly coverStartDate, DateOnly coverEndDate)
+    {
+        return new Cover
+        {
+            Id = Guid.NewGuid(),
+            StartDate = coverStartDate,
+            EndDate = coverEndDate,
+            Type = AnyCoverType,
+            Premium = AnyPremium
+        };
+    }
+
     private void StubFindClaimById(Guid id, Claim claim)
     {
         _claimsRepositoryMock
@@ -186,18 +198,6 @@ public class ClaimsServiceTests
         _claimsRepositoryMock
             .Setup(x => x.GetAllAsync())
             .ReturnsAsync(claimsToReturn);
-    }
-
-    private Cover CreateCoverForPeriod(DateOnly coverStartDate, DateOnly coverEndDate)
-    {
-        return new Cover
-        {
-            Id = Guid.NewGuid(),
-            StartDate = coverStartDate,
-            EndDate = coverEndDate,
-            Type = AnyCoverType,
-            Premium = AnyPremium
-        };
     }
 
     private void StubFindCoverById(Guid id, Cover? cover)
