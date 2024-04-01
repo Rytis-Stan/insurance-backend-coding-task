@@ -4,7 +4,7 @@ public interface IClaimsService
 {
     Task<Claim> CreateClaimAsync(ICreateClaimRequest request);
     Task<IEnumerable<Claim>> GetAllClaimsAsync();
-    Task<Claim> DeleteClaimAsync(Guid id);
+    Task<Claim?> DeleteClaimAsync(Guid id);
     Task<Claim?> GetClaimByIdAsync(Guid id);
 }
 

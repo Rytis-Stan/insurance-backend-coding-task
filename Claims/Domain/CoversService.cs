@@ -65,7 +65,7 @@ public class CoversService : ICoversService
         return await _coversRepository.GetAllAsync();
     }
 
-    public async Task<Cover> DeleteCoverAsync(Guid id)
+    public async Task<Cover?> DeleteCoverAsync(Guid id)
     {
         return await _coversRepository.DeleteAsync(id);
     }

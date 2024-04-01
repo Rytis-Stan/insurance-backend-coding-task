@@ -232,6 +232,18 @@ public class CoversServiceTests
         _coversRepositoryMock.Verify(x => x.DeleteAsync(id));
     }
 
+    [Fact]
+    public async Task ReturnsCoverReturnedByRepositoryDelete()
+    {
+        var id = Guid.NewGuid();
+        var cover = RandomCover();
+        StubDelete(id, cover);
+
+        var returnedCover = await _coversService.DeleteCoverAsync(id);
+
+        Assert.Equal(cover, returnedCover);
+    }
+
     private Cover RandomCover()
     {
         return new Cover
@@ -256,6 +268,13 @@ public class CoversServiceTests
         _coversRepositoryMock
             .Setup(x => x.GetAllAsync())
             .ReturnsAsync(coversToReturn);
+    }
+
+    private void StubDelete(Guid id, Cover? deletedCoverToReturn)
+    {
+        _coversRepositoryMock
+            .Setup(x => x.DeleteAsync(id))
+            .ReturnsAsync(deletedCoverToReturn);
     }
 
     private void StubUtcNow(DateTime utcNow)

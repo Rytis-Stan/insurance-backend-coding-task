@@ -174,6 +174,18 @@ public class ClaimsServiceTests
         _claimsRepositoryMock.Verify(x => x.DeleteAsync(id));
     }
 
+    [Fact]
+    public async Task ReturnsClaimReturnedByRepositoryDelete()
+    {
+        var id = Guid.NewGuid();
+        var claim = RandomClaim();
+        StubDelete(id, claim);
+    
+        var returnedClaim = await _claimsService.DeleteClaimAsync(id);
+    
+        Assert.Equal(claim, returnedClaim);
+    }
+
     private Cover CreateCoverForPeriod(DateOnly coverStartDate, DateOnly coverEndDate)
     {
         return new Cover
@@ -205,6 +217,13 @@ public class ClaimsServiceTests
         _coversRepositoryMock
             .Setup(x => x.FindByIdAsync(id))
             .ReturnsAsync(cover);
+    }
+
+    private void StubDelete(Guid id, Claim? deletedClaimToReturn)
+    {
+        _claimsRepositoryMock
+            .Setup(x => x.DeleteAsync(id))
+            .ReturnsAsync(deletedClaimToReturn);
     }
 
     private Claim RandomClaim()
