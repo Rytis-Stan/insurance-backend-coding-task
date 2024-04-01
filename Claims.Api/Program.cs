@@ -60,23 +60,15 @@ public class Program
 
     private static void AddServices(WebApplicationBuilder builder)
     {
-        var services = builder.Services;
-        var configuration = new AppConfiguration(builder.Configuration);
+        var configuration = AppConfigurationFrom(builder);
 
+        var services = builder.Services;
         services.AddControllers().AddJsonOptions(x =>
         {
             x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
 
-        var cosmosDbConfiguration = configuration.CosmosDb;
-        var cosmosClient = new CosmosClient(cosmosDbConfiguration.Account, cosmosDbConfiguration.Key);
-
-        Trace.WriteLine("DB Name: " + cosmosDbConfiguration.DatabaseName);
-
-        // throw new Exception("The database name is: " + configuration.DatabaseName);
-
-        var database = new ClaimsDatabase(cosmosClient, cosmosDbConfiguration.DatabaseName, new IdGenerator());
-        database.InitializeAsync().GetAwaiter().GetResult();
+        var database = InitializeCosmosDb(configuration);
 
         AddRepositories(services, database);
         services.AddDbContext<AuditContext>(options => options.UseSqlServer(configuration.ConnectionString));
@@ -85,6 +77,27 @@ public class Program
         AddDomainServices(services);
         AddAuditing(services);
         AddSwagger(services);
+    }
+
+    private static ClaimsDatabase InitializeCosmosDb(AppConfiguration appConfiguration)
+    {
+        var cosmosDbConfiguration = appConfiguration.CosmosDb;
+        var cosmosClient = new CosmosClient(cosmosDbConfiguration.Account, cosmosDbConfiguration.Key);
+
+        Trace.WriteLine("DB Name: " + cosmosDbConfiguration.DatabaseName);
+
+        // throw new Exception("The database name is: " + configuration.DatabaseName);
+
+        var database = new ClaimsDatabase(cosmosClient, cosmosDbConfiguration.DatabaseName, new IdGenerator());
+        database.InitializeAsync().GetAwaiter().GetResult();
+        return database;
+    }
+
+    private static AppConfiguration AppConfigurationFrom(WebApplicationBuilder builder)
+    {
+        var appConfiguration = new AppConfiguration();
+        builder.Configuration.Bind(appConfiguration);
+        return appConfiguration;
     }
 
     private static void AddInfrastructure(IServiceCollection services)
