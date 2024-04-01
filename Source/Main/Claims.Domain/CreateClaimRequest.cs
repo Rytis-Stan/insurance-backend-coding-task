@@ -1,8 +1,6 @@
-﻿using Claims.Domain;
+namespace Claims.Domain;
 
-namespace Claims.Api.Dto;
-
-public record CreateClaimRequestDto(
+public record CreateClaimRequest(
     Guid CoverId,
     string Name,
     ClaimType Type,

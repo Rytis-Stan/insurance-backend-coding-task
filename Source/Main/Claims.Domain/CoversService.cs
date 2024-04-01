@@ -16,13 +16,13 @@ public class CoversService : ICoversService
         _clock = clock;
     }
 
-    public async Task<Cover> CreateCoverAsync(ICreateCoverRequest request)
+    public async Task<Cover> CreateCoverAsync(CreateCoverRequest request)
     {
         Validate(request);
         return await _coversRepository.AddAsync(ToNewCoverInfo(request));
     }
 
-    private void Validate(ICreateCoverRequest request)
+    private void Validate(CreateCoverRequest request)
     {
         var utcToday = DateOnly.FromDateTime(_clock.UtcNow());
         var startDate = request.StartDate;
@@ -46,12 +46,12 @@ public class CoversService : ICoversService
         }
     }
 
-    private INewCoverInfo ToNewCoverInfo(ICreateCoverRequest request)
+    private INewCoverInfo ToNewCoverInfo(CreateCoverRequest request)
     {
         return new NewCoverInfo(request.StartDate, request.EndDate, request.Type, PremiumFrom(request));
     }
 
-    private decimal PremiumFrom(ICreateCoverRequest request)
+    private decimal PremiumFrom(CreateCoverRequest request)
     {
         return _pricingService.CalculatePremium(request.StartDate, request.EndDate, request.Type);
     }

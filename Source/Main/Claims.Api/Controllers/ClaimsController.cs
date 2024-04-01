@@ -21,9 +21,14 @@ public class ClaimsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Claim>> CreateAsync(CreateClaimRequestDto request)
     {
-        var claim = await _claimsService.CreateClaimAsync(request);
+        var claim = await _claimsService.CreateClaimAsync(ToDomainRequest(request));
         _auditor.AuditClaimPost(claim.Id);
         return Ok(claim);
+    }
+
+    private CreateClaimRequest ToDomainRequest(CreateClaimRequestDto request)
+    {
+        return new CreateClaimRequest(request.CoverId, request.Name, request.Type, request.DamageCost, request.Created);
     }
 
     [HttpGet("{id}")]

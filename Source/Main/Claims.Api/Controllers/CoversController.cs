@@ -23,9 +23,14 @@ public class CoversController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Cover>> CreateAsync(CreateCoverRequestDto request)
     {
-        var cover = await _coversService.CreateCoverAsync(request);
+        var cover = await _coversService.CreateCoverAsync(ToDomainRequest(request));
         _auditor.AuditCoverPost(cover.Id);
         return Ok(cover);
+    }
+
+    private CreateCoverRequest ToDomainRequest(CreateCoverRequestDto request)
+    {
+        return new CreateCoverRequest(request.StartDate, request.EndDate, request.Type);
     }
 
     [HttpGet("{id}")]

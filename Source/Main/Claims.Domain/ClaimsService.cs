@@ -13,13 +13,13 @@ public class ClaimsService : IClaimsService
         _coversRepository = coversRepository;
     }
 
-    public async Task<Claim> CreateClaimAsync(ICreateClaimRequest request)
+    public async Task<Claim> CreateClaimAsync(CreateClaimRequest request)
     {
         await Validate(request);
         return await _claimsRepository.AddAsync(ToNewClaimInfo(request));
     }
 
-    private async Task Validate(ICreateClaimRequest request)
+    private async Task Validate(CreateClaimRequest request)
     {
         var damageCost = request.DamageCost;
         if (damageCost == 0.00m)
@@ -43,7 +43,7 @@ public class ClaimsService : IClaimsService
         }
     }
 
-    private static INewClaimInfo ToNewClaimInfo(ICreateClaimRequest request)
+    private static INewClaimInfo ToNewClaimInfo(CreateClaimRequest request)
     {
         return new NewClaimInfo(request.CoverId, request.Name, request.Type, request.DamageCost, request.Created);
     }
