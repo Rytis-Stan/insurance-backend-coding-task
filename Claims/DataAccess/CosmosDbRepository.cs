@@ -22,7 +22,7 @@ public abstract class CosmosDbRepository<T, TNewItemInfo, TJson>
     public async Task<T> AddAsync(TNewItemInfo item)
     {
         var id = _idGenerator.NewId().ToString();
-        var json = ToNewJson(item, id);
+        var json = ToNewJson(id, item);
         return ToItem(await _container.CreateItemAsync(json, new PartitionKey(id)));
     }
 
@@ -56,6 +56,6 @@ public abstract class CosmosDbRepository<T, TNewItemInfo, TJson>
         return ToItem(await _container.DeleteItemAsync<TJson>(id.ToString(), new PartitionKey(id.ToString())));
     }
 
-    protected abstract TJson ToNewJson(TNewItemInfo item, string id);
+    protected abstract TJson ToNewJson(string id, TNewItemInfo item);
     protected abstract T ToItem(TJson json);
 }

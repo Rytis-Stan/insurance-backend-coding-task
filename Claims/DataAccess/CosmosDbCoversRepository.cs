@@ -11,7 +11,7 @@ public class CosmosDbCoversRepository : CosmosDbRepository<Cover, INewCoverInfo,
     {
     }
 
-    protected override CoverJson ToNewJson(INewCoverInfo item, string id)
+    protected override CoverJson ToNewJson(string id, INewCoverInfo item)
     {
         return new CoverJson
         {

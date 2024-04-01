@@ -11,7 +11,7 @@ public class CosmosDbClaimsRepository : CosmosDbRepository<Claim, INewClaimInfo,
     {
     }
 
-    protected override ClaimJson ToNewJson(INewClaimInfo item, string id)
+    protected override ClaimJson ToNewJson(string id, INewClaimInfo item)
     {
         return new ClaimJson
         {
