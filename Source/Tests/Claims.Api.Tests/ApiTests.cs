@@ -35,7 +35,7 @@ public class ApiTests : IDisposable
         {
             cosmosClient.GetDatabase(configuration.DatabaseName).DeleteAsync().GetAwaiter().GetResult();
         }
-        catch (CosmosException ex) when(ex.StatusCode == HttpStatusCode.NotFound)
+        catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
         {
             // Database was not found. Do nothing.
         }
@@ -129,17 +129,32 @@ public class ApiTests : IDisposable
     [Fact]
     public async Task ClaimsPostReturnsNewlyCreatedClaim()
     {
-        var coverId = Guid.NewGuid();
+        var utcNow = DateTime.UtcNow;
+        var coverStartDate = DateOnly.FromDateTime(utcNow).AddDays(TestData.RandomInt(1, 100));
+        var coverPeriodDurationInDays = 200;
+        var coverEndDate = coverStartDate.AddDays(TestData.RandomInt(coverPeriodDurationInDays - 1));
+        var coverType = TestData.RandomEnum<CoverType>();
+        var coversResponse = await _client.PostAsync("/Covers", new CreateCoverRequestDto(coverStartDate, coverEndDate, coverType));
+        coversResponse.EnsureSuccessStatusCode();
+        var cover = await coversResponse.ReadContentAsync<CoverDto>();
+
+        var coverId = cover!.Id;
         var name = TestData.RandomString("name");
         var claimType = TestData.RandomEnum<ClaimType>();
         var damageCost = TestData.RandomInt(10_000);
-        var dateTime = TestData.RandomUtcDateTime();
+        var created = TestValueBuilder.UtcDateTime(coverStartDate);
 
-        var response = await _client.PostAsync("/Claims", new CreateClaimRequestDto(coverId, name, claimType, damageCost, dateTime));
+        var claimsResponse = await _client.PostAsync("/Claims", new CreateClaimRequestDto(coverId, name, claimType, damageCost, created));
 
-        response.EnsureSuccessStatusCode();
-        var claim = response.ReadContentAsync<ClaimDto>();
+        claimsResponse.EnsureSuccessStatusCode();
+        var claim = await claimsResponse.ReadContentAsync<ClaimDto>();
         Assert.NotNull(claim);
+        Assert.NotEqual(Guid.Empty, claim.Id);
+        Assert.Equal(coverId, claim.CoverId);
+        Assert.Equal(created, claim.Created);
+        Assert.Equal(name, claim.Name);
+        Assert.Equal(claimType, claim.Type);
+        Assert.Equal(damageCost, claim.DamageCost);
     }
 
     [Fact]
