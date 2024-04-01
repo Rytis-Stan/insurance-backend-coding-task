@@ -70,7 +70,10 @@ public class Program
         });
 
         var cosmosDbConfiguration = configuration.CosmosDb;
-        var cosmosClient = InitializeCosmosClientInstanceAsync(cosmosDbConfiguration).GetAwaiter().GetResult();
+        var cosmosClient = new CosmosClient(cosmosDbConfiguration.Account, cosmosDbConfiguration.Key);
+
+        new ClaimsDatabase(cosmosClient, cosmosDbConfiguration.DatabaseName).InitializeAsync().GetAwaiter().GetResult();
+
         AddRepositories(services, cosmosClient, cosmosDbConfiguration);
         services.AddDbContext<AuditContext>(options => options.UseSqlServer(configuration.ConnectionString));
 
@@ -110,18 +113,7 @@ public class Program
         app.UseAuthorization();
         app.MapControllers();
     }
-
-    private static async Task<CosmosClient> InitializeCosmosClientInstanceAsync(CosmosDbConfiguration configuration)
-    {
-        var client = new CosmosClient(configuration.Account, configuration.Key);
-        var response = await client.CreateDatabaseIfNotExistsAsync(configuration.DatabaseName);
-        foreach (var containerName in ContainerNames.All)
-        {
-            await response.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
-        }
-        return client;
-    }
-
+    
     private static void MigrateDatabase(WebApplication app)
     {
         using var scope = app.Services.CreateScope();
