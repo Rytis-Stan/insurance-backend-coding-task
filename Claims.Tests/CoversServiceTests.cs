@@ -237,7 +237,7 @@ public class CoversServiceTests
     {
         var id = Guid.NewGuid();
         var cover = RandomCover();
-        StubDelete(id, cover);
+        StubDeleteCover(id, cover);
 
         var returnedCover = await _coversService.DeleteCoverAsync(id);
 
@@ -270,7 +270,7 @@ public class CoversServiceTests
             .ReturnsAsync(coversToReturn);
     }
 
-    private void StubDelete(Guid id, Cover? deletedCoverToReturn)
+    private void StubDeleteCover(Guid id, Cover? deletedCoverToReturn)
     {
         _coversRepositoryMock
             .Setup(x => x.DeleteAsync(id))

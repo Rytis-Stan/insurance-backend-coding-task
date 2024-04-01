@@ -179,7 +179,7 @@ public class ClaimsServiceTests
     {
         var id = Guid.NewGuid();
         var claim = RandomClaim();
-        StubDelete(id, claim);
+        StubDeleteClaim(id, claim);
     
         var returnedClaim = await _claimsService.DeleteClaimAsync(id);
     
@@ -219,7 +219,7 @@ public class ClaimsServiceTests
             .ReturnsAsync(cover);
     }
 
-    private void StubDelete(Guid id, Claim? deletedClaimToReturn)
+    private void StubDeleteClaim(Guid id, Claim? deletedClaimToReturn)
     {
         _claimsRepositoryMock
             .Setup(x => x.DeleteAsync(id))
