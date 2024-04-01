@@ -27,7 +27,7 @@ public class Program
         ConfigureApp(app);
         MigrateDatabase(app);
 
-        // TODO: Uncomment.
+        // TODO: Finish implementing queues for auditing.
         // InitializeMessageQueues();
 
         return app;
@@ -102,10 +102,6 @@ public class Program
 
     private static ClaimsDatabase InitializeCosmosDb(CosmosDbConfiguration configuration)
     {
-        Trace.WriteLine("DB Name: " + configuration.DatabaseName);
-
-        // throw new Exception("The database name is: " + configuration.DatabaseName);
-
         var cosmosClient = new CosmosClient(configuration.Account, configuration.Key);
         var database = new ClaimsDatabase(cosmosClient, configuration.DatabaseName, new IdGenerator());
         database.InitializeAsync().GetAwaiter().GetResult();
