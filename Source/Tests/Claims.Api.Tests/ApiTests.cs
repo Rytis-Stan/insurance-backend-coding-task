@@ -6,11 +6,11 @@ using Xunit;
 
 namespace Claims.Api.Tests;
 
-public class ClaimsControllerTests : IDisposable
+public class ApiTests : IDisposable
 {
     private readonly HttpClient _client;
 
-    public ClaimsControllerTests()
+    public ApiTests()
     {
         _client = new CustomWebApplicationFactory<Program>().CreateClient();
     }
