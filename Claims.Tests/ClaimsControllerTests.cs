@@ -38,6 +38,7 @@ public class ClaimsControllerTests : ControllerTests
         
         response.EnsureSuccessStatusCode();
         var covers = await response.ReadContentAsync<CoverDto[]>();
+        Assert.NotNull(covers);
         Assert.Empty(covers);
     }
 
@@ -63,6 +64,8 @@ public class ClaimsControllerTests : ControllerTests
 
     [Theory]
     [InlineData("2001-01-01", "2001-01-01", CoverType.Yacht, 1375.00)]
+    [InlineData("2024-03-02", "2024-03-31", CoverType.ContainerShip, 48750)]
+    [InlineData("1995-06-05", "1995-12-04", CoverType.Tanker, 337331.25)]
     public async Task CoversPremiumGetReturnsCalculatedPremiumForGivenPeriodBasedOnCoverType(
         string startDate, string endDate, CoverType coverType, decimal expectedPremium)
     {
