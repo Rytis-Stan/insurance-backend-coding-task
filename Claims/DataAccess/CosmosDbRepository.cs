@@ -53,7 +53,20 @@ public abstract class CosmosDbRepository<T, TNewItemInfo, TJson>
 
     public async Task<T?> DeleteAsync(Guid id)
     {
-        return ToItem(await _container.DeleteItemAsync<TJson>(id.ToString(), new PartitionKey(id.ToString())));
+        return await DeleteAsync(id.ToString());
+    }
+
+    private async Task<T?> DeleteAsync(string id)
+    {
+        var batch = _container.CreateTransactionalBatch(new PartitionKey(id));
+        batch.ReadItem(id);
+        batch.DeleteItem(id);
+        var response = await batch.ExecuteAsync();
+
+        var json = response.GetOperationResultAtIndex<TJson>(0).Resource;
+        return json != null
+            ? ToItem(json)
+            : null;
     }
 
     protected abstract TJson ToNewJson(string id, TNewItemInfo item);
