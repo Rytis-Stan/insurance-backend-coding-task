@@ -83,13 +83,9 @@ public class Program
         services.AddDbContext<AuditContext>(options => options.UseSqlServer(configuration.ConnectionString));
 
         AddInfrastructure(services);
-        services.AddTransient<IClaimAuditor, Auditor>();
-        services.AddTransient<ICoverAuditor, Auditor>();
         AddServices(services);
-
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
+        AddAuditing(services);
+        AddSwagger(services);
     }
 
     private static void AddInfrastructure(IServiceCollection services)
@@ -110,9 +106,20 @@ public class Program
         services.AddTransient<IPricingService, PricingService>();
     }
 
+    private static void AddAuditing(IServiceCollection services)
+    {
+        services.AddTransient<IClaimAuditor, Auditor>();
+        services.AddTransient<ICoverAuditor, Auditor>();
+    }
+
+    private static void AddSwagger(IServiceCollection services)
+    {
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
+    }
+
     private static void ConfigureApp(WebApplication app)
     {
-        // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
