@@ -28,7 +28,7 @@ public class ClaimsServiceTests
     public async Task ThrowsExceptionWhenCreatingAClaimWithZeroDamageCost()
     {
         var coverId = Guid.NewGuid();
-        var created = UtcDateTime(2000, 01, 01); // TODO: Random date-time value within a valid range?
+        var created = TestData.RandomUtcDateTime();
         var request = new CreateClaimRequest(coverId, "anyName", AnyClaimType, 0, created);
 
         await AssertExtended.ThrowsArgumentExceptionAsync(
@@ -44,7 +44,7 @@ public class ClaimsServiceTests
     public async Task ThrowsExceptionWhenCreatingAClaimWithDamageCostExceedingMaxAllowedValueOfAHundredThousand(decimal damageCost)
     {
         var coverId = Guid.NewGuid();
-        var created = UtcDateTime(2000, 01, 01); // TODO: Random date-time value within a valid range?
+        var created = TestData.RandomUtcDateTime();
         var request = new CreateClaimRequest(coverId, "anyName", AnyClaimType, damageCost, created);
 
         await AssertExtended.ThrowsArgumentExceptionAsync(
@@ -58,7 +58,7 @@ public class ClaimsServiceTests
     public async Task ThrowsExceptionWhenCreatingAClaimWithNonExistingCoverId()
     {
         var coverId = Guid.NewGuid();
-        var created = UtcDateTime(2000, 01, 01); // TODO: Random date-time value within a valid range?
+        var created = TestData.RandomUtcDateTime();
         var request = new CreateClaimRequest(coverId, "anyName", AnyClaimType, AnyDamageCost, created);
         StubFindCoverById(coverId, null);
 
