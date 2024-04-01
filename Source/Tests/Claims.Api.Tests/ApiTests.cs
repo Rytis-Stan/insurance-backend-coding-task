@@ -21,6 +21,8 @@ public class ApiTests : IDisposable
     public void Dispose()
     {
         _client.Dispose();
+        
+        // TODO: Rewrite tests so that the databases can be deleted only once for all the API tests?
         DeleteCosmosDbIfExists();
         DeleteSqlServerDatabaseIfExists();
     }
