@@ -53,7 +53,7 @@ public class ClaimsServiceTests
 
         await AssertExtended.ThrowsArgumentExceptionAsync(
             () => _claimsService.CreateClaimAsync(request),
-            "Damage cost cannot exceed 100.000."
+            "Damage cost cannot exceed 100000."
         );
     }
     

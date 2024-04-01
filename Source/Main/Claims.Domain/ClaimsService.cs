@@ -28,7 +28,7 @@ public class ClaimsService : IClaimsService
         }
         if (damageCost > 100_000)
         {
-            throw new ArgumentException("Damage cost cannot exceed 100.000.");
+            throw new ArgumentException("Damage cost cannot exceed 100000.");
         }
         var cover = await _coversRepository.FindByIdAsync(request.CoverId);
         if (cover == null)
