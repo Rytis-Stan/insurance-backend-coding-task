@@ -1,7 +1,10 @@
 ﻿using System.Net;
+using Claims.Api.Configuration;
 using Claims.Api.Dto;
 using Claims.Domain;
 using Claims.Testing;
+using Microsoft.Azure.Cosmos;
+using Microsoft.Extensions.Configuration;
 using Xunit;
 
 namespace Claims.Api.Tests;
@@ -18,6 +21,30 @@ public class ApiTests : IDisposable
     public void Dispose()
     {
         _client.Dispose();
+        DeleteCosmosDbIfExists();
+    }
+
+    private void DeleteCosmosDbIfExists()
+    {
+        var configuration = CosmosDbConfiguration();
+        var cosmosClient = new CosmosClient(configuration.Account, configuration.Key);
+        try
+        {
+            cosmosClient.GetDatabase(configuration.DatabaseName).DeleteAsync().GetAwaiter().GetResult();
+        }
+        catch (CosmosException ex) when(ex.StatusCode == HttpStatusCode.NotFound)
+        {
+            // Database was not found. Do nothing.
+        }
+    }
+
+    private CosmosDbConfiguration CosmosDbConfiguration()
+    {
+        return AppConfiguration.FromConfiguration(
+            new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build()
+        ).CosmosDb;
     }
 
     [Theory]
