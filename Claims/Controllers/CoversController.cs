@@ -13,9 +13,10 @@ public class CoversController : ControllerBase
     private readonly IPricingService _pricingService;
     private readonly ICoverAuditor _auditor;
 
-    public CoversController(ICoversService coversService, ICoverAuditor auditor)
+    public CoversController(ICoversService coversService, IPricingService pricingService, ICoverAuditor auditor)
     {
         _coversService = coversService;
+        _pricingService = pricingService;
         _auditor = auditor;
     }
 
