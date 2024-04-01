@@ -8,16 +8,16 @@ namespace Claims.Api.Tests;
 
 public class ClaimsControllerTests : IDisposable
 {
-    protected readonly HttpClient Client;
+    private readonly HttpClient _client;
 
     public ClaimsControllerTests()
     {
-        Client = new CustomWebApplicationFactory<Program>().CreateClient();
+        _client = new CustomWebApplicationFactory<Program>().CreateClient();
     }
 
     public void Dispose()
     {
-        Client.Dispose();
+        _client.Dispose();
     }
 
     [Theory]
@@ -33,7 +33,7 @@ public class ClaimsControllerTests : IDisposable
         var startDate = DateOnly.FromDateTime(utcNow).AddDays(TestData.RandomInt(1, 100));
         var endDate = startDate.AddDays(periodDurationInDays - 1);
         
-        var response = await Client.PostAsync("/Covers", new CreateCoverRequestDto(startDate, endDate, coverType));
+        var response = await _client.PostAsync("/Covers", new CreateCoverRequestDto(startDate, endDate, coverType));
 
         response.EnsureSuccessStatusCode();
         var cover = await response.ReadContentAsync<CoverDto>();
@@ -49,7 +49,7 @@ public class ClaimsControllerTests : IDisposable
     [Fact]
     public async Task CoversGetReturnEmptyCoverCollectionWhenNoClaimsAdded()
     {
-        var response = await Client.GetAsync("/Covers");
+        var response = await _client.GetAsync("/Covers");
         
         response.EnsureSuccessStatusCode();
         var covers = await response.ReadContentAsync<CoverDto[]>();
@@ -62,7 +62,7 @@ public class ClaimsControllerTests : IDisposable
     {
         var id = Guid.NewGuid();
 
-        var response = await Client.GetAsync($"/Covers/{id}");
+        var response = await _client.GetAsync($"/Covers/{id}");
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -72,7 +72,7 @@ public class ClaimsControllerTests : IDisposable
     {
         var id = Guid.NewGuid();
 
-        var response = await Client.DeleteAsync($"/Covers/{id}");
+        var response = await _client.DeleteAsync($"/Covers/{id}");
 
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
@@ -84,7 +84,7 @@ public class ClaimsControllerTests : IDisposable
     public async Task CoversPremiumGetReturnsCalculatedPremiumForGivenPeriodBasedOnCoverType(
         string startDate, string endDate, CoverType coverType, decimal expectedPremium)
     {
-        var response = await Client.GetAsync($"/Covers/Premium/?startDate={startDate}&endDate={endDate}&coverType={coverType}");
+        var response = await _client.GetAsync($"/Covers/Premium/?startDate={startDate}&endDate={endDate}&coverType={coverType}");
 
         response.EnsureSuccessStatusCode();
         var premium = await response.ReadContentAsync<decimal>();
@@ -100,7 +100,7 @@ public class ClaimsControllerTests : IDisposable
         var damageCost = TestData.RandomInt(10_000);
         var dateTime = TestData.RandomUtcDateTime();
 
-        var response = await Client.PostAsync("/Claims", new CreateClaimRequestDto(coverId, name, claimType, damageCost, dateTime));
+        var response = await _client.PostAsync("/Claims", new CreateClaimRequestDto(coverId, name, claimType, damageCost, dateTime));
 
         response.EnsureSuccessStatusCode();
         var claim = response.ReadContentAsync<ClaimDto>();
@@ -110,7 +110,7 @@ public class ClaimsControllerTests : IDisposable
     [Fact]
     public async Task ClaimsGetReturnEmptyClaimCollectionWhenNoClaimsAdded()
     {
-        var response = await Client.GetAsync("/Claims");
+        var response = await _client.GetAsync("/Claims");
 
         response.EnsureSuccessStatusCode();
         var claims = await response.ReadContentAsync<ClaimDto[]>();
@@ -122,7 +122,7 @@ public class ClaimsControllerTests : IDisposable
     {
         var id = Guid.NewGuid();
 
-        var response = await Client.GetAsync($"/Claims/{id}");
+        var response = await _client.GetAsync($"/Claims/{id}");
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -132,7 +132,7 @@ public class ClaimsControllerTests : IDisposable
     {
         var id = Guid.NewGuid();
 
-        var response = await Client.DeleteAsync($"/Claims/{id}");
+        var response = await _client.DeleteAsync($"/Claims/{id}");
 
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
