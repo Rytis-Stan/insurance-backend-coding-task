@@ -82,7 +82,7 @@ public class Program
         AddRepositories(services, database);
         services.AddDbContext<AuditContext>(options => options.UseSqlServer(configuration.ConnectionString));
 
-        services.AddSingleton<IClock, Clock>();
+        AddInfrastructure(services);
         services.AddTransient<IClaimAuditor, Auditor>();
         services.AddTransient<ICoverAuditor, Auditor>();
         AddServices(services);
@@ -90,6 +90,11 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+    }
+
+    private static void AddInfrastructure(IServiceCollection services)
+    {
+        services.AddSingleton<IClock, Clock>();
     }
 
     private static void AddRepositories(IServiceCollection services, IClaimsDatabase database)
