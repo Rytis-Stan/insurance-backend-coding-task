@@ -3,9 +3,9 @@ namespace Claims.Domain;
 public interface IClaimsService
 {
     Task<Claim> CreateClaimAsync(ICreateClaimRequest request);
+    Task<Claim?> GetClaimByIdAsync(Guid id);
     Task<IEnumerable<Claim>> GetAllClaimsAsync();
     Task<Claim?> DeleteClaimAsync(Guid id);
-    Task<Claim?> GetClaimByIdAsync(Guid id);
 }
 
 public interface ICreateClaimRequest

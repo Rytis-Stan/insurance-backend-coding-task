@@ -46,11 +46,6 @@ public class ClaimsService : IClaimsService
         return new NewClaimInfo(request.CoverId, request.Name, request.Type, request.DamageCost, request.Created);
     }
 
-    public async Task<Claim?> DeleteClaimAsync(Guid id)
-    {
-        return await _claimsRepository.DeleteAsync(id);
-    }
-
     public async Task<Claim?> GetClaimByIdAsync(Guid id)
     {
         return await _claimsRepository.FindByIdAsync(id);
@@ -59,5 +54,10 @@ public class ClaimsService : IClaimsService
     public async Task<IEnumerable<Claim>> GetAllClaimsAsync()
     {
         return await _claimsRepository.GetAllAsync();
+    }
+
+    public async Task<Claim?> DeleteClaimAsync(Guid id)
+    {
+        return await _claimsRepository.DeleteAsync(id);
     }
 }
