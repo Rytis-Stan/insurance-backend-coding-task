@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace Claims.Tests;
+namespace Claims.Domain.Tests;
 
 public static class AssertExtended
 {

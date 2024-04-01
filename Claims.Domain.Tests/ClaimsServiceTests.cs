@@ -1,11 +1,10 @@
-﻿using Claims.Domain;
-using Claims.Domain.Repositories;
+﻿using Claims.Domain.Repositories;
 using Claims.Testing;
 using Moq;
 using Xunit;
 using static Claims.Testing.TestValueBuilder;
 
-namespace Claims.Tests;
+namespace Claims.Domain.Tests;
 
 public class ClaimsServiceTests
 {

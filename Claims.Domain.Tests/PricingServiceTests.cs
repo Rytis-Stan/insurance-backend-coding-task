@@ -1,8 +1,7 @@
-﻿using Claims.Domain;
-using Claims.Testing;
+﻿using Claims.Testing;
 using Xunit;
 
-namespace Claims.Tests;
+namespace Claims.Domain.Tests;
 
 public class PricingServiceTests
 {
