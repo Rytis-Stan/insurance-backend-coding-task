@@ -5,7 +5,6 @@ using Claims.Api.Configuration;
 using Claims.Auditing;
 using Claims.Infrastructure;
 using Claims.Persistence.CosmosDb;
-using Claims.Repositories;
 using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
 using RabbitMQ.Client;
@@ -83,7 +82,7 @@ public class Program
         services.AddDbContext<AuditContext>(options => options.UseSqlServer(configuration.ConnectionString));
 
         AddInfrastructure(services);
-        AddServices(services);
+        AddDomainServices(services);
         AddAuditing(services);
         AddSwagger(services);
     }
@@ -99,7 +98,7 @@ public class Program
         services.AddScoped(_ => database.CoversRepository);
     }
 
-    private static void AddServices(IServiceCollection services)
+    private static void AddDomainServices(IServiceCollection services)
     {
         services.AddTransient<IClaimsService, ClaimsService>();
         services.AddTransient<ICoversService, CoversService>();
