@@ -1,9 +1,10 @@
 ﻿using System.Net;
 using Claims.Domain;
 using Claims.Dto;
+using Claims.Testing;
 using Xunit;
 
-namespace Claims.Tests;
+namespace Claims.Api.Tests;
 
 public class ClaimsControllerTests : ControllerTests
 {

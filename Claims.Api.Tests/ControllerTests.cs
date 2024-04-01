@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
-namespace Claims.Tests;
+namespace Claims.Api.Tests;
 
 public abstract class ControllerTests : IDisposable
 {

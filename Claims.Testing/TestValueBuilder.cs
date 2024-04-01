@@ -1,4 +1,4 @@
-﻿namespace Claims.Tests;
+﻿namespace Claims.Testing;
 
 /// <summary>
 /// A static utility class for creating various types of test data. The main concern of

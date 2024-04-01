@@ -1,9 +1,10 @@
 ﻿using Claims.Domain;
 using Claims.Dto;
 using Claims.Infrastructure;
+using Claims.Testing;
 using Moq;
 using Xunit;
-using static Claims.Tests.TestValueBuilder;
+using static Claims.Testing.TestValueBuilder;
 
 namespace Claims.Tests;
 
