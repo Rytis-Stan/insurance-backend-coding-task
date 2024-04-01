@@ -26,9 +26,10 @@ public class ClaimsService : IClaimsService
         {
             throw new ArgumentException("Damage cost must be a positive value.");
         }
-        if (damageCost > 100_000)
+        const decimal maxAllowedDamageCost = 100_000;
+        if (damageCost > maxAllowedDamageCost)
         {
-            throw new ArgumentException("Damage cost cannot exceed 100000.");
+            throw new ArgumentException($"Damage cost cannot exceed {maxAllowedDamageCost}.");
         }
         var cover = await _coversRepository.FindByIdAsync(request.CoverId);
         if (cover == null)
