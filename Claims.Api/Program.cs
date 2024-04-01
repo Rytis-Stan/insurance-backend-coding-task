@@ -85,9 +85,7 @@ public class Program
         services.AddSingleton<IClock, Clock>();
         services.AddTransient<IClaimAuditor, Auditor>();
         services.AddTransient<ICoverAuditor, Auditor>();
-        services.AddTransient<IClaimsService, ClaimsService>();
-        services.AddTransient<ICoversService, CoversService>();
-        services.AddTransient<IPricingService, PricingService>();
+        AddServices(services);
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
@@ -98,6 +96,13 @@ public class Program
     {
         services.AddScoped(_ => database.ClaimsRepository);
         services.AddScoped(_ => database.CoversRepository);
+    }
+
+    private static void AddServices(IServiceCollection services)
+    {
+        services.AddTransient<IClaimsService, ClaimsService>();
+        services.AddTransient<ICoversService, CoversService>();
+        services.AddTransient<IPricingService, PricingService>();
     }
 
     private static void ConfigureApp(WebApplication app)
