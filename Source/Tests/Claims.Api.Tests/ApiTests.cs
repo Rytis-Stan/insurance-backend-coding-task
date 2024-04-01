@@ -149,6 +149,7 @@ public class ApiTests : IDisposable
 
         response.EnsureSuccessStatusCode();
         var claims = await response.ReadContentAsync<ClaimDto[]>();
+        Assert.NotNull(claims);
         Assert.Empty(claims);
     }
 
