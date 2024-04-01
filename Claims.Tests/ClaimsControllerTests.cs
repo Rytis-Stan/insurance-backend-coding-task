@@ -7,16 +7,18 @@ namespace Claims.Tests;
 
 public class ClaimsControllerTests : ControllerTests
 {
-    [Fact]
-    public async Task CoversPostReturnsNewlyCreatedCover()
+    [Theory]
+    [InlineData(1, CoverType.BulkCarrier, 1625.00)]
+    [InlineData(179, CoverType.Tanker, 330037.50)]
+    [InlineData(182, CoverType.Yacht, 239717.50)]
+    public async Task CoversPostReturnsNewlyCreatedCover(int periodDurationInDays, CoverType coverType, decimal expectedPremium)
     {
         var utcNow = DateTime.UtcNow;
         // NOTE: Start and end date should start at least 1 day after UTC Now to avoid the
         // current date changing while the endpoint is being called (can happen if the
         // test starts running just before a day's end).
-        var startDate = DateOnly.FromDateTime(utcNow).AddDays(TestData.RandomInt(1, 10));
-        var endDate = startDate.AddDays(TestData.RandomInt(100));
-        var coverType = TestData.RandomEnum<CoverType>();
+        var startDate = DateOnly.FromDateTime(utcNow).AddDays(TestData.RandomInt(1, 100));
+        var endDate = startDate.AddDays(periodDurationInDays - 1);
         
         var response = await Client.PostAsync("/Covers", new CreateCoverRequestDto(startDate, endDate, coverType));
 
@@ -28,7 +30,7 @@ public class ClaimsControllerTests : ControllerTests
         Assert.Equal(startDate, cover.StartDate);
         Assert.Equal(endDate, cover.EndDate);
         Assert.Equal(coverType, cover.Type);
-        Assert.Equal(100.00m, cover.Premium);
+        Assert.Equal(expectedPremium, cover.Premium);
     }
 
     [Fact]
