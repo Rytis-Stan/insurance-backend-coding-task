@@ -6,7 +6,6 @@ using Claims.Api.Configuration;
 using Claims.Infrastructure;
 using Claims.Persistence.CosmosDb;
 using Claims.Repositories;
-using Claims.Repositories.CosmosDb;
 using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
 using RabbitMQ.Client;

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Claims.Repositories.CosmosDb;
+namespace Claims.Persistence.CosmosDb;
 
 public class ClaimJson
 {
