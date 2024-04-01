@@ -5,4 +5,4 @@ public record NewCoverInfo(
     DateOnly EndDate,
     CoverType Type,
     decimal Premium
-) : INewCoverInfo;
+);

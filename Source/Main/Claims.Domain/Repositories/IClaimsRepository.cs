@@ -1,5 +1,5 @@
 namespace Claims.Domain.Repositories;
 
-public interface IClaimsRepository : IRepository<INewClaimInfo, Claim>
+public interface IClaimsRepository : IRepository<NewClaimInfo, Claim>
 {
 }

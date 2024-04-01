@@ -46,7 +46,7 @@ public class CoversService : ICoversService
         }
     }
 
-    private INewCoverInfo ToNewCoverInfo(CreateCoverRequest request)
+    private NewCoverInfo ToNewCoverInfo(CreateCoverRequest request)
     {
         return new NewCoverInfo(request.StartDate, request.EndDate, request.Type, PremiumFrom(request));
     }

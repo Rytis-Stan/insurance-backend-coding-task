@@ -5,14 +5,14 @@ using Microsoft.Azure.Cosmos;
 
 namespace Claims.Persistence.CosmosDb;
 
-internal class CosmosDbClaimsRepository : CosmosDbRepository<Claim, INewClaimInfo, ClaimJson>, IClaimsRepository
+internal class CosmosDbClaimsRepository : CosmosDbRepository<Claim, NewClaimInfo, ClaimJson>, IClaimsRepository
 {
     public CosmosDbClaimsRepository(CosmosClient dbClient, string databaseName, IIdGenerator idGenerator)
         : base(dbClient, databaseName, ContainerNames.Claim, idGenerator)
     {
     }
 
-    protected override ClaimJson ToNewJson(string id, INewClaimInfo item)
+    protected override ClaimJson ToNewJson(string id, NewClaimInfo item)
     {
         return new ClaimJson
         {

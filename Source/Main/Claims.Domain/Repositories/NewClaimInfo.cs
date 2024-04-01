@@ -6,4 +6,4 @@ public record NewClaimInfo(
     ClaimType Type,
     decimal DamageCost,
     DateTime Created
-) : INewClaimInfo;
+);

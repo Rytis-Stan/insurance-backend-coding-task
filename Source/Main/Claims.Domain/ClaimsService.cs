@@ -43,7 +43,7 @@ public class ClaimsService : IClaimsService
         }
     }
 
-    private static INewClaimInfo ToNewClaimInfo(CreateClaimRequest request)
+    private static NewClaimInfo ToNewClaimInfo(CreateClaimRequest request)
     {
         return new NewClaimInfo(request.CoverId, request.Name, request.Type, request.DamageCost, request.Created);
     }
