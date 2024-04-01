@@ -72,9 +72,14 @@ public class Program
         var cosmosDbConfiguration = configuration.CosmosDb;
         var cosmosClient = new CosmosClient(cosmosDbConfiguration.Account, cosmosDbConfiguration.Key);
 
-        new ClaimsDatabase(cosmosClient, cosmosDbConfiguration.DatabaseName).InitializeAsync().GetAwaiter().GetResult();
+        Trace.WriteLine("DB Name: " + cosmosDbConfiguration.DatabaseName);
 
-        AddRepositories(services, cosmosClient, cosmosDbConfiguration);
+        // throw new Exception("The database name is: " + configuration.DatabaseName);
+
+        var database = new ClaimsDatabase(cosmosClient, cosmosDbConfiguration.DatabaseName, new IdGenerator());
+        database.InitializeAsync().GetAwaiter().GetResult();
+
+        AddRepositories(services, database);
         services.AddDbContext<AuditContext>(options => options.UseSqlServer(configuration.ConnectionString));
 
         services.AddSingleton<IClock, Clock>();
@@ -89,15 +94,10 @@ public class Program
         services.AddSwaggerGen();
     }
 
-    private static void AddRepositories(IServiceCollection services, CosmosClient cosmosClient, CosmosDbConfiguration configuration)
+    private static void AddRepositories(IServiceCollection services, IClaimsDatabase database)
     {
-        Trace.WriteLine("DB Name: " + configuration.DatabaseName);
-
-        // throw new Exception("The database name is: " + configuration.DatabaseName);
-
-        var idGenerator = new IdGenerator();
-        services.AddSingleton<IClaimsRepository>(new CosmosDbClaimsRepository(cosmosClient, configuration.DatabaseName, idGenerator));
-        services.AddSingleton<ICoversRepository>(new CosmosDbCoversRepository(cosmosClient, configuration.DatabaseName, idGenerator));
+        services.AddScoped(_ => database.ClaimsRepository);
+        services.AddScoped(_ => database.CoversRepository);
     }
 
     private static void ConfigureApp(WebApplication app)
