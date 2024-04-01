@@ -68,7 +68,7 @@ public class Program
             x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
 
-        var database = InitializeCosmosDb(configuration);
+        var database = InitializeCosmosDb(configuration.CosmosDb);
 
         AddRepositories(services, database);
         services.AddDbContext<AuditContext>(options => options.UseSqlServer(configuration.ConnectionString));
@@ -79,16 +79,14 @@ public class Program
         AddSwagger(services);
     }
 
-    private static ClaimsDatabase InitializeCosmosDb(AppConfiguration appConfiguration)
+    private static ClaimsDatabase InitializeCosmosDb(CosmosDbConfiguration configuration)
     {
-        var cosmosDbConfiguration = appConfiguration.CosmosDb;
-        var cosmosClient = new CosmosClient(cosmosDbConfiguration.Account, cosmosDbConfiguration.Key);
-
-        Trace.WriteLine("DB Name: " + cosmosDbConfiguration.DatabaseName);
+        Trace.WriteLine("DB Name: " + configuration.DatabaseName);
 
         // throw new Exception("The database name is: " + configuration.DatabaseName);
 
-        var database = new ClaimsDatabase(cosmosClient, cosmosDbConfiguration.DatabaseName, new IdGenerator());
+        var cosmosClient = new CosmosClient(configuration.Account, configuration.Key);
+        var database = new ClaimsDatabase(cosmosClient, configuration.DatabaseName, new IdGenerator());
         database.InitializeAsync().GetAwaiter().GetResult();
         return database;
     }
