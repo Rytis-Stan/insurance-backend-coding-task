@@ -4,16 +4,19 @@ public class PricingService : IPricingService
 {
     public decimal CalculatePremium(DateOnly startDate, DateOnly endDate, CoverType coverType)
     {
-        var insurancePeriodInDays = endDate.DayNumber + 1 - startDate.DayNumber;
+        var totalInsurancePeriodInDays = endDate.DayNumber - startDate.DayNumber + 1;
 
-        var daysInInitial30DayPeriod = Math.Min(insurancePeriodInDays, 30);
-        var daysInLater150DayPeriod = Math.Clamp(insurancePeriodInDays - 30, 0, 150);
-        var daysInRemainingPeriod = Math.Max(insurancePeriodInDays - 30 - 150, 0);
+        const int initialPeriodDurationInDays = 30;
+        const int laterPeriodDurationInDays = 150;
 
-        var premiumForInitial30Days = daysInInitial30DayPeriod * DayRateFor(coverType);
-        var premiumForLater150Days = daysInLater150DayPeriod * DayRateFor(coverType) * DayBaseRateCoefficientForDay31To180(coverType);
-        var premiumForRemainingDays = daysInRemainingPeriod * DayRateFor(coverType) * DayBaseRateCoefficientForDaysAfter180(coverType);
-        var totalPremium = premiumForInitial30Days + premiumForLater150Days + premiumForRemainingDays;
+        var daysInInitialPeriod = Math.Min(totalInsurancePeriodInDays, initialPeriodDurationInDays);
+        var daysInLaterPeriod = Math.Clamp(totalInsurancePeriodInDays - initialPeriodDurationInDays, 0, laterPeriodDurationInDays);
+        var daysInRemainingPeriod = Math.Max(totalInsurancePeriodInDays - initialPeriodDurationInDays - laterPeriodDurationInDays, 0);
+
+        var initialPeriodPremium = daysInInitialPeriod * DayRateFor(coverType);
+        var laterPeriodPremium = daysInLaterPeriod * DayRateFor(coverType) * DayBaseRateCoefficientForLaterPeriod(coverType);
+        var remainingPeriodPremium = daysInRemainingPeriod * DayRateFor(coverType) * DayBaseRateCoefficientForRemainingPeriod(coverType);
+        var totalPremium = initialPeriodPremium + laterPeriodPremium + remainingPeriodPremium;
 
         return totalPremium;
     }
@@ -35,14 +38,14 @@ public class PricingService : IPricingService
         };
     }
 
-    private decimal DayBaseRateCoefficientForDay31To180(CoverType coverType)
+    private decimal DayBaseRateCoefficientForLaterPeriod(CoverType coverType)
     {
         return coverType == CoverType.Yacht
             ? 1.00m - 0.05m
             : 1.00m - 0.02m;
     }
 
-    private decimal DayBaseRateCoefficientForDaysAfter180(CoverType coverType)
+    private decimal DayBaseRateCoefficientForRemainingPeriod(CoverType coverType)
     {
         return coverType == CoverType.Yacht
             ? 1.00m - 0.08m
