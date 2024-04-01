@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.AuditDaemon", "Claim
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Api.Tests", "Claims.Api.Tests\Claims.Api.Tests.csproj", "{BE8555FB-FE71-4BF0-8CCA-AA41E1CE17E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claims.Testing", "Claims.Testing\Claims.Testing.csproj", "{3CB367D5-18DC-4B80-9860-3B79797956EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Testing", "Claims.Testing\Claims.Testing.csproj", "{3CB367D5-18DC-4B80-9860-3B79797956EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claims.Infrastructure", "Claims.Infrastructure\Claims.Infrastructure.csproj", "{71E652E0-E56B-43EB-9379-C02D2C47553E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{3CB367D5-18DC-4B80-9860-3B79797956EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CB367D5-18DC-4B80-9860-3B79797956EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CB367D5-18DC-4B80-9860-3B79797956EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71E652E0-E56B-43EB-9379-C02D2C47553E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71E652E0-E56B-43EB-9379-C02D2C47553E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71E652E0-E56B-43EB-9379-C02D2C47553E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71E652E0-E56B-43EB-9379-C02D2C47553E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
