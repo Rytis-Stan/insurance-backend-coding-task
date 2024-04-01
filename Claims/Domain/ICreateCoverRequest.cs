@@ -6,3 +6,9 @@ public interface ICreateCoverRequest
     DateOnly EndDate { get; }
     CoverType Type { get; }
 }
+
+public record CreateCoverRequest(
+    DateOnly StartDate,
+    DateOnly EndDate,
+    CoverType Type
+) : ICreateCoverRequest;

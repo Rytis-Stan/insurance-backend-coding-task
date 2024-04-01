@@ -1,5 +1,4 @@
 ﻿using Claims.Domain;
-using Claims.Dto;
 using Claims.Infrastructure;
 using Claims.Testing;
 using Moq;
@@ -48,7 +47,7 @@ public class CoversServiceTests
         async Task Test(DateTime utcNow, DateOnly startDate)
         {
             var endDate = DateOnly.FromDateTime(utcNow);
-            var request = new CreateCoverRequestDto(startDate, endDate, AnyCoverType);
+            var request = new CreateCoverRequest(startDate, endDate, AnyCoverType);
             StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsArgumentExceptionAsync(
@@ -81,7 +80,7 @@ public class CoversServiceTests
         async Task Test(DateTime utcNow, DateOnly endDate)
         {
             var startDate = DateOnly.FromDateTime(utcNow);
-            var request = new CreateCoverRequestDto(startDate, endDate, AnyCoverType);
+            var request = new CreateCoverRequest(startDate, endDate, AnyCoverType);
             StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsArgumentExceptionAsync(
@@ -122,7 +121,7 @@ public class CoversServiceTests
     
         async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate)
         {
-            var request = new CreateCoverRequestDto(startDate, endDate, AnyCoverType);
+            var request = new CreateCoverRequest(startDate, endDate, AnyCoverType);
             StubUtcNow(utcNow);
     
             await AssertExtended.ThrowsArgumentExceptionAsync(
@@ -167,7 +166,7 @@ public class CoversServiceTests
 
         async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate)
         {
-            var request = new CreateCoverRequestDto(startDate, endDate, AnyCoverType);
+            var request = new CreateCoverRequest(startDate, endDate, AnyCoverType);
             StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsArgumentExceptionAsync(
@@ -190,7 +189,7 @@ public class CoversServiceTests
 
         async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate, CoverType coverType, decimal premium)
         {
-            var request = new CreateCoverRequestDto(startDate, endDate, coverType);
+            var request = new CreateCoverRequest(startDate, endDate, coverType);
             StubUtcNow(utcNow);
             StubPremium(startDate, endDate, coverType, premium);
 
