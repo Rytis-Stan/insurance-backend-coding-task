@@ -55,13 +55,13 @@ public class ClaimsControllerTests : ControllerTests
     }
 
     [Fact]
-    public async Task CoversDeleteWithIdReturnsNotFoundWhenNoCoverExistsWithGivenId()
+    public async Task CoversDeleteWithIdReturnsNoContentWhenNoCoverExistsWithGivenId()
     {
         var id = Guid.NewGuid();
 
         var response = await Client.DeleteAsync($"/Covers/{id}");
 
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
 
     [Theory]
@@ -115,12 +115,12 @@ public class ClaimsControllerTests : ControllerTests
     }
 
     [Fact]
-    public async Task ClaimsDeleteWithIdReturnsNotFoundWhenNoClaimExistsWithGivenId()
+    public async Task ClaimsDeleteWithIdReturnsNoContentWhenNoClaimExistsWithGivenId()
     {
         var id = Guid.NewGuid();
 
         var response = await Client.DeleteAsync($"/Claims/{id}");
 
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
 }
