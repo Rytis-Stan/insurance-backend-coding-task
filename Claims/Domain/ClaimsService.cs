@@ -28,7 +28,7 @@ public class ClaimsService : IClaimsService
         {
             throw new ArgumentException("Damage cost cannot exceed 100.000.");
         }
-        var cover = await _coversRepository.GetByIdAsync(request.CoverId);
+        var cover = await _coversRepository.FindByIdAsync(request.CoverId);
         if (cover == null)
         {
             throw new ArgumentException("Claim references a non-existing cover via the cover ID.");
@@ -53,7 +53,7 @@ public class ClaimsService : IClaimsService
 
     public async Task<Claim?> GetClaimByIdAsync(Guid id)
     {
-        return await _claimsRepository.GetByIdAsync(id);
+        return await _claimsRepository.FindByIdAsync(id);
     }
 
     public async Task<IEnumerable<Claim>> GetAllClaimsAsync()

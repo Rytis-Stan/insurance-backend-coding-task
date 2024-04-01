@@ -204,7 +204,7 @@ public class CoversServiceTests
     {
         var id = Guid.NewGuid();
         var cover = RandomCover();
-        StubGetCoverById(id, cover);
+        StubFindCoverById(id, cover);
 
         var returnedCover = await _coversService.GetCoverAsync(id);
 
@@ -232,10 +232,10 @@ public class CoversServiceTests
         _coversRepositoryMock.Verify(x => x.DeleteAsync(id));
     }
 
-    private void StubGetCoverById(Guid id, Cover? coverToReturn)
+    private void StubFindCoverById(Guid id, Cover? coverToReturn)
     {
         _coversRepositoryMock
-            .Setup(x => x.GetByIdAsync(id))
+            .Setup(x => x.FindByIdAsync(id))
             .ReturnsAsync(coverToReturn);
     }
 

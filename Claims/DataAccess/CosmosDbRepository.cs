@@ -26,7 +26,7 @@ public abstract class CosmosDbRepository<T, TNewItemInfo, TJson>
         return ToItem(await _container.CreateItemAsync(json, new PartitionKey(id)));
     }
 
-    public async Task<T?> GetByIdAsync(Guid id)
+    public async Task<T?> FindByIdAsync(Guid id)
     {
         try
         {
@@ -51,7 +51,7 @@ public abstract class CosmosDbRepository<T, TNewItemInfo, TJson>
         return results;
     }
 
-    public async Task<T> DeleteAsync(Guid id)
+    public async Task<T?> DeleteAsync(Guid id)
     {
         return ToItem(await _container.DeleteItemAsync<TJson>(id.ToString(), new PartitionKey(id.ToString())));
     }

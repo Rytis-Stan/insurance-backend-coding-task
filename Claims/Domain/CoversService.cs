@@ -57,7 +57,7 @@ public class CoversService : ICoversService
 
     public async Task<Cover?> GetCoverAsync(Guid id)
     {
-        return await _coversRepository.GetByIdAsync(id);
+        return await _coversRepository.FindByIdAsync(id);
     }
 
     public async Task<IEnumerable<Cover>> GetAllCoversAsync()
