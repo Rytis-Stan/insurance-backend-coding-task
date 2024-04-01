@@ -1,6 +1,6 @@
 ﻿namespace Claims.Persistence.CosmosDb;
 
-public static class ContainerNames
+internal static class ContainerNames
 {
     public static readonly string Claim = nameof(Claim);
     public static readonly string Cover = nameof(Cover);
