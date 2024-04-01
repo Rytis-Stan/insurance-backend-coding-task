@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using Claims.Api.Auditing;
 using Claims.Api.Configuration;
 using Claims.Infrastructure;
+using Claims.Persistence.CosmosDb;
 using Claims.Repositories;
 using Claims.Repositories.CosmosDb;
 using Microsoft.Azure.Cosmos;
@@ -128,12 +129,4 @@ public class Program
         var context = scope.ServiceProvider.GetRequiredService<AuditContext>();
         context.Database.Migrate();
     }
-}
-
-public class ContainerNames
-{
-    public static readonly string Claim = nameof(Claim);
-    public static readonly string Cover = nameof(Cover);
-
-    public static readonly IEnumerable<string> All = new[] { Claim, Cover };
 }
