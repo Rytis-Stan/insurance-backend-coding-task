@@ -105,7 +105,7 @@ public class PricingServiceTests
         AssertComputersCorrectPremium(coverType, periodDurationInDays, expectedPremium);
     }
 
-    private void AssertComputersCorrectPremium(CoverType coverType, int periodDurationInDays, decimal expectedPremium)
+    private static void AssertComputersCorrectPremium(CoverType coverType, int periodDurationInDays, decimal expectedPremium)
     {
         var (startDate, endDate) = TestData.RandomFixedLengthPeriod(periodDurationInDays);
         Assert.Equal(

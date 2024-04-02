@@ -23,7 +23,7 @@ public partial class ApiTests
         DeleteSqlServerDatabaseIfExists();
     }
 
-    private void DeleteCosmosDbIfExists()
+    private static void DeleteCosmosDbIfExists()
     {
         var configuration = CosmosDbConfiguration();
         var cosmosClient = new CosmosClient(configuration.Account, configuration.Key);
@@ -37,12 +37,12 @@ public partial class ApiTests
         }
     }
 
-    private void DeleteSqlServerDatabaseIfExists()
+    private static void DeleteSqlServerDatabaseIfExists()
     {
         // TODO: Implement database deletion logic.
     }
 
-    private CosmosDbConfiguration CosmosDbConfiguration()
+    private static CosmosDbConfiguration CosmosDbConfiguration()
     {
         return AppConfiguration.FromConfiguration(
             new ConfigurationBuilder()

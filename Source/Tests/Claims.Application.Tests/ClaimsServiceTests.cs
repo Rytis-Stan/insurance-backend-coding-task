@@ -190,7 +190,7 @@ public class ClaimsServiceTests
         Assert.Equal(claim, returnedClaim);
     }
 
-    private Cover CreateCoverForPeriod(DateOnly coverStartDate, DateOnly coverEndDate)
+    private static Cover CreateCoverForPeriod(DateOnly coverStartDate, DateOnly coverEndDate)
     {
         return new Cover
         {
@@ -230,7 +230,7 @@ public class ClaimsServiceTests
             .ReturnsAsync(deletedClaimToReturn);
     }
 
-    private Claim RandomClaim()
+    private static Claim RandomClaim()
     {
         return new Claim
         {

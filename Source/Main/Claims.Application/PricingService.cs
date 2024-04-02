@@ -23,13 +23,13 @@ public class PricingService : IPricingService
         return totalPremium;
     }
 
-    private decimal DayRateFor(CoverType coverType)
+    private static decimal DayRateFor(CoverType coverType)
     {
         const decimal baseDayRate = 1250.00m;
         return baseDayRate * DayRateCoefficientFor(coverType);
     }
 
-    private decimal DayRateCoefficientFor(CoverType coverType)
+    private static decimal DayRateCoefficientFor(CoverType coverType)
     {
         return coverType switch
         {
@@ -40,14 +40,14 @@ public class PricingService : IPricingService
         };
     }
 
-    private decimal DayBaseRateCoefficientForLaterPeriod(CoverType coverType)
+    private static decimal DayBaseRateCoefficientForLaterPeriod(CoverType coverType)
     {
         return coverType == CoverType.Yacht
             ? 1.00m - 0.05m
             : 1.00m - 0.02m;
     }
 
-    private decimal DayBaseRateCoefficientForRemainingPeriod(CoverType coverType)
+    private static decimal DayBaseRateCoefficientForRemainingPeriod(CoverType coverType)
     {
         return coverType == CoverType.Yacht
             ? 1.00m - 0.08m

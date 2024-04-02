@@ -245,7 +245,7 @@ public class CoversServiceTests
         Assert.Equal(cover, returnedCover);
     }
 
-    private Cover RandomCover()
+    private static Cover RandomCover()
     {
         return new Cover
         {
