@@ -1,7 +1,8 @@
-using Claims.Domain.Repositories;
+using Claims.Application.Repositories;
+using Claims.Domain;
 using Claims.Infrastructure;
 
-namespace Claims.Domain;
+namespace Claims.Application;
 
 public class CoversService : ICoversService
 {

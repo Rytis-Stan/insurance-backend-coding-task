@@ -1,6 +1,8 @@
-namespace Claims.Domain;
+using Claims.Domain;
 
-public record CreateClaimRequest(
+namespace Claims.Application.Repositories;
+
+public record NewClaimInfo(
     Guid CoverId,
     string Name,
     ClaimType Type,

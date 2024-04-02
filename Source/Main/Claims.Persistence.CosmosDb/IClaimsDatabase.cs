@@ -1,4 +1,4 @@
-using Claims.Domain.Repositories;
+using Claims.Application.Repositories;
 
 namespace Claims.Persistence.CosmosDb;
 

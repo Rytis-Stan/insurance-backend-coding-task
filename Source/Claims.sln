@@ -23,6 +23,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Domain.Tests", "Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Api.Tests", "Tests\Claims.Api.Tests\Claims.Api.Tests.csproj", "{5D444FA7-56D5-49FF-8F9B-16ECAC14751F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claims.Application", "Main\Claims.Application\Claims.Application.csproj", "{7D853A25-33C4-4B69-BA23-75956FE8D0E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claims.Application.Tests", "Tests\Claims.Application.Tests\Claims.Application.Tests.csproj", "{5050EADB-99AA-4887-8E4F-70BB07A50BE5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +69,14 @@ Global
 		{5D444FA7-56D5-49FF-8F9B-16ECAC14751F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D444FA7-56D5-49FF-8F9B-16ECAC14751F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D444FA7-56D5-49FF-8F9B-16ECAC14751F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D853A25-33C4-4B69-BA23-75956FE8D0E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D853A25-33C4-4B69-BA23-75956FE8D0E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D853A25-33C4-4B69-BA23-75956FE8D0E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D853A25-33C4-4B69-BA23-75956FE8D0E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5050EADB-99AA-4887-8E4F-70BB07A50BE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5050EADB-99AA-4887-8E4F-70BB07A50BE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5050EADB-99AA-4887-8E4F-70BB07A50BE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5050EADB-99AA-4887-8E4F-70BB07A50BE5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,6 +85,7 @@ Global
 		{0722F378-F248-417C-BB17-78CBEC762E59} = {003F7774-8202-4837-8C40-72297F3876C1}
 		{1C3DBBC3-C42E-44BB-9C6E-D0A990BF678B} = {003F7774-8202-4837-8C40-72297F3876C1}
 		{5D444FA7-56D5-49FF-8F9B-16ECAC14751F} = {003F7774-8202-4837-8C40-72297F3876C1}
+		{5050EADB-99AA-4887-8E4F-70BB07A50BE5} = {003F7774-8202-4837-8C40-72297F3876C1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9D4C1340-FBC4-4F35-944F-26237883E032}

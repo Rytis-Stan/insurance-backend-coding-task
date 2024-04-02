@@ -1,6 +1,7 @@
-using Claims.Domain.Repositories;
+using Claims.Application.Repositories;
+using Claims.Domain;
 
-namespace Claims.Domain;
+namespace Claims.Application;
 
 public class ClaimsService : IClaimsService
 {

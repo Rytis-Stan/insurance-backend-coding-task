@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json.Serialization;
 using Claims.Api.Configuration;
+using Claims.Application;
 using Claims.Auditing;
 using Claims.Domain;
 using Claims.Infrastructure;

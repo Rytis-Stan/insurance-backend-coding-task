@@ -1,4 +1,4 @@
-namespace Claims.Domain.Repositories;
+namespace Claims.Application.Repositories;
 
 public interface IRepository<in TNewObjectInfo, TObject>
 {

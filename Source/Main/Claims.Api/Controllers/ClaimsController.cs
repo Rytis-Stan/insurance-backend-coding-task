@@ -1,4 +1,5 @@
 using Claims.Api.Dto;
+using Claims.Application;
 using Claims.Auditing;
 using Claims.Domain;
 using Microsoft.AspNetCore.Mvc;

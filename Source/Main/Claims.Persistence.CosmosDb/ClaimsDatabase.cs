@@ -1,4 +1,4 @@
-using Claims.Domain.Repositories;
+using Claims.Application.Repositories;
 using Claims.Infrastructure;
 using Microsoft.Azure.Cosmos;
 

@@ -1,4 +1,6 @@
-namespace Claims.Domain.Repositories;
+using Claims.Domain;
+
+namespace Claims.Application.Repositories;
 
 public record NewCoverInfo(
     DateOnly StartDate,
