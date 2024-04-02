@@ -33,10 +33,12 @@ public class ClaimsService : IClaimsService
             throw new ArgumentException($"Damage cost cannot exceed {maxAllowedDamageCost}.");
         }
         var cover = await _coversRepository.FindByIdAsync(request.CoverId);
+#pragma warning disable IDE0270 // Use coalesce expression
         if (cover == null)
         {
             throw new ArgumentException("Claim references a non-existing cover via the cover ID.");
         }
+#pragma warning restore IDE0270 // Use coalesce expression
         var created = DateOnly.FromDateTime(request.Created);
         if (created < cover.StartDate ||
             created > cover.EndDate)
