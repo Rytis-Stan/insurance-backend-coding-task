@@ -2,7 +2,6 @@
 
 public enum HttpRequestType
 {
-    Get,
     Post,
     Delete
 }

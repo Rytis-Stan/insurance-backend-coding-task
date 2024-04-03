@@ -185,21 +185,21 @@ public class RabbitMqReceivingQueue<TMessage> : IReceivingQueue<TMessage>
     }
 }
 
-public class ClaimMessageQueueAuditor : MessageQueueAuditor
+public class MessageQueueClaimAuditor : MessageQueueAuditor, IClaimAuditor
 {
     protected override AuditEntityKind EntityKind => AuditEntityKind.Claim;
 
-    public ClaimMessageQueueAuditor(ISendingQueue<AuditMessage> sendingQueue)
+    public MessageQueueClaimAuditor(ISendingQueue<AuditMessage> sendingQueue)
         : base(sendingQueue)
     {
     }
 }
 
-public class CoverMessageQueueAuditor : MessageQueueAuditor
+public class MessageQueueCoverAuditor : MessageQueueAuditor, ICoverAuditor
 {
     protected override AuditEntityKind EntityKind => AuditEntityKind.Cover;
 
-    public CoverMessageQueueAuditor(ISendingQueue<AuditMessage> sendingQueue)
+    public MessageQueueCoverAuditor(ISendingQueue<AuditMessage> sendingQueue)
         : base(sendingQueue)
     {
     }

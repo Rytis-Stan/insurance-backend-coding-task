@@ -92,8 +92,14 @@ public class Program
     private static void AddAuditing(IServiceCollection services, string connectionString)
     {
         services.AddDbContext<AuditContext>(options => options.UseSqlServer(connectionString));
-        services.AddTransient<IClaimAuditor, EntityFrameworkClaimAuditor>();
-        services.AddTransient<ICoverAuditor, EntityFrameworkCoverAuditor>();
+        // services.AddTransient<IClaimAuditor, EntityFrameworkClaimAuditor>();
+        // services.AddTransient<ICoverAuditor, EntityFrameworkCoverAuditor>();
+
+        var queue = new UninitializedRabbitMqMessageQueues().Initialize();
+
+        ISendingQueue<AuditMessage> sendingQueue = queue.SendingQueue();
+        services.AddScoped<IClaimAuditor>(_ => new MessageQueueClaimAuditor(sendingQueue));
+        services.AddScoped<ICoverAuditor>(_ => new MessageQueueCoverAuditor(sendingQueue));
     }
 
     private static void AddSwagger(IServiceCollection services)
