@@ -15,20 +15,20 @@ public class Auditor : IClaimAuditor, ICoverAuditor
 
     public void AuditClaimPost(Guid id)
     {
-        AuditClaim(id, "POST");
+        AuditClaim(id, HttpRequestType.Post);
     }
 
     public void AuditClaimDelete(Guid id)
     {
-        AuditClaim(id, "DELETE");
+        AuditClaim(id, HttpRequestType.Delete);
     }
 
-    private void AuditClaim(Guid id, string httpRequestType)
+    private void AuditClaim(Guid id, HttpRequestType httpRequestType)
     {
         var claimAudit = new ClaimAudit
         {
             Created = _clock.UtcNow(),
-            HttpRequestType = httpRequestType,
+            HttpRequestType = httpRequestType.ToString(),
             ClaimId = id.ToString()
         };
 
@@ -38,20 +38,20 @@ public class Auditor : IClaimAuditor, ICoverAuditor
 
     public void AuditCoverPost(Guid id)
     {
-        AuditCover(id, "POST");
+        AuditCover(id, HttpRequestType.Post);
     }
 
     public void AuditCoverDelete(Guid id)
     {
-        AuditCover(id, "DELETE");
+        AuditCover(id, HttpRequestType.Delete);
     }
 
-    private void AuditCover(Guid id, string httpRequestType)
+    private void AuditCover(Guid id, HttpRequestType httpRequestType)
     {
         var coverAudit = new CoverAudit
         {
             Created = _clock.UtcNow(),
-            HttpRequestType = httpRequestType,
+            HttpRequestType = httpRequestType.ToString(),
             CoverId = id.ToString()
         };
 
@@ -59,16 +59,3 @@ public class Auditor : IClaimAuditor, ICoverAuditor
         _auditContext.SaveChanges();
     }
 }
-
-// public class RabbitMqAuditor : IClaimAuditor, ICoverAuditor
-// {
-//     public void AuditClaim(Guid id, string httpRequestType)
-//     {
-//         throw new NotImplementedException();
-//     }
-//
-//     public void AuditCover(Guid id, string httpRequestType)
-//     {
-//         throw new NotImplementedException();
-//     }
-// }
