@@ -32,9 +32,9 @@ public class Program
         return app;
     }
 
-    private static void InitializeMessageQueues()
+    private static void InitializeMessageQueues(RabbitMqConfiguration configuration)
     {
-        var queue = new InactiveRabbitMqSendingQueue<AuditMessage>("localhost", "Claims.AuditQueue").Activate();
+        var queue = new InactiveRabbitMqSendingQueue<AuditMessage>(configuration.HostName, configuration.QueueName).Activate();
         // Send some experimental messages!
         for (int i = 0; i < 10; i++)
         {
@@ -91,13 +91,13 @@ public class Program
         services.AddTransient<IPricingService, PricingService>();
     }
 
-    private static void AddAuditing(IServiceCollection services, string connectionString)
+    private static void AddAuditing(IServiceCollection services, string connectionString, RabbitMqConfiguration configuration)
     {
         services.AddDbContext<AuditContext>(options => options.UseSqlServer(connectionString));
         // services.AddTransient<IClaimAuditor, EntityFrameworkClaimAuditor>();
         // services.AddTransient<ICoverAuditor, EntityFrameworkCoverAuditor>();
 
-        var queue = new InactiveRabbitMqSendingQueue<AuditMessage>("localhost", "Claims.AuditQueue").Activate();
+        var queue = new InactiveRabbitMqSendingQueue<AuditMessage>(configuration.HostName, configuration.QueueName).Activate();
         services.AddScoped<IClaimAuditor>(_ => new MessageQueueClaimAuditor(queue));
         services.AddScoped<ICoverAuditor>(_ => new MessageQueueCoverAuditor(queue));
     }
