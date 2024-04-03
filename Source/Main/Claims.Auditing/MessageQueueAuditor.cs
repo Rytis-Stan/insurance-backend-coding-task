@@ -32,32 +32,32 @@ public abstract class MessageQueueAuditor : IHttpRequestAuditor
     }
 }
 
-public interface IUninitializedSendingQueue<in TMessage>
+public interface IInactiveSendingQueue<in TMessage>
 {
-    ISendingQueue<TMessage> Initialize();
+    ISendingQueue<TMessage> Activate();
 }
 
-public interface IUninitializedReceivingQueue<out TMessage>
+public interface IInactiveReceivingQueue<out TMessage>
 {
-    IReceivingQueue<TMessage> Initialize();
+    IReceivingQueue<TMessage> Activate();
 }
 
-public class UninitializedRabbitMqSendingQueue<TMessage>
-    : RabbitMqMessageQueue<ISendingQueue<TMessage>>, IUninitializedSendingQueue<TMessage>
+public class InactiveRabbitMqSendingQueue<TMessage>
+    : RabbitMqMessageQueue<ISendingQueue<TMessage>>, IInactiveSendingQueue<TMessage>
 {
-    public UninitializedRabbitMqSendingQueue()
+    public InactiveRabbitMqSendingQueue()
         : base("localhost", "Claims.AuditQueue")
     {
     }
 
-    protected override ISendingQueue<TMessage> CreateInitializedQueue(
+    protected override ISendingQueue<TMessage> CreateActiveQueue(
         IConnection connection, IModel channel, string queueName)
     {
         return new RabbitMqSendingQueue<TMessage>(connection, channel, queueName);
     }
 }
 
-public abstract class RabbitMqMessageQueue<TInitializeQueue>
+public abstract class RabbitMqMessageQueue<TActiveQueue>
 {
     private readonly string _hostName;
     private readonly string _queueName;
@@ -68,17 +68,14 @@ public abstract class RabbitMqMessageQueue<TInitializeQueue>
         _queueName = queueName;
     }
 
-    public TInitializeQueue Initialize()
+    public TActiveQueue Activate()
     {
         var factory = new ConnectionFactory { HostName = _hostName };
         var connection = factory.CreateConnection();
         var channel = connection.CreateModel();
         EnsureQueueConstructed(channel);
-        return CreateInitializedQueue(connection, channel, _queueName);
+        return CreateActiveQueue(connection, channel, _queueName);
     }
-
-    protected abstract TInitializeQueue CreateInitializedQueue(
-        IConnection connection, IModel channel, string queueName);
 
     private void EnsureQueueConstructed(IModel channel)
     {
@@ -90,17 +87,20 @@ public abstract class RabbitMqMessageQueue<TInitializeQueue>
             arguments: null
         );
     }
+
+    protected abstract TActiveQueue CreateActiveQueue(
+        IConnection connection, IModel channel, string queueName);
 }
 
-public class UninitializedRabbitMqReceivingQueue<TMessage>
-    : RabbitMqMessageQueue<IReceivingQueue<TMessage>>, IUninitializedReceivingQueue<TMessage>
+public class InactiveRabbitMqReceivingQueue<TMessage>
+    : RabbitMqMessageQueue<IReceivingQueue<TMessage>>, IInactiveReceivingQueue<TMessage>
 {
-    public UninitializedRabbitMqReceivingQueue()
+    public InactiveRabbitMqReceivingQueue()
         : base("localhost", "Claims.AuditQueue")
     {
     }
 
-    protected override IReceivingQueue<TMessage> CreateInitializedQueue(
+    protected override IReceivingQueue<TMessage> CreateActiveQueue(
         IConnection connection, IModel channel, string queueName)
     {
         return new RabbitMqReceivingQueue<TMessage>(connection, channel, queueName);
