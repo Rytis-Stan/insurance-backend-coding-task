@@ -1,7 +1,5 @@
 ﻿namespace Claims.Auditing;
 
-public interface ICoverAuditor
+public interface ICoverAuditor : IHttpRequestAuditor
 {
-    void AuditCoverPost(Guid id);
-    void AuditCoverDelete(Guid id);
 }

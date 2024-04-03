@@ -11,19 +11,19 @@ namespace Claims.Api.Controllers;
 public class ClaimsController : ControllerBase
 {
     private readonly IClaimsService _claimsService;
-    private readonly IClaimAuditor _auditor;
+    private readonly IClaimAuditor _claimAuditor;
 
-    public ClaimsController(IClaimsService claimsService, IClaimAuditor auditor)
+    public ClaimsController(IClaimsService claimsService, IClaimAuditor claimAuditor)
     {
         _claimsService = claimsService;
-        _auditor = auditor;
+        _claimAuditor = claimAuditor;
     }
 
     [HttpPost]
     public async Task<ActionResult<ClaimDto>> CreateAsync(CreateClaimRequestDto request)
     {
         var claim = await _claimsService.CreateClaimAsync(ToDomainRequest(request));
-        _auditor.AuditClaimPost(claim.Id);
+        _claimAuditor.AuditPost(claim.Id);
         return Ok(ToDto(claim));
     }
 
@@ -46,17 +46,17 @@ public class ClaimsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult<ClaimDto?>> DeleteAsync(Guid id)
     {
-        _auditor.AuditClaimDelete(id);
+        _claimAuditor.AuditDelete(id);
         var deletedClaim = await _claimsService.DeleteClaimAsync(id);
         return Ok(ToDto(deletedClaim));
     }
 
-    private CreateClaimRequest ToDomainRequest(CreateClaimRequestDto request)
+    private static CreateClaimRequest ToDomainRequest(CreateClaimRequestDto request)
     {
         return new CreateClaimRequest(request.CoverId, request.Name, request.Type, request.DamageCost, request.Created);
     }
 
-    private ClaimDto? ToDto(Claim? claim)
+    private static ClaimDto? ToDto(Claim? claim)
     {
         return claim != null
             ? new ClaimDto(claim.Id, claim.CoverId, claim.Created, claim.Name, claim.Type, claim.DamageCost)

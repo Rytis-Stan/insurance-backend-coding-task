@@ -12,20 +12,20 @@ public class CoversController : ControllerBase
 {
     private readonly ICoversService _coversService;
     private readonly IPricingService _pricingService;
-    private readonly ICoverAuditor _auditor;
+    private readonly ICoverAuditor _coverAuditor;
 
-    public CoversController(ICoversService coversService, IPricingService pricingService, ICoverAuditor auditor)
+    public CoversController(ICoversService coversService, IPricingService pricingService, ICoverAuditor coverAuditor)
     {
         _coversService = coversService;
         _pricingService = pricingService;
-        _auditor = auditor;
+        _coverAuditor = coverAuditor;
     }
 
     [HttpPost]
     public async Task<ActionResult<CoverDto>> CreateAsync(CreateCoverRequestDto request)
     {
         var cover = await _coversService.CreateCoverAsync(ToDomainRequest(request));
-        _auditor.AuditCoverPost(cover.Id);
+        _coverAuditor.AuditPost(cover.Id);
         return Ok(ToDto(cover));
     }
 
@@ -54,17 +54,17 @@ public class CoversController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult<CoverDto?>> DeleteAsync(Guid id)
     {
-        _auditor.AuditCoverDelete(id);
+        _coverAuditor.AuditDelete(id);
         var deletedCover = await _coversService.DeleteCoverAsync(id);
         return Ok(ToDto(deletedCover));
     }
 
-    private CreateCoverRequest ToDomainRequest(CreateCoverRequestDto request)
+    private static CreateCoverRequest ToDomainRequest(CreateCoverRequestDto request)
     {
         return new CreateCoverRequest(request.StartDate, request.EndDate, request.Type);
     }
 
-    private CoverDto? ToDto(Cover? cover)
+    private static CoverDto? ToDto(Cover? cover)
     {
         return cover != null
             ? new CoverDto(cover.Id, cover.StartDate, cover.EndDate, cover.Type, cover.Premium)
