@@ -34,49 +34,44 @@ public abstract class MessageQueueAuditor : IHttpRequestAuditor
 
 public interface IUninitializedSendingQueue<in TMessage>
 {
-    ISendingQueue<TMessage> InitializeSending();
+    ISendingQueue<TMessage> Initialize();
 }
 
 public interface IUninitializedReceivingQueue<out TMessage>
 {
-    IReceivingQueue<TMessage> InitializeReceiving();
+    IReceivingQueue<TMessage> Initialize();
 }
 
-public class UninitializedRabbitMqMessageQueue<TMessage> : IUninitializedSendingQueue<TMessage>, IUninitializedReceivingQueue<TMessage>
+public class UninitializedRabbitMqSendingQueue<TMessage> : RabbitMqMessageQueue<TMessage>, IUninitializedSendingQueue<TMessage>
+{
+    public UninitializedRabbitMqSendingQueue()
+        : base("localhost", "Claims.AuditQueue")
+    {
+    }
+
+    public ISendingQueue<TMessage> Initialize()
+    {
+        var (connection, channel, queueName) = DoInitialize();
+        return new RabbitMqSendingQueue<TMessage>(connection, channel, queueName);
+    }
+}
+
+public class RabbitMqMessageQueue<TMessage>
 {
     private readonly string _hostName;
     private readonly string _queueName;
 
-    public UninitializedRabbitMqMessageQueue()
-        : this("localhost", "Claims.AuditQueue")
-    {
-    }
-
-    private UninitializedRabbitMqMessageQueue(string hostName, string queueName)
+    protected RabbitMqMessageQueue(string hostName, string queueName)
     {
         _hostName = hostName;
         _queueName = queueName;
     }
 
-    public ISendingQueue<TMessage> InitializeSending()
-    {
-        var (connection, channel) = DoInitialize();
-        return new RabbitMqSendingQueue<TMessage>(connection, channel, _queueName);
-    }
-
-    public IReceivingQueue<TMessage> InitializeReceiving()
-    {
-        var (connection, channel) = DoInitialize();
-        return new RabbitMqReceivingQueue<TMessage>(connection, channel, _queueName);
-    }
-
-    private (IConnection, IModel) DoInitialize()
+    protected (IConnection, IModel, string) DoInitialize()
     {
         var factory = new ConnectionFactory { HostName = _hostName };
-        /*using*/
-        var connection = factory.CreateConnection();
-        /*using*/
-        IModel channel = connection.CreateModel();
+        /*using*/ var connection = factory.CreateConnection();
+        /*using*/ IModel channel = connection.CreateModel();
 
         // TODO: Move the queue name (and some options???) to the configuration file!
         channel.QueueDeclare(
@@ -86,7 +81,21 @@ public class UninitializedRabbitMqMessageQueue<TMessage> : IUninitializedSending
             autoDelete: false,
             arguments: null
         );
-        return (connection, channel);
+        return (connection, channel, _queueName);
+    }
+}
+
+public class UninitializedRabbitMqReceivingQueue<TMessage> : RabbitMqMessageQueue<TMessage>, IUninitializedReceivingQueue<TMessage>
+{
+    public UninitializedRabbitMqReceivingQueue()
+        : base("localhost", "Claims.AuditQueue")
+    {
+    }
+
+    public IReceivingQueue<TMessage> Initialize()
+    {
+        var (connection, channel, queueName) = DoInitialize();
+        return new RabbitMqReceivingQueue<TMessage>(connection, channel, queueName);
     }
 }
 
