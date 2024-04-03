@@ -10,7 +10,7 @@ public class Program
     static void Main()
     {
         // TODO: Move the queue name (and some options???) to the configuration file!
-        using var messageQueues = new InactiveRabbitMqReceivingQueue<AuditMessage>().Activate();
+        using var messageQueues = new InactiveRabbitMqReceivingQueue<AuditMessage>("localhost", "Claims.AuditQueue").Activate();
 
         Console.WriteLine("Starting to listed to messages.");
 

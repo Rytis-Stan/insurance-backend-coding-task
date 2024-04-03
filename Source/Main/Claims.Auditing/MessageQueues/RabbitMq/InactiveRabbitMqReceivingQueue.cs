@@ -5,8 +5,8 @@ namespace Claims.Auditing.MessageQueues.RabbitMq;
 public class InactiveRabbitMqReceivingQueue<TMessage>
     : InactiveRabbitMqMessageQueue<IReceivingQueue<TMessage>>, IInactiveReceivingQueue<TMessage>
 {
-    public InactiveRabbitMqReceivingQueue()
-        : base("localhost", "Claims.AuditQueue")
+    public InactiveRabbitMqReceivingQueue(string hostName, string queueName)
+        : base(hostName, queueName)
     {
     }
 

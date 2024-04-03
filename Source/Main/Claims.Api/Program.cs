@@ -34,7 +34,7 @@ public class Program
 
     private static void InitializeMessageQueues()
     {
-        var queue = new InactiveRabbitMqSendingQueue<AuditMessage>().Activate();
+        var queue = new InactiveRabbitMqSendingQueue<AuditMessage>("localhost", "Claims.AuditQueue").Activate();
         // Send some experimental messages!
         for (int i = 0; i < 10; i++)
         {
@@ -97,7 +97,7 @@ public class Program
         // services.AddTransient<IClaimAuditor, EntityFrameworkClaimAuditor>();
         // services.AddTransient<ICoverAuditor, EntityFrameworkCoverAuditor>();
 
-        var queue = new InactiveRabbitMqSendingQueue<AuditMessage>().Activate();
+        var queue = new InactiveRabbitMqSendingQueue<AuditMessage>("localhost", "Claims.AuditQueue").Activate();
         services.AddScoped<IClaimAuditor>(_ => new MessageQueueClaimAuditor(queue));
         services.AddScoped<ICoverAuditor>(_ => new MessageQueueCoverAuditor(queue));
     }
