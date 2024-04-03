@@ -1,14 +1,11 @@
-using System.Text;
 using System.Text.Json.Serialization;
 using Claims.Api.Configuration;
 using Claims.Application;
 using Claims.Auditing;
-using Claims.Domain;
 using Claims.Infrastructure;
 using Claims.Persistence.CosmosDb;
 using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
-using RabbitMQ.Client;
 
 namespace Claims.Api;
 
@@ -28,35 +25,19 @@ public class Program
         MigrateDatabase(app);
 
         // TODO: Finish implementing queues for auditing.
-        // InitializeMessageQueues();
+        //InitializeMessageQueues();
 
         return app;
     }
 
     private static void InitializeMessageQueues()
     {
-        var factory = new ConnectionFactory { HostName = "localhost" };
-        using var connection = factory.CreateConnection();
-        using var channel = connection.CreateModel();
-
-        // TODO: Move the queue name (and some options???) to the configuration file!
-        const string queueName = "Claims.AuditQueue";
-        channel.QueueDeclare(
-            queue: queueName,
-            durable: false,
-            exclusive: false,
-            autoDelete: false,
-            arguments: null
-        );
-
-        string message = $"MY_MESSAGE: {DateTime.UtcNow}";
-        var body = Encoding.UTF8.GetBytes(message);
-
-        channel.BasicPublish(
-            exchange: string.Empty,
-            routingKey: queueName,
-            basicProperties: null,
-            body: body);
+        var queue = new UninitializedRabbitMqMessageQueues().Initialize().SendingQueue();
+        // Send some experimental messages!
+        for (int i = 0; i < 10; i++)
+        {
+            queue.Send(new AuditMessage(AuditEntityKind.Claim, Guid.NewGuid(), HttpRequestType.Post));
+        }
     }
 
     private static void AddServices(WebApplicationBuilder builder)
