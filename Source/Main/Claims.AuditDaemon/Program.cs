@@ -6,10 +6,10 @@ namespace Claims.AuditDaemon;
 
 public class Program
 {
-    static void Main(string[] args)
+    static void Main()
     {
         // TODO: Move the queue name (and some options???) to the configuration file!
-        using var messageQueues = new UninitializedRabbitMqMessageQueue().Initialize();
+        using var messageQueues = new UninitializedRabbitMqMessageQueue<AuditMessage>().InitializeReceiving();
 
         Console.WriteLine("Starting to listed to messages.");
 
@@ -19,7 +19,7 @@ public class Program
         var auditContext = new AuditContext(dbContextOptions);
         var clock = new Clock();
         var switchingAuditor = new SwitchingAuditor(auditContext, clock);
-        messageQueues.ReceivingQueue().OnReceived(message =>
+        messageQueues.OnReceived(message =>
         {
             Console.WriteLine($"RECEIVED_AT: {DateTime.UtcNow}, MESSAGE: {message}");
             switchingAuditor.OnMessageReceived(message);

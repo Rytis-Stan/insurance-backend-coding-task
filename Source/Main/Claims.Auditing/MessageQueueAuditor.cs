@@ -7,12 +7,12 @@ namespace Claims.Auditing;
 
 public abstract class MessageQueueAuditor : IHttpRequestAuditor
 {
-    private readonly ISendingQueue<AuditMessage> _sendingQueue;
+    private readonly ISendingQueue<AuditMessage> _queue;
     private readonly AuditEntityKind _entityKind;
 
-    protected MessageQueueAuditor(ISendingQueue<AuditMessage> sendingQueue, AuditEntityKind entityKind)
+    protected MessageQueueAuditor(ISendingQueue<AuditMessage> queue, AuditEntityKind entityKind)
     {
-        _sendingQueue = sendingQueue;
+        _queue = queue;
         _entityKind = entityKind;
     }
 
@@ -28,22 +28,21 @@ public abstract class MessageQueueAuditor : IHttpRequestAuditor
 
     private void Audit(Guid entityId, HttpRequestType httpRequestType)
     {
-        _sendingQueue.Send(new AuditMessage(_entityKind, entityId, httpRequestType));
+        _queue.Send(new AuditMessage(_entityKind, entityId, httpRequestType));
     }
 }
 
-public interface IUninitializedMessageQueue
+public interface IUninitializedSendingQueue<in TMessage>
 {
-    IMessageQueue Initialize();
+    ISendingQueue<TMessage> InitializeSending();
 }
 
-public interface IMessageQueue : IDisposable
+public interface IUninitializedReceivingQueue<out TMessage>
 {
-    ISendingQueue<AuditMessage> SendingQueue();
-    IReceivingQueue<AuditMessage> ReceivingQueue();
+    IReceivingQueue<TMessage> InitializeReceiving();
 }
 
-public class UninitializedRabbitMqMessageQueue : IUninitializedMessageQueue
+public class UninitializedRabbitMqMessageQueue<TMessage> : IUninitializedSendingQueue<TMessage>, IUninitializedReceivingQueue<TMessage>
 {
     private readonly string _hostName;
     private readonly string _queueName;
@@ -59,13 +58,25 @@ public class UninitializedRabbitMqMessageQueue : IUninitializedMessageQueue
         _queueName = queueName;
     }
 
-    public IMessageQueue Initialize()
+    public ISendingQueue<TMessage> InitializeSending()
+    {
+        var (connection, channel) = DoInitialize();
+        return new RabbitMqSendingQueue<TMessage>(connection, channel, _queueName);
+    }
+
+    public IReceivingQueue<TMessage> InitializeReceiving()
+    {
+        var (connection, channel) = DoInitialize();
+        return new RabbitMqReceivingQueue<TMessage>(connection, channel, _queueName);
+    }
+
+    private (IConnection, IModel) DoInitialize()
     {
         var factory = new ConnectionFactory { HostName = _hostName };
         /*using*/
         var connection = factory.CreateConnection();
         /*using*/
-        var channel = connection.CreateModel();
+        IModel channel = connection.CreateModel();
 
         // TODO: Move the queue name (and some options???) to the configuration file!
         channel.QueueDeclare(
@@ -75,98 +86,79 @@ public class UninitializedRabbitMqMessageQueue : IUninitializedMessageQueue
             autoDelete: false,
             arguments: null
         );
-
-        return new RabbitMqMessageQueue(connection, channel, _queueName);
+        return (connection, channel);
     }
 }
 
-public class RabbitMqMessageQueue : IMessageQueue
+public abstract class RabbitMqMessageQueue
 {
     private readonly IConnection _connection;
-    private readonly IModel _channel;
-    private readonly string _queueName;
+    protected readonly IModel Channel;
+    protected readonly string QueueName;
 
-    public RabbitMqMessageQueue(IConnection connection, IModel channel, string queueName)
+    protected RabbitMqMessageQueue(IConnection connection, IModel channel, string queueName)
     {
         _connection = connection;
-        _channel = channel;
-        _queueName = queueName;
-    }
-
-    public ISendingQueue<AuditMessage> SendingQueue()
-    {
-        return new RabbitMqSendingQueue<AuditMessage>(_channel, _queueName);
-    }
-
-    public IReceivingQueue<AuditMessage> ReceivingQueue()
-    {
-        return new RabbitMqReceivingQueue<AuditMessage>(_channel, _queueName);
+        Channel = channel;
+        QueueName = queueName;
     }
 
     public void Dispose()
     {
-        _channel.Dispose();
+        Channel.Dispose();
         _connection.Dispose();
     }
 }
 
-public interface ISendingQueue<in TMessage>
+public interface ISendingQueue<in TMessage> : IDisposable
 {
     void Send(TMessage message);
 }
 
-public interface IReceivingQueue<out TMessage>
+public interface IReceivingQueue<out TMessage> : IDisposable
 {
     void OnReceived(Action<TMessage> action);
 }
 
-public class RabbitMqSendingQueue<TMessage> : ISendingQueue<TMessage>
+public class RabbitMqSendingQueue<TMessage> : RabbitMqMessageQueue, ISendingQueue<TMessage>
 {
-    private readonly IModel _channel;
-    private readonly string _queueName;
-
-    public RabbitMqSendingQueue(IModel channel, string queueName)
+    public RabbitMqSendingQueue(IConnection connection, IModel channel, string queueName)
+        : base(connection, channel, queueName)
     {
-        _channel = channel;
-        _queueName = queueName;
     }
 
     public void Send(TMessage message)
     {
         var messageJson = JsonSerializer.Serialize(message);
         var messageJsonBytes = Encoding.UTF8.GetBytes(messageJson);
-        _channel.BasicPublish(
+        Channel.BasicPublish(
             exchange: "",
-            routingKey: _queueName,
+            routingKey: QueueName,
             basicProperties: null,
             body: messageJsonBytes
         );
     }
 }
 
-public class RabbitMqReceivingQueue<TMessage> : IReceivingQueue<TMessage>
+public class RabbitMqReceivingQueue<TMessage> : RabbitMqMessageQueue, IReceivingQueue<TMessage>
 {
-    private readonly IModel _channel;
-    private readonly string _queueName;
-
-    public RabbitMqReceivingQueue(IModel channel, string queueName)
+    public RabbitMqReceivingQueue(IConnection connection, IModel channel, string queueName)
+        : base(connection, channel, queueName)
     {
-        _channel = channel;
-        _queueName = queueName;
     }
 
     public void OnReceived(Action<TMessage> action)
     {
-        var consumer = new EventingBasicConsumer(_channel);
+        var consumer = new EventingBasicConsumer(Channel);
         consumer.Received += (_, e) =>
         {
             var message = ToMessage(e.Body);
             action(message);
-            _channel.BasicAck(e.DeliveryTag, multiple: false);
+            Channel.BasicAck(e.DeliveryTag, multiple: false);
         };
 
-        _channel.BasicConsume(
-            queue: _queueName,
+        Channel.BasicConsume(
+            queue: QueueName,
             autoAck: false,
             consumer: consumer
         );
@@ -188,16 +180,16 @@ public class RabbitMqReceivingQueue<TMessage> : IReceivingQueue<TMessage>
 
 public class MessageQueueClaimAuditor : MessageQueueAuditor, IClaimAuditor
 {
-    public MessageQueueClaimAuditor(ISendingQueue<AuditMessage> sendingQueue)
-        : base(sendingQueue, AuditEntityKind.Claim)
+    public MessageQueueClaimAuditor(ISendingQueue<AuditMessage> queue)
+        : base(queue, AuditEntityKind.Claim)
     {
     }
 }
 
 public class MessageQueueCoverAuditor : MessageQueueAuditor, ICoverAuditor
 {
-    public MessageQueueCoverAuditor(ISendingQueue<AuditMessage> sendingQueue)
-        : base(sendingQueue, AuditEntityKind.Cover)
+    public MessageQueueCoverAuditor(ISendingQueue<AuditMessage> queue)
+        : base(queue, AuditEntityKind.Cover)
     {
     }
 }
