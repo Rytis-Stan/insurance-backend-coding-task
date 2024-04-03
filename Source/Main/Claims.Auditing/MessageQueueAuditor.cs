@@ -8,12 +8,12 @@ namespace Claims.Auditing;
 public abstract class MessageQueueAuditor : IHttpRequestAuditor
 {
     private readonly ISendingQueue<AuditMessage> _sendingQueue;
+    private readonly AuditEntityKind _entityKind;
 
-    protected abstract AuditEntityKind EntityKind { get; }
-
-    protected MessageQueueAuditor(ISendingQueue<AuditMessage> sendingQueue)
+    protected MessageQueueAuditor(ISendingQueue<AuditMessage> sendingQueue, AuditEntityKind entityKind)
     {
         _sendingQueue = sendingQueue;
+        _entityKind = entityKind;
     }
 
     public void AuditPost(Guid entityId)
@@ -28,7 +28,7 @@ public abstract class MessageQueueAuditor : IHttpRequestAuditor
 
     private void Audit(Guid entityId, HttpRequestType httpRequestType)
     {
-        _sendingQueue.Send(new AuditMessage(EntityKind, entityId, httpRequestType));
+        _sendingQueue.Send(new AuditMessage(_entityKind, entityId, httpRequestType));
     }
 }
 
@@ -187,20 +187,16 @@ public class RabbitMqReceivingQueue<TMessage> : IReceivingQueue<TMessage>
 
 public class MessageQueueClaimAuditor : MessageQueueAuditor, IClaimAuditor
 {
-    protected override AuditEntityKind EntityKind => AuditEntityKind.Claim;
-
     public MessageQueueClaimAuditor(ISendingQueue<AuditMessage> sendingQueue)
-        : base(sendingQueue)
+        : base(sendingQueue, AuditEntityKind.Claim)
     {
     }
 }
 
 public class MessageQueueCoverAuditor : MessageQueueAuditor, ICoverAuditor
 {
-    protected override AuditEntityKind EntityKind => AuditEntityKind.Cover;
-
     public MessageQueueCoverAuditor(ISendingQueue<AuditMessage> sendingQueue)
-        : base(sendingQueue)
+        : base(sendingQueue, AuditEntityKind.Cover)
     {
     }
 }
