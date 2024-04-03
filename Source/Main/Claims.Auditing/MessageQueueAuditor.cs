@@ -45,30 +45,31 @@ public interface IMessageQueue : IDisposable
 
 public class UninitializedRabbitMqMessageQueues : IUninitializedMessageQueues
 {
+    private readonly string _hostName;
     private readonly string _queueName;
 
     public UninitializedRabbitMqMessageQueues()
-        : this("Claims.AuditQueue")
+        : this("localhost", "Claims.AuditQueue")
     {
     }
 
-    private UninitializedRabbitMqMessageQueues(string queueName)
+    private UninitializedRabbitMqMessageQueues(string hostName, string queueName)
     {
+        _hostName = hostName;
         _queueName = queueName;
     }
 
     public IMessageQueue Initialize()
     {
-        var factory = new ConnectionFactory { HostName = "localhost" };
+        var factory = new ConnectionFactory { HostName = _hostName };
         /*using*/
         var connection = factory.CreateConnection();
         /*using*/
         var channel = connection.CreateModel();
 
         // TODO: Move the queue name (and some options???) to the configuration file!
-        const string queueName = "Claims.AuditQueue";
         channel.QueueDeclare(
-            queue: queueName,
+            queue: _queueName,
             durable: false,
             exclusive: false,
             autoDelete: false,
