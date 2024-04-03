@@ -42,21 +42,22 @@ public interface IUninitializedReceivingQueue<out TMessage>
     IReceivingQueue<TMessage> Initialize();
 }
 
-public class UninitializedRabbitMqSendingQueue<TMessage> : RabbitMqMessageQueue<TMessage>, IUninitializedSendingQueue<TMessage>
+public class UninitializedRabbitMqSendingQueue<TMessage>
+    : RabbitMqMessageQueue<ISendingQueue<TMessage>>, IUninitializedSendingQueue<TMessage>
 {
     public UninitializedRabbitMqSendingQueue()
         : base("localhost", "Claims.AuditQueue")
     {
     }
 
-    public ISendingQueue<TMessage> Initialize()
+    protected override ISendingQueue<TMessage> CreateInitializedQueue(
+        IConnection connection, IModel channel, string queueName)
     {
-        var (connection, channel, queueName) = DoInitialize();
         return new RabbitMqSendingQueue<TMessage>(connection, channel, queueName);
     }
 }
 
-public class RabbitMqMessageQueue<TMessage>
+public abstract class RabbitMqMessageQueue<TInitializeQueue>
 {
     private readonly string _hostName;
     private readonly string _queueName;
@@ -67,13 +68,20 @@ public class RabbitMqMessageQueue<TMessage>
         _queueName = queueName;
     }
 
-    protected (IConnection, IModel, string) DoInitialize()
+    public TInitializeQueue Initialize()
     {
         var factory = new ConnectionFactory { HostName = _hostName };
-        /*using*/ var connection = factory.CreateConnection();
-        /*using*/ IModel channel = connection.CreateModel();
+        var connection = factory.CreateConnection();
+        var channel = connection.CreateModel();
+        EnsureQueueConstructed(channel);
+        return CreateInitializedQueue(connection, channel, _queueName);
+    }
 
-        // TODO: Move the queue name (and some options???) to the configuration file!
+    protected abstract TInitializeQueue CreateInitializedQueue(
+        IConnection connection, IModel channel, string queueName);
+
+    private void EnsureQueueConstructed(IModel channel)
+    {
         channel.QueueDeclare(
             queue: _queueName,
             durable: false,
@@ -81,20 +89,20 @@ public class RabbitMqMessageQueue<TMessage>
             autoDelete: false,
             arguments: null
         );
-        return (connection, channel, _queueName);
     }
 }
 
-public class UninitializedRabbitMqReceivingQueue<TMessage> : RabbitMqMessageQueue<TMessage>, IUninitializedReceivingQueue<TMessage>
+public class UninitializedRabbitMqReceivingQueue<TMessage>
+    : RabbitMqMessageQueue<IReceivingQueue<TMessage>>, IUninitializedReceivingQueue<TMessage>
 {
     public UninitializedRabbitMqReceivingQueue()
         : base("localhost", "Claims.AuditQueue")
     {
     }
 
-    public IReceivingQueue<TMessage> Initialize()
+    protected override IReceivingQueue<TMessage> CreateInitializedQueue(
+        IConnection connection, IModel channel, string queueName)
     {
-        var (connection, channel, queueName) = DoInitialize();
         return new RabbitMqReceivingQueue<TMessage>(connection, channel, queueName);
     }
 }
