@@ -157,7 +157,12 @@ public class RabbitMqReceivingQueue<TMessage> : IReceivingQueue<TMessage>
     public void OnReceived(Action<TMessage> action)
     {
         var consumer = new EventingBasicConsumer(_channel);
-        consumer.Received += (_, e) => action(ToMessage(e.Body));
+        consumer.Received += (_, e) =>
+        {
+            var message = ToMessage(e.Body);
+            action(message);
+            _channel.BasicAck(e.DeliveryTag, multiple: false);
+        };
 
         _channel.BasicConsume(
             queue: _queueName,
