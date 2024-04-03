@@ -32,7 +32,7 @@ public abstract class MessageQueueAuditor : IHttpRequestAuditor
     }
 }
 
-public interface IUninitializedMessageQueues
+public interface IUninitializedMessageQueue
 {
     IMessageQueue Initialize();
 }
@@ -43,17 +43,17 @@ public interface IMessageQueue : IDisposable
     IReceivingQueue<AuditMessage> ReceivingQueue();
 }
 
-public class UninitializedRabbitMqMessageQueues : IUninitializedMessageQueues
+public class UninitializedRabbitMqMessageQueue : IUninitializedMessageQueue
 {
     private readonly string _hostName;
     private readonly string _queueName;
 
-    public UninitializedRabbitMqMessageQueues()
+    public UninitializedRabbitMqMessageQueue()
         : this("localhost", "Claims.AuditQueue")
     {
     }
 
-    private UninitializedRabbitMqMessageQueues(string hostName, string queueName)
+    private UninitializedRabbitMqMessageQueue(string hostName, string queueName)
     {
         _hostName = hostName;
         _queueName = queueName;

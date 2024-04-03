@@ -9,7 +9,7 @@ public class Program
     static void Main(string[] args)
     {
         // TODO: Move the queue name (and some options???) to the configuration file!
-        using var messageQueues = new UninitializedRabbitMqMessageQueues().Initialize();
+        using var messageQueues = new UninitializedRabbitMqMessageQueue().Initialize();
 
         Console.WriteLine("Starting to listed to messages.");
 
