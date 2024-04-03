@@ -2,9 +2,9 @@
 
 namespace Claims.Auditing;
 
-public class ClaimAuditor : HttpRequestAuditor<ClaimAudit>, IClaimAuditor
+public class EntityFrameworkClaimAuditor : EntityFrameworkAuditor<ClaimAudit>, IClaimAuditor
 {
-    public ClaimAuditor(AuditContext auditContext, IClock clock)
+    public EntityFrameworkClaimAuditor(AuditContext auditContext, IClock clock)
         : base(auditContext, clock)
     {
     }

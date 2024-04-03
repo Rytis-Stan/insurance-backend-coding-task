@@ -2,12 +2,12 @@
 
 namespace Claims.Auditing;
 
-public abstract class HttpRequestAuditor<TAuditEntry> : IHttpRequestAuditor
+public abstract class EntityFrameworkAuditor<TAuditEntry> : IHttpRequestAuditor
 {
     private readonly AuditContext _auditContext;
     private readonly IClock _clock;
 
-    protected HttpRequestAuditor(AuditContext auditContext, IClock clock)
+    protected EntityFrameworkAuditor(AuditContext auditContext, IClock clock)
     {
         _auditContext = auditContext;
         _clock = clock;

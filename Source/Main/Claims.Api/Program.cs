@@ -111,8 +111,8 @@ public class Program
     private static void AddAuditing(IServiceCollection services, string connectionString)
     {
         services.AddDbContext<AuditContext>(options => options.UseSqlServer(connectionString));
-        services.AddTransient<IClaimAuditor, ClaimAuditor>();
-        services.AddTransient<ICoverAuditor, CoverAuditor>();
+        services.AddTransient<IClaimAuditor, EntityFrameworkClaimAuditor>();
+        services.AddTransient<ICoverAuditor, EntityFrameworkCoverAuditor>();
     }
 
     private static void AddSwagger(IServiceCollection services)
