@@ -20,7 +20,7 @@ public class Program
     private static WebApplication BuildApp(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        var configuration = AppConfiguration.FromConfiguration(builder.Configuration);
+        var configuration = new AppConfiguration(builder.Configuration);
         var (claimsDatabase, auditQueue) = MigratedDatabases(configuration);
         AddServices(builder.Services, claimsDatabase, auditQueue);
         var app = builder.Build();

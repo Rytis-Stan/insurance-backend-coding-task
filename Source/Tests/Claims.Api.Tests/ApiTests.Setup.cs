@@ -57,7 +57,7 @@ public partial class ApiTests
 
     private static CosmosDbConfiguration CosmosDbConfiguration()
     {
-        return AppConfiguration.FromConfiguration(
+        return new AppConfiguration(
             // ReSharper disable once StringLiteralTypo
             new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")

@@ -12,7 +12,7 @@ public class Program
 
     private static AppConfiguration AppConfiguration()
     {
-        return Configuration.AppConfiguration.FromConfiguration(
+        return new AppConfiguration(
             // ReSharper disable once StringLiteralTypo
             new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")

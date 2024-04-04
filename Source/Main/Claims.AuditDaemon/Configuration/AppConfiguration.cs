@@ -8,10 +8,8 @@ public class AppConfiguration
     public string ConnectionString { get; init; }
     public RabbitMqConfiguration RabbitMq { get; init; }
 
-    public static AppConfiguration FromConfiguration(IConfiguration configuration)
+    public AppConfiguration(IConfiguration configuration)
     {
-        var appConfiguration = new AppConfiguration();
-        configuration.Bind(appConfiguration);
-        return appConfiguration;
+        configuration.Bind(this);
     }
 }
