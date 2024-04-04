@@ -18,10 +18,10 @@ public partial class ApiTests : IDisposable
         var damageCost = TestData.RandomInt(10_000);
         var created = TestValueBuilder.UtcDateTime(cover.StartDate);
 
-        var claimsResponse = await ClaimsPostAsync(cover.Id, name, claimType, damageCost, created);
+        var response = await ClaimsPostAsync(cover.Id, name, claimType, damageCost, created);
 
-        claimsResponse.EnsureSuccessStatusCode();
-        var claim = await claimsResponse.ReadContentAsync<ClaimDto>();
+        response.EnsureSuccessStatusCode();
+        var claim = await response.ReadContentAsync<ClaimDto>();
         Assert.NotNull(claim);
         Assert.NotEqual(Guid.Empty, claim.Id);
         Assert.Equal(cover.Id, claim.CoverId);
