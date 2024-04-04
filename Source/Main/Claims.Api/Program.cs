@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using Claims.Api.Configuration;
 using Claims.Application;
 using Claims.Auditing;
+using Claims.Auditing.MessageQueues;
 using Claims.Auditing.MessageQueues.RabbitMq;
 using Claims.Infrastructure;
 using Claims.Persistence.CosmosDb;
@@ -20,17 +21,24 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         var configuration = AppConfiguration.FromConfiguration(builder.Configuration);
-        var claimsDatabase = MigratedDatabases(configuration);
-        AddServices(builder.Services, configuration, claimsDatabase);
+        var (claimsDatabase, auditQueue) = MigratedDatabases(configuration);
+        AddServices(builder.Services, claimsDatabase, auditQueue);
         var app = builder.Build();
         ConfigureApp(app);
         return app;
     }
 
-    private static IClaimsDatabase MigratedDatabases(AppConfiguration configuration)
+    private static (IClaimsDatabase, ISendingQueue<AuditMessage>) MigratedDatabases(AppConfiguration configuration)
     {
         MigrateAuditDatabase(configuration.ConnectionString);
-        return MigrateMainDatabase(configuration.CosmosDb);
+        var auditQueue = InitializeAuditQueue(configuration.RabbitMq);
+        var claimsDatabase = MigrateClaimsDatabase(configuration.CosmosDb);
+        return (claimsDatabase, auditQueue);
+    }
+
+    private static ISendingQueue<AuditMessage> InitializeAuditQueue(RabbitMqConfiguration configuration)
+    {
+        return new InactiveRabbitMqSendingQueue<AuditMessage>(configuration.HostName, configuration.QueueName).Activate();
     }
 
     private static void MigrateAuditDatabase(string connectionString)
@@ -38,7 +46,7 @@ public class Program
         new EntityFrameworkAuditDatabase(connectionString).Migrate();
     }
 
-    private static IClaimsDatabase MigrateMainDatabase(CosmosDbConfiguration configuration)
+    private static IClaimsDatabase MigrateClaimsDatabase(CosmosDbConfiguration configuration)
     {
         var cosmosClient = new CosmosClient(configuration.Account, configuration.Key);
         var database = new ClaimsDatabase(cosmosClient, configuration.DatabaseName, new IdGenerator());
@@ -46,13 +54,13 @@ public class Program
         return database;
     }
 
-    private static void AddServices(IServiceCollection services, AppConfiguration configuration, IClaimsDatabase claimsDatabase)
+    private static void AddServices(IServiceCollection services, IClaimsDatabase claimsDatabase, ISendingQueue<AuditMessage> auditQueue)
     {
         AddControllers(services);
         AddRepositories(services, claimsDatabase);
         AddInfrastructure(services);
         AddDomainServices(services);
-        AddAuditing(services, configuration.RabbitMq);
+        AddAuditing(services, auditQueue);
         AddSwagger(services);
     }
 
@@ -82,11 +90,10 @@ public class Program
         services.AddTransient<IPricingService, PricingService>();
     }
 
-    private static void AddAuditing(IServiceCollection services, RabbitMqConfiguration configuration)
+    private static void AddAuditing(IServiceCollection services, ISendingQueue<AuditMessage> auditQueue)
     {
-        var queue = new InactiveRabbitMqSendingQueue<AuditMessage>(configuration.HostName, configuration.QueueName).Activate();
-        services.AddScoped<IClaimAuditor>(_ => new MessageQueueClaimAuditor(queue));
-        services.AddScoped<ICoverAuditor>(_ => new MessageQueueCoverAuditor(queue));
+        services.AddScoped<IClaimAuditor>(_ => new MessageQueueClaimAuditor(auditQueue));
+        services.AddScoped<ICoverAuditor>(_ => new MessageQueueCoverAuditor(auditQueue));
     }
 
     private static void AddSwagger(IServiceCollection services)
