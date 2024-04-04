@@ -1,5 +1,5 @@
-﻿using Claims.Auditing.PersistenceBased;
-using Claims.Infrastructure;
+﻿using BuildingBlocks.Temporal;
+using Claims.Auditing.PersistenceBased;
 using Microsoft.EntityFrameworkCore;
 
 namespace Claims.Persistence.Auditing;

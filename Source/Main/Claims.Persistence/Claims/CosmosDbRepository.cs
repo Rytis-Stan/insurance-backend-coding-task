@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using Claims.Infrastructure;
 using Microsoft.Azure.Cosmos;
 
 namespace Claims.Persistence.Claims;

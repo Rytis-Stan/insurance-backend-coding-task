@@ -1,11 +1,11 @@
 using System.Text.Json.Serialization;
 using BuildingBlocks.MessageQueues;
 using BuildingBlocks.MessageQueues.RabbitMq;
+using BuildingBlocks.Temporal;
 using Claims.Api.Configuration;
 using Claims.Application;
 using Claims.Auditing;
 using Claims.Auditing.MessageQueueBased;
-using Claims.Infrastructure;
 using Claims.Persistence.Auditing;
 using Claims.Persistence.Claims;
 using Microsoft.Azure.Cosmos;

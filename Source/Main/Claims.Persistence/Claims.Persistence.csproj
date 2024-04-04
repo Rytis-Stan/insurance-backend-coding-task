@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BuildingBlocks.Temporal\BuildingBlocks.Temporal.csproj" />
     <ProjectReference Include="..\Claims.Application\Claims.Application.csproj" />
     <ProjectReference Include="..\Claims.Auditing\Claims.Auditing.csproj" />
     <ProjectReference Include="..\Claims.Domain\Claims.Domain.csproj" />

@@ -1,6 +1,6 @@
-﻿using Claims.Application.Repositories;
+﻿using BuildingBlocks.Temporal;
+using Claims.Application.Repositories;
 using Claims.Domain;
-using Claims.Infrastructure;
 using Claims.Testing;
 using Moq;
 using Xunit;

@@ -1,4 +1,4 @@
-﻿namespace Claims.Infrastructure;
+﻿namespace BuildingBlocks.Temporal;
 
 public class Clock : IClock
 {

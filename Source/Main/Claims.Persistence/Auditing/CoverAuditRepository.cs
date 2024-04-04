@@ -1,6 +1,6 @@
-﻿using Claims.Auditing;
+﻿using BuildingBlocks.Temporal;
+using Claims.Auditing;
 using Claims.Auditing.PersistenceBased;
-using Claims.Infrastructure;
 
 namespace Claims.Persistence.Auditing;
 

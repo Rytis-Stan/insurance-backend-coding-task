@@ -1,6 +1,5 @@
 using Claims.Application.Repositories;
 using Claims.Domain;
-using Claims.Infrastructure;
 using Microsoft.Azure.Cosmos;
 
 namespace Claims.Persistence.Claims;
