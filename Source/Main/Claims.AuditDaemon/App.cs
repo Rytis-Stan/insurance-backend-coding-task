@@ -2,6 +2,7 @@
 using Claims.Auditing;
 using Claims.Auditing.MessageQueues;
 using Claims.Auditing.MessageQueues.RabbitMq;
+using Claims.Persistence.Auditing;
 
 namespace Claims.AuditDaemon;
 

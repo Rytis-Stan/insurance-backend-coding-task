@@ -1,6 +1,7 @@
-﻿using Claims.Infrastructure;
+﻿using Claims.Auditing;
+using Claims.Infrastructure;
 
-namespace Claims.Auditing;
+namespace Claims.Persistence.Auditing;
 
 public abstract class AuditRepository<TAuditEntry> : IAuditRepository
 {

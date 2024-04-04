@@ -1,7 +1,8 @@
-﻿using Claims.Infrastructure;
+﻿using Claims.Auditing;
+using Claims.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
-namespace Claims.Auditing;
+namespace Claims.Persistence.Auditing;
 
 public class EntityFrameworkAuditDatabase : IAuditDatabase
 {
