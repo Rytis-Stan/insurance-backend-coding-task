@@ -1,4 +1,6 @@
-﻿namespace Claims.Auditing;
+﻿using Claims.Auditing;
+
+namespace Claims.Persistence.Auditing;
 
 public interface IAuditDatabase : IDisposable
 {
