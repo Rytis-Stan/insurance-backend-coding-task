@@ -2,8 +2,6 @@
 using Claims.Auditing;
 using Claims.Auditing.MessageQueues;
 using Claims.Auditing.MessageQueues.RabbitMq;
-using Claims.Infrastructure;
-using Microsoft.EntityFrameworkCore;
 
 namespace Claims.AuditDaemon;
 
@@ -29,8 +27,8 @@ public class App
     private void StartListeningToAuditMessages()
     {
         using var messageQueue = ConnectToQueue(_configuration.RabbitMq);
-        using var auditContext = EntityFrameworkAuditDatabase.CreateAuditContext(_configuration.ConnectionString);
-        var auditor = new SwitchingAuditor(auditContext, new Clock());
+        using var auditDatabase = new EntityFrameworkAuditDatabase(_configuration.ConnectionString);
+        var auditor = new SwitchingAuditor(auditDatabase);
         messageQueue.OnReceived(message =>
         {
             Console.WriteLine($"RECEIVED_AT: {DateTime.UtcNow}, MESSAGE: {message}");
@@ -47,11 +45,11 @@ public class App
     {
         private readonly Dictionary<AuditEntityKind, IHttpRequestAuditor> _auditorsByAuditEntityKind;
 
-        public SwitchingAuditor(AuditContext auditContext, IClock clock)
+        public SwitchingAuditor(IAuditDatabase auditDatabase)
             : this(new Dictionary<AuditEntityKind, IHttpRequestAuditor>
             {
-                { AuditEntityKind.Cover, new EntityFrameworkCoverAuditor(auditContext, clock) },
-                { AuditEntityKind.Claim, new EntityFrameworkClaimAuditor(auditContext, clock) }
+                { AuditEntityKind.Cover, new RepositoryBasedCoverAuditor(auditDatabase.CoverAuditRepository) },
+                { AuditEntityKind.Claim, new RepositoryBasedClaimAuditor(auditDatabase.ClaimAuditRepository) }
             })
         {
         }

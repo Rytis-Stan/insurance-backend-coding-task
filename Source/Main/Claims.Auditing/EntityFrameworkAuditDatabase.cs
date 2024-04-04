@@ -1,20 +1,42 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Claims.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace Claims.Auditing;
 
-public class EntityFrameworkAuditDatabase
+public interface IAuditDatabase : IDisposable
 {
-    private readonly string _connectionString;
+    void Migrate();
+    ICoverAuditRepository CoverAuditRepository { get; }
+    IClaimAuditRepository ClaimAuditRepository { get; }
+}
+
+public class EntityFrameworkAuditDatabase : IAuditDatabase
+{
+    private readonly AuditContext _auditContext;
+    private readonly IClock _clock;
+
+    public ICoverAuditRepository CoverAuditRepository => new CoverAuditRepository(_auditContext, _clock);
+    public IClaimAuditRepository ClaimAuditRepository => new ClaimAuditRepository(_auditContext, _clock);
 
     public EntityFrameworkAuditDatabase(string connectionString)
+        : this(CreateAuditContext(connectionString), new Clock())
     {
-        _connectionString = connectionString;
+    }
+
+    private EntityFrameworkAuditDatabase(AuditContext auditContext, IClock clock)
+    {
+        _auditContext = auditContext;
+        _clock = clock;
+    }
+
+    public void Dispose()
+    {
+        _auditContext.Dispose();
     }
 
     public void Migrate()
     {
-        var context = CreateAuditContext(_connectionString);
-        context.Database.Migrate();
+        _auditContext.Database.Migrate();
     }
 
     public static AuditContext CreateAuditContext(string connectionString)
