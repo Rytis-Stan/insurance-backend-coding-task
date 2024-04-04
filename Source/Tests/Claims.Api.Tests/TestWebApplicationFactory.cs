@@ -9,10 +9,15 @@ public class TestWebApplicationFactory<TStartup> : WebApplicationFactory<TStartu
 {
     protected override IHost CreateHost(IHostBuilder builder)
     {
+        OverrideSettings(builder);
+        return base.CreateHost(builder);
+    }
+
+    private static void OverrideSettings(IHostBuilder builder)
+    {
         builder.ConfigureHostConfiguration(
             // ReSharper disable once StringLiteralTypo
             x => x.AddJsonFile("appsettings.json")
         );
-        return base.CreateHost(builder);
     }
 }
