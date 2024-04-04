@@ -1,5 +1,6 @@
 ﻿using Claims.AuditDaemon.Configuration;
 using Claims.Auditing;
+using Claims.Auditing.MessageQueues;
 using Claims.Auditing.MessageQueues.RabbitMq;
 using Claims.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -27,17 +28,25 @@ public class App
 
     private void StartListeningToMessages()
     {
-        using var messageQueue = new InactiveRabbitMqReceivingQueue<AuditMessage>(_configuration.RabbitMq.HostName, _configuration.RabbitMq.QueueName).Activate();
-        var dbContextOptions = new DbContextOptionsBuilder<AuditContext>().UseSqlServer(_configuration.ConnectionString).Options;
-
-        using var auditContext = new AuditContext(dbContextOptions);
-        var clock = new Clock();
-        var switchingAuditor = new SwitchingAuditor(auditContext, clock);
+        using var messageQueue = ConnectToQueue(_configuration.RabbitMq);
+        using var auditContext = CreateAuditContext();
+        var switchingAuditor = new SwitchingAuditor(auditContext, new Clock());
         messageQueue.OnReceived(message =>
         {
             Console.WriteLine($"RECEIVED_AT: {DateTime.UtcNow}, MESSAGE: {message}");
             switchingAuditor.OnMessageReceived(message);
         });
+    }
+
+    private static IReceivingQueue<AuditMessage> ConnectToQueue(RabbitMqConfiguration configuration)
+    {
+        return new InactiveRabbitMqReceivingQueue<AuditMessage>(configuration.HostName, configuration.QueueName).Activate();
+    }
+
+    private AuditContext CreateAuditContext()
+    {
+        var dbContextOptions = new DbContextOptionsBuilder<AuditContext>().UseSqlServer(_configuration.ConnectionString).Options;
+        return new AuditContext(dbContextOptions);
     }
 
     private class SwitchingAuditor
