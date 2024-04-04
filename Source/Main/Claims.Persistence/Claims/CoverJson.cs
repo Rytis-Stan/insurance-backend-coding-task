@@ -1,7 +1,7 @@
 ﻿using Claims.Domain;
 using Newtonsoft.Json;
 
-namespace Claims.Persistence.CosmosDb;
+namespace Claims.Persistence.Claims;
 
 public class CoverJson
 {

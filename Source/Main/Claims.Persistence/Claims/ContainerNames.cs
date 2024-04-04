@@ -1,4 +1,4 @@
-﻿namespace Claims.Persistence.CosmosDb;
+﻿namespace Claims.Persistence.Claims;
 
 internal static class ContainerNames
 {

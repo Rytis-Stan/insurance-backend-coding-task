@@ -19,7 +19,7 @@
     <ProjectReference Include="..\Claims.Application\Claims.Application.csproj" />
     <ProjectReference Include="..\Claims.Auditing\Claims.Auditing.csproj" />
     <ProjectReference Include="..\Claims.Infrastructure\Claims.Infrastructure.csproj" />
-    <ProjectReference Include="..\Claims.Persistence.CosmosDb\Claims.Persistence.CosmosDb.csproj" />
+    <ProjectReference Include="..\Claims.Persistence\Claims.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

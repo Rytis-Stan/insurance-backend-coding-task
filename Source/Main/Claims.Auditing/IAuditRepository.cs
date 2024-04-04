@@ -49,7 +49,7 @@ internal class CoverAuditRepository : AuditRepository<CoverAudit>, ICoverAuditRe
         {
             CoverId = entityId.ToString(),
             HttpRequestType = httpRequestType.ToString(),
-            Created = created,
+            Created = created
         };
     }
 }

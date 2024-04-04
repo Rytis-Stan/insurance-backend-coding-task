@@ -3,7 +3,7 @@ using Claims.Domain;
 using Claims.Infrastructure;
 using Microsoft.Azure.Cosmos;
 
-namespace Claims.Persistence.CosmosDb;
+namespace Claims.Persistence.Claims;
 
 internal class CosmosDbClaimsRepository : CosmosDbRepository<NewClaimInfo, Claim, ClaimJson>, IClaimsRepository
 {

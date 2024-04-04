@@ -1,6 +1,6 @@
 using Claims.Application.Repositories;
 
-namespace Claims.Persistence.CosmosDb;
+namespace Claims.Persistence.Claims;
 
 public interface IClaimsDatabase
 {
