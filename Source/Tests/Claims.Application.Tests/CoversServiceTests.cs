@@ -205,7 +205,7 @@ public class CoversServiceTests
     {
         var id = Guid.NewGuid();
         var cover = RandomCover();
-        StubFindCoverById(id, cover);
+        StubFindCover(id, cover);
 
         var returnedCover = await _coversService.GetCoverAsync(id);
 
@@ -257,7 +257,7 @@ public class CoversServiceTests
         };
     }
 
-    private void StubFindCoverById(Guid id, Cover? coverToReturn)
+    private void StubFindCover(Guid id, Cover? coverToReturn)
     {
         _coversRepositoryMock
             .Setup(x => x.FindByIdAsync(id))

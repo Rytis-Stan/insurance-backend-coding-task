@@ -65,7 +65,7 @@ public class ClaimsServiceTests
         var coverId = Guid.NewGuid();
         var created = TestData.RandomUtcDateTime();
         var request = new CreateClaimRequest(coverId, "anyName", AnyClaimType, AnyDamageCost, created);
-        StubFindCoverById(coverId, null);
+        StubFindCover(coverId, null);
 
         await AssertExtended.ThrowsArgumentExceptionAsync(
             () => _claimsService.CreateClaimAsync(request),
@@ -111,7 +111,7 @@ public class ClaimsServiceTests
         {
             var cover = CreateCoverForPeriod(coverStartDate, coverEndDate);
             var request = new CreateClaimRequest(cover.Id, "anyName", AnyClaimType, AnyDamageCost, claimCreated);
-            StubFindCoverById(cover.Id, cover);
+            StubFindCover(cover.Id, cover);
 
             await AssertExtended.ThrowsArgumentExceptionAsync(
                 () => _claimsService.CreateClaimAsync(request),
@@ -137,7 +137,7 @@ public class ClaimsServiceTests
         {
             var cover = CreateCoverForPeriod(coverStartDate, coverEndDate);
             var request = new CreateClaimRequest(cover.Id, claimName, claimType, claimDamageCost, claimCreated);
-            StubFindCoverById(cover.Id, cover);
+            StubFindCover(cover.Id, cover);
     
             await _claimsService.CreateClaimAsync(request);
     
@@ -150,7 +150,7 @@ public class ClaimsServiceTests
     {
         var id = Guid.NewGuid();
         var claim = RandomClaim();
-        StubFindClaimById(id, claim);
+        StubFindClaim(id, claim);
 
         var returnedClaim = await _claimsService.GetClaimByIdAsync(id);
 
@@ -202,11 +202,11 @@ public class ClaimsServiceTests
         };
     }
 
-    private void StubFindClaimById(Guid id, Claim claim)
+    private void StubFindClaim(Guid id, Claim claimToReturn)
     {
         _claimsRepositoryMock
             .Setup(x => x.FindByIdAsync(id))
-            .ReturnsAsync(claim);
+            .ReturnsAsync(claimToReturn);
     }
 
     private void StubGetAllClaims(IEnumerable<Claim> claimsToReturn)
@@ -216,11 +216,11 @@ public class ClaimsServiceTests
             .ReturnsAsync(claimsToReturn);
     }
 
-    private void StubFindCoverById(Guid id, Cover? cover)
+    private void StubFindCover(Guid id, Cover? coverToReturn)
     {
         _coversRepositoryMock
             .Setup(x => x.FindByIdAsync(id))
-            .ReturnsAsync(cover);
+            .ReturnsAsync(coverToReturn);
     }
 
     private void StubDeleteClaim(Guid id, Claim? deletedClaimToReturn)
