@@ -19,37 +19,37 @@ public class Program
     private static WebApplication BuildApp(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        AddServices(builder);
+        var configuration = AppConfiguration.FromConfiguration(builder.Configuration);
+        var claimsDatabase = MigratedDatabases(configuration);
+        AddServices(builder.Services, configuration, claimsDatabase);
         var app = builder.Build();
         ConfigureApp(app);
-
-        // TODO: Finish implementing queues for auditing.
-        //InitializeMessageQueues();
-
         return app;
     }
 
-    private static void InitializeMessageQueues(RabbitMqConfiguration configuration)
-    {
-        var queue = new InactiveRabbitMqSendingQueue<AuditMessage>(configuration.HostName, configuration.QueueName).Activate();
-        // Send some experimental messages!
-        for (int i = 0; i < 10; i++)
-        {
-            queue.Send(new AuditMessage(AuditEntityKind.Claim, Guid.NewGuid(), HttpRequestType.Post));
-        }
-    }
-
-    private static void AddServices(WebApplicationBuilder builder)
-    {
-        AddServices(builder.Services, AppConfiguration.FromConfiguration(builder.Configuration));
-    }
-
-    private static void AddServices(IServiceCollection services, AppConfiguration configuration)
+    private static IClaimsDatabase MigratedDatabases(AppConfiguration configuration)
     {
         MigrateAuditDatabase(configuration.ConnectionString);
+        return MigrateMainDatabase(configuration.CosmosDb);
+    }
 
+    private static void MigrateAuditDatabase(string connectionString)
+    {
+        new EntityFrameworkAuditDatabase(connectionString).Migrate();
+    }
+
+    private static IClaimsDatabase MigrateMainDatabase(CosmosDbConfiguration configuration)
+    {
+        var cosmosClient = new CosmosClient(configuration.Account, configuration.Key);
+        var database = new ClaimsDatabase(cosmosClient, configuration.DatabaseName, new IdGenerator());
+        database.InitializeAsync().GetAwaiter().GetResult();
+        return database;
+    }
+
+    private static void AddServices(IServiceCollection services, AppConfiguration configuration, IClaimsDatabase claimsDatabase)
+    {
         AddControllers(services);
-        AddRepositories(services, InitializeCosmosDb(configuration.CosmosDb));
+        AddRepositories(services, claimsDatabase);
         AddInfrastructure(services);
         AddDomainServices(services);
         AddAuditing(services, configuration.RabbitMq);
@@ -73,14 +73,6 @@ public class Program
     {
         services.AddScoped(_ => database.ClaimsRepository);
         services.AddScoped(_ => database.CoversRepository);
-    }
-
-    private static ClaimsDatabase InitializeCosmosDb(CosmosDbConfiguration configuration)
-    {
-        var cosmosClient = new CosmosClient(configuration.Account, configuration.Key);
-        var database = new ClaimsDatabase(cosmosClient, configuration.DatabaseName, new IdGenerator());
-        database.InitializeAsync().GetAwaiter().GetResult();
-        return database;
     }
 
     private static void AddDomainServices(IServiceCollection services)
@@ -114,11 +106,5 @@ public class Program
         app.UseHttpsRedirection();
         app.UseAuthorization();
         app.MapControllers();
-    }
-    
-    private static void MigrateAuditDatabase(string connectionString)
-    {
-        var auditDatabase = new EntityFrameworkAuditDatabase(connectionString);
-        auditDatabase.Migrate();
     }
 }
