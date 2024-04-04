@@ -17,7 +17,7 @@ public class ClaimsService : IClaimsService
     public async Task<Claim> CreateClaimAsync(CreateClaimRequest request)
     {
         await Validate(request);
-        return await _claimsRepository.AddAsync(ToNewClaimInfo(request));
+        return await _claimsRepository.CreateAsync(ToNewClaimInfo(request));
     }
 
     private async Task Validate(CreateClaimRequest request)

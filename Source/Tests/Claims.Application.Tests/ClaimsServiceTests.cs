@@ -141,7 +141,7 @@ public class ClaimsServiceTests
     
             await _claimsService.CreateClaimAsync(request);
     
-            _claimsRepositoryMock.Verify(x => x.AddAsync(new NewClaimInfo(cover.Id, claimName, claimType, claimDamageCost, claimCreated)));
+            _claimsRepositoryMock.Verify(x => x.CreateAsync(new NewClaimInfo(cover.Id, claimName, claimType, claimDamageCost, claimCreated)));
         }
     }
 

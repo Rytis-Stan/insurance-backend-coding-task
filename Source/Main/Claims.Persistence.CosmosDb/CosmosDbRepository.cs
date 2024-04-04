@@ -19,7 +19,7 @@ public abstract class CosmosDbRepository<TNewObjectInfo, TObject, TJson>
         _idGenerator = idGenerator;
     }
 
-    public async Task<TObject> AddAsync(TNewObjectInfo newObject)
+    public async Task<TObject> CreateAsync(TNewObjectInfo newObject)
     {
         var id = _idGenerator.NewId().ToString();
         var json = ToNewJson(id, newObject);

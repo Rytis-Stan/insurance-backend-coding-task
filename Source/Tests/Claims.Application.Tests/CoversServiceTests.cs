@@ -196,7 +196,7 @@ public class CoversServiceTests
 
             await _coversService.CreateCoverAsync(request);
 
-            _coversRepositoryMock.Verify(x => x.AddAsync(new NewCoverInfo(startDate, endDate, coverType, premium)));
+            _coversRepositoryMock.Verify(x => x.CreateAsync(new NewCoverInfo(startDate, endDate, coverType, premium)));
         }
     }
 

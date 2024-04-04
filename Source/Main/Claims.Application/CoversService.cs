@@ -20,7 +20,7 @@ public class CoversService : ICoversService
     public async Task<Cover> CreateCoverAsync(CreateCoverRequest request)
     {
         Validate(request);
-        return await _coversRepository.AddAsync(ToNewCoverInfo(request));
+        return await _coversRepository.CreateAsync(ToNewCoverInfo(request));
     }
 
     private void Validate(CreateCoverRequest request)
