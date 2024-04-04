@@ -4,9 +4,9 @@ using Microsoft.Azure.Cosmos;
 
 namespace Claims.Persistence.CosmosDb;
 
-public abstract class CosmosDbRepository<T, TNewItemInfo, TJson>
-    where T : class
-    where TNewItemInfo : class
+public abstract class CosmosDbRepository<TObject, TNewObjectInfo, TJson>
+    where TObject : class
+    where TNewObjectInfo : class
     where TJson : class
 {
     private readonly Container _container;
@@ -19,14 +19,14 @@ public abstract class CosmosDbRepository<T, TNewItemInfo, TJson>
         _idGenerator = idGenerator;
     }
 
-    public async Task<T> AddAsync(TNewItemInfo item)
+    public async Task<TObject> AddAsync(TNewObjectInfo item)
     {
         var id = _idGenerator.NewId().ToString();
         var json = ToNewJson(id, item);
         return ToItem(await _container.CreateItemAsync(json, new PartitionKey(id)));
     }
 
-    public async Task<T?> FindByIdAsync(Guid id)
+    public async Task<TObject?> FindByIdAsync(Guid id)
     {
         try
         {
@@ -39,10 +39,10 @@ public abstract class CosmosDbRepository<T, TNewItemInfo, TJson>
         }
     }
 
-    public async Task<IEnumerable<T>> GetAllAsync()
+    public async Task<IEnumerable<TObject>> GetAllAsync()
     {
         var query = _container.GetItemQueryIterator<TJson>(new QueryDefinition("SELECT * FROM c"));
-        var results = new List<T>();
+        var results = new List<TObject>();
         while (query.HasMoreResults)
         {
             var response = await query.ReadNextAsync();
@@ -51,12 +51,12 @@ public abstract class CosmosDbRepository<T, TNewItemInfo, TJson>
         return results;
     }
 
-    public async Task<T?> DeleteAsync(Guid id)
+    public async Task<TObject?> DeleteAsync(Guid id)
     {
         return await DeleteAsync(id.ToString());
     }
 
-    private async Task<T?> DeleteAsync(string id)
+    private async Task<TObject?> DeleteAsync(string id)
     {
         var batch = _container.CreateTransactionalBatch(new PartitionKey(id));
         batch.ReadItem(id);
@@ -69,6 +69,6 @@ public abstract class CosmosDbRepository<T, TNewItemInfo, TJson>
             : null;
     }
 
-    protected abstract TJson ToNewJson(string id, TNewItemInfo item);
-    protected abstract T ToItem(TJson json);
+    protected abstract TJson ToNewJson(string id, TNewObjectInfo item);
+    protected abstract TObject ToItem(TJson json);
 }
