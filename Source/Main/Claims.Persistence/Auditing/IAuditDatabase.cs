@@ -1,4 +1,4 @@
-﻿using Claims.Auditing;
+﻿using Claims.Auditing.PersistenceBased;
 
 namespace Claims.Persistence.Auditing;
 

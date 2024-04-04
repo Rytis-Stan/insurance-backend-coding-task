@@ -1,4 +1,4 @@
-﻿using Claims.Auditing;
+﻿using Claims.Auditing.PersistenceBased;
 using Claims.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
