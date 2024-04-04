@@ -6,7 +6,6 @@ using Claims.Auditing.MessageQueues.RabbitMq;
 using Claims.Infrastructure;
 using Claims.Persistence.CosmosDb;
 using Microsoft.Azure.Cosmos;
-using Microsoft.EntityFrameworkCore;
 
 namespace Claims.Api;
 
@@ -23,7 +22,6 @@ public class Program
         AddServices(builder);
         var app = builder.Build();
         ConfigureApp(app);
-        MigrateDatabase(app);
 
         // TODO: Finish implementing queues for auditing.
         //InitializeMessageQueues();
@@ -48,6 +46,8 @@ public class Program
 
     private static void AddServices(IServiceCollection services, AppConfiguration configuration)
     {
+        MigrateAuditDatabase(configuration.ConnectionString);
+
         AddControllers(services);
         AddRepositories(services, InitializeCosmosDb(configuration.CosmosDb));
         AddInfrastructure(services);
@@ -116,10 +116,9 @@ public class Program
         app.MapControllers();
     }
     
-    private static void MigrateDatabase(WebApplication app)
+    private static void MigrateAuditDatabase(string connectionString)
     {
-        using var scope = app.Services.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<AuditContext>();
-        context.Database.Migrate();
+        var auditDatabase = new EntityFrameworkAuditDatabase(connectionString);
+        auditDatabase.Migrate();
     }
 }

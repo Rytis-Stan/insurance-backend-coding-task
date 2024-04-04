@@ -29,7 +29,7 @@ public class App
     private void StartListeningToAuditMessages()
     {
         using var messageQueue = ConnectToQueue(_configuration.RabbitMq);
-        using var auditContext = CreateAuditContext(_configuration.ConnectionString);
+        using var auditContext = EntityFrameworkAuditDatabase.CreateAuditContext(_configuration.ConnectionString);
         var auditor = new SwitchingAuditor(auditContext, new Clock());
         messageQueue.OnReceived(message =>
         {
@@ -41,12 +41,6 @@ public class App
     private static IReceivingQueue<AuditMessage> ConnectToQueue(RabbitMqConfiguration configuration)
     {
         return new InactiveRabbitMqReceivingQueue<AuditMessage>(configuration.HostName, configuration.QueueName).Activate();
-    }
-
-    private static AuditContext CreateAuditContext(string connectionString)
-    {
-        var dbContextOptions = new DbContextOptionsBuilder<AuditContext>().UseSqlServer(connectionString).Options;
-        return new AuditContext(dbContextOptions);
     }
 
     private class SwitchingAuditor
