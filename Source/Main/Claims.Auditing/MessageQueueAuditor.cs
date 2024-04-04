@@ -28,21 +28,3 @@ public abstract class MessageQueueAuditor : IHttpRequestAuditor
         _queue.Send(new AuditMessage(_entityKind, entityId, httpRequestType));
     }
 }
-
-public class MessageQueueClaimAuditor : MessageQueueAuditor, IClaimAuditor
-{
-    public MessageQueueClaimAuditor(ISendingQueue<AuditMessage> queue)
-        : base(queue, AuditEntityKind.Claim)
-    {
-    }
-}
-
-public class MessageQueueCoverAuditor : MessageQueueAuditor, ICoverAuditor
-{
-    public MessageQueueCoverAuditor(ISendingQueue<AuditMessage> queue)
-        : base(queue, AuditEntityKind.Cover)
-    {
-    }
-}
-
-public record AuditMessage(AuditEntityKind EntityType, Guid EntityId, HttpRequestType HttpRequestType);
