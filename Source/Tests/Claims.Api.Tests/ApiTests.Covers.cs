@@ -78,29 +78,4 @@ public partial class ApiTests
         var premium = await response.ReadContentAsync<decimal>();
         Assert.Equal(expectedPremium, premium);
     }
-
-    private Task<HttpResponseMessage> CoversPostAsync(DateOnly startDate, DateOnly endDate, CoverType coverType)
-    {
-        return _client.PostAsync("/Covers", new CreateCoverRequestDto(startDate, endDate, coverType));
-    }
-
-    private Task<HttpResponseMessage> CoversGetAsync()
-    {
-        return _client.GetAsync("/Covers");
-    }
-
-    private Task<HttpResponseMessage> CoversGetAsync(Guid id)
-    {
-        return _client.GetAsync($"/Covers/{id}");
-    }
-
-    private Task<HttpResponseMessage> CoversDeleteAsync(Guid id)
-    {
-        return _client.DeleteAsync($"/Covers/{id}");
-    }
-
-    private Task<HttpResponseMessage> CoversPremiumGetAsync(string startDate, string endDate, CoverType coverType)
-    {
-        return _client.GetAsync($"/Covers/Premium/?startDate={startDate}&endDate={endDate}&coverType={coverType}");
-    }
 }

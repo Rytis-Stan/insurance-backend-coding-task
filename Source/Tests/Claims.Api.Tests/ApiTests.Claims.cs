@@ -69,24 +69,4 @@ public partial class ApiTests : IDisposable
 
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
-
-    private Task<HttpResponseMessage> ClaimsPostAsync(Guid coverId, string name, ClaimType claimType, int damageCost, DateTime created)
-    {
-        return _client.PostAsync("/Claims", new CreateClaimRequestDto(coverId, name, claimType, damageCost, created));
-    }
-
-    private Task<HttpResponseMessage> ClaimsGetAsync()
-    {
-        return _client.GetAsync("/Claims");
-    }
-
-    private Task<HttpResponseMessage> ClaimsGetAsync(Guid id)
-    {
-        return _client.GetAsync($"/Claims/{id}");
-    }
-
-    private Task<HttpResponseMessage> ClaimsDeleteAsync(Guid id)
-    {
-        return _client.DeleteAsync($"/Claims/{id}");
-    }
 }

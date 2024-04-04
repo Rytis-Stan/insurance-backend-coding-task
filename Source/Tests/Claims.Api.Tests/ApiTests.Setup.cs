@@ -5,6 +5,7 @@ using System.Net;
 
 namespace Claims.Api.Tests;
 
+// ReSharper disable once UnusedMember.Global
 public partial class ApiTests
 {
     private readonly HttpClient _client;
