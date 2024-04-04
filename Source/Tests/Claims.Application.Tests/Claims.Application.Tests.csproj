@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Main\BuildingBlocks.Temporal\BuildingBlocks.Temporal.csproj" />
     <ProjectReference Include="..\..\Main\Claims.Application\Claims.Application.csproj" />
     <ProjectReference Include="..\Claims.Testing\Claims.Testing.csproj" />
   </ItemGroup>
