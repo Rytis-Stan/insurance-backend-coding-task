@@ -69,6 +69,6 @@ public class CoversService : ICoversService
 
     public async Task<Cover?> DeleteCoverAsync(Guid id)
     {
-        return await _coversRepository.DeleteAsync(id);
+        return await _coversRepository.DeleteByIdAsync(id);
     }
 }

@@ -64,6 +64,6 @@ public class ClaimsService : IClaimsService
 
     public async Task<Claim?> DeleteClaimAsync(Guid id)
     {
-        return await _claimsRepository.DeleteAsync(id);
+        return await _claimsRepository.DeleteByIdAsync(id);
     }
 }

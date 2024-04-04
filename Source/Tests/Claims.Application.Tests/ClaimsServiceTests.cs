@@ -175,7 +175,7 @@ public class ClaimsServiceTests
 
         await _claimsService.DeleteClaimAsync(id);
 
-        _claimsRepositoryMock.Verify(x => x.DeleteAsync(id));
+        _claimsRepositoryMock.Verify(x => x.DeleteByIdAsync(id));
     }
 
     [Fact]
@@ -226,7 +226,7 @@ public class ClaimsServiceTests
     private void StubDeleteClaim(Guid id, Claim? deletedClaimToReturn)
     {
         _claimsRepositoryMock
-            .Setup(x => x.DeleteAsync(id))
+            .Setup(x => x.DeleteByIdAsync(id))
             .ReturnsAsync(deletedClaimToReturn);
     }
 

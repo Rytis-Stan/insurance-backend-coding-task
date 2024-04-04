@@ -19,10 +19,10 @@ public abstract class CosmosDbRepository<TNewObjectInfo, TObject, TJson>
         _idGenerator = idGenerator;
     }
 
-    public async Task<TObject> AddAsync(TNewObjectInfo item)
+    public async Task<TObject> AddAsync(TNewObjectInfo newObject)
     {
         var id = _idGenerator.NewId().ToString();
-        var json = ToNewJson(id, item);
+        var json = ToNewJson(id, newObject);
         return ToItem(await _container.CreateItemAsync(json, new PartitionKey(id)));
     }
 
@@ -51,12 +51,12 @@ public abstract class CosmosDbRepository<TNewObjectInfo, TObject, TJson>
         return results;
     }
 
-    public async Task<TObject?> DeleteAsync(Guid id)
+    public async Task<TObject?> DeleteByIdAsync(Guid id)
     {
-        return await DeleteAsync(id.ToString());
+        return await DeleteByIdAsync(id.ToString());
     }
 
-    private async Task<TObject?> DeleteAsync(string id)
+    private async Task<TObject?> DeleteByIdAsync(string id)
     {
         var batch = _container.CreateTransactionalBatch(new PartitionKey(id));
         batch.ReadItem(id);

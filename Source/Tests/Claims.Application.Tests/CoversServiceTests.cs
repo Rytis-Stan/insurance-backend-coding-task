@@ -230,7 +230,7 @@ public class CoversServiceTests
 
         await _coversService.DeleteCoverAsync(id);
 
-        _coversRepositoryMock.Verify(x => x.DeleteAsync(id));
+        _coversRepositoryMock.Verify(x => x.DeleteByIdAsync(id));
     }
 
     [Fact]
@@ -274,7 +274,7 @@ public class CoversServiceTests
     private void StubDeleteCover(Guid id, Cover? deletedCoverToReturn)
     {
         _coversRepositoryMock
-            .Setup(x => x.DeleteAsync(id))
+            .Setup(x => x.DeleteByIdAsync(id))
             .ReturnsAsync(deletedCoverToReturn);
     }
 
