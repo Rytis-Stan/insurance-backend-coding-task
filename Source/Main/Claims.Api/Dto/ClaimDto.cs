@@ -1,12 +1,10 @@
-﻿using Claims.Domain;
-
-namespace Claims.Api.Dto;
+﻿namespace Claims.Api.Dto;
 
 public record ClaimDto(
     Guid Id,
     Guid CoverId,
     DateTime Created,
     string Name,
-    ClaimType Type,
+    ClaimTypeDto Type,
     decimal DamageCost
 );

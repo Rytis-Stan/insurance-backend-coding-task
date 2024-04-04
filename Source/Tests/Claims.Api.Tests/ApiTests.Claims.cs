@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using Claims.Api.Dto;
-using Claims.Domain;
 using Claims.Testing;
 using Xunit;
 
@@ -14,7 +13,7 @@ public partial class ApiTests : IDisposable
         var cover = (await CreateRandomCover())!;
 
         var name = TestData.RandomString("name");
-        var claimType = TestData.RandomEnum<ClaimType>();
+        var claimType = TestData.RandomEnum<ClaimTypeDto>();
         var damageCost = TestData.RandomInt(10_000);
         var created = TestValueBuilder.UtcDateTime(cover.StartDate);
 
@@ -69,7 +68,7 @@ public partial class ApiTests : IDisposable
         var startDate = DateOnly.FromDateTime(utcNow).AddDays(TestData.RandomInt(1, 100));
         var periodDurationInDays = 200;
         var endDate = startDate.AddDays(TestData.RandomInt(periodDurationInDays - 1));
-        var coverType = TestData.RandomEnum<CoverType>();
+        var coverType = TestData.RandomEnum<CoverTypeDto>();
         var response = await CoversPostAsync(startDate, endDate, coverType);
         response.EnsureSuccessStatusCode();
         return await response.ReadContentAsync<CoverDto>();

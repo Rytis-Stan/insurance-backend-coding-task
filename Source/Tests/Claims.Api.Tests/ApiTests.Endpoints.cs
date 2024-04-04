@@ -1,5 +1,4 @@
 ﻿using Claims.Api.Dto;
-using Claims.Domain;
 
 namespace Claims.Api.Tests;
 
@@ -14,7 +13,7 @@ namespace Claims.Api.Tests;
 // ReSharper disable once UnusedMember.Global
 public partial class ApiTests
 {
-    private Task<HttpResponseMessage> CoversPostAsync(DateOnly startDate, DateOnly endDate, CoverType coverType)
+    private Task<HttpResponseMessage> CoversPostAsync(DateOnly startDate, DateOnly endDate, CoverTypeDto coverType)
     {
         return _client.PostAsync("/Covers", new CreateCoverRequestDto(startDate, endDate, coverType));
     }
@@ -34,12 +33,12 @@ public partial class ApiTests
         return _client.DeleteAsync($"/Covers/{id}");
     }
 
-    private Task<HttpResponseMessage> CoversPremiumGetAsync(string startDate, string endDate, CoverType coverType)
+    private Task<HttpResponseMessage> CoversPremiumGetAsync(string startDate, string endDate, CoverTypeDto coverType)
     {
         return _client.GetAsync($"/Covers/Premium/?startDate={startDate}&endDate={endDate}&coverType={coverType}");
     }
 
-    private Task<HttpResponseMessage> ClaimsPostAsync(Guid coverId, string name, ClaimType claimType, int damageCost, DateTime created)
+    private Task<HttpResponseMessage> ClaimsPostAsync(Guid coverId, string name, ClaimTypeDto claimType, int damageCost, DateTime created)
     {
         return _client.PostAsync("/Claims", new CreateClaimRequestDto(coverId, name, claimType, damageCost, created));
     }

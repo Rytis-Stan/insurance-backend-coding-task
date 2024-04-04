@@ -59,15 +59,41 @@ public class CoversController : ControllerBase
         return Ok(ToDto(deletedCover));
     }
 
-    private static CreateCoverRequest ToDomainRequest(CreateCoverRequestDto request)
+    private static CreateCoverRequest ToDomainRequest(CreateCoverRequestDto source)
     {
-        return new CreateCoverRequest(request.StartDate, request.EndDate, request.Type);
+        return new CreateCoverRequest(source.StartDate, source.EndDate, ToDomainEnum(source.Type));
     }
 
-    private static CoverDto? ToDto(Cover? cover)
+    private static CoverDto? ToDto(Cover? source)
     {
-        return cover != null
-            ? new CoverDto(cover.Id, cover.StartDate, cover.EndDate, cover.Type, cover.Premium)
+        return source != null
+            ? new CoverDto(source.Id, source.StartDate, source.EndDate, ToDtoEnum(source.Type), source.Premium)
             : null;
+    }
+
+    private static CoverType ToDomainEnum(CoverTypeDto source)
+    {
+        return source switch
+        {
+            CoverTypeDto.Yacht => CoverType.Yacht,
+            CoverTypeDto.PassengerShip => CoverType.PassengerShip,
+            CoverTypeDto.ContainerShip => CoverType.ContainerShip,
+            CoverTypeDto.BulkCarrier => CoverType.BulkCarrier,
+            CoverTypeDto.Tanker => CoverType.Tanker,
+            _ => throw new ArgumentOutOfRangeException(nameof(source))
+        };
+    }
+
+    private static CoverTypeDto ToDtoEnum(CoverType source)
+    {
+        return source switch
+        {
+            CoverType.Yacht => CoverTypeDto.Yacht,
+            CoverType.PassengerShip => CoverTypeDto.PassengerShip,
+            CoverType.ContainerShip => CoverTypeDto.ContainerShip,
+            CoverType.BulkCarrier => CoverTypeDto.BulkCarrier,
+            CoverType.Tanker => CoverTypeDto.Tanker,
+            _ => throw new ArgumentOutOfRangeException(nameof(source), source, null)
+        };
     }
 }

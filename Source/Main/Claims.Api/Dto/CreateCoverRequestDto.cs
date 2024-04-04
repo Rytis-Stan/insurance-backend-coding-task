@@ -1,9 +1,16 @@
-﻿using Claims.Domain;
-
-namespace Claims.Api.Dto;
+﻿namespace Claims.Api.Dto;
 
 public record CreateCoverRequestDto(
     DateOnly StartDate,
     DateOnly EndDate,
-    CoverType Type
+    CoverTypeDto Type
 );
+
+public enum CoverTypeDto
+{
+    Yacht,
+    PassengerShip,
+    ContainerShip,
+    BulkCarrier,
+    Tanker
+}

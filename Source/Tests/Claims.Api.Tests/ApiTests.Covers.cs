@@ -9,10 +9,10 @@ namespace Claims.Api.Tests;
 public partial class ApiTests
 {
     [Theory]
-    [InlineData(1, CoverType.BulkCarrier, 1625.00)]
-    [InlineData(179, CoverType.Tanker, 330037.50)]
-    [InlineData(182, CoverType.Yacht, 239717.50)]
-    public async Task CoversPostReturnsNewlyCreatedCover(int periodDurationInDays, CoverType coverType, decimal expectedPremium)
+    [InlineData(1, CoverTypeDto.BulkCarrier, 1625.00)]
+    [InlineData(179, CoverTypeDto.Tanker, 330037.50)]
+    [InlineData(182, CoverTypeDto.Yacht, 239717.50)]
+    public async Task CoversPostReturnsNewlyCreatedCover(int periodDurationInDays, CoverTypeDto coverType, decimal expectedPremium)
     {
         var utcNow = DateTime.UtcNow;
         // NOTE: Start and end date should start at least 1 day after UTC Now to avoid the
@@ -66,11 +66,11 @@ public partial class ApiTests
     }
 
     [Theory]
-    [InlineData("2001-01-01", "2001-01-01", CoverType.Yacht, 1375.00)]
-    [InlineData("2024-03-02", "2024-03-31", CoverType.ContainerShip, 48750)]
-    [InlineData("1995-06-05", "1995-12-04", CoverType.Tanker, 337331.25)]
+    [InlineData("2001-01-01", "2001-01-01", CoverTypeDto.Yacht, 1375.00)]
+    [InlineData("2024-03-02", "2024-03-31", CoverTypeDto.ContainerShip, 48750)]
+    [InlineData("1995-06-05", "1995-12-04", CoverTypeDto.Tanker, 337331.25)]
     public async Task CoversPremiumGetReturnsCalculatedPremiumForGivenPeriodBasedOnCoverType(
-        string startDate, string endDate, CoverType coverType, decimal expectedPremium)
+        string startDate, string endDate, CoverTypeDto coverType, decimal expectedPremium)
     {
         var response = await CoversPremiumGetAsync(startDate, endDate, coverType);
 
