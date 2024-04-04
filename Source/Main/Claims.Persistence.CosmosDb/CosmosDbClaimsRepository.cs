@@ -5,7 +5,7 @@ using Microsoft.Azure.Cosmos;
 
 namespace Claims.Persistence.CosmosDb;
 
-internal class CosmosDbClaimsRepository : CosmosDbRepository<Claim, NewClaimInfo, ClaimJson>, IClaimsRepository
+internal class CosmosDbClaimsRepository : CosmosDbRepository<NewClaimInfo, Claim, ClaimJson>, IClaimsRepository
 {
     public CosmosDbClaimsRepository(CosmosClient dbClient, string databaseName, IIdGenerator idGenerator)
         : base(dbClient, databaseName, ContainerNames.Claim, idGenerator)

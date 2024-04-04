@@ -4,9 +4,9 @@ using Microsoft.Azure.Cosmos;
 
 namespace Claims.Persistence.CosmosDb;
 
-public abstract class CosmosDbRepository<TObject, TNewObjectInfo, TJson>
-    where TObject : class
+public abstract class CosmosDbRepository<TNewObjectInfo, TObject, TJson>
     where TNewObjectInfo : class
+    where TObject : class
     where TJson : class
 {
     private readonly Container _container;
