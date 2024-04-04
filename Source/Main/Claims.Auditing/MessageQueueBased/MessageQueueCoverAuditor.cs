@@ -1,4 +1,4 @@
-﻿using Claims.Auditing.MessageQueues;
+﻿using BuildingBlocks.MessageQueues;
 
 namespace Claims.Auditing.MessageQueueBased;
 

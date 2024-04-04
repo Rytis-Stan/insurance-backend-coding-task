@@ -2,7 +2,7 @@
 using System.Text.Json;
 using RabbitMQ.Client;
 
-namespace Claims.Auditing.MessageQueues.RabbitMq;
+namespace BuildingBlocks.MessageQueues.RabbitMq;
 
 public class RabbitMqSendingQueue<TMessage> : RabbitMqMessageQueue, ISendingQueue<TMessage>
 {

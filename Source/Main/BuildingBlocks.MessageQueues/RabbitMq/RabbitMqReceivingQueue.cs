@@ -3,7 +3,7 @@ using System.Text.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-namespace Claims.Auditing.MessageQueues.RabbitMq;
+namespace BuildingBlocks.MessageQueues.RabbitMq;
 
 public class RabbitMqReceivingQueue<TMessage> : RabbitMqMessageQueue, IReceivingQueue<TMessage>
 {

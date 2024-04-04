@@ -1,8 +1,8 @@
-﻿using Claims.AuditDaemon.Configuration;
+﻿using BuildingBlocks.MessageQueues;
+using BuildingBlocks.MessageQueues.RabbitMq;
+using Claims.AuditDaemon.Configuration;
 using Claims.Auditing;
 using Claims.Auditing.MessageQueueBased;
-using Claims.Auditing.MessageQueues;
-using Claims.Auditing.MessageQueues.RabbitMq;
 using Claims.Auditing.PersistenceBased;
 using Claims.Persistence.Auditing;
 

@@ -1,4 +1,4 @@
-﻿namespace Claims.Auditing.MessageQueues;
+﻿namespace BuildingBlocks.MessageQueues;
 
 public interface IReceivingQueue<out TMessage> : IDisposable
 {

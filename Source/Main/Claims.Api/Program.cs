@@ -1,10 +1,10 @@
 using System.Text.Json.Serialization;
+using BuildingBlocks.MessageQueues;
+using BuildingBlocks.MessageQueues.RabbitMq;
 using Claims.Api.Configuration;
 using Claims.Application;
 using Claims.Auditing;
 using Claims.Auditing.MessageQueueBased;
-using Claims.Auditing.MessageQueues;
-using Claims.Auditing.MessageQueues.RabbitMq;
 using Claims.Infrastructure;
 using Claims.Persistence.Auditing;
 using Claims.Persistence.Claims;

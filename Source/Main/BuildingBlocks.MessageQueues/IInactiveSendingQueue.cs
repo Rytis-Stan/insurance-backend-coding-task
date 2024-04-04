@@ -1,4 +1,4 @@
-﻿namespace Claims.Auditing.MessageQueues;
+﻿namespace BuildingBlocks.MessageQueues;
 
 public interface IInactiveSendingQueue<in TMessage>
 {

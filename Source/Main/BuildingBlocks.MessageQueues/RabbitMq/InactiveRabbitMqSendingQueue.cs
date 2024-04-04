@@ -1,6 +1,6 @@
 ﻿using RabbitMQ.Client;
 
-namespace Claims.Auditing.MessageQueues.RabbitMq;
+namespace BuildingBlocks.MessageQueues.RabbitMq;
 
 public class InactiveRabbitMqSendingQueue<TMessage>
     : InactiveRabbitMqMessageQueue<ISendingQueue<TMessage>>, IInactiveSendingQueue<TMessage>
