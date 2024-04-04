@@ -1,6 +1,6 @@
 ﻿using Claims.Auditing.MessageQueues;
 
-namespace Claims.Auditing;
+namespace Claims.Auditing.MessageQueueBased;
 
 public class MessageQueueClaimAuditor : MessageQueueAuditor, IClaimAuditor
 {

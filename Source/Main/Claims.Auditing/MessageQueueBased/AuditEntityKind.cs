@@ -1,4 +1,4 @@
-﻿namespace Claims.Auditing;
+﻿namespace Claims.Auditing.MessageQueueBased;
 
 public enum AuditEntityKind
 {

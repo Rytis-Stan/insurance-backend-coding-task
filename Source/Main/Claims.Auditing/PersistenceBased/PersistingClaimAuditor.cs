@@ -1,4 +1,4 @@
-﻿namespace Claims.Auditing;
+﻿namespace Claims.Auditing.PersistenceBased;
 
 public class PersistingClaimAuditor : PersistingAuditor<IClaimAuditRepository>, IClaimAuditor
 {
