@@ -48,8 +48,8 @@ public class App
         public SwitchingAuditor(IAuditDatabase auditDatabase)
             : this(new Dictionary<AuditEntityKind, IHttpRequestAuditor>
             {
-                { AuditEntityKind.Cover, new RepositoryBasedCoverAuditor(auditDatabase.CoverAuditRepository) },
-                { AuditEntityKind.Claim, new RepositoryBasedClaimAuditor(auditDatabase.ClaimAuditRepository) }
+                { AuditEntityKind.Cover, new PersistingCoverAuditor(auditDatabase.CoverAuditRepository) },
+                { AuditEntityKind.Claim, new PersistingClaimAuditor(auditDatabase.ClaimAuditRepository) }
             })
         {
         }
