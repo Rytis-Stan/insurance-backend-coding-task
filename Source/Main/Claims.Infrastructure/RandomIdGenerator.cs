@@ -1,6 +1,6 @@
 ﻿namespace Claims.Infrastructure;
 
-public class RandomIdGenerator : IIdGenerator
+public class RandomIdGenerator : IIdSource
 {
     public Guid NewId()
     {

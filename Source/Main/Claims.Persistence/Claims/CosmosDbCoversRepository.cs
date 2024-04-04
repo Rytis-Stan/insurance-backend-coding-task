@@ -7,8 +7,8 @@ namespace Claims.Persistence.Claims;
 
 internal class CosmosDbCoversRepository : CosmosDbRepository<NewCoverInfo, Cover, CoverJson>, ICoversRepository
 {
-    public CosmosDbCoversRepository(CosmosClient dbClient, string databaseName, IIdGenerator idGenerator)
-        : base(dbClient, databaseName, ContainerNames.Cover, idGenerator)
+    public CosmosDbCoversRepository(CosmosClient dbClient, string databaseName, IIdSource idSource)
+        : base(dbClient, databaseName, ContainerNames.Cover, idSource)
     {
     }
 

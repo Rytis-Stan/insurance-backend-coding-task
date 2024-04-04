@@ -10,18 +10,18 @@ public abstract class CosmosDbRepository<TNewObjectInfo, TObject, TJson>
     where TJson : class
 {
     private readonly Container _container;
-    private readonly IIdGenerator _idGenerator;
+    private readonly IIdSource _idSource;
 
-    protected CosmosDbRepository(CosmosClient dbClient, string databaseName, string containerName, IIdGenerator idGenerator)
+    protected CosmosDbRepository(CosmosClient dbClient, string databaseName, string containerName, IIdSource idSource)
     {
         ArgumentNullException.ThrowIfNull(dbClient, nameof(dbClient));
         _container = dbClient.GetContainer(databaseName, containerName);
-        _idGenerator = idGenerator;
+        _idSource = idSource;
     }
 
     public async Task<TObject> CreateAsync(TNewObjectInfo newObject)
     {
-        var id = _idGenerator.NewId().ToString();
+        var id = _idSource.NewId().ToString();
         var json = ToNewJson(id, newObject);
         return ToItem(await _container.CreateItemAsync(json, new PartitionKey(id)));
     }

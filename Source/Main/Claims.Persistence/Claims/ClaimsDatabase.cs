@@ -8,16 +8,16 @@ public class ClaimsDatabase : IClaimsDatabase
 {
     private readonly CosmosClient _client;
     private readonly string _name;
-    private readonly IIdGenerator _idGenerator;
+    private readonly IIdSource _idSource;
 
-    public IClaimsRepository ClaimsRepository => new CosmosDbClaimsRepository(_client, _name, _idGenerator);
-    public ICoversRepository CoversRepository => new CosmosDbCoversRepository(_client, _name, _idGenerator);
+    public IClaimsRepository ClaimsRepository => new CosmosDbClaimsRepository(_client, _name, _idSource);
+    public ICoversRepository CoversRepository => new CosmosDbCoversRepository(_client, _name, _idSource);
 
-    public ClaimsDatabase(CosmosClient client, string name, IIdGenerator idGenerator)
+    public ClaimsDatabase(CosmosClient client, string name, IIdSource idSource)
     {
         _client = client;
         _name = name;
-        _idGenerator = idGenerator;
+        _idSource = idSource;
     }
 
     public async Task InitializeAsync()

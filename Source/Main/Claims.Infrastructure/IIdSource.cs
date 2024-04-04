@@ -1,6 +1,6 @@
 ﻿namespace Claims.Infrastructure;
 
-public interface IIdGenerator
+public interface IIdSource
 {
     Guid NewId();
 }
