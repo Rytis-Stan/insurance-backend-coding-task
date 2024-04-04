@@ -1,7 +1,9 @@
-﻿using Claims.Auditing;
+﻿using Claims.AuditDaemon.Configuration;
+using Claims.Auditing;
 using Claims.Auditing.MessageQueues.RabbitMq;
 using Claims.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Claims.AuditDaemon;
 
@@ -9,13 +11,13 @@ public class Program
 {
     static void Main()
     {
-        // TODO: Move the queue name (and some options???) to the configuration file!
-        using var messageQueues = new InactiveRabbitMqReceivingQueue<AuditMessage>("localhost", "Claims.AuditQueue").Activate();
+        var configuration = AppConfiguration();
+
+        using var messageQueues = new InactiveRabbitMqReceivingQueue<AuditMessage>(configuration.RabbitMq.HostName, configuration.RabbitMq.QueueName).Activate();
 
         Console.WriteLine("Starting to listed to messages.");
 
-        var connectionString = "Server=localhost\\SQLEXPRESS;Database=AuditDb;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True";
-        var dbContextOptions = new DbContextOptionsBuilder<AuditContext>().UseSqlServer(connectionString).Options;
+        var dbContextOptions = new DbContextOptionsBuilder<AuditContext>().UseSqlServer(configuration.ConnectionString).Options;
 
         var auditContext = new AuditContext(dbContextOptions);
         var clock = new Clock();
@@ -28,6 +30,16 @@ public class Program
 
         Console.WriteLine("Press [enter] to quit.");
         Console.ReadLine();
+    }
+
+    private static AppConfiguration AppConfiguration()
+    {
+        return Configuration.AppConfiguration.FromConfiguration(
+            // ReSharper disable once StringLiteralTypo
+            new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build()
+        );
     }
 
     private class SwitchingAuditor

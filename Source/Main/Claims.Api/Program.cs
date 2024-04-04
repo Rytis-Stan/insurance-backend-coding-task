@@ -2,7 +2,6 @@ using System.Text.Json.Serialization;
 using Claims.Api.Configuration;
 using Claims.Application;
 using Claims.Auditing;
-using Claims.Auditing.MessageQueues;
 using Claims.Auditing.MessageQueues.RabbitMq;
 using Claims.Infrastructure;
 using Claims.Persistence.CosmosDb;

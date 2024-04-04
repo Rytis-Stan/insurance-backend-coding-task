@@ -1,8 +1,10 @@
-namespace Claims.Api.Configuration;
+using Microsoft.Extensions.Configuration;
+
+namespace Claims.AuditDaemon.Configuration;
 
 public class AppConfiguration
 {
-    public CosmosDbConfiguration CosmosDb { get; init; }
+    public string ConnectionString { get; init; }
     public RabbitMqConfiguration RabbitMq { get; init; }
 
     public static AppConfiguration FromConfiguration(IConfiguration configuration)

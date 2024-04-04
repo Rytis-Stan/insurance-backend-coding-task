@@ -4,6 +4,7 @@ using Claims.Domain;
 namespace Claims.Api.Tests;
 
 // This partial class segment contains methods for calling all possible API endpoints.
+//
 // The reasons for having dedicated methods:
 // 1. It makes the endpoint calls slightly shorter, especially if some DTO objects need to be passed in;
 // 2. It allows easy reuse of same endpoint calls in multiple tests (because some tests require calling
