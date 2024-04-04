@@ -44,6 +44,7 @@ public class App
         return new InactiveRabbitMqReceivingQueue<AuditMessage>(configuration.HostName, configuration.QueueName).Activate();
     }
 
+    // TODO: Move this code to "Claims.Auditing" project?
     private class SwitchingAuditor
     {
         private readonly Dictionary<AuditEntityKind, IHttpRequestAuditor> _auditorsByAuditEntityKind;
