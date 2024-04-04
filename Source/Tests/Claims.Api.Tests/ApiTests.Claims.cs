@@ -11,7 +11,7 @@ public partial class ApiTests : IDisposable
     [Fact]
     public async Task ClaimsPostReturnsNewlyCreatedClaim()
     {
-        var cover = await CreateRandomCover();
+        var cover = (await CreateRandomCover())!;
 
         var name = TestData.RandomString("name");
         var claimType = TestData.RandomEnum<ClaimType>();
