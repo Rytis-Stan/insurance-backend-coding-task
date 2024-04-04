@@ -20,21 +20,21 @@ public class App
     {
         Console.WriteLine("Starting to listed to messages.");
 
-        StartListeningToMessages();
+        StartListeningToAuditMessages();
         
         Console.WriteLine("Press [enter] to quit.");
         Console.ReadLine();
     }
 
-    private void StartListeningToMessages()
+    private void StartListeningToAuditMessages()
     {
         using var messageQueue = ConnectToQueue(_configuration.RabbitMq);
-        using var auditContext = CreateAuditContext();
-        var switchingAuditor = new SwitchingAuditor(auditContext, new Clock());
+        using var auditContext = CreateAuditContext(_configuration.ConnectionString);
+        var auditor = new SwitchingAuditor(auditContext, new Clock());
         messageQueue.OnReceived(message =>
         {
             Console.WriteLine($"RECEIVED_AT: {DateTime.UtcNow}, MESSAGE: {message}");
-            switchingAuditor.OnMessageReceived(message);
+            auditor.OnMessageReceived(message);
         });
     }
 
@@ -43,9 +43,9 @@ public class App
         return new InactiveRabbitMqReceivingQueue<AuditMessage>(configuration.HostName, configuration.QueueName).Activate();
     }
 
-    private AuditContext CreateAuditContext()
+    private static AuditContext CreateAuditContext(string connectionString)
     {
-        var dbContextOptions = new DbContextOptionsBuilder<AuditContext>().UseSqlServer(_configuration.ConnectionString).Options;
+        var dbContextOptions = new DbContextOptionsBuilder<AuditContext>().UseSqlServer(connectionString).Options;
         return new AuditContext(dbContextOptions);
     }
 
