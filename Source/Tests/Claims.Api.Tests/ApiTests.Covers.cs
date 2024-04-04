@@ -21,7 +21,7 @@ public partial class ApiTests
         var startDate = DateOnly.FromDateTime(utcNow).AddDays(TestData.RandomInt(1, 100));
         var endDate = startDate.AddDays(periodDurationInDays - 1);
 
-        var response = await _client.PostAsync("/Covers", new CreateCoverRequestDto(startDate, endDate, coverType));
+        var response = await CoversPostAsync(startDate, endDate, coverType);
 
         response.EnsureSuccessStatusCode();
         var cover = await response.ReadContentAsync<CoverDto>();
@@ -37,7 +37,7 @@ public partial class ApiTests
     [Fact]
     public async Task CoversGetReturnEmptyCoverCollectionWhenNoClaimsAdded()
     {
-        var response = await _client.GetAsync("/Covers");
+        var response = await CoversGetAsync();
 
         response.EnsureSuccessStatusCode();
         var covers = await response.ReadContentAsync<CoverDto[]>();
@@ -50,7 +50,7 @@ public partial class ApiTests
     {
         var id = Guid.NewGuid();
 
-        var response = await _client.GetAsync($"/Covers/{id}");
+        var response = await CoversGetAsync(id);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -60,7 +60,7 @@ public partial class ApiTests
     {
         var id = Guid.NewGuid();
 
-        var response = await _client.DeleteAsync($"/Covers/{id}");
+        var response = await CoversDeleteAsync(id);
 
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
@@ -72,10 +72,35 @@ public partial class ApiTests
     public async Task CoversPremiumGetReturnsCalculatedPremiumForGivenPeriodBasedOnCoverType(
         string startDate, string endDate, CoverType coverType, decimal expectedPremium)
     {
-        var response = await _client.GetAsync($"/Covers/Premium/?startDate={startDate}&endDate={endDate}&coverType={coverType}");
+        var response = await CoversPremiumGetAsync(startDate, endDate, coverType);
 
         response.EnsureSuccessStatusCode();
         var premium = await response.ReadContentAsync<decimal>();
         Assert.Equal(expectedPremium, premium);
+    }
+
+    private Task<HttpResponseMessage> CoversPostAsync(DateOnly startDate, DateOnly endDate, CoverType coverType)
+    {
+        return _client.PostAsync("/Covers", new CreateCoverRequestDto(startDate, endDate, coverType));
+    }
+
+    private Task<HttpResponseMessage> CoversGetAsync()
+    {
+        return _client.GetAsync("/Covers");
+    }
+
+    private Task<HttpResponseMessage> CoversGetAsync(Guid id)
+    {
+        return _client.GetAsync($"/Covers/{id}");
+    }
+
+    private Task<HttpResponseMessage> CoversDeleteAsync(Guid id)
+    {
+        return _client.DeleteAsync($"/Covers/{id}");
+    }
+
+    private Task<HttpResponseMessage> CoversPremiumGetAsync(string startDate, string endDate, CoverType coverType)
+    {
+        return _client.GetAsync($"/Covers/Premium/?startDate={startDate}&endDate={endDate}&coverType={coverType}");
     }
 }
