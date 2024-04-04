@@ -19,7 +19,11 @@ public class EntityFrameworkAuditDatabase
 
     public static AuditContext CreateAuditContext(string connectionString)
     {
-        var dbContextOptions = new DbContextOptionsBuilder<AuditContext>().UseSqlServer(connectionString).Options;
-        return new AuditContext(dbContextOptions);
+        return new AuditContext(DbContextOptions(connectionString));
+    }
+
+    private static DbContextOptions<AuditContext> DbContextOptions(string connectionString)
+    {
+        return new DbContextOptionsBuilder<AuditContext>().UseSqlServer(connectionString).Options;
     }
 }
