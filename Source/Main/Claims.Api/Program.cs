@@ -53,7 +53,7 @@ public class Program
         AddRepositories(services, InitializeCosmosDb(configuration.CosmosDb));
         AddInfrastructure(services);
         AddDomainServices(services);
-        AddAuditing(services, configuration.ConnectionString);
+        AddAuditing(services, configuration.RabbitMq);
         AddSwagger(services);
     }
 
@@ -91,12 +91,8 @@ public class Program
         services.AddTransient<IPricingService, PricingService>();
     }
 
-    private static void AddAuditing(IServiceCollection services, string connectionString, RabbitMqConfiguration configuration)
+    private static void AddAuditing(IServiceCollection services, RabbitMqConfiguration configuration)
     {
-        services.AddDbContext<AuditContext>(options => options.UseSqlServer(connectionString));
-        // services.AddTransient<IClaimAuditor, EntityFrameworkClaimAuditor>();
-        // services.AddTransient<ICoverAuditor, EntityFrameworkCoverAuditor>();
-
         var queue = new InactiveRabbitMqSendingQueue<AuditMessage>(configuration.HostName, configuration.QueueName).Activate();
         services.AddScoped<IClaimAuditor>(_ => new MessageQueueClaimAuditor(queue));
         services.AddScoped<ICoverAuditor>(_ => new MessageQueueCoverAuditor(queue));

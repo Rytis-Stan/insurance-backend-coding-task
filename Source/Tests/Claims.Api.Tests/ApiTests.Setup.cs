@@ -17,10 +17,7 @@ public partial class ApiTests
     public void Dispose()
     {
         _client.Dispose();
-
-        // TODO: Rewrite tests so that the databases can be deleted only once for all the API tests?
         DeleteCosmosDbIfExists();
-        DeleteSqlServerDatabaseIfExists();
     }
 
     private static void DeleteCosmosDbIfExists()
@@ -35,11 +32,6 @@ public partial class ApiTests
         {
             // Database was not found. Do nothing.
         }
-    }
-
-    private static void DeleteSqlServerDatabaseIfExists()
-    {
-        // TODO: Implement database deletion logic.
     }
 
     private static CosmosDbConfiguration CosmosDbConfiguration()
