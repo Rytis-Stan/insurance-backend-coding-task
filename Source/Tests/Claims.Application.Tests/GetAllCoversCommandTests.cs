@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Claims.Application.Tests;
 
-public class GetAllCoversCommandTests : CoversServiceTests
+public class GetAllCoversCommandTests : CoversCommandTests
 {
     private readonly GetAllCoversCommand _command;
 

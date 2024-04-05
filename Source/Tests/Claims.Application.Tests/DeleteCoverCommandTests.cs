@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Claims.Application.Tests;
 
-public class DeleteCoverCommandTests : CoversServiceTests
+public class DeleteCoverCommandTests : CoversCommandTests
 {
     private readonly DeleteCoverCommand _command;
 

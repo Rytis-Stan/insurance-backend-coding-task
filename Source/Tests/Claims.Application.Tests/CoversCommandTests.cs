@@ -5,13 +5,12 @@ using Moq;
 
 namespace Claims.Application.Tests;
 
-// TODO: Decide what to do with this class. Should this become a base "CoversCommandTests" class?
 // TODO: Decide where to put the "RandomCover()" method.
-public class CoversServiceTests
+public abstract class CoversCommandTests
 {
     protected readonly Mock<ICoversRepository> _coversRepositoryMock;
 
-    public CoversServiceTests()
+    protected CoversCommandTests()
     {
         _coversRepositoryMock = new Mock<ICoversRepository>();
     }

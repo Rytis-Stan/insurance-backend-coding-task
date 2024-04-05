@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Claims.Application.Tests;
 
-public class CreateCoverCommandTests : CoversServiceTests
+public class CreateCoverCommandTests : CoversCommandTests
 {
     private const CoverType AnyCoverType = CoverType.PassengerShip;
 
