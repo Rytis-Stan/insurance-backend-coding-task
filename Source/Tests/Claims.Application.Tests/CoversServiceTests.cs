@@ -262,11 +262,11 @@ public class GetAllCoversCommandTests : CoversServiceTests
 
 public class DeleteCoverCommandTests : CoversServiceTests
 {
-    private readonly IDeleteCoverCommand _deleteCoverCommand;
+    private readonly DeleteCoverCommand _command;
 
     public DeleteCoverCommandTests()
     {
-        _deleteCoverCommand = new DeleteCoverCommand(_coversRepositoryMock.Object);
+        _command = new DeleteCoverCommand(_coversRepositoryMock.Object);
     }
 
     [Fact]
@@ -274,7 +274,7 @@ public class DeleteCoverCommandTests : CoversServiceTests
     {
         var id = Guid.NewGuid();
 
-        await _deleteCoverCommand.DeleteCoverAsync(id);
+        await _command.DeleteCoverAsync(id);
 
         _coversRepositoryMock.Verify(x => x.DeleteByIdAsync(id));
     }
@@ -286,7 +286,7 @@ public class DeleteCoverCommandTests : CoversServiceTests
         var cover = RandomCover();
         StubDeleteCover(id, cover);
 
-        var returnedCover = await _deleteCoverCommand.DeleteCoverAsync(id);
+        var returnedCover = await _command.DeleteCoverAsync(id);
 
         Assert.Equal(cover, returnedCover);
     }
