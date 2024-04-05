@@ -17,7 +17,7 @@ public class CreateCoverCommand : ICreateCoverCommand
         _clock = clock;
     }
 
-    public async Task<Cover> CreateCoverAsync(CreateCoverRequest request)
+    public async Task<Cover> ExecuteAsync(CreateCoverRequest request)
     {
         Validate(request);
         return await _coversRepository.CreateAsync(ToNewCoverInfo(request));

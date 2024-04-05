@@ -14,7 +14,7 @@ public class CreateClaimCommand : ICreateClaimCommand
         _coversRepository = coversRepository;
     }
 
-    public async Task<Claim> CreateClaimAsync(CreateClaimRequest request)
+    public async Task<Claim> ExecuteAsync(CreateClaimRequest request)
     {
         await Validate(request);
         return await _claimsRepository.CreateAsync(ToNewClaimInfo(request));

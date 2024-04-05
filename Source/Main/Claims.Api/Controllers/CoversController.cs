@@ -30,7 +30,7 @@ public class CoversController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<CoverDto>> CreateAsync(CreateCoverRequestDto request)
     {
-        var cover = await _createCoverCommand.CreateCoverAsync(request.ToDomainRequest());
+        var cover = await _createCoverCommand.ExecuteAsync(request.ToDomainRequest());
         _coverAuditor.AuditPost(cover.Id);
         return Ok(cover.ToDto());
     }
@@ -38,7 +38,7 @@ public class CoversController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<CoverDto>> GetAsync(Guid id)
     {
-        var cover = (await _getCoverCommand.GetCoverAsync(id)).ToDto();
+        var cover = (await _getCoverCommand.ExecuteAsync(id)).ToDto();
         return cover != null
             ? Ok(cover)
             : NotFound();
@@ -47,7 +47,7 @@ public class CoversController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CoverDto>>> GetAsync()
     {
-        var covers = await _getAllCoversCommand.GetAllCoversAsync();
+        var covers = await _getAllCoversCommand.ExecuteAsync();
         return Ok(covers);
     }
 
@@ -60,7 +60,7 @@ public class CoversController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult<CoverDto?>> DeleteAsync(Guid id)
     {
-        var deletedCover = await _deleteCoverCommand.DeleteCoverAsync(id);
+        var deletedCover = await _deleteCoverCommand.ExecuteAsync(id);
         _coverAuditor.AuditDelete(id);
         return Ok(deletedCover.ToDto());
     }

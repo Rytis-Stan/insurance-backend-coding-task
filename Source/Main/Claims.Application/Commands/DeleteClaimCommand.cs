@@ -12,7 +12,7 @@ public class DeleteClaimCommand : IDeleteClaimCommand
         _claimsRepository = claimsRepository;
     }
 
-    public async Task<Claim?> DeleteClaimAsync(Guid id)
+    public async Task<Claim?> ExecuteAsync(Guid id)
     {
         return await _claimsRepository.DeleteByIdAsync(id);
     }

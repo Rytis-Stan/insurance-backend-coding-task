@@ -27,7 +27,7 @@ public class ClaimsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ClaimDto>> CreateAsync(CreateClaimRequestDto request)
     {
-        var claim = await _createClaimCommand.CreateClaimAsync(request.ToDomainRequest());
+        var claim = await _createClaimCommand.ExecuteAsync(request.ToDomainRequest());
         _claimAuditor.AuditPost(claim.Id);
         return Ok(claim.ToDto());
     }
@@ -35,7 +35,7 @@ public class ClaimsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<ClaimDto>> GetAsync(Guid id)
     {
-        var claim = await _getClaimByIdCommand.GetClaimByIdAsync(id);
+        var claim = await _getClaimByIdCommand.ExecuteAsync(id);
         return claim != null
             ? Ok(claim)
             : NotFound();
@@ -44,14 +44,14 @@ public class ClaimsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ClaimDto>>> GetAsync()
     {
-        var claims = await _getAllClaimsCommand.GetAllClaimsAsync();
+        var claims = await _getAllClaimsCommand.ExecuteAsync();
         return Ok(claims.Select(MappingExtensions.ToDto));
     }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult<ClaimDto?>> DeleteAsync(Guid id)
     {
-        var deletedClaim = await _deleteClaimCommand.DeleteClaimAsync(id);
+        var deletedClaim = await _deleteClaimCommand.ExecuteAsync(id);
         _claimAuditor.AuditDelete(id);
         return Ok(deletedClaim.ToDto());
     }

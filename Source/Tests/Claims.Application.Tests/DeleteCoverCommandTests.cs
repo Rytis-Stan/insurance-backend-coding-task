@@ -19,7 +19,7 @@ public class DeleteCoverCommandTests : CoversCommandTests
     {
         var id = Guid.NewGuid();
 
-        await _command.DeleteCoverAsync(id);
+        await _command.ExecuteAsync(id);
 
         _coversRepositoryMock.Verify(x => x.DeleteByIdAsync(id));
     }
@@ -31,7 +31,7 @@ public class DeleteCoverCommandTests : CoversCommandTests
         var cover = RandomCover();
         StubDeleteCover(id, cover);
 
-        var returnedCover = await _command.DeleteCoverAsync(id);
+        var returnedCover = await _command.ExecuteAsync(id);
 
         Assert.Equal(cover, returnedCover);
     }

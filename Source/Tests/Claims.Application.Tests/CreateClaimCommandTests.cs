@@ -35,7 +35,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
         var request = new CreateClaimRequest(coverId, "anyName", AnyClaimType, damageCost, created);
 
         await AssertExtended.ThrowsArgumentExceptionAsync(
-            () => _command.CreateClaimAsync(request),
+            () => _command.ExecuteAsync(request),
             "Damage cost must be a positive value."
         );
     }
@@ -51,7 +51,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
         var request = new CreateClaimRequest(coverId, "anyName", AnyClaimType, damageCost, created);
 
         await AssertExtended.ThrowsArgumentExceptionAsync(
-            () => _command.CreateClaimAsync(request),
+            () => _command.ExecuteAsync(request),
             "Damage cost cannot exceed 100000."
         );
     }
@@ -66,7 +66,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
         StubFindCover(coverId, null);
 
         await AssertExtended.ThrowsArgumentExceptionAsync(
-            () => _command.CreateClaimAsync(request),
+            () => _command.ExecuteAsync(request),
             "Claim references a non-existing cover via the cover ID."
         );
     }
@@ -112,7 +112,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
             StubFindCover(cover.Id, cover);
 
             await AssertExtended.ThrowsArgumentExceptionAsync(
-                () => _command.CreateClaimAsync(request),
+                () => _command.ExecuteAsync(request),
                 "Claim is outside the related cover period."
             );
         }
@@ -137,7 +137,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
             var request = new CreateClaimRequest(cover.Id, claimName, claimType, claimDamageCost, claimCreated);
             StubFindCover(cover.Id, cover);
 
-            await _command.CreateClaimAsync(request);
+            await _command.ExecuteAsync(request);
 
             _claimsRepositoryMock.Verify(x => x.CreateAsync(new NewClaimInfo(cover.Id, claimName, claimType, claimDamageCost, claimCreated)));
         }

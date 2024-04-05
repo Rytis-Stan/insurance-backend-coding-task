@@ -20,7 +20,7 @@ public class GetAllCoversCommandTests : CoversCommandTests
         var covers = new[] { RandomCover(), RandomCover() };
         StubGetAllCovers(covers);
 
-        var returnedCovers = await _command.GetAllCoversAsync();
+        var returnedCovers = await _command.ExecuteAsync();
 
         Assert.Equal(covers, returnedCovers);
     }

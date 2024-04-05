@@ -12,7 +12,7 @@ public class GetAllClaimsCommand : IGetAllClaimsCommand
         _claimsRepository = claimsRepository;
     }
 
-    public async Task<IEnumerable<Claim>> GetAllClaimsAsync()
+    public async Task<IEnumerable<Claim>> ExecuteAsync()
     {
         return await _claimsRepository.GetAllAsync();
     }

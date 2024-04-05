@@ -12,7 +12,7 @@ public class DeleteCoverCommand : IDeleteCoverCommand
         _coversRepository = coversRepository;
     }
 
-    public async Task<Cover?> DeleteCoverAsync(Guid id)
+    public async Task<Cover?> ExecuteAsync(Guid id)
     {
         return await _coversRepository.DeleteByIdAsync(id);
     }

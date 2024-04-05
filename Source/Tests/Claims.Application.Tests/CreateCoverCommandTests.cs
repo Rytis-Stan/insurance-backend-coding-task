@@ -50,7 +50,7 @@ public class CreateCoverCommandTests : CoversCommandTests
             StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsArgumentExceptionAsync(
-                () => _command.CreateCoverAsync(request),
+                () => _command.ExecuteAsync(request),
                 "Start date cannot be in the past."
             );
         }
@@ -83,7 +83,7 @@ public class CreateCoverCommandTests : CoversCommandTests
             StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsArgumentExceptionAsync(
-                () => _command.CreateCoverAsync(request),
+                () => _command.ExecuteAsync(request),
                 "End date cannot be in the past."
             );
         }
@@ -124,7 +124,7 @@ public class CreateCoverCommandTests : CoversCommandTests
             StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsArgumentExceptionAsync(
-                () => _command.CreateCoverAsync(request),
+                () => _command.ExecuteAsync(request),
                 "End date cannot be earlier than the start date."
             );
         }
@@ -169,7 +169,7 @@ public class CreateCoverCommandTests : CoversCommandTests
             StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsArgumentExceptionAsync(
-                () => _command.CreateCoverAsync(request),
+                () => _command.ExecuteAsync(request),
                 "Total insurance period cannot exceed 1 year."
             );
         }
@@ -192,7 +192,7 @@ public class CreateCoverCommandTests : CoversCommandTests
             StubUtcNow(utcNow);
             StubPremium(startDate, endDate, coverType, premium);
 
-            await _command.CreateCoverAsync(request);
+            await _command.ExecuteAsync(request);
 
             _coversRepositoryMock.Verify(x => x.CreateAsync(new NewCoverInfo(startDate, endDate, coverType, premium)));
         }

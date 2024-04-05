@@ -4,20 +4,20 @@ namespace Claims.Application.Commands;
 
 public interface ICreateCoverCommand
 {
-    Task<Cover> CreateCoverAsync(CreateCoverRequest request);
+    Task<Cover> ExecuteAsync(CreateCoverRequest request);
 }
 
 public interface IGetCoverCommand
 {
-    Task<Cover?> GetCoverAsync(Guid id);
+    Task<Cover?> ExecuteAsync(Guid id);
 }
 
 public interface IGetAllCoversCommand
 {
-    Task<IEnumerable<Cover>> GetAllCoversAsync();
+    Task<IEnumerable<Cover>> ExecuteAsync();
 }
 
 public interface IDeleteCoverCommand
 {
-    Task<Cover?> DeleteCoverAsync(Guid id);
+    Task<Cover?> ExecuteAsync(Guid id);
 }

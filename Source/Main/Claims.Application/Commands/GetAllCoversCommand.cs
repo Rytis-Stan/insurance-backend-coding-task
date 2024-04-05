@@ -12,7 +12,7 @@ public class GetAllCoversCommand : IGetAllCoversCommand
         _coversRepository = coversRepository;
     }
 
-    public async Task<IEnumerable<Cover>> GetAllCoversAsync()
+    public async Task<IEnumerable<Cover>> ExecuteAsync()
     {
         return await _coversRepository.GetAllAsync();
     }
