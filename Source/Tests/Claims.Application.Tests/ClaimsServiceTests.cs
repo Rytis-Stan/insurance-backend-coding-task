@@ -26,6 +26,25 @@ public class GetClaimByIdCommandTests : ClaimsServiceTests
     {
         _getClaimByIdCommand = _claimsService;
     }
+
+    [Fact]
+    public async Task ReturnsClaimByIdFromRepository()
+    {
+        var id = Guid.NewGuid();
+        var claim = RandomClaim();
+        StubFindClaim(id, claim);
+
+        var returnedClaim = await _getClaimByIdCommand.GetClaimByIdAsync(id);
+
+        Assert.Equal(claim, returnedClaim);
+    }
+
+    private void StubFindClaim(Guid id, Claim claimToReturn)
+    {
+        _claimsRepositoryMock
+            .Setup(x => x.FindByIdAsync(id))
+            .ReturnsAsync(claimToReturn);
+    }
 }
 
 public class GetAllClaimsCommandTests : ClaimsServiceTests
@@ -35,6 +54,24 @@ public class GetAllClaimsCommandTests : ClaimsServiceTests
     public GetAllClaimsCommandTests()
     {
         _getAllClaimsCommand = _claimsService;
+    }
+
+    [Fact]
+    public async Task ReturnsAllClaimsFromRepository()
+    {
+        var claims = new[] { RandomClaim(), RandomClaim() };
+        StubGetAllClaims(claims);
+
+        var returnedClaims = await _getAllClaimsCommand.GetAllClaimsAsync();
+
+        Assert.Equal(claims, returnedClaims);
+    }
+
+    private void StubGetAllClaims(IEnumerable<Claim> claimsToReturn)
+    {
+        _claimsRepositoryMock
+            .Setup(x => x.GetAllAsync())
+            .ReturnsAsync(claimsToReturn);
     }
 }
 
@@ -89,8 +126,6 @@ public class ClaimsServiceTests
     protected readonly ClaimsService _claimsService;
 
     private readonly ICreateClaimCommand _createClaimCommand;
-    private readonly IGetClaimByIdCommand _getClaimByIdCommand;
-    private readonly IGetAllClaimsCommand _getAllClaimsCommand;
 
     public ClaimsServiceTests()
     {
@@ -99,8 +134,6 @@ public class ClaimsServiceTests
         _claimsService = new ClaimsService(_claimsRepositoryMock.Object, _coversRepositoryMock.Object);
 
         _createClaimCommand = _claimsService;
-        _getClaimByIdCommand = _claimsService;
-        _getAllClaimsCommand = _claimsService;
     }
 
     [Theory]
@@ -223,31 +256,6 @@ public class ClaimsServiceTests
         }
     }
 
-    [Fact]
-    public async Task ReturnsClaimByIdFromRepository()
-    {
-        var id = Guid.NewGuid();
-        var claim = RandomClaim();
-        StubFindClaim(id, claim);
-
-        var returnedClaim = await _getClaimByIdCommand.GetClaimByIdAsync(id);
-
-        Assert.Equal(claim, returnedClaim);
-    }
-
-    [Fact]
-    public async Task ReturnsAllClaimsFromRepository()
-    {
-        var claims = new[] { RandomClaim(), RandomClaim() };
-        StubGetAllClaims(claims);
-
-        var returnedClaims = await _getAllClaimsCommand.GetAllClaimsAsync();
-
-        Assert.Equal(claims, returnedClaims);
-    }
-
-
-
     private static Cover CreateCoverForPeriod(DateOnly startDate, DateOnly endDate)
     {
         return new Cover
@@ -258,20 +266,6 @@ public class ClaimsServiceTests
             Type = AnyCoverType,
             Premium = AnyPremium
         };
-    }
-
-    private void StubFindClaim(Guid id, Claim claimToReturn)
-    {
-        _claimsRepositoryMock
-            .Setup(x => x.FindByIdAsync(id))
-            .ReturnsAsync(claimToReturn);
-    }
-
-    private void StubGetAllClaims(IEnumerable<Claim> claimsToReturn)
-    {
-        _claimsRepositoryMock
-            .Setup(x => x.GetAllAsync())
-            .ReturnsAsync(claimsToReturn);
     }
 
     private void StubFindCover(Guid id, Cover? coverToReturn)
