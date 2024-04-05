@@ -60,8 +60,8 @@ public class CoversController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult<CoverDto?>> DeleteAsync(Guid id)
     {
-        _coverAuditor.AuditDelete(id);
         var deletedCover = await _deleteCoverCommand.DeleteCoverAsync(id);
+        _coverAuditor.AuditDelete(id);
         return Ok(deletedCover.ToDto());
     }
 }

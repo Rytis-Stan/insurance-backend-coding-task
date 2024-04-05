@@ -51,8 +51,8 @@ public class ClaimsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult<ClaimDto?>> DeleteAsync(Guid id)
     {
-        _claimAuditor.AuditDelete(id);
         var deletedClaim = await _deleteClaimCommand.DeleteClaimAsync(id);
+        _claimAuditor.AuditDelete(id);
         return Ok(deletedClaim.ToDto());
     }
 }
