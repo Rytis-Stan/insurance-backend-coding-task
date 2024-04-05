@@ -9,13 +9,20 @@ namespace Claims.Api.Controllers;
 [Route("[controller]")]
 public class CoversController : ControllerBase
 {
-    private readonly ICoversService _coversService;
+    private readonly ICreateCoverCommand _createCoverCommand;
+    private readonly IGetCoverCommand _getCoverCommand;
+    private readonly IGetAllCoversCommand _getAllCoversCommand;
+    private readonly IDeleteCoverCommand _deleteCoverCommand;
     private readonly ICoverPricing _coverPricing;
     private readonly ICoverAuditor _coverAuditor;
 
-    public CoversController(ICoversService coversService, ICoverPricing coverPricing, ICoverAuditor coverAuditor)
+    // TODO: Fix issue of too many controller constructor parameters (and do the same for the other controller)!
+    public CoversController(ICreateCoverCommand createCoverCommand, IGetCoverCommand getCoverCommand, IGetAllCoversCommand getAllCoversCommand, IDeleteCoverCommand deleteCoverCommand, ICoverPricing coverPricing, ICoverAuditor coverAuditor)
     {
-        _coversService = coversService;
+        _createCoverCommand = createCoverCommand;
+        _getCoverCommand = getCoverCommand;
+        _getAllCoversCommand = getAllCoversCommand;
+        _deleteCoverCommand = deleteCoverCommand;
         _coverPricing = coverPricing;
         _coverAuditor = coverAuditor;
     }
@@ -23,7 +30,7 @@ public class CoversController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<CoverDto>> CreateAsync(CreateCoverRequestDto request)
     {
-        var cover = await _coversService.CreateCoverAsync(request.ToDomainRequest());
+        var cover = await _createCoverCommand.CreateCoverAsync(request.ToDomainRequest());
         _coverAuditor.AuditPost(cover.Id);
         return Ok(cover.ToDto());
     }
@@ -31,7 +38,7 @@ public class CoversController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<CoverDto>> GetAsync(Guid id)
     {
-        var cover = (await _coversService.GetCoverAsync(id)).ToDto();
+        var cover = (await _getCoverCommand.GetCoverAsync(id)).ToDto();
         return cover != null
             ? Ok(cover)
             : NotFound();
@@ -40,7 +47,7 @@ public class CoversController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CoverDto>>> GetAsync()
     {
-        var covers = await _coversService.GetAllCoversAsync();
+        var covers = await _getAllCoversCommand.GetAllCoversAsync();
         return Ok(covers);
     }
 
@@ -54,7 +61,7 @@ public class CoversController : ControllerBase
     public async Task<ActionResult<CoverDto?>> DeleteAsync(Guid id)
     {
         _coverAuditor.AuditDelete(id);
-        var deletedCover = await _coversService.DeleteCoverAsync(id);
+        var deletedCover = await _deleteCoverCommand.DeleteCoverAsync(id);
         return Ok(deletedCover.ToDto());
     }
 }

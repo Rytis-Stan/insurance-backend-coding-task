@@ -88,9 +88,13 @@ public class Program
 
     private static void AddDomainServices(IServiceCollection services)
     {
-        // services.AddTransient<IClaimsService, ClaimsService>();
-        services.AddTransient<ICoversService, CoversService>();
+        services.AddTransient<ICreateCoverCommand, CoversService>();
+        services.AddTransient<IGetCoverCommand, CoversService>();
+        services.AddTransient<IGetAllCoversCommand, CoversService>();
+        services.AddTransient<IDeleteCoverCommand, CoversService>();
+
         services.AddTransient<ICoverPricing, CoverPricing>();
+
         services.AddTransient<ICreateClaimCommand, ClaimsService>();
         services.AddTransient<IGetClaimByIdCommand, ClaimsService>();
         services.AddTransient<IGetAllClaimsCommand, ClaimsService>();
