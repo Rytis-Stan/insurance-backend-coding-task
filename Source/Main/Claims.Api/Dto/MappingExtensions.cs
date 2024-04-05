@@ -5,6 +5,18 @@ namespace Claims.Api.Dto;
 
 public static class MappingExtensions
 {
+    public static CreateCoverRequest ToDomainRequest(this CreateCoverRequestDto source)
+    {
+        return new CreateCoverRequest(source.StartDate, source.EndDate, ToDomainEnum(source.Type));
+    }
+
+    public static CoverDto? ToDto(this Cover? source)
+    {
+        return source != null
+            ? new CoverDto(source.Id, source.StartDate, source.EndDate, ToDtoEnum(source.Type), source.Premium)
+            : null;
+    }
+
     public static CreateClaimRequest ToDomainRequest(this CreateClaimRequestDto source)
     {
         var claimTypeDto = source.Type;
@@ -15,42 +27,6 @@ public static class MappingExtensions
     {
         return source != null
             ? new ClaimDto(source.Id, source.CoverId, source.Created, source.Name, ToDtoEnum(source.Type), source.DamageCost)
-            : null;
-    }
-
-    public static ClaimType ToDomainEnum(this ClaimTypeDto source)
-    {
-        return source switch
-        {
-            ClaimTypeDto.Collision => ClaimType.Collision,
-            ClaimTypeDto.Grounding => ClaimType.Grounding,
-            ClaimTypeDto.BadWeather => ClaimType.BadWeather,
-            ClaimTypeDto.Fire => ClaimType.Fire,
-            _ => throw new ArgumentOutOfRangeException(nameof(source))
-        };
-    }
-
-    public static ClaimTypeDto ToDtoEnum(this ClaimType source)
-    {
-        return source switch
-        {
-            ClaimType.Collision => ClaimTypeDto.Collision,
-            ClaimType.Grounding => ClaimTypeDto.Grounding,
-            ClaimType.BadWeather => ClaimTypeDto.BadWeather,
-            ClaimType.Fire => ClaimTypeDto.Fire,
-            _ => throw new ArgumentOutOfRangeException(nameof(source))
-        };
-    }
-
-    public static CreateCoverRequest ToDomainRequest(this CreateCoverRequestDto source)
-    {
-        return new CreateCoverRequest(source.StartDate, source.EndDate, ToDomainEnum(source.Type));
-    }
-
-    public static CoverDto? ToDto(this Cover? source)
-    {
-        return source != null
-            ? new CoverDto(source.Id, source.StartDate, source.EndDate, ToDtoEnum(source.Type), source.Premium)
             : null;
     }
 
@@ -77,6 +53,30 @@ public static class MappingExtensions
             CoverType.BulkCarrier => CoverTypeDto.BulkCarrier,
             CoverType.Tanker => CoverTypeDto.Tanker,
             _ => throw new ArgumentOutOfRangeException(nameof(source), source, null)
+        };
+    }
+
+    public static ClaimType ToDomainEnum(this ClaimTypeDto source)
+    {
+        return source switch
+        {
+            ClaimTypeDto.Collision => ClaimType.Collision,
+            ClaimTypeDto.Grounding => ClaimType.Grounding,
+            ClaimTypeDto.BadWeather => ClaimType.BadWeather,
+            ClaimTypeDto.Fire => ClaimType.Fire,
+            _ => throw new ArgumentOutOfRangeException(nameof(source))
+        };
+    }
+
+    public static ClaimTypeDto ToDtoEnum(this ClaimType source)
+    {
+        return source switch
+        {
+            ClaimType.Collision => ClaimTypeDto.Collision,
+            ClaimType.Grounding => ClaimTypeDto.Grounding,
+            ClaimType.BadWeather => ClaimTypeDto.BadWeather,
+            ClaimType.Fire => ClaimTypeDto.Fire,
+            _ => throw new ArgumentOutOfRangeException(nameof(source))
         };
     }
 }
