@@ -12,8 +12,8 @@ public class GetCoverCommand : IGetCoverCommand
         _coversRepository = coversRepository;
     }
 
-    public async Task<Cover?> ExecuteAsync(Guid id)
+    public async Task<Cover?> ExecuteAsync(GetCoverRequest request)
     {
-        return await _coversRepository.FindByIdAsync(id);
+        return await _coversRepository.FindByIdAsync(request.Id);
     }
 }

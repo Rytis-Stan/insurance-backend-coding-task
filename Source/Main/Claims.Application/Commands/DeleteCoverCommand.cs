@@ -12,8 +12,8 @@ public class DeleteCoverCommand : IDeleteCoverCommand
         _coversRepository = coversRepository;
     }
 
-    public async Task<Cover?> ExecuteAsync(Guid id)
+    public async Task<Cover?> ExecuteAsync(DeleteCoverRequest request)
     {
-        return await _coversRepository.DeleteByIdAsync(id);
+        return await _coversRepository.DeleteByIdAsync(request.Id);
     }
 }

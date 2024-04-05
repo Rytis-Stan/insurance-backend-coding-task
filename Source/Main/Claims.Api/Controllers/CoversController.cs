@@ -38,7 +38,7 @@ public class CoversController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<CoverDto>> GetAsync(Guid id)
     {
-        var cover = (await _getCoverCommand.ExecuteAsync(id)).ToDto();
+        var cover = (await _getCoverCommand.ExecuteAsync(new GetCoverRequest(id))).ToDto();
         return cover != null
             ? Ok(cover)
             : NotFound();
@@ -60,7 +60,7 @@ public class CoversController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult<CoverDto?>> DeleteAsync(Guid id)
     {
-        var deletedCover = await _deleteCoverCommand.ExecuteAsync(id);
+        var deletedCover = await _deleteCoverCommand.ExecuteAsync(new DeleteCoverRequest(id));
         _coverAuditor.AuditDelete(id);
         return Ok(deletedCover.ToDto());
     }

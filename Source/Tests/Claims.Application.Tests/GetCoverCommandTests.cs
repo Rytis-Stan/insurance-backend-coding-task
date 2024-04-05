@@ -21,7 +21,7 @@ public class GetCoverCommandTests : CoversCommandTests
         var cover = RandomCover();
         StubFindCover(id, cover);
 
-        var returnedCover = await _command.ExecuteAsync(id);
+        var returnedCover = await _command.ExecuteAsync(new GetCoverRequest(id));
 
         Assert.Equal(cover, returnedCover);
     }
