@@ -10,14 +10,10 @@ namespace Claims.Application.Tests;
 public class CoversServiceTests
 {
     protected readonly Mock<ICoversRepository> _coversRepositoryMock;
-    protected readonly Mock<ICoverPricing> _coverPricingMock;
-    protected readonly Mock<IClock> _clockMock;
 
     public CoversServiceTests()
     {
         _coversRepositoryMock = new Mock<ICoversRepository>();
-        _coverPricingMock = new Mock<ICoverPricing>();
-        _clockMock = new Mock<IClock>();
     }
 
     protected static Cover RandomCover()
@@ -30,12 +26,5 @@ public class CoversServiceTests
             Type = TestData.RandomEnum<CoverType>(),
             Premium = TestData.RandomInt(100)
         };
-    }
-
-    protected void StubUtcNow(DateTime utcNow)
-    {
-        _clockMock
-            .Setup(x => x.UtcNow())
-            .Returns(utcNow);
     }
 }

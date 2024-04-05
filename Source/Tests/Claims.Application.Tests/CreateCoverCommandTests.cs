@@ -1,7 +1,9 @@
-﻿using Claims.Application.Commands;
+﻿using BuildingBlocks.Temporal;
+using Claims.Application.Commands;
 using Claims.Application.Repositories;
 using Claims.Domain;
 using Claims.Testing;
+using Moq;
 using Xunit;
 
 namespace Claims.Application.Tests;
@@ -10,10 +12,14 @@ public class CreateCoverCommandTests : CoversServiceTests
 {
     private const CoverType AnyCoverType = CoverType.PassengerShip;
 
+    private readonly Mock<ICoverPricing> _coverPricingMock;
+    private readonly Mock<IClock> _clockMock;
     private readonly ICreateCoverCommand _createCoverCommand;
 
     public CreateCoverCommandTests()
     {
+        _coverPricingMock = new Mock<ICoverPricing>();
+        _clockMock = new Mock<IClock>();
         _createCoverCommand = new CreateCoverCommand(_coversRepositoryMock.Object, _coverPricingMock.Object, _clockMock.Object);
     }
 
@@ -190,6 +196,13 @@ public class CreateCoverCommandTests : CoversServiceTests
 
             _coversRepositoryMock.Verify(x => x.CreateAsync(new NewCoverInfo(startDate, endDate, coverType, premium)));
         }
+    }
+
+    private void StubUtcNow(DateTime utcNow)
+    {
+        _clockMock
+            .Setup(x => x.UtcNow())
+            .Returns(utcNow);
     }
 
     private void StubPremium(DateOnly startDate, DateOnly endDate, CoverType coverType, decimal premium)
