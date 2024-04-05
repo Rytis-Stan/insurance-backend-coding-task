@@ -17,7 +17,7 @@ public class CreateCoverCommandTests : CoversServiceTests
 
     public CreateCoverCommandTests()
     {
-        _createCoverCommand = coversService;
+        _createCoverCommand = new CreateCoverCommand(_coversRepositoryMock.Object, _coverPricingMock.Object, _clockMock.Object);
     }
 
     [Fact]
@@ -304,14 +304,12 @@ public class CoversServiceTests
     protected readonly Mock<ICoversRepository> _coversRepositoryMock;
     protected readonly Mock<ICoverPricing> _coverPricingMock;
     protected readonly Mock<IClock> _clockMock;
-    protected readonly CoversService coversService;
 
     public CoversServiceTests()
     {
         _coversRepositoryMock = new Mock<ICoversRepository>();
         _coverPricingMock = new Mock<ICoverPricing>();
         _clockMock = new Mock<IClock>();
-        coversService = new CoversService(_coversRepositoryMock.Object, _coverPricingMock.Object, _clockMock.Object);
     }
 
     protected static Cover RandomCover()

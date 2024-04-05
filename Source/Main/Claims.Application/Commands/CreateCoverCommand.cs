@@ -4,13 +4,13 @@ using Claims.Domain;
 
 namespace Claims.Application.Commands;
 
-public class CoversService : ICreateCoverCommand
+public class CreateCoverCommand : ICreateCoverCommand
 {
     private readonly ICoversRepository _coversRepository;
     private readonly ICoverPricing _coverPricing;
     private readonly IClock _clock;
 
-    public CoversService(ICoversRepository coversRepository, ICoverPricing coverPricing, IClock clock)
+    public CreateCoverCommand(ICoversRepository coversRepository, ICoverPricing coverPricing, IClock clock)
     {
         _coversRepository = coversRepository;
         _coverPricing = coverPricing;
@@ -56,8 +56,6 @@ public class CoversService : ICreateCoverCommand
     {
         return _coverPricing.CalculatePremium(request.StartDate, request.EndDate, request.Type);
     }
-
-
 }
 
 public class GetCoverCommand : IGetCoverCommand
