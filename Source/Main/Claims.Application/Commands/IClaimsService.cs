@@ -30,7 +30,9 @@ public interface IGetAllClaimsCommand : ICommand<IEnumerable<Claim>>
     // Task<IEnumerable<Claim>> ExecuteAsync();
 }
 
+public record DeleteClaimRequest(Guid Id);
+
 public interface IDeleteClaimCommand
 {
-    Task<Claim?> ExecuteAsync(Guid id);
+    Task<Claim?> ExecuteAsync(DeleteClaimRequest request);
 }

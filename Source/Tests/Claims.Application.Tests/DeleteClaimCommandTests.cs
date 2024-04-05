@@ -19,7 +19,7 @@ public class DeleteClaimCommandTests : ClaimsCommandTests
     {
         var id = Guid.NewGuid();
 
-        await _command.ExecuteAsync(id);
+        await _command.ExecuteAsync(new DeleteClaimRequest(id));
 
         _claimsRepositoryMock.Verify(x => x.DeleteByIdAsync(id));
     }
@@ -31,7 +31,7 @@ public class DeleteClaimCommandTests : ClaimsCommandTests
         var claim = RandomClaim();
         StubDeleteClaim(id, claim);
 
-        var returnedClaim = await _command.ExecuteAsync(id);
+        var returnedClaim = await _command.ExecuteAsync(new DeleteClaimRequest(id));
 
         Assert.Equal(claim, returnedClaim);
     }
