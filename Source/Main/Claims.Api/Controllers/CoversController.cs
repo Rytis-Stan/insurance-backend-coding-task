@@ -1,7 +1,6 @@
 using Claims.Api.Dto;
 using Claims.Application;
 using Claims.Auditing;
-using Claims.Domain;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Claims.Api.Controllers;
@@ -46,9 +45,9 @@ public class CoversController : ControllerBase
     }
 
     [HttpGet("Premium")]
-    public ActionResult<decimal> ComputePremiumAsync(DateOnly startDate, DateOnly endDate, CoverType coverType)
+    public ActionResult<decimal> ComputePremiumAsync(DateOnly startDate, DateOnly endDate, CoverTypeDto coverType)
     {
-        return Ok(_pricingService.CalculatePremium(startDate, endDate, coverType));
+        return Ok(_pricingService.CalculatePremium(startDate, endDate, coverType.ToDomainEnum()));
     }
 
     [HttpDelete("{id}")]
