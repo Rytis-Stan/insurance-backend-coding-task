@@ -2,9 +2,9 @@ using Claims.Domain;
 
 namespace Claims.Application.Commands;
 
-public interface ICreateCoverCommand
+public interface ICreateCoverCommand : ICommand<CreateCoverRequest, Cover>
 {
-    Task<Cover> ExecuteAsync(CreateCoverRequest request);
+    // Task<Cover> ExecuteAsync(CreateCoverRequest request);
 }
 
 public interface IGetCoverCommand

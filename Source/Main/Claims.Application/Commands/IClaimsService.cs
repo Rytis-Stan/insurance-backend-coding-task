@@ -2,9 +2,14 @@ using Claims.Domain;
 
 namespace Claims.Application.Commands;
 
-public interface ICreateClaimCommand
+public interface ICommand<in TRequest, TResponse>
 {
-    Task<Claim> ExecuteAsync(CreateClaimRequest request);
+    Task<TResponse> ExecuteAsync(TRequest request);
+}
+
+public interface ICreateClaimCommand : ICommand<CreateClaimRequest, Claim>
+{
+    // Task<Claim> ExecuteAsync(CreateClaimRequest request);
 }
 
 public interface IGetClaimByIdCommand
