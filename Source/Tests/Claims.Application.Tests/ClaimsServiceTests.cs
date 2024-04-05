@@ -8,6 +8,75 @@ using static Claims.Testing.TestValueBuilder;
 
 namespace Claims.Application.Tests;
 
+public class CreateClaimCommandTests : ClaimsServiceTests
+{
+    private readonly ICreateClaimCommand _createClaimCommand;
+
+    public CreateClaimCommandTests()
+    {
+        _createClaimCommand = _claimsService;
+    }
+}
+
+public class GetClaimByIdCommandTests : ClaimsServiceTests
+{
+    private readonly IGetClaimByIdCommand _getClaimByIdCommand;
+
+    public GetClaimByIdCommandTests()
+    {
+        _getClaimByIdCommand = _claimsService;
+    }
+}
+
+public class GetAllClaimsCommandTests : ClaimsServiceTests
+{
+    private readonly IGetAllClaimsCommand _getAllClaimsCommand;
+
+    public GetAllClaimsCommandTests()
+    {
+        _getAllClaimsCommand = _claimsService;
+    }
+}
+
+public class DeleteClaimCommandTests : ClaimsServiceTests
+{
+    private readonly IDeleteClaimCommand _deleteClaimCommand;
+
+    public DeleteClaimCommandTests()
+    {
+        _deleteClaimCommand = _claimsService;
+    }
+
+    [Fact]
+    public async Task DeletesClaimByIdInRepository()
+    {
+        var id = Guid.NewGuid();
+
+        await _deleteClaimCommand.DeleteClaimAsync(id);
+
+        _claimsRepositoryMock.Verify(x => x.DeleteByIdAsync(id));
+    }
+
+    [Fact]
+    public async Task ReturnsClaimReturnedByRepositoryDelete()
+    {
+        var id = Guid.NewGuid();
+        var claim = RandomClaim();
+        StubDeleteClaim(id, claim);
+
+        var returnedClaim = await _deleteClaimCommand.DeleteClaimAsync(id);
+
+        Assert.Equal(claim, returnedClaim);
+    }
+
+    private void StubDeleteClaim(Guid id, Claim? deletedClaimToReturn)
+    {
+        _claimsRepositoryMock
+            .Setup(x => x.DeleteByIdAsync(id))
+            .ReturnsAsync(deletedClaimToReturn);
+    }
+}
+
 public class ClaimsServiceTests
 {
     private const ClaimType AnyClaimType = ClaimType.BadWeather;
@@ -15,15 +84,23 @@ public class ClaimsServiceTests
     private const CoverType AnyCoverType = CoverType.BulkCarrier;
     private const decimal AnyPremium = 100.00m;
 
-    private readonly Mock<IClaimsRepository> _claimsRepositoryMock;
-    private readonly Mock<ICoversRepository> _coversRepositoryMock;
-    private readonly ClaimsService _claimsService;
+    protected readonly Mock<IClaimsRepository> _claimsRepositoryMock;
+    protected readonly Mock<ICoversRepository> _coversRepositoryMock;
+    protected readonly ClaimsService _claimsService;
+
+    private readonly ICreateClaimCommand _createClaimCommand;
+    private readonly IGetClaimByIdCommand _getClaimByIdCommand;
+    private readonly IGetAllClaimsCommand _getAllClaimsCommand;
 
     public ClaimsServiceTests()
     {
         _claimsRepositoryMock = new Mock<IClaimsRepository>();
         _coversRepositoryMock = new Mock<ICoversRepository>();
         _claimsService = new ClaimsService(_claimsRepositoryMock.Object, _coversRepositoryMock.Object);
+
+        _createClaimCommand = _claimsService;
+        _getClaimByIdCommand = _claimsService;
+        _getAllClaimsCommand = _claimsService;
     }
 
     [Theory]
@@ -38,7 +115,7 @@ public class ClaimsServiceTests
         var request = new CreateClaimRequest(coverId, "anyName", AnyClaimType, damageCost, created);
 
         await AssertExtended.ThrowsArgumentExceptionAsync(
-            () => _claimsService.CreateClaimAsync(request),
+            () => _createClaimCommand.CreateClaimAsync(request),
             "Damage cost must be a positive value."
         );
     }
@@ -54,7 +131,7 @@ public class ClaimsServiceTests
         var request = new CreateClaimRequest(coverId, "anyName", AnyClaimType, damageCost, created);
 
         await AssertExtended.ThrowsArgumentExceptionAsync(
-            () => _claimsService.CreateClaimAsync(request),
+            () => _createClaimCommand.CreateClaimAsync(request),
             "Damage cost cannot exceed 100000."
         );
     }
@@ -69,7 +146,7 @@ public class ClaimsServiceTests
         StubFindCover(coverId, null);
 
         await AssertExtended.ThrowsArgumentExceptionAsync(
-            () => _claimsService.CreateClaimAsync(request),
+            () => _createClaimCommand.CreateClaimAsync(request),
             "Claim references a non-existing cover via the cover ID."
         );
     }
@@ -115,7 +192,7 @@ public class ClaimsServiceTests
             StubFindCover(cover.Id, cover);
 
             await AssertExtended.ThrowsArgumentExceptionAsync(
-                () => _claimsService.CreateClaimAsync(request),
+                () => _createClaimCommand.CreateClaimAsync(request),
                 "Claim is outside the related cover period."
             );
         }
@@ -140,7 +217,7 @@ public class ClaimsServiceTests
             var request = new CreateClaimRequest(cover.Id, claimName, claimType, claimDamageCost, claimCreated);
             StubFindCover(cover.Id, cover);
     
-            await _claimsService.CreateClaimAsync(request);
+            await _createClaimCommand.CreateClaimAsync(request);
     
             _claimsRepositoryMock.Verify(x => x.CreateAsync(new NewClaimInfo(cover.Id, claimName, claimType, claimDamageCost, claimCreated)));
         }
@@ -153,7 +230,7 @@ public class ClaimsServiceTests
         var claim = RandomClaim();
         StubFindClaim(id, claim);
 
-        var returnedClaim = await _claimsService.GetClaimByIdAsync(id);
+        var returnedClaim = await _getClaimByIdCommand.GetClaimByIdAsync(id);
 
         Assert.Equal(claim, returnedClaim);
     }
@@ -164,32 +241,12 @@ public class ClaimsServiceTests
         var claims = new[] { RandomClaim(), RandomClaim() };
         StubGetAllClaims(claims);
 
-        var returnedClaims = await _claimsService.GetAllClaimsAsync();
+        var returnedClaims = await _getAllClaimsCommand.GetAllClaimsAsync();
 
         Assert.Equal(claims, returnedClaims);
     }
 
-    [Fact]
-    public async Task DeletesClaimByIdInRepository()
-    {
-        var id = Guid.NewGuid();
 
-        await _claimsService.DeleteClaimAsync(id);
-
-        _claimsRepositoryMock.Verify(x => x.DeleteByIdAsync(id));
-    }
-
-    [Fact]
-    public async Task ReturnsClaimReturnedByRepositoryDelete()
-    {
-        var id = Guid.NewGuid();
-        var claim = RandomClaim();
-        StubDeleteClaim(id, claim);
-    
-        var returnedClaim = await _claimsService.DeleteClaimAsync(id);
-    
-        Assert.Equal(claim, returnedClaim);
-    }
 
     private static Cover CreateCoverForPeriod(DateOnly startDate, DateOnly endDate)
     {
@@ -224,14 +281,7 @@ public class ClaimsServiceTests
             .ReturnsAsync(coverToReturn);
     }
 
-    private void StubDeleteClaim(Guid id, Claim? deletedClaimToReturn)
-    {
-        _claimsRepositoryMock
-            .Setup(x => x.DeleteByIdAsync(id))
-            .ReturnsAsync(deletedClaimToReturn);
-    }
-
-    private static Claim RandomClaim()
+    protected static Claim RandomClaim()
     {
         return new Claim
         {
