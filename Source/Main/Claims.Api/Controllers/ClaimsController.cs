@@ -45,7 +45,7 @@ public class ClaimsController : ControllerBase
     public async Task<ActionResult<IEnumerable<ClaimDto>>> GetAsync()
     {
         var claims = await _getAllClaimsCommand.ExecuteAsync();
-        return Ok(claims.Select(MappingExtensions.ToDto));
+        return Ok(claims.Select(x => x.ToDto()));
     }
 
     [HttpDelete("{id}")]
