@@ -3,12 +3,12 @@ using Claims.Domain;
 
 namespace Claims.Application.Commands;
 
-public class ClaimsService : ICreateClaimCommand
+public class CreateClaimCommand : ICreateClaimCommand
 {
     private readonly IClaimsRepository _claimsRepository;
     private readonly ICoversRepository _coversRepository;
 
-    public ClaimsService(IClaimsRepository claimsRepository, ICoversRepository coversRepository)
+    public CreateClaimCommand(IClaimsRepository claimsRepository, ICoversRepository coversRepository)
     {
         _claimsRepository = claimsRepository;
         _coversRepository = coversRepository;

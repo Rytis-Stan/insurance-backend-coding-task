@@ -19,7 +19,7 @@ public class CreateClaimCommandTests : ClaimsServiceTests
 
     public CreateClaimCommandTests()
     {
-        _createClaimCommand = _claimsService;
+        _createClaimCommand = new CreateClaimCommand(_claimsRepositoryMock.Object, _coversRepositoryMock.Object);
     }
 
     [Theory]
@@ -262,13 +262,11 @@ public class ClaimsServiceTests
 {
     protected readonly Mock<IClaimsRepository> _claimsRepositoryMock;
     protected readonly Mock<ICoversRepository> _coversRepositoryMock;
-    protected readonly ClaimsService _claimsService;
 
     public ClaimsServiceTests()
     {
         _claimsRepositoryMock = new Mock<IClaimsRepository>();
         _coversRepositoryMock = new Mock<ICoversRepository>();
-        _claimsService = new ClaimsService(_claimsRepositoryMock.Object, _coversRepositoryMock.Object);
     }
 
     protected static Claim RandomClaim()

@@ -95,7 +95,7 @@ public class Program
 
         services.AddTransient<ICoverPricing, CoverPricing>();
 
-        services.AddTransient<ICreateClaimCommand, ClaimsService>();
+        services.AddTransient<ICreateClaimCommand, CreateClaimCommand>();
         services.AddTransient<IGetClaimByIdCommand, GetClaimByIdCommand>();
         services.AddTransient<IGetAllClaimsCommand, GetAllClaimsCommand>();
         services.AddTransient<IDeleteClaimCommand, DeleteClaimCommand>();
