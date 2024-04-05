@@ -4,7 +4,7 @@ using Claims.Domain;
 
 namespace Claims.Application.Commands;
 
-public class CoversService : ICreateCoverCommand, IGetCoverCommand, IGetAllCoversCommand, IDeleteCoverCommand
+public class CoversService : ICreateCoverCommand, IGetCoverCommand, IGetAllCoversCommand
 {
     private readonly ICoversRepository _coversRepository;
     private readonly ICoverPricing _coverPricing;
@@ -65,6 +65,16 @@ public class CoversService : ICreateCoverCommand, IGetCoverCommand, IGetAllCover
     public async Task<IEnumerable<Cover>> GetAllCoversAsync()
     {
         return await _coversRepository.GetAllAsync();
+    }
+}
+
+public class DeleteCoverCommand : IDeleteCoverCommand
+{
+    private readonly ICoversRepository _coversRepository;
+
+    public DeleteCoverCommand(ICoversRepository coversRepository)
+    {
+        _coversRepository = coversRepository;
     }
 
     public async Task<Cover?> DeleteCoverAsync(Guid id)

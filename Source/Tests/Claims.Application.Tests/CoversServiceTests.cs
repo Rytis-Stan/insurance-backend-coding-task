@@ -260,13 +260,13 @@ public class GetAllCoversCommandTests : CoversServiceTests
     }
 }
 
-public class DeleteCoverCommand : CoversServiceTests
+public class DeleteCoverCommandTests : CoversServiceTests
 {
     private readonly IDeleteCoverCommand _deleteCoverCommand;
 
-    public DeleteCoverCommand()
+    public DeleteCoverCommandTests()
     {
-        _deleteCoverCommand = coversService;
+        _deleteCoverCommand = new DeleteCoverCommand(_coversRepositoryMock.Object);
     }
 
     [Fact]
