@@ -9,19 +9,25 @@ namespace Claims.Api.Controllers;
 [Route("[controller]")]
 public class ClaimsController : ControllerBase
 {
-    private readonly IClaimsService _claimsService;
+    private readonly ICreateClaimCommand _createClaimCommand;
+    private readonly IGetClaimByIdCommand _getClaimByIdCommand;
+    private readonly IGetAllClaimsCommand _getAllClaimsCommand;
+    private readonly IDeleteClaimCommand _deleteClaimCommand;
     private readonly IClaimAuditor _claimAuditor;
 
-    public ClaimsController(IClaimsService claimsService, IClaimAuditor claimAuditor)
+    public ClaimsController(ICreateClaimCommand createClaimCommand, IGetClaimByIdCommand getClaimByIdCommand, IGetAllClaimsCommand getAllClaimsCommand, IDeleteClaimCommand deleteClaimCommand, IClaimAuditor claimAuditor)
     {
-        _claimsService = claimsService;
+        _createClaimCommand = createClaimCommand;
+        _getClaimByIdCommand = getClaimByIdCommand;
+        _getAllClaimsCommand = getAllClaimsCommand;
+        _deleteClaimCommand = deleteClaimCommand;
         _claimAuditor = claimAuditor;
     }
 
     [HttpPost]
     public async Task<ActionResult<ClaimDto>> CreateAsync(CreateClaimRequestDto request)
     {
-        var claim = await _claimsService.CreateClaimAsync(request.ToDomainRequest());
+        var claim = await _createClaimCommand.CreateClaimAsync(request.ToDomainRequest());
         _claimAuditor.AuditPost(claim.Id);
         return Ok(claim.ToDto());
     }
@@ -29,7 +35,7 @@ public class ClaimsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<ClaimDto>> GetAsync(Guid id)
     {
-        var claim = await _claimsService.GetClaimByIdAsync(id);
+        var claim = await _getClaimByIdCommand.GetClaimByIdAsync(id);
         return claim != null
             ? Ok(claim)
             : NotFound();
@@ -38,7 +44,7 @@ public class ClaimsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ClaimDto>>> GetAsync()
     {
-        var claims = await _claimsService.GetAllClaimsAsync();
+        var claims = await _getAllClaimsCommand.GetAllClaimsAsync();
         return Ok(claims.Select(MappingExtensions.ToDto));
     }
 
@@ -46,7 +52,7 @@ public class ClaimsController : ControllerBase
     public async Task<ActionResult<ClaimDto?>> DeleteAsync(Guid id)
     {
         _claimAuditor.AuditDelete(id);
-        var deletedClaim = await _claimsService.DeleteClaimAsync(id);
+        var deletedClaim = await _deleteClaimCommand.DeleteClaimAsync(id);
         return Ok(deletedClaim.ToDto());
     }
 }

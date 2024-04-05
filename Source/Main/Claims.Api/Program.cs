@@ -9,6 +9,7 @@ using Claims.Auditing.MessageQueueBased;
 using Claims.Persistence.Auditing;
 using Claims.Persistence.Claims;
 using Microsoft.Azure.Cosmos;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Claims.Api;
 
@@ -87,9 +88,13 @@ public class Program
 
     private static void AddDomainServices(IServiceCollection services)
     {
-        services.AddTransient<IClaimsService, ClaimsService>();
+        // services.AddTransient<IClaimsService, ClaimsService>();
         services.AddTransient<ICoversService, CoversService>();
         services.AddTransient<ICoverPricing, CoverPricing>();
+        services.AddTransient<ICreateClaimCommand, ClaimsService>();
+        services.AddTransient<IGetClaimByIdCommand, ClaimsService>();
+        services.AddTransient<IGetAllClaimsCommand, ClaimsService>();
+        services.AddTransient<IDeleteClaimCommand, ClaimsService>();
     }
 
     private static void AddAuditing(IServiceCollection services, ISendingQueue<AuditMessage> auditQueue)
