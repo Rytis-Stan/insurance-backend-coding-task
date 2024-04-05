@@ -41,4 +41,42 @@ public static class MappingExtensions
             _ => throw new ArgumentOutOfRangeException(nameof(source))
         };
     }
+
+    public static CreateCoverRequest ToDomainRequest(this CreateCoverRequestDto source)
+    {
+        return new CreateCoverRequest(source.StartDate, source.EndDate, ToDomainEnum(source.Type));
+    }
+
+    public static CoverDto? ToDto(this Cover? source)
+    {
+        return source != null
+            ? new CoverDto(source.Id, source.StartDate, source.EndDate, ToDtoEnum(source.Type), source.Premium)
+            : null;
+    }
+
+    public static CoverType ToDomainEnum(this CoverTypeDto source)
+    {
+        return source switch
+        {
+            CoverTypeDto.Yacht => CoverType.Yacht,
+            CoverTypeDto.PassengerShip => CoverType.PassengerShip,
+            CoverTypeDto.ContainerShip => CoverType.ContainerShip,
+            CoverTypeDto.BulkCarrier => CoverType.BulkCarrier,
+            CoverTypeDto.Tanker => CoverType.Tanker,
+            _ => throw new ArgumentOutOfRangeException(nameof(source))
+        };
+    }
+
+    public static CoverTypeDto ToDtoEnum(this CoverType source)
+    {
+        return source switch
+        {
+            CoverType.Yacht => CoverTypeDto.Yacht,
+            CoverType.PassengerShip => CoverTypeDto.PassengerShip,
+            CoverType.ContainerShip => CoverTypeDto.ContainerShip,
+            CoverType.BulkCarrier => CoverTypeDto.BulkCarrier,
+            CoverType.Tanker => CoverTypeDto.Tanker,
+            _ => throw new ArgumentOutOfRangeException(nameof(source), source, null)
+        };
+    }
 }

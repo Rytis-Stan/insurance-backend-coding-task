@@ -24,15 +24,15 @@ public class CoversController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<CoverDto>> CreateAsync(CreateCoverRequestDto request)
     {
-        var cover = await _coversService.CreateCoverAsync(ToDomainRequest(request));
+        var cover = await _coversService.CreateCoverAsync(request.ToDomainRequest());
         _coverAuditor.AuditPost(cover.Id);
-        return Ok(ToDto(cover));
+        return Ok(cover.ToDto());
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<CoverDto>> GetAsync(Guid id)
     {
-        var cover = ToDto(await _coversService.GetCoverAsync(id));
+        var cover = (await _coversService.GetCoverAsync(id)).ToDto();
         return cover != null
             ? Ok(cover)
             : NotFound();
@@ -56,44 +56,6 @@ public class CoversController : ControllerBase
     {
         _coverAuditor.AuditDelete(id);
         var deletedCover = await _coversService.DeleteCoverAsync(id);
-        return Ok(ToDto(deletedCover));
-    }
-
-    private static CreateCoverRequest ToDomainRequest(CreateCoverRequestDto source)
-    {
-        return new CreateCoverRequest(source.StartDate, source.EndDate, ToDomainEnum(source.Type));
-    }
-
-    private static CoverDto? ToDto(Cover? source)
-    {
-        return source != null
-            ? new CoverDto(source.Id, source.StartDate, source.EndDate, ToDtoEnum(source.Type), source.Premium)
-            : null;
-    }
-
-    private static CoverType ToDomainEnum(CoverTypeDto source)
-    {
-        return source switch
-        {
-            CoverTypeDto.Yacht => CoverType.Yacht,
-            CoverTypeDto.PassengerShip => CoverType.PassengerShip,
-            CoverTypeDto.ContainerShip => CoverType.ContainerShip,
-            CoverTypeDto.BulkCarrier => CoverType.BulkCarrier,
-            CoverTypeDto.Tanker => CoverType.Tanker,
-            _ => throw new ArgumentOutOfRangeException(nameof(source))
-        };
-    }
-
-    private static CoverTypeDto ToDtoEnum(CoverType source)
-    {
-        return source switch
-        {
-            CoverType.Yacht => CoverTypeDto.Yacht,
-            CoverType.PassengerShip => CoverTypeDto.PassengerShip,
-            CoverType.ContainerShip => CoverTypeDto.ContainerShip,
-            CoverType.BulkCarrier => CoverTypeDto.BulkCarrier,
-            CoverType.Tanker => CoverTypeDto.Tanker,
-            _ => throw new ArgumentOutOfRangeException(nameof(source), source, null)
-        };
+        return Ok(deletedCover.ToDto());
     }
 }
