@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claims.Persistence.Claims",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claims.Persistence.Auditing", "Main\Claims.Persistence.Auditing\Claims.Persistence.Auditing.csproj", "{FF9A919F-69A0-4939-8941-5A17AE248C6F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Domain.Tests", "Tests\Claims.Domain.Tests\Claims.Domain.Tests.csproj", "{4049588D-2FE2-46C5-B608-67C61C3E1E8C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{FF9A919F-69A0-4939-8941-5A17AE248C6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF9A919F-69A0-4939-8941-5A17AE248C6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF9A919F-69A0-4939-8941-5A17AE248C6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4049588D-2FE2-46C5-B608-67C61C3E1E8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4049588D-2FE2-46C5-B608-67C61C3E1E8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4049588D-2FE2-46C5-B608-67C61C3E1E8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4049588D-2FE2-46C5-B608-67C61C3E1E8C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -104,6 +110,7 @@ Global
 		{A5C07096-BB14-45F5-B745-BFD052E224BA} = {6C8A7F8D-2103-4C17-8246-FC6CEC214383}
 		{D21AB839-614F-46BF-86F9-5E7B1CDE937A} = {6C8A7F8D-2103-4C17-8246-FC6CEC214383}
 		{FF9A919F-69A0-4939-8941-5A17AE248C6F} = {6C8A7F8D-2103-4C17-8246-FC6CEC214383}
+		{4049588D-2FE2-46C5-B608-67C61C3E1E8C} = {003F7774-8202-4837-8C40-72297F3876C1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9D4C1340-FBC4-4F35-944F-26237883E032}
