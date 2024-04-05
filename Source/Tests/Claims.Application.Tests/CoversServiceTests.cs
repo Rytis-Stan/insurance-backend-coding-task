@@ -9,30 +9,15 @@ using static Claims.Testing.TestValueBuilder;
 
 namespace Claims.Application.Tests;
 
-public class CoversServiceTests
+public class CreateCoverCommandTests : CoversServiceTests
 {
     private const CoverType AnyCoverType = CoverType.PassengerShip;
 
-    private readonly Mock<ICoversRepository> _coversRepositoryMock;
-    private readonly Mock<ICoverPricing> _coverPricingMock;
-    private readonly Mock<IClock> _clockMock;
-
     private readonly ICreateCoverCommand _createCoverCommand;
-    private readonly IGetCoverCommand _getCoverCommand;
-    private readonly IGetAllCoversCommand _getAllCoversCommand;
-    private readonly IDeleteCoverCommand _deleteCoverCommand;
 
-    public CoversServiceTests()
+    public CreateCoverCommandTests()
     {
-        _coversRepositoryMock = new Mock<ICoversRepository>();
-        _coverPricingMock = new Mock<ICoverPricing>();
-        _clockMock = new Mock<IClock>();
-        CoversService coversService = new CoversService(_coversRepositoryMock.Object, _coverPricingMock.Object, _clockMock.Object);
-
         _createCoverCommand = coversService;
-        _getCoverCommand = coversService;
-        _getAllCoversCommand = coversService;
-        _deleteCoverCommand = coversService;
     }
 
     [Fact]
@@ -129,12 +114,12 @@ public class CoversServiceTests
             Date(1981, 06, 11),
             Date(1981, 06, 10)
         );
-    
+
         async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate)
         {
             var request = new CreateCoverRequest(startDate, endDate, AnyCoverType);
             StubUtcNow(utcNow);
-    
+
             await AssertExtended.ThrowsArgumentExceptionAsync(
                 () => _createCoverCommand.CreateCoverAsync(request),
                 "End date cannot be earlier than the start date."
@@ -210,6 +195,23 @@ public class CoversServiceTests
         }
     }
 
+    private void StubPremium(DateOnly startDate, DateOnly endDate, CoverType coverType, decimal premium)
+    {
+        _coverPricingMock
+            .Setup(x => x.CalculatePremium(startDate, endDate, coverType))
+            .Returns(premium);
+    }
+}
+
+public class GetCoverCommandTests : CoversServiceTests
+{
+    private readonly IGetCoverCommand _getCoverCommand;
+
+    public GetCoverCommandTests()
+    {
+        _getCoverCommand = coversService;
+    }
+
     [Fact]
     public async Task ReturnsCoverByIdFromRepository()
     {
@@ -222,6 +224,23 @@ public class CoversServiceTests
         Assert.Equal(cover, returnedCover);
     }
 
+    private void StubFindCover(Guid id, Cover? coverToReturn)
+    {
+        _coversRepositoryMock
+            .Setup(x => x.FindByIdAsync(id))
+            .ReturnsAsync(coverToReturn);
+    }
+}
+
+public class GetAllCoversCommandTests : CoversServiceTests
+{
+    private readonly IGetAllCoversCommand _getAllCoversCommand;
+
+    public GetAllCoversCommandTests()
+    {
+        _getAllCoversCommand = coversService;
+    }
+
     [Fact]
     public async Task ReturnsAllCoversFromRepository()
     {
@@ -231,6 +250,23 @@ public class CoversServiceTests
         var returnedCovers = await _getAllCoversCommand.GetAllCoversAsync();
 
         Assert.Equal(covers, returnedCovers);
+    }
+
+    private void StubGetAllCovers(IEnumerable<Cover> coversToReturn)
+    {
+        _coversRepositoryMock
+            .Setup(x => x.GetAllAsync())
+            .ReturnsAsync(coversToReturn);
+    }
+}
+
+public class DeleteCoverCommand : CoversServiceTests
+{
+    private readonly IDeleteCoverCommand _deleteCoverCommand;
+
+    public DeleteCoverCommand()
+    {
+        _deleteCoverCommand = coversService;
     }
 
     [Fact]
@@ -255,7 +291,30 @@ public class CoversServiceTests
         Assert.Equal(cover, returnedCover);
     }
 
-    private static Cover RandomCover()
+    private void StubDeleteCover(Guid id, Cover? deletedCoverToReturn)
+    {
+        _coversRepositoryMock
+            .Setup(x => x.DeleteByIdAsync(id))
+            .ReturnsAsync(deletedCoverToReturn);
+    }
+}
+
+public class CoversServiceTests
+{
+    protected readonly Mock<ICoversRepository> _coversRepositoryMock;
+    protected readonly Mock<ICoverPricing> _coverPricingMock;
+    protected readonly Mock<IClock> _clockMock;
+    protected readonly CoversService coversService;
+
+    public CoversServiceTests()
+    {
+        _coversRepositoryMock = new Mock<ICoversRepository>();
+        _coverPricingMock = new Mock<ICoverPricing>();
+        _clockMock = new Mock<IClock>();
+        coversService = new CoversService(_coversRepositoryMock.Object, _coverPricingMock.Object, _clockMock.Object);
+    }
+
+    protected static Cover RandomCover()
     {
         return new Cover
         {
@@ -267,38 +326,10 @@ public class CoversServiceTests
         };
     }
 
-    private void StubFindCover(Guid id, Cover? coverToReturn)
-    {
-        _coversRepositoryMock
-            .Setup(x => x.FindByIdAsync(id))
-            .ReturnsAsync(coverToReturn);
-    }
-
-    private void StubGetAllCovers(IEnumerable<Cover> coversToReturn)
-    {
-        _coversRepositoryMock
-            .Setup(x => x.GetAllAsync())
-            .ReturnsAsync(coversToReturn);
-    }
-
-    private void StubDeleteCover(Guid id, Cover? deletedCoverToReturn)
-    {
-        _coversRepositoryMock
-            .Setup(x => x.DeleteByIdAsync(id))
-            .ReturnsAsync(deletedCoverToReturn);
-    }
-
-    private void StubUtcNow(DateTime utcNow)
+    protected void StubUtcNow(DateTime utcNow)
     {
         _clockMock
             .Setup(x => x.UtcNow())
             .Returns(utcNow);
-    }
-
-    private void StubPremium(DateOnly startDate, DateOnly endDate, CoverType coverType, decimal premium)
-    {
-        _coverPricingMock
-            .Setup(x => x.CalculatePremium(startDate, endDate, coverType))
-            .Returns(premium);
     }
 }
