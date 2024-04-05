@@ -21,7 +21,3 @@ public interface IDeleteClaimCommand
 {
     Task<Claim?> DeleteClaimAsync(Guid id);
 }
-
-public interface IClaimsService : ICreateClaimCommand, IGetClaimByIdCommand, IGetAllClaimsCommand, IDeleteClaimCommand
-{
-}

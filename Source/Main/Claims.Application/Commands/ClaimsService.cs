@@ -3,7 +3,7 @@ using Claims.Domain;
 
 namespace Claims.Application.Commands;
 
-public class ClaimsService : IClaimsService
+public class ClaimsService : ICreateClaimCommand, IGetClaimByIdCommand, IGetAllClaimsCommand, IDeleteClaimCommand
 {
     private readonly IClaimsRepository _claimsRepository;
     private readonly ICoversRepository _coversRepository;
