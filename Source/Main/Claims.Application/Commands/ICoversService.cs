@@ -9,9 +9,9 @@ public interface ICreateCoverCommand : ICommand<CreateCoverRequest, Cover>
 
 public record GetCoverRequest(Guid Id);
 
-public interface IGetCoverCommand
+public interface IGetCoverCommand : ICommand<GetCoverRequest, Cover?>
 {
-    Task<Cover?> ExecuteAsync(GetCoverRequest request);
+    // Task<Cover?> ExecuteAsync(GetCoverRequest request);
 }
 
 public interface IGetAllCoversCommand : ICommand<IEnumerable<Cover>>
@@ -21,7 +21,7 @@ public interface IGetAllCoversCommand : ICommand<IEnumerable<Cover>>
 
 public record DeleteCoverRequest(Guid Id);
 
-public interface IDeleteCoverCommand
+public interface IDeleteCoverCommand : ICommand<DeleteCoverRequest, Cover?>
 {
-    Task<Cover?> ExecuteAsync(DeleteCoverRequest request);
+    // Task<Cover?> ExecuteAsync(DeleteCoverRequest request);
 }
