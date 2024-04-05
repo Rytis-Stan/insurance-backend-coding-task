@@ -15,12 +15,12 @@ public class CreateClaimCommandTests : ClaimsCommandTests
     private const decimal AnyPremium = 100.00m;
 
     private readonly Mock<ICoversRepository> _coversRepositoryMock;
-    private readonly ICreateClaimCommand _createClaimCommand;
+    private readonly CreateClaimCommand _command;
 
     public CreateClaimCommandTests()
     {
         _coversRepositoryMock = new Mock<ICoversRepository>();
-        _createClaimCommand = new CreateClaimCommand(_claimsRepositoryMock.Object, _coversRepositoryMock.Object);
+        _command = new CreateClaimCommand(_claimsRepositoryMock.Object, _coversRepositoryMock.Object);
     }
 
     [Theory]
@@ -35,7 +35,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
         var request = new CreateClaimRequest(coverId, "anyName", AnyClaimType, damageCost, created);
 
         await AssertExtended.ThrowsArgumentExceptionAsync(
-            () => _createClaimCommand.CreateClaimAsync(request),
+            () => _command.CreateClaimAsync(request),
             "Damage cost must be a positive value."
         );
     }
@@ -51,7 +51,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
         var request = new CreateClaimRequest(coverId, "anyName", AnyClaimType, damageCost, created);
 
         await AssertExtended.ThrowsArgumentExceptionAsync(
-            () => _createClaimCommand.CreateClaimAsync(request),
+            () => _command.CreateClaimAsync(request),
             "Damage cost cannot exceed 100000."
         );
     }
@@ -66,7 +66,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
         StubFindCover(coverId, null);
 
         await AssertExtended.ThrowsArgumentExceptionAsync(
-            () => _createClaimCommand.CreateClaimAsync(request),
+            () => _command.CreateClaimAsync(request),
             "Claim references a non-existing cover via the cover ID."
         );
     }
@@ -112,7 +112,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
             StubFindCover(cover.Id, cover);
 
             await AssertExtended.ThrowsArgumentExceptionAsync(
-                () => _createClaimCommand.CreateClaimAsync(request),
+                () => _command.CreateClaimAsync(request),
                 "Claim is outside the related cover period."
             );
         }
@@ -137,7 +137,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
             var request = new CreateClaimRequest(cover.Id, claimName, claimType, claimDamageCost, claimCreated);
             StubFindCover(cover.Id, cover);
 
-            await _createClaimCommand.CreateClaimAsync(request);
+            await _command.CreateClaimAsync(request);
 
             _claimsRepositoryMock.Verify(x => x.CreateAsync(new NewClaimInfo(cover.Id, claimName, claimType, claimDamageCost, claimCreated)));
         }

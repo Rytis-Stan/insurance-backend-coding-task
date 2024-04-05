@@ -7,11 +7,11 @@ namespace Claims.Application.Tests;
 
 public class DeleteClaimCommandTests : ClaimsCommandTests
 {
-    private readonly IDeleteClaimCommand _deleteClaimCommand;
+    private readonly DeleteClaimCommand _command;
 
     public DeleteClaimCommandTests()
     {
-        _deleteClaimCommand = new DeleteClaimCommand(_claimsRepositoryMock.Object);
+        _command = new DeleteClaimCommand(_claimsRepositoryMock.Object);
     }
 
     [Fact]
@@ -19,7 +19,7 @@ public class DeleteClaimCommandTests : ClaimsCommandTests
     {
         var id = Guid.NewGuid();
 
-        await _deleteClaimCommand.DeleteClaimAsync(id);
+        await _command.DeleteClaimAsync(id);
 
         _claimsRepositoryMock.Verify(x => x.DeleteByIdAsync(id));
     }
@@ -31,7 +31,7 @@ public class DeleteClaimCommandTests : ClaimsCommandTests
         var claim = RandomClaim();
         StubDeleteClaim(id, claim);
 
-        var returnedClaim = await _deleteClaimCommand.DeleteClaimAsync(id);
+        var returnedClaim = await _command.DeleteClaimAsync(id);
 
         Assert.Equal(claim, returnedClaim);
     }

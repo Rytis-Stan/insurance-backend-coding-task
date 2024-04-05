@@ -7,11 +7,11 @@ namespace Claims.Application.Tests;
 
 public class GetAllClaimsCommandTests : ClaimsCommandTests
 {
-    private readonly IGetAllClaimsCommand _getAllClaimsCommand;
+    private readonly GetAllClaimsCommand _command;
 
     public GetAllClaimsCommandTests()
     {
-        _getAllClaimsCommand = new GetAllClaimsCommand(_claimsRepositoryMock.Object);
+        _command = new GetAllClaimsCommand(_claimsRepositoryMock.Object);
     }
 
     [Fact]
@@ -20,7 +20,7 @@ public class GetAllClaimsCommandTests : ClaimsCommandTests
         var claims = new[] { RandomClaim(), RandomClaim() };
         StubGetAllClaims(claims);
 
-        var returnedClaims = await _getAllClaimsCommand.GetAllClaimsAsync();
+        var returnedClaims = await _command.GetAllClaimsAsync();
 
         Assert.Equal(claims, returnedClaims);
     }

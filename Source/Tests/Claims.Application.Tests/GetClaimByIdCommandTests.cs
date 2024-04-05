@@ -7,11 +7,11 @@ namespace Claims.Application.Tests;
 
 public class GetClaimByIdCommandTests : ClaimsCommandTests
 {
-    private readonly IGetClaimByIdCommand _getClaimByIdCommand;
+    private readonly GetClaimByIdCommand _command;
 
     public GetClaimByIdCommandTests()
     {
-        _getClaimByIdCommand = new GetClaimByIdCommand(_claimsRepositoryMock.Object);
+        _command = new GetClaimByIdCommand(_claimsRepositoryMock.Object);
     }
 
     [Fact]
@@ -21,7 +21,7 @@ public class GetClaimByIdCommandTests : ClaimsCommandTests
         var claim = RandomClaim();
         StubFindClaim(id, claim);
 
-        var returnedClaim = await _getClaimByIdCommand.GetClaimByIdAsync(id);
+        var returnedClaim = await _command.GetClaimByIdAsync(id);
 
         Assert.Equal(claim, returnedClaim);
     }
