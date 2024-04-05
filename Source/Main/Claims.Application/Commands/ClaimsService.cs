@@ -3,7 +3,7 @@ using Claims.Domain;
 
 namespace Claims.Application.Commands;
 
-public class ClaimsService : ICreateClaimCommand, IGetClaimByIdCommand, IGetAllClaimsCommand, IDeleteClaimCommand
+public class ClaimsService : ICreateClaimCommand, IGetClaimByIdCommand, IGetAllClaimsCommand
 {
     private readonly IClaimsRepository _claimsRepository;
     private readonly ICoversRepository _coversRepository;
@@ -60,6 +60,16 @@ public class ClaimsService : ICreateClaimCommand, IGetClaimByIdCommand, IGetAllC
     public async Task<IEnumerable<Claim>> GetAllClaimsAsync()
     {
         return await _claimsRepository.GetAllAsync();
+    }
+}
+
+public class DeleteClaimCommand : IDeleteClaimCommand
+{
+    private readonly IClaimsRepository _claimsRepository;
+
+    public DeleteClaimCommand(IClaimsRepository claimsRepository)
+    {
+        _claimsRepository = claimsRepository;
     }
 
     public async Task<Claim?> DeleteClaimAsync(Guid id)

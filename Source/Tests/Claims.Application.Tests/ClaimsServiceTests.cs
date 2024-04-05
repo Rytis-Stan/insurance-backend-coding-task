@@ -225,7 +225,7 @@ public class DeleteClaimCommandTests : ClaimsServiceTests
 
     public DeleteClaimCommandTests()
     {
-        _deleteClaimCommand = _claimsService;
+        _deleteClaimCommand = new DeleteClaimCommand(_claimsRepositoryMock.Object);
     }
 
     [Fact]
