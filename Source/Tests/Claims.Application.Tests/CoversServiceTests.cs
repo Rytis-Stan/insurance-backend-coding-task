@@ -14,16 +14,16 @@ public class CoversServiceTests
     private const CoverType AnyCoverType = CoverType.PassengerShip;
 
     private readonly Mock<ICoversRepository> _coversRepositoryMock;
-    private readonly Mock<IPricingService> _pricingServiceMock;
+    private readonly Mock<ICoverPricing> _coverPricingMock;
     private readonly Mock<IClock> _clockMock;
     private readonly CoversService _coversService;
 
     public CoversServiceTests()
     {
         _coversRepositoryMock = new Mock<ICoversRepository>();
-        _pricingServiceMock = new Mock<IPricingService>();
+        _coverPricingMock = new Mock<ICoverPricing>();
         _clockMock = new Mock<IClock>();
-        _coversService = new CoversService(_coversRepositoryMock.Object, _pricingServiceMock.Object, _clockMock.Object);
+        _coversService = new CoversService(_coversRepositoryMock.Object, _coverPricingMock.Object, _clockMock.Object);
     }
 
     [Fact]
@@ -288,7 +288,7 @@ public class CoversServiceTests
 
     private void StubPremium(DateOnly startDate, DateOnly endDate, CoverType coverType, decimal premium)
     {
-        _pricingServiceMock
+        _coverPricingMock
             .Setup(x => x.CalculatePremium(startDate, endDate, coverType))
             .Returns(premium);
     }

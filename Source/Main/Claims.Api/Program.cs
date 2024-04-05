@@ -89,7 +89,7 @@ public class Program
     {
         services.AddTransient<IClaimsService, ClaimsService>();
         services.AddTransient<ICoversService, CoversService>();
-        services.AddTransient<IPricingService, PricingService>();
+        services.AddTransient<ICoverPricing, CoverPricing>();
     }
 
     private static void AddAuditing(IServiceCollection services, ISendingQueue<AuditMessage> auditQueue)

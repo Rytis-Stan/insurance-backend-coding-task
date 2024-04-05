@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Claims.Application.Tests;
 
-public class PricingServiceTests
+public class CoverPricingTests
 {
     [Theory]
     [InlineData(CoverType.Yacht, 1375)]         // 10% of 1250
@@ -111,7 +111,7 @@ public class PricingServiceTests
         var (startDate, endDate) = TestData.RandomFixedLengthPeriod(periodDurationInDays);
         Assert.Equal(
             expectedPremium,
-            new PricingService().CalculatePremium(startDate, endDate, coverType)
+            new CoverPricing().CalculatePremium(startDate, endDate, coverType)
         );
     }
 }

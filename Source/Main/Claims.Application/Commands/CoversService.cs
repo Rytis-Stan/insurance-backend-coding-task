@@ -7,13 +7,13 @@ namespace Claims.Application.Commands;
 public class CoversService : ICoversService
 {
     private readonly ICoversRepository _coversRepository;
-    private readonly IPricingService _pricingService;
+    private readonly ICoverPricing _coverPricing;
     private readonly IClock _clock;
 
-    public CoversService(ICoversRepository coversRepository, IPricingService pricingService, IClock clock)
+    public CoversService(ICoversRepository coversRepository, ICoverPricing coverPricing, IClock clock)
     {
         _coversRepository = coversRepository;
-        _pricingService = pricingService;
+        _coverPricing = coverPricing;
         _clock = clock;
     }
 
@@ -54,7 +54,7 @@ public class CoversService : ICoversService
 
     private decimal PremiumFrom(CreateCoverRequest request)
     {
-        return _pricingService.CalculatePremium(request.StartDate, request.EndDate, request.Type);
+        return _coverPricing.CalculatePremium(request.StartDate, request.EndDate, request.Type);
     }
 
     public async Task<Cover?> GetCoverAsync(Guid id)
