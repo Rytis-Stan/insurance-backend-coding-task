@@ -35,7 +35,7 @@ public class ClaimsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<ClaimDto>> GetAsync(Guid id)
     {
-        var claim = await _getClaimByIdCommand.ExecuteAsync(id);
+        var claim = await _getClaimByIdCommand.ExecuteAsync(new GetClaimByIdRequest(id));
         return claim != null
             ? Ok(claim)
             : NotFound();

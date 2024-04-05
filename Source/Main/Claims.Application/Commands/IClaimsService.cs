@@ -18,9 +18,11 @@ public interface ICreateClaimCommand : ICommand<CreateClaimRequest, Claim>
     // Task<Claim> ExecuteAsync(CreateClaimRequest request);
 }
 
+public record GetClaimByIdRequest(Guid Id);
+
 public interface IGetClaimByIdCommand
 {
-    Task<Claim?> ExecuteAsync(Guid id);
+    Task<Claim?> ExecuteAsync(GetClaimByIdRequest request);
 }
 
 public interface IGetAllClaimsCommand : ICommand<IEnumerable<Claim>>

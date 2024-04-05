@@ -12,8 +12,8 @@ public class GetClaimByIdCommand : IGetClaimByIdCommand
         _claimsRepository = claimsRepository;
     }
 
-    public async Task<Claim?> ExecuteAsync(Guid id)
+    public async Task<Claim?> ExecuteAsync(GetClaimByIdRequest request)
     {
-        return await _claimsRepository.FindByIdAsync(id);
+        return await _claimsRepository.FindByIdAsync(request.Id);
     }
 }

@@ -21,7 +21,7 @@ public class GetClaimByIdCommandTests : ClaimsCommandTests
         var claim = RandomClaim();
         StubFindClaim(id, claim);
 
-        var returnedClaim = await _command.ExecuteAsync(id);
+        var returnedClaim = await _command.ExecuteAsync(new GetClaimByIdRequest(id));
 
         Assert.Equal(claim, returnedClaim);
     }
