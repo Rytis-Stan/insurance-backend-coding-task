@@ -16,14 +16,23 @@ public class CoversServiceTests
     private readonly Mock<ICoversRepository> _coversRepositoryMock;
     private readonly Mock<ICoverPricing> _coverPricingMock;
     private readonly Mock<IClock> _clockMock;
-    private readonly CoversService _coversService;
+
+    private readonly ICreateCoverCommand _createCoverCommand;
+    private readonly IGetCoverCommand _getCoverCommand;
+    private readonly IGetAllCoversCommand _getAllCoversCommand;
+    private readonly IDeleteCoverCommand _deleteCoverCommand;
 
     public CoversServiceTests()
     {
         _coversRepositoryMock = new Mock<ICoversRepository>();
         _coverPricingMock = new Mock<ICoverPricing>();
         _clockMock = new Mock<IClock>();
-        _coversService = new CoversService(_coversRepositoryMock.Object, _coverPricingMock.Object, _clockMock.Object);
+        CoversService coversService = new CoversService(_coversRepositoryMock.Object, _coverPricingMock.Object, _clockMock.Object);
+
+        _createCoverCommand = coversService;
+        _getCoverCommand = coversService;
+        _getAllCoversCommand = coversService;
+        _deleteCoverCommand = coversService;
     }
 
     [Fact]
@@ -53,7 +62,7 @@ public class CoversServiceTests
             StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsArgumentExceptionAsync(
-                () => _coversService.CreateCoverAsync(request),
+                () => _createCoverCommand.CreateCoverAsync(request),
                 "Start date cannot be in the past."
             );
         }
@@ -86,7 +95,7 @@ public class CoversServiceTests
             StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsArgumentExceptionAsync(
-                () => _coversService.CreateCoverAsync(request),
+                () => _createCoverCommand.CreateCoverAsync(request),
                 "End date cannot be in the past."
             );
         }
@@ -127,7 +136,7 @@ public class CoversServiceTests
             StubUtcNow(utcNow);
     
             await AssertExtended.ThrowsArgumentExceptionAsync(
-                () => _coversService.CreateCoverAsync(request),
+                () => _createCoverCommand.CreateCoverAsync(request),
                 "End date cannot be earlier than the start date."
             );
         }
@@ -172,7 +181,7 @@ public class CoversServiceTests
             StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsArgumentExceptionAsync(
-                () => _coversService.CreateCoverAsync(request),
+                () => _createCoverCommand.CreateCoverAsync(request),
                 "Total insurance period cannot exceed 1 year."
             );
         }
@@ -195,7 +204,7 @@ public class CoversServiceTests
             StubUtcNow(utcNow);
             StubPremium(startDate, endDate, coverType, premium);
 
-            await _coversService.CreateCoverAsync(request);
+            await _createCoverCommand.CreateCoverAsync(request);
 
             _coversRepositoryMock.Verify(x => x.CreateAsync(new NewCoverInfo(startDate, endDate, coverType, premium)));
         }
@@ -208,7 +217,7 @@ public class CoversServiceTests
         var cover = RandomCover();
         StubFindCover(id, cover);
 
-        var returnedCover = await _coversService.GetCoverAsync(id);
+        var returnedCover = await _getCoverCommand.GetCoverAsync(id);
 
         Assert.Equal(cover, returnedCover);
     }
@@ -219,7 +228,7 @@ public class CoversServiceTests
         var covers = new[] { RandomCover(), RandomCover() };
         StubGetAllCovers(covers);
 
-        var returnedCovers = await _coversService.GetAllCoversAsync();
+        var returnedCovers = await _getAllCoversCommand.GetAllCoversAsync();
 
         Assert.Equal(covers, returnedCovers);
     }
@@ -229,7 +238,7 @@ public class CoversServiceTests
     {
         var id = Guid.NewGuid();
 
-        await _coversService.DeleteCoverAsync(id);
+        await _deleteCoverCommand.DeleteCoverAsync(id);
 
         _coversRepositoryMock.Verify(x => x.DeleteByIdAsync(id));
     }
@@ -241,7 +250,7 @@ public class CoversServiceTests
         var cover = RandomCover();
         StubDeleteCover(id, cover);
 
-        var returnedCover = await _coversService.DeleteCoverAsync(id);
+        var returnedCover = await _deleteCoverCommand.DeleteCoverAsync(id);
 
         Assert.Equal(cover, returnedCover);
     }
