@@ -190,13 +190,13 @@ public class ClaimsServiceTests
         Assert.Equal(claim, returnedClaim);
     }
 
-    private static Cover CreateCoverForPeriod(DateOnly coverStartDate, DateOnly coverEndDate)
+    private static Cover CreateCoverForPeriod(DateOnly startDate, DateOnly endDate)
     {
         return new Cover
         {
             Id = Guid.NewGuid(),
-            StartDate = coverStartDate,
-            EndDate = coverEndDate,
+            StartDate = startDate,
+            EndDate = endDate,
             Type = AnyCoverType,
             Premium = AnyPremium
         };
