@@ -14,13 +14,13 @@ public class CreateCoverCommandTests : CoversServiceTests
 
     private readonly Mock<ICoverPricing> _coverPricingMock;
     private readonly Mock<IClock> _clockMock;
-    private readonly ICreateCoverCommand _createCoverCommand;
+    private readonly CreateCoverCommand _command;
 
     public CreateCoverCommandTests()
     {
         _coverPricingMock = new Mock<ICoverPricing>();
         _clockMock = new Mock<IClock>();
-        _createCoverCommand = new CreateCoverCommand(_coversRepositoryMock.Object, _coverPricingMock.Object, _clockMock.Object);
+        _command = new CreateCoverCommand(_coversRepositoryMock.Object, _coverPricingMock.Object, _clockMock.Object);
     }
 
     [Fact]
@@ -50,7 +50,7 @@ public class CreateCoverCommandTests : CoversServiceTests
             StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsArgumentExceptionAsync(
-                () => _createCoverCommand.CreateCoverAsync(request),
+                () => _command.CreateCoverAsync(request),
                 "Start date cannot be in the past."
             );
         }
@@ -83,7 +83,7 @@ public class CreateCoverCommandTests : CoversServiceTests
             StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsArgumentExceptionAsync(
-                () => _createCoverCommand.CreateCoverAsync(request),
+                () => _command.CreateCoverAsync(request),
                 "End date cannot be in the past."
             );
         }
@@ -124,7 +124,7 @@ public class CreateCoverCommandTests : CoversServiceTests
             StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsArgumentExceptionAsync(
-                () => _createCoverCommand.CreateCoverAsync(request),
+                () => _command.CreateCoverAsync(request),
                 "End date cannot be earlier than the start date."
             );
         }
@@ -169,7 +169,7 @@ public class CreateCoverCommandTests : CoversServiceTests
             StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsArgumentExceptionAsync(
-                () => _createCoverCommand.CreateCoverAsync(request),
+                () => _command.CreateCoverAsync(request),
                 "Total insurance period cannot exceed 1 year."
             );
         }
@@ -192,7 +192,7 @@ public class CreateCoverCommandTests : CoversServiceTests
             StubUtcNow(utcNow);
             StubPremium(startDate, endDate, coverType, premium);
 
-            await _createCoverCommand.CreateCoverAsync(request);
+            await _command.CreateCoverAsync(request);
 
             _coversRepositoryMock.Verify(x => x.CreateAsync(new NewCoverInfo(startDate, endDate, coverType, premium)));
         }

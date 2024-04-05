@@ -7,11 +7,11 @@ namespace Claims.Application.Tests;
 
 public class GetCoverCommandTests : CoversServiceTests
 {
-    private readonly IGetCoverCommand _getCoverCommand;
+    private readonly GetCoverCommand _command;
 
     public GetCoverCommandTests()
     {
-        _getCoverCommand = new GetCoverCommand(_coversRepositoryMock.Object);
+        _command = new GetCoverCommand(_coversRepositoryMock.Object);
     }
 
     [Fact]
@@ -21,7 +21,7 @@ public class GetCoverCommandTests : CoversServiceTests
         var cover = RandomCover();
         StubFindCover(id, cover);
 
-        var returnedCover = await _getCoverCommand.GetCoverAsync(id);
+        var returnedCover = await _command.GetCoverAsync(id);
 
         Assert.Equal(cover, returnedCover);
     }
