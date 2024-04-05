@@ -7,26 +7,26 @@ public static class MappingExtensions
 {
     public static CreateCoverRequest ToDomainRequest(this CreateCoverRequestDto source)
     {
-        return new CreateCoverRequest(source.StartDate, source.EndDate, ToDomainEnum(source.Type));
+        return new CreateCoverRequest(source.StartDate, source.EndDate, source.Type.ToDomainEnum());
     }
 
     public static CoverDto? ToDto(this Cover? source)
     {
         return source != null
-            ? new CoverDto(source.Id, source.StartDate, source.EndDate, ToDtoEnum(source.Type), source.Premium)
+            ? new CoverDto(source.Id, source.StartDate, source.EndDate, source.Type.ToDtoEnum(), source.Premium)
             : null;
     }
 
     public static CreateClaimRequest ToDomainRequest(this CreateClaimRequestDto source)
     {
         var claimTypeDto = source.Type;
-        return new CreateClaimRequest(source.CoverId, source.Name, ToDomainEnum(claimTypeDto), source.DamageCost, source.Created);
+        return new CreateClaimRequest(source.CoverId, source.Name, claimTypeDto.ToDomainEnum(), source.DamageCost, source.Created);
     }
 
     public static ClaimDto? ToDto(this Claim? source)
     {
         return source != null
-            ? new ClaimDto(source.Id, source.CoverId, source.Created, source.Name, ToDtoEnum(source.Type), source.DamageCost)
+            ? new ClaimDto(source.Id, source.CoverId, source.Created, source.Name, source.Type.ToDtoEnum(), source.DamageCost)
             : null;
     }
 
