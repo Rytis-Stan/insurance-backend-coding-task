@@ -21,7 +21,3 @@ public interface IDeleteCoverCommand
 {
     Task<Cover?> DeleteCoverAsync(Guid id);
 }
-
-public interface ICoversService : ICreateCoverCommand, IGetCoverCommand, IGetAllCoversCommand, IDeleteCoverCommand
-{
-}

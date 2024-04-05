@@ -4,7 +4,7 @@ using Claims.Domain;
 
 namespace Claims.Application.Commands;
 
-public class CoversService : ICoversService
+public class CoversService : ICreateCoverCommand, IGetCoverCommand, IGetAllCoversCommand, IDeleteCoverCommand
 {
     private readonly ICoversRepository _coversRepository;
     private readonly ICoverPricing _coverPricing;
