@@ -168,7 +168,7 @@ public class GetClaimByIdCommandTests : ClaimsServiceTests
 
     public GetClaimByIdCommandTests()
     {
-        _getClaimByIdCommand = _claimsService;
+        _getClaimByIdCommand = new GetClaimByIdCommand(_claimsRepositoryMock.Object);
     }
 
     [Fact]

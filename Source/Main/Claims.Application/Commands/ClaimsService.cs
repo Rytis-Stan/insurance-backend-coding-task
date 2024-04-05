@@ -3,7 +3,7 @@ using Claims.Domain;
 
 namespace Claims.Application.Commands;
 
-public class ClaimsService : ICreateClaimCommand, IGetClaimByIdCommand
+public class ClaimsService : ICreateClaimCommand
 {
     private readonly IClaimsRepository _claimsRepository;
     private readonly ICoversRepository _coversRepository;
@@ -51,13 +51,21 @@ public class ClaimsService : ICreateClaimCommand, IGetClaimByIdCommand
     {
         return new NewClaimInfo(request.CoverId, request.Name, request.Type, request.DamageCost, request.Created);
     }
+}
+
+public class GetClaimByIdCommand : IGetClaimByIdCommand
+{
+    private readonly IClaimsRepository _claimsRepository;
+
+    public GetClaimByIdCommand(IClaimsRepository claimsRepository)
+    {
+        _claimsRepository = claimsRepository;
+    }
 
     public async Task<Claim?> GetClaimByIdAsync(Guid id)
     {
         return await _claimsRepository.FindByIdAsync(id);
     }
-
-
 }
 
 public class GetAllClaimsCommand : IGetAllClaimsCommand
