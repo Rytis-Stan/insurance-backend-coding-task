@@ -97,7 +97,7 @@ public class Program
 
         services.AddTransient<ICreateClaimCommand, ClaimsService>();
         services.AddTransient<IGetClaimByIdCommand, ClaimsService>();
-        services.AddTransient<IGetAllClaimsCommand, ClaimsService>();
+        services.AddTransient<IGetAllClaimsCommand, GetAllClaimsCommand>();
         services.AddTransient<IDeleteClaimCommand, DeleteClaimCommand>();
     }
 

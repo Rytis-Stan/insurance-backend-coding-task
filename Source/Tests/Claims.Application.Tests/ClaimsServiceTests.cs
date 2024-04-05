@@ -197,7 +197,7 @@ public class GetAllClaimsCommandTests : ClaimsServiceTests
 
     public GetAllClaimsCommandTests()
     {
-        _getAllClaimsCommand = _claimsService;
+        _getAllClaimsCommand = new GetAllClaimsCommand(_claimsRepositoryMock.Object);
     }
 
     [Fact]
