@@ -89,7 +89,7 @@ public class Program
     private static void AddDomainServices(IServiceCollection services)
     {
         services.AddTransient<ICreateCoverCommand, CoversService>();
-        services.AddTransient<IGetCoverCommand, CoversService>();
+        services.AddTransient<IGetCoverCommand, GetCoverCommand>();
         services.AddTransient<IGetAllCoversCommand, GetAllCoversCommand>();
         services.AddTransient<IDeleteCoverCommand, DeleteCoverCommand>();
 

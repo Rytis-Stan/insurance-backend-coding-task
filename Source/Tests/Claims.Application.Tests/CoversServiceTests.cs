@@ -209,7 +209,7 @@ public class GetCoverCommandTests : CoversServiceTests
 
     public GetCoverCommandTests()
     {
-        _getCoverCommand = coversService;
+        _getCoverCommand = new GetCoverCommand(_coversRepositoryMock.Object);
     }
 
     [Fact]

@@ -4,7 +4,7 @@ using Claims.Domain;
 
 namespace Claims.Application.Commands;
 
-public class CoversService : ICreateCoverCommand, IGetCoverCommand
+public class CoversService : ICreateCoverCommand
 {
     private readonly ICoversRepository _coversRepository;
     private readonly ICoverPricing _coverPricing;
@@ -55,6 +55,18 @@ public class CoversService : ICreateCoverCommand, IGetCoverCommand
     private decimal PremiumFrom(CreateCoverRequest request)
     {
         return _coverPricing.CalculatePremium(request.StartDate, request.EndDate, request.Type);
+    }
+
+
+}
+
+public class GetCoverCommand : IGetCoverCommand
+{
+    private readonly ICoversRepository _coversRepository;
+
+    public GetCoverCommand(ICoversRepository coversRepository)
+    {
+        _coversRepository = coversRepository;
     }
 
     public async Task<Cover?> GetCoverAsync(Guid id)
