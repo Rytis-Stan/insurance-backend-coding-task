@@ -1,4 +1,4 @@
-﻿using Claims.Application;
+﻿using Claims.Application.Commands;
 using Claims.Domain;
 
 namespace Claims.Api.Dto;

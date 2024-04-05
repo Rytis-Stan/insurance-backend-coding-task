@@ -1,6 +1,6 @@
 using Claims.Domain;
 
-namespace Claims.Application;
+namespace Claims.Application.Commands;
 
 public interface IClaimsService
 {

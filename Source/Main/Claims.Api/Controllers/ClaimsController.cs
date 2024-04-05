@@ -1,5 +1,5 @@
 using Claims.Api.Dto;
-using Claims.Application;
+using Claims.Application.Commands;
 using Claims.Auditing;
 using Microsoft.AspNetCore.Mvc;
 

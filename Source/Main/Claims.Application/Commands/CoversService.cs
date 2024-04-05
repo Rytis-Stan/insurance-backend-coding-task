@@ -2,7 +2,7 @@ using BuildingBlocks.Temporal;
 using Claims.Application.Repositories;
 using Claims.Domain;
 
-namespace Claims.Application;
+namespace Claims.Application.Commands;
 
 public class CoversService : ICoversService
 {

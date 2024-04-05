@@ -1,4 +1,5 @@
-﻿using Claims.Domain;
+﻿using Claims.Application.Commands;
+using Claims.Domain;
 using Claims.Testing;
 using Xunit;
 

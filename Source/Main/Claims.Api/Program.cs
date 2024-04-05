@@ -3,7 +3,7 @@ using BuildingBlocks.MessageQueues;
 using BuildingBlocks.MessageQueues.RabbitMq;
 using BuildingBlocks.Temporal;
 using Claims.Api.Configuration;
-using Claims.Application;
+using Claims.Application.Commands;
 using Claims.Auditing;
 using Claims.Auditing.MessageQueueBased;
 using Claims.Persistence.Auditing;
