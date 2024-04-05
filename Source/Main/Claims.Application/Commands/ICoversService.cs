@@ -12,9 +12,9 @@ public interface IGetCoverCommand
     Task<Cover?> ExecuteAsync(Guid id);
 }
 
-public interface IGetAllCoversCommand
+public interface IGetAllCoversCommand : ICommand<IEnumerable<Cover>>
 {
-    Task<IEnumerable<Cover>> ExecuteAsync();
+    // Task<IEnumerable<Cover>> ExecuteAsync();
 }
 
 public interface IDeleteCoverCommand

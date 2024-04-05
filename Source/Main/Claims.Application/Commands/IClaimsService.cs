@@ -1,3 +1,4 @@
+using System.Windows.Input;
 using Claims.Domain;
 
 namespace Claims.Application.Commands;
@@ -5,6 +6,11 @@ namespace Claims.Application.Commands;
 public interface ICommand<in TRequest, TResponse>
 {
     Task<TResponse> ExecuteAsync(TRequest request);
+}
+
+public interface ICommand<TResponse>
+{
+    Task<TResponse> ExecuteAsync();
 }
 
 public interface ICreateClaimCommand : ICommand<CreateClaimRequest, Claim>
@@ -17,9 +23,9 @@ public interface IGetClaimByIdCommand
     Task<Claim?> ExecuteAsync(Guid id);
 }
 
-public interface IGetAllClaimsCommand
+public interface IGetAllClaimsCommand : ICommand<IEnumerable<Claim>>
 {
-    Task<IEnumerable<Claim>> ExecuteAsync();
+    // Task<IEnumerable<Claim>> ExecuteAsync();
 }
 
 public interface IDeleteClaimCommand
