@@ -8,7 +8,7 @@ using static Claims.Testing.TestValueBuilder;
 
 namespace Claims.Application.Tests;
 
-public class CreateClaimCommandTests : ClaimsServiceTests
+public class CreateClaimCommandTests : ClaimsCommandTests
 {
     private const ClaimType AnyClaimType = ClaimType.BadWeather;
     private const decimal AnyDamageCost = 10.00m;
@@ -162,7 +162,7 @@ public class CreateClaimCommandTests : ClaimsServiceTests
     }
 }
 
-public class GetClaimByIdCommandTests : ClaimsServiceTests
+public class GetClaimByIdCommandTests : ClaimsCommandTests
 {
     private readonly IGetClaimByIdCommand _getClaimByIdCommand;
 
@@ -191,7 +191,7 @@ public class GetClaimByIdCommandTests : ClaimsServiceTests
     }
 }
 
-public class GetAllClaimsCommandTests : ClaimsServiceTests
+public class GetAllClaimsCommandTests : ClaimsCommandTests
 {
     private readonly IGetAllClaimsCommand _getAllClaimsCommand;
 
@@ -219,7 +219,7 @@ public class GetAllClaimsCommandTests : ClaimsServiceTests
     }
 }
 
-public class DeleteClaimCommandTests : ClaimsServiceTests
+public class DeleteClaimCommandTests : ClaimsCommandTests
 {
     private readonly IDeleteClaimCommand _deleteClaimCommand;
 
@@ -258,12 +258,13 @@ public class DeleteClaimCommandTests : ClaimsServiceTests
     }
 }
 
-public class ClaimsServiceTests
+// TODO: Decide what to do about this base tests class and the "RandomClaim()" method.
+public abstract class ClaimsCommandTests
 {
     protected readonly Mock<IClaimsRepository> _claimsRepositoryMock;
     protected readonly Mock<ICoversRepository> _coversRepositoryMock;
 
-    public ClaimsServiceTests()
+    protected ClaimsCommandTests()
     {
         _claimsRepositoryMock = new Mock<IClaimsRepository>();
         _coversRepositoryMock = new Mock<ICoversRepository>();
