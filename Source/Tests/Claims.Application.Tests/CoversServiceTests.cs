@@ -1,12 +1,12 @@
-﻿using BuildingBlocks.Temporal;
-using Claims.Application.Commands;
-using Claims.Application.Repositories;
+﻿using Claims.Application.Repositories;
 using Claims.Domain;
 using Claims.Testing;
 using Moq;
 
 namespace Claims.Application.Tests;
 
+// TODO: Decide what to do with this class. Should this become a base "CoversCommandTests" class?
+// TODO: Decide where to put the "RandomCover()" method.
 public class CoversServiceTests
 {
     protected readonly Mock<ICoversRepository> _coversRepositoryMock;
