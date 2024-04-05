@@ -238,7 +238,7 @@ public class GetAllCoversCommandTests : CoversServiceTests
 
     public GetAllCoversCommandTests()
     {
-        _getAllCoversCommand = coversService;
+        _getAllCoversCommand = new GetAllCoversCommand(_coversRepositoryMock.Object);
     }
 
     [Fact]

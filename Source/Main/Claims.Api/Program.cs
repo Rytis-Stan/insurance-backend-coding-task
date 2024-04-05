@@ -90,7 +90,7 @@ public class Program
     {
         services.AddTransient<ICreateCoverCommand, CoversService>();
         services.AddTransient<IGetCoverCommand, CoversService>();
-        services.AddTransient<IGetAllCoversCommand, CoversService>();
+        services.AddTransient<IGetAllCoversCommand, GetAllCoversCommand>();
         services.AddTransient<IDeleteCoverCommand, DeleteCoverCommand>();
 
         services.AddTransient<ICoverPricing, CoverPricing>();

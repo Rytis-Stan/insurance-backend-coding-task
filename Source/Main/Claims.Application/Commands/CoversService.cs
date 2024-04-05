@@ -4,7 +4,7 @@ using Claims.Domain;
 
 namespace Claims.Application.Commands;
 
-public class CoversService : ICreateCoverCommand, IGetCoverCommand, IGetAllCoversCommand
+public class CoversService : ICreateCoverCommand, IGetCoverCommand
 {
     private readonly ICoversRepository _coversRepository;
     private readonly ICoverPricing _coverPricing;
@@ -60,6 +60,16 @@ public class CoversService : ICreateCoverCommand, IGetCoverCommand, IGetAllCover
     public async Task<Cover?> GetCoverAsync(Guid id)
     {
         return await _coversRepository.FindByIdAsync(id);
+    }
+}
+
+public class GetAllCoversCommand : IGetAllCoversCommand
+{
+    private readonly ICoversRepository _coversRepository;
+
+    public GetAllCoversCommand(ICoversRepository coversRepository)
+    {
+        _coversRepository = coversRepository;
     }
 
     public async Task<IEnumerable<Cover>> GetAllCoversAsync()
