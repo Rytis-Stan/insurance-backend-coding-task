@@ -14,10 +14,12 @@ public class CreateClaimCommandTests : ClaimsCommandTests
     private const CoverType AnyCoverType = CoverType.BulkCarrier;
     private const decimal AnyPremium = 100.00m;
 
+    private readonly Mock<ICoversRepository> _coversRepositoryMock;
     private readonly ICreateClaimCommand _createClaimCommand;
 
     public CreateClaimCommandTests()
     {
+        _coversRepositoryMock = new Mock<ICoversRepository>();
         _createClaimCommand = new CreateClaimCommand(_claimsRepositoryMock.Object, _coversRepositoryMock.Object);
     }
 

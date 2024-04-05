@@ -9,12 +9,10 @@ namespace Claims.Application.Tests;
 public abstract class ClaimsCommandTests
 {
     protected readonly Mock<IClaimsRepository> _claimsRepositoryMock;
-    protected readonly Mock<ICoversRepository> _coversRepositoryMock;
 
     protected ClaimsCommandTests()
     {
         _claimsRepositoryMock = new Mock<IClaimsRepository>();
-        _coversRepositoryMock = new Mock<ICoversRepository>();
     }
 
     protected static Claim RandomClaim()
