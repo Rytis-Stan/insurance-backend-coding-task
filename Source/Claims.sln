@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Application", "Main\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Application.Tests", "Tests\Claims.Application.Tests\Claims.Application.Tests.csproj", "{5050EADB-99AA-4887-8E4F-70BB07A50BE5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EntryPoints", "EntryPoints", "{81D11772-48EE-4362-9131-9F42E3E0BF6B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Executables", "Executables", "{81D11772-48EE-4362-9131-9F42E3E0BF6B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Code", "Code", "{6C8A7F8D-2103-4C17-8246-FC6CEC214383}"
 EndProject
@@ -29,9 +29,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.MessageQueue
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.Temporal", "Main\BuildingBlocks.Temporal\BuildingBlocks.Temporal.csproj", "{A5C07096-BB14-45F5-B745-BFD052E224BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claims.Persistence.Claims", "Main\Claims.Persistence.Claims\Claims.Persistence.Claims.csproj", "{D21AB839-614F-46BF-86F9-5E7B1CDE937A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Persistence.Claims", "Main\Claims.Persistence.Claims\Claims.Persistence.Claims.csproj", "{D21AB839-614F-46BF-86F9-5E7B1CDE937A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claims.Persistence.Auditing", "Main\Claims.Persistence.Auditing\Claims.Persistence.Auditing.csproj", "{FF9A919F-69A0-4939-8941-5A17AE248C6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Persistence.Auditing", "Main\Claims.Persistence.Auditing\Claims.Persistence.Auditing.csproj", "{FF9A919F-69A0-4939-8941-5A17AE248C6F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Domain.Tests", "Tests\Claims.Domain.Tests\Claims.Domain.Tests.csproj", "{4049588D-2FE2-46C5-B608-67C61C3E1E8C}"
 EndProject
