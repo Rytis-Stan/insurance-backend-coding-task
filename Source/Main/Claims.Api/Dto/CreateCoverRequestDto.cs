@@ -5,12 +5,3 @@ public record CreateCoverRequestDto(
     DateOnly EndDate,
     CoverTypeDto Type
 );
-
-public enum CoverTypeDto
-{
-    Yacht,
-    PassengerShip,
-    ContainerShip,
-    BulkCarrier,
-    Tanker
-}
