@@ -19,7 +19,7 @@ public abstract class RabbitMqMessageQueue<TActiveQueue>
         var connection = factory.CreateConnection();
         var channel = connection.CreateModel();
         EnsureQueueConstructed(channel);
-        return CreateActiveQueue(connection, channel, _queueName);
+        return CreateConnectedQueue(connection, channel, _queueName);
     }
 
     private void EnsureQueueConstructed(IModel channel)
@@ -33,6 +33,25 @@ public abstract class RabbitMqMessageQueue<TActiveQueue>
         );
     }
 
-    protected abstract TActiveQueue CreateActiveQueue(
-        IConnection connection, IModel channel, string queueName);
+    protected abstract TActiveQueue CreateConnectedQueue(IConnection connection, IModel channel, string queueName);
+
+    public abstract class ConnectedRabbitMqMessageQueue
+    {
+        private readonly IConnection _connection;
+        protected readonly IModel Channel;
+        protected readonly string QueueName;
+
+        protected ConnectedRabbitMqMessageQueue(IConnection connection, IModel channel, string queueName)
+        {
+            _connection = connection;
+            Channel = channel;
+            QueueName = queueName;
+        }
+
+        public void Dispose()
+        {
+            Channel.Dispose();
+            _connection.Dispose();
+        }
+    }
 }
