@@ -55,7 +55,7 @@ public class App
     }
 
     // TODO: Move this code to "Claims.Auditing" project?
-    private class AuditingQueueListener
+    private class AuditingQueueListener : IQueueListener<AuditMessage>
     {
         private readonly Dictionary<AuditEntityKind, IHttpRequestAuditor> _auditorsByAuditEntityKind;
 
