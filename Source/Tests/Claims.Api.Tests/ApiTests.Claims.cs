@@ -2,6 +2,7 @@
 using Claims.Api.Dto;
 using Claims.Testing;
 using Xunit;
+using static Claims.Testing.TestValueBuilder;
 
 namespace Claims.Api.Tests;
 
@@ -15,7 +16,7 @@ public partial class ApiTests : IDisposable
         var name = TestData.RandomString("name");
         var claimType = TestData.RandomEnum<ClaimTypeDto>();
         var damageCost = TestData.RandomInt(10_000);
-        var created = TestValueBuilder.UtcDateTime(cover.StartDate);
+        var created = UtcDateTime(cover.StartDate);
 
         var response = await ClaimsPostAsync(cover.Id, name, claimType, damageCost, created);
 

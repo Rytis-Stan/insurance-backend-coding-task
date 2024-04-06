@@ -4,6 +4,7 @@ using Claims.Domain;
 using Claims.Testing;
 using Moq;
 using Xunit;
+using static Claims.Testing.TestValueBuilder;
 
 namespace Claims.Application.Tests;
 
@@ -75,34 +76,34 @@ public class CreateClaimCommandTests : ClaimsCommandTests
     public async Task ThrowsExceptionWhenCreatingAClaimForADateOutsideOfRelatedCoverPeriod()
     {
         await Test(
-            TestValueBuilder.Date(2000, 10, 20),
-            TestValueBuilder.Date(2000, 10, 20),
-            TestValueBuilder.UtcDateTime(2000, 10, 18)
+            Date(2000, 10, 20),
+            Date(2000, 10, 20),
+            UtcDateTime(2000, 10, 18)
         );
         await Test(
-            TestValueBuilder.Date(2000, 10, 20),
-            TestValueBuilder.Date(2000, 10, 20),
-            TestValueBuilder.UtcDateTime(2000, 10, 19)
+            Date(2000, 10, 20),
+            Date(2000, 10, 20),
+            UtcDateTime(2000, 10, 19)
         );
         await Test(
-            TestValueBuilder.Date(1987, 06, 05),
-            TestValueBuilder.Date(1987, 06, 05),
-            TestValueBuilder.UtcDateTime(1987, 06, 04)
+            Date(1987, 06, 05),
+            Date(1987, 06, 05),
+            UtcDateTime(1987, 06, 04)
         );
         await Test(
-            TestValueBuilder.Date(1987, 06, 05),
-            TestValueBuilder.Date(1987, 06, 05),
-            TestValueBuilder.UtcDateTime(1987, 06, 06)
+            Date(1987, 06, 05),
+            Date(1987, 06, 05),
+            UtcDateTime(1987, 06, 06)
         );
         await Test(
-            TestValueBuilder.Date(1987, 06, 05),
-            TestValueBuilder.Date(1987, 06, 05),
-            TestValueBuilder.UtcDateTime(1987, 06, 07)
+            Date(1987, 06, 05),
+            Date(1987, 06, 05),
+            UtcDateTime(1987, 06, 07)
         );
         await Test(
-            TestValueBuilder.Date(1987, 06, 05),
-            TestValueBuilder.Date(1987, 06, 06),
-            TestValueBuilder.UtcDateTime(1987, 06, 07)
+            Date(1987, 06, 05),
+            Date(1987, 06, 06),
+            UtcDateTime(1987, 06, 07)
         );
 
         async Task Test(DateOnly coverStartDate, DateOnly coverEndDate, DateTime claimCreated)
@@ -121,15 +122,15 @@ public class CreateClaimCommandTests : ClaimsCommandTests
     [Fact]
     public async Task AddsClaimToRepositoryWhenCreatingAValidClaim()
     {
-        await Test(TestValueBuilder.Date(2000, 10, 10), TestValueBuilder.Date(2000, 10, 15), "someClaim", ClaimType.BadWeather, 123.45m, TestValueBuilder.UtcDateTime(2000, 10, 10));
-        await Test(TestValueBuilder.Date(2000, 10, 10), TestValueBuilder.Date(2000, 10, 15), "claimNo1", ClaimType.BadWeather, 123.45m, TestValueBuilder.UtcDateTime(2000, 10, 10));
-        await Test(TestValueBuilder.Date(2000, 10, 10), TestValueBuilder.Date(2000, 10, 15), "claimNo1", ClaimType.Fire, 123.45m, TestValueBuilder.UtcDateTime(2000, 10, 10));
-        await Test(TestValueBuilder.Date(2000, 10, 10), TestValueBuilder.Date(2000, 10, 15), "claimNo1", ClaimType.Fire, 67.89m, TestValueBuilder.UtcDateTime(2000, 10, 10));
-        await Test(TestValueBuilder.Date(2000, 10, 10), TestValueBuilder.Date(2000, 10, 15), "claimNo1", ClaimType.Fire, 67.89m, TestValueBuilder.UtcDateTime(2000, 10, 11));
-        await Test(TestValueBuilder.Date(2000, 10, 10), TestValueBuilder.Date(2000, 10, 15), "claimNo1", ClaimType.Fire, 100000.00m, TestValueBuilder.UtcDateTime(2000, 10, 11));
-        await Test(TestValueBuilder.Date(2000, 10, 10), TestValueBuilder.Date(2000, 10, 15), "claimNo1", ClaimType.Fire, 100000.00m, TestValueBuilder.UtcDateTime(2000, 10, 14));
-        await Test(TestValueBuilder.Date(2000, 10, 10), TestValueBuilder.Date(2000, 10, 15), "claimNo1", ClaimType.Fire, 100000.00m, TestValueBuilder.UtcDateTime(2000, 10, 15));
-        await Test(TestValueBuilder.Date(1996, 03, 04), TestValueBuilder.Date(1996, 05, 06), "claimB", ClaimType.Collision, 0.01m, TestValueBuilder.UtcDateTime(1996, 03, 04));
+        await Test(Date(2000, 10, 10), Date(2000, 10, 15), "someClaim", ClaimType.BadWeather, 123.45m, UtcDateTime(2000, 10, 10));
+        await Test(Date(2000, 10, 10), Date(2000, 10, 15), "claimNo1", ClaimType.BadWeather, 123.45m, UtcDateTime(2000, 10, 10));
+        await Test(Date(2000, 10, 10), Date(2000, 10, 15), "claimNo1", ClaimType.Fire, 123.45m, UtcDateTime(2000, 10, 10));
+        await Test(Date(2000, 10, 10), Date(2000, 10, 15), "claimNo1", ClaimType.Fire, 67.89m, UtcDateTime(2000, 10, 10));
+        await Test(Date(2000, 10, 10), Date(2000, 10, 15), "claimNo1", ClaimType.Fire, 67.89m, UtcDateTime(2000, 10, 11));
+        await Test(Date(2000, 10, 10), Date(2000, 10, 15), "claimNo1", ClaimType.Fire, 100000.00m, UtcDateTime(2000, 10, 11));
+        await Test(Date(2000, 10, 10), Date(2000, 10, 15), "claimNo1", ClaimType.Fire, 100000.00m, UtcDateTime(2000, 10, 14));
+        await Test(Date(2000, 10, 10), Date(2000, 10, 15), "claimNo1", ClaimType.Fire, 100000.00m, UtcDateTime(2000, 10, 15));
+        await Test(Date(1996, 03, 04), Date(1996, 05, 06), "claimB", ClaimType.Collision, 0.01m, UtcDateTime(1996, 03, 04));
 
         async Task Test(DateOnly coverStartDate, DateOnly coverEndDate, string claimName, ClaimType claimType, decimal claimDamageCost, DateTime claimCreated)
         {

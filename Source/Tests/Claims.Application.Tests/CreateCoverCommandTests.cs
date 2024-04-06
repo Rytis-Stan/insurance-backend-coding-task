@@ -2,9 +2,9 @@
 using Claims.Application.Commands;
 using Claims.Application.Repositories;
 using Claims.Domain;
-using Claims.Testing;
 using Moq;
 using Xunit;
+using static Claims.Testing.TestValueBuilder;
 
 namespace Claims.Application.Tests;
 
@@ -27,20 +27,20 @@ public class CreateCoverCommandTests : CoversCommandTests
     public async Task ThrowsExceptionWhenCreatingACoverWithStartDateThatIsInThePast()
     {
         await Test(
-            TestValueBuilder.UtcDateTime(2000, 01, 10),
-            TestValueBuilder.Date(2000, 01, 08)
+            UtcDateTime(2000, 01, 10),
+            Date(2000, 01, 08)
         );
         await Test(
-            TestValueBuilder.UtcDateTime(2000, 01, 10),
-            TestValueBuilder.Date(2000, 01, 09)
+            UtcDateTime(2000, 01, 10),
+            Date(2000, 01, 09)
         );
         await Test(
-            TestValueBuilder.UtcDateTime(1998, 07, 06),
-            TestValueBuilder.Date(1998, 07, 05)
+            UtcDateTime(1998, 07, 06),
+            Date(1998, 07, 05)
         );
         await Test(
-            TestValueBuilder.UtcDateTime(1998, 07, 06),
-            TestValueBuilder.Date(1996, 05, 04)
+            UtcDateTime(1998, 07, 06),
+            Date(1996, 05, 04)
         );
 
         async Task Test(DateTime utcNow, DateOnly startDate)
@@ -60,20 +60,20 @@ public class CreateCoverCommandTests : CoversCommandTests
     public async Task ThrowsExceptionWhenCreatingACoverWithEndDateThatIsInThePast()
     {
         await Test(
-            TestValueBuilder.UtcDateTime(2000, 01, 10),
-            TestValueBuilder.Date(2000, 01, 08)
+            UtcDateTime(2000, 01, 10),
+            Date(2000, 01, 08)
         );
         await Test(
-            TestValueBuilder.UtcDateTime(2000, 01, 10),
-            TestValueBuilder.Date(2000, 01, 09)
+            UtcDateTime(2000, 01, 10),
+            Date(2000, 01, 09)
         );
         await Test(
-            TestValueBuilder.UtcDateTime(1998, 07, 06),
-            TestValueBuilder.Date(1998, 07, 05)
+            UtcDateTime(1998, 07, 06),
+            Date(1998, 07, 05)
         );
         await Test(
-            TestValueBuilder.UtcDateTime(1998, 07, 06),
-            TestValueBuilder.Date(1996, 05, 04)
+            UtcDateTime(1998, 07, 06),
+            Date(1996, 05, 04)
         );
 
         async Task Test(DateTime utcNow, DateOnly endDate)
@@ -93,29 +93,29 @@ public class CreateCoverCommandTests : CoversCommandTests
     public async Task ThrowsExceptionWhenEndDateNotItThePastButGoesBeforeStartDate()
     {
         await Test(
-            TestValueBuilder.UtcDateTime(2000, 01, 10),
-            TestValueBuilder.Date(2010, 01, 10),
-            TestValueBuilder.Date(2010, 01, 08)
+            UtcDateTime(2000, 01, 10),
+            Date(2010, 01, 10),
+            Date(2010, 01, 08)
         );
         await Test(
-            TestValueBuilder.UtcDateTime(2000, 01, 10),
-            TestValueBuilder.Date(2010, 01, 10),
-            TestValueBuilder.Date(2010, 01, 09)
+            UtcDateTime(2000, 01, 10),
+            Date(2010, 01, 10),
+            Date(2010, 01, 09)
         );
         await Test(
-            TestValueBuilder.UtcDateTime(1981, 06, 07),
-            TestValueBuilder.Date(2010, 01, 10),
-            TestValueBuilder.Date(2010, 01, 09)
+            UtcDateTime(1981, 06, 07),
+            Date(2010, 01, 10),
+            Date(2010, 01, 09)
         );
         await Test(
-            TestValueBuilder.UtcDateTime(1981, 06, 07),
-            TestValueBuilder.Date(1981, 06, 10),
-            TestValueBuilder.Date(1981, 06, 09)
+            UtcDateTime(1981, 06, 07),
+            Date(1981, 06, 10),
+            Date(1981, 06, 09)
         );
         await Test(
-            TestValueBuilder.UtcDateTime(1981, 06, 07),
-            TestValueBuilder.Date(1981, 06, 11),
-            TestValueBuilder.Date(1981, 06, 10)
+            UtcDateTime(1981, 06, 07),
+            Date(1981, 06, 11),
+            Date(1981, 06, 10)
         );
 
         async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate)
@@ -138,29 +138,29 @@ public class CreateCoverCommandTests : CoversCommandTests
         // number of days. In this situation, the insurance is considered valid
         // right until the same day happens the next year after the insurance start.
         await Test(
-            TestValueBuilder.UtcDateTime(2000, 01, 01),
-            TestValueBuilder.Date(2000, 01, 01),
-            TestValueBuilder.Date(2001, 01, 01)
+            UtcDateTime(2000, 01, 01),
+            Date(2000, 01, 01),
+            Date(2001, 01, 01)
         );
         await Test(
-            TestValueBuilder.UtcDateTime(1972, 01, 01),
-            TestValueBuilder.Date(1972, 01, 01),
-            TestValueBuilder.Date(1973, 01, 01)
+            UtcDateTime(1972, 01, 01),
+            Date(1972, 01, 01),
+            Date(1973, 01, 01)
         );
         await Test(
-            TestValueBuilder.UtcDateTime(1972, 01, 01),
-            TestValueBuilder.Date(1972, 01, 01),
-            TestValueBuilder.Date(1999, 01, 01)
+            UtcDateTime(1972, 01, 01),
+            Date(1972, 01, 01),
+            Date(1999, 01, 01)
         );
         await Test(
-            TestValueBuilder.UtcDateTime(1972, 01, 01),
-            TestValueBuilder.Date(1972, 01, 01),
-            TestValueBuilder.Date(1999, 02, 03)
+            UtcDateTime(1972, 01, 01),
+            Date(1972, 01, 01),
+            Date(1999, 02, 03)
         );
         await Test(
-            TestValueBuilder.UtcDateTime(1972, 01, 01),
-            TestValueBuilder.Date(1998, 02, 03),
-            TestValueBuilder.Date(1999, 02, 03)
+            UtcDateTime(1972, 01, 01),
+            Date(1998, 02, 03),
+            Date(1999, 02, 03)
         );
 
         async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate)
@@ -178,13 +178,13 @@ public class CreateCoverCommandTests : CoversCommandTests
     [Fact]
     public async Task AddsCoverToRepositoryWhenCreatingAValidCover()
     {
-        await Test(TestValueBuilder.UtcDateTime(2000, 10, 10), TestValueBuilder.Date(2000, 10, 10), TestValueBuilder.Date(2000, 10, 20), CoverType.BulkCarrier, 123.45m);
-        await Test(TestValueBuilder.UtcDateTime(2000, 10, 10), TestValueBuilder.Date(2000, 10, 11), TestValueBuilder.Date(2000, 10, 20), CoverType.BulkCarrier, 123.45m);
-        await Test(TestValueBuilder.UtcDateTime(2000, 10, 10), TestValueBuilder.Date(2000, 10, 11), TestValueBuilder.Date(2000, 10, 19), CoverType.BulkCarrier, 123.45m);
-        await Test(TestValueBuilder.UtcDateTime(2000, 10, 10), TestValueBuilder.Date(2000, 10, 11), TestValueBuilder.Date(2000, 10, 19), CoverType.Tanker, 123.45m);
-        await Test(TestValueBuilder.UtcDateTime(2000, 10, 10), TestValueBuilder.Date(2000, 10, 11), TestValueBuilder.Date(2000, 10, 19), CoverType.Tanker, 98.76m);
-        await Test(TestValueBuilder.UtcDateTime(1971, 03, 04), TestValueBuilder.Date(1971, 03, 04), TestValueBuilder.Date(1971, 05, 06), CoverType.Yacht, 101.00m);
-        await Test(TestValueBuilder.UtcDateTime(1971, 03, 04), TestValueBuilder.Date(1971, 03, 04), TestValueBuilder.Date(1972, 03, 03), CoverType.Yacht, 101.00m);
+        await Test(UtcDateTime(2000, 10, 10), Date(2000, 10, 10), Date(2000, 10, 20), CoverType.BulkCarrier, 123.45m);
+        await Test(UtcDateTime(2000, 10, 10), Date(2000, 10, 11), Date(2000, 10, 20), CoverType.BulkCarrier, 123.45m);
+        await Test(UtcDateTime(2000, 10, 10), Date(2000, 10, 11), Date(2000, 10, 19), CoverType.BulkCarrier, 123.45m);
+        await Test(UtcDateTime(2000, 10, 10), Date(2000, 10, 11), Date(2000, 10, 19), CoverType.Tanker, 123.45m);
+        await Test(UtcDateTime(2000, 10, 10), Date(2000, 10, 11), Date(2000, 10, 19), CoverType.Tanker, 98.76m);
+        await Test(UtcDateTime(1971, 03, 04), Date(1971, 03, 04), Date(1971, 05, 06), CoverType.Yacht, 101.00m);
+        await Test(UtcDateTime(1971, 03, 04), Date(1971, 03, 04), Date(1972, 03, 03), CoverType.Yacht, 101.00m);
 
         async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate, CoverType coverType, decimal premium)
         {
