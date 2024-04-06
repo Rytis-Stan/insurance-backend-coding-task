@@ -9,10 +9,10 @@ using Claims.Auditing.MessageQueueBased;
 using Claims.Persistence.Auditing;
 using Claims.Persistence.Claims;
 using Microsoft.Azure.Cosmos;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Claims.Api;
 
+// NOTE: Please read the updated "README.md" file for discussions about various task implementation details.
 public class Program
 {
     static void Main(string[] args)
