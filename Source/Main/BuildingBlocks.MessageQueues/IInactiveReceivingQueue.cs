@@ -2,5 +2,5 @@
 
 public interface IInactiveReceivingQueue<out TMessage>
 {
-    IReceivingQueue<TMessage> Activate();
+    IReceivingQueue<TMessage> Connect();
 }

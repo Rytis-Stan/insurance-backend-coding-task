@@ -2,5 +2,5 @@
 
 public interface IInactiveSendingQueue<in TMessage>
 {
-    ISendingQueue<TMessage> Activate();
+    ISendingQueue<TMessage> Connect();
 }

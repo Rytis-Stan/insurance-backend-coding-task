@@ -34,7 +34,7 @@ public class Program
 
     private static ISendingQueue<AuditMessage> InitializeAuditQueue(RabbitMqConfiguration configuration)
     {
-        return new InactiveRabbitMqSendingQueue<AuditMessage>(configuration.HostName, configuration.QueueName).Activate();
+        return new RabbitMqSendingQueue<AuditMessage>(configuration.HostName, configuration.QueueName).Connect();
     }
 
     private static IClaimsDatabase MigrateClaimsDatabase(CosmosDbConfiguration configuration)

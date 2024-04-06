@@ -1,25 +1,18 @@
-﻿using System.Text;
-using System.Text.Json;
-using RabbitMQ.Client;
+﻿using RabbitMQ.Client;
 
 namespace BuildingBlocks.MessageQueues.RabbitMq;
 
-public class RabbitMqSendingQueue<TMessage> : RabbitMqMessageQueue, ISendingQueue<TMessage>
+public class RabbitMqSendingQueue<TMessage>
+    : RabbitMqMessageQueue<ISendingQueue<TMessage>>, IInactiveSendingQueue<TMessage>
 {
-    public RabbitMqSendingQueue(IConnection connection, IModel channel, string queueName)
-        : base(connection, channel, queueName)
+    public RabbitMqSendingQueue(string hostName, string queueName)
+        : base(hostName, queueName)
     {
     }
 
-    public void Send(TMessage message)
+    protected override ISendingQueue<TMessage> CreateActiveQueue(
+        IConnection connection, IModel channel, string queueName)
     {
-        var messageJson = JsonSerializer.Serialize(message);
-        var messageJsonBytes = Encoding.UTF8.GetBytes(messageJson);
-        Channel.BasicPublish(
-            exchange: "",
-            routingKey: QueueName,
-            basicProperties: null,
-            body: messageJsonBytes
-        );
+        return new ConnectedRabbitMqSendingQueue<TMessage>(connection, channel, queueName);
     }
 }

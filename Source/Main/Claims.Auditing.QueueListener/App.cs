@@ -51,7 +51,7 @@ public class App
 
     private static IReceivingQueue<AuditMessage> ConnectToQueue(RabbitMqConfiguration configuration)
     {
-        return new InactiveRabbitMqReceivingQueue<AuditMessage>(configuration.HostName, configuration.QueueName).Activate();
+        return new RabbitMqReceivingQueue<AuditMessage>(configuration.HostName, configuration.QueueName).Connect();
     }
 
     // TODO: Move this code to "Claims.Auditing" project?
