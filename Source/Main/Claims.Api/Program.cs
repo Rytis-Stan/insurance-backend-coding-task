@@ -63,7 +63,8 @@ public class Program
         AddControllers(services);
         AddRepositories(services, claimsDatabase);
         AddInfrastructure(services);
-        AddDomainServices(services);
+        AddDomain(services);
+        AddApplicationCommands(services);
         AddAuditing(services, auditQueue);
         AddSwagger(services);
     }
@@ -87,10 +88,13 @@ public class Program
         services.AddScoped(_ => database.CoversRepository);
     }
 
-    private static void AddDomainServices(IServiceCollection services)
+    private static void AddDomain(IServiceCollection services)
     {
         services.AddTransient<ICoverPricing, CoverPricing>();
+    }
 
+    private static void AddApplicationCommands(IServiceCollection services)
+    {
         services.AddTransient<ICreateCoverCommand, CreateCoverCommand>();
         services.AddTransient<IGetCoverCommand, GetCoverCommand>();
         services.AddTransient<IGetAllCoversCommand, GetAllCoversCommand>();
