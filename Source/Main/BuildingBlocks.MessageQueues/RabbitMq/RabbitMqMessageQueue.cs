@@ -2,7 +2,10 @@
 
 namespace BuildingBlocks.MessageQueues.RabbitMq;
 
-public abstract class RabbitMqMessageQueue<TConnectedQueue>
+/// <summary>
+/// Base class for RabbitMQ message queues in an unconnected state.
+/// </summary>
+public abstract class RabbitMqMessageQueue
 {
     private readonly string _hostName;
     private readonly string _queueName;
@@ -13,19 +16,13 @@ public abstract class RabbitMqMessageQueue<TConnectedQueue>
         _queueName = queueName;
     }
 
-    public TConnectedQueue Connect()
-    {
-        var (connection, channel) = DeclareQueueAndConnectToIt();
-        return CreateConnectedQueue(connection, channel, _queueName);
-    }
-
-    private (IConnection Connection, IModel Channel) DeclareQueueAndConnectToIt()
+    protected QueueInfo DeclareQueueAndConnectToIt()
     {
         var factory = new ConnectionFactory { HostName = _hostName };
         var connection = factory.CreateConnection();
         var channel = connection.CreateModel();
         DeclareQueue(channel);
-        return (connection, channel);
+        return new QueueInfo(connection, channel, _queueName);
     }
 
     private void DeclareQueue(IModel channel)
@@ -39,9 +36,12 @@ public abstract class RabbitMqMessageQueue<TConnectedQueue>
         );
     }
 
-    protected abstract TConnectedQueue CreateConnectedQueue(IConnection connection, IModel channel, string queueName);
+    protected record QueueInfo(IConnection Connection, IModel Channel, string QueueName);
 
-    public abstract class ConnectedRabbitMqMessageQueue : IDisposable
+    /// <summary>
+    /// Base class for RabbitMQ message queues in a connected state.
+    /// </summary>
+    protected abstract class ConnectedRabbitMqMessageQueue : IDisposable
     {
         private readonly IConnection _connection;
         protected readonly IModel Channel;
