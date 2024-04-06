@@ -17,11 +17,6 @@ public class RabbitMqSendingQueue<TMessage> : RabbitMqMessageQueue, ISendingQueu
         return new ConnectedRabbitMqSendingQueue(connection, channel, queueName);
     }
 
-    // protected override IConnectedSendingQueue<TMessage> CreateConnectedQueue(IConnection connection, IModel channel, string queueName)
-    // {
-    //     return new ConnectedRabbitMqSendingQueue(connection, channel, queueName);
-    // }
-
     private class ConnectedRabbitMqSendingQueue : ConnectedRabbitMqMessageQueue, IConnectedSendingQueue<TMessage>
     {
         public ConnectedRabbitMqSendingQueue(IConnection connection, IModel channel, string queueName)
