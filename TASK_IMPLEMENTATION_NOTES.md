@@ -12,6 +12,8 @@ If You see something unexpected or weird in the implementation, there is probabl
 
 The following is a list of various things to consider and improve, especially since the codebase is a constantly evolving thing:
 
+* Consideration: using minimal API instead of controllers: TODO
+* Database and queue ownership issues: TODO
 * The deletion of a cover should handle the deletion of related claims in one of the following ways, because a claim without a cover cannot exist on it's own (it's a child the claim):
   * All child claims should simply be deleted, if any;
   * An exceptions should be raised if at least one claim is attached to a cover.
