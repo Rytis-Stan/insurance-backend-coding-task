@@ -18,7 +18,7 @@ public class GetCoverCommandTests : CoversCommandTests
     public async Task ReturnsCoverByIdFromRepository()
     {
         var id = Guid.NewGuid();
-        var cover = RandomCover();
+        var cover = TestDomainData.RandomCover();
         StubFindCover(id, cover);
 
         var returnedCover = await _command.ExecuteAsync(new GetCoverRequest(id));

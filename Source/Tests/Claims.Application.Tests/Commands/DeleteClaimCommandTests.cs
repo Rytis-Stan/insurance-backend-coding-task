@@ -28,7 +28,7 @@ public class DeleteClaimCommandTests : ClaimsCommandTests
     public async Task ReturnsClaimReturnedByRepositoryDelete()
     {
         var id = Guid.NewGuid();
-        var claim = RandomClaim();
+        var claim = TestDomainData.RandomClaim();
         StubDeleteClaim(id, claim);
 
         var returnedClaim = await _command.ExecuteAsync(new DeleteClaimRequest(id));

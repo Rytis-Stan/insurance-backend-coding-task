@@ -18,7 +18,7 @@ public class GetClaimByIdCommandTests : ClaimsCommandTests
     public async Task ReturnsClaimByIdFromRepository()
     {
         var id = Guid.NewGuid();
-        var claim = RandomClaim();
+        var claim = TestDomainData.RandomClaim();
         StubFindClaim(id, claim);
 
         var returnedClaim = await _command.ExecuteAsync(new GetClaimByIdRequest(id));

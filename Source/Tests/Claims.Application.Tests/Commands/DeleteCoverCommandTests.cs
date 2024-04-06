@@ -28,7 +28,7 @@ public class DeleteCoverCommandTests : CoversCommandTests
     public async Task ReturnsCoverReturnedByRepositoryDelete()
     {
         var id = Guid.NewGuid();
-        var cover = RandomCover();
+        var cover = TestDomainData.RandomCover();
         StubDeleteCover(id, cover);
 
         var returnedCover = await _command.ExecuteAsync(new DeleteCoverRequest(id));

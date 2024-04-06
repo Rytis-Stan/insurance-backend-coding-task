@@ -17,7 +17,7 @@ public class GetAllClaimsCommandTests : ClaimsCommandTests
     [Fact]
     public async Task ReturnsAllClaimsFromRepository()
     {
-        var claims = new[] { RandomClaim(), RandomClaim() };
+        var claims = new[] { TestDomainData.RandomClaim(), TestDomainData.RandomClaim() };
         StubGetAllClaims(claims);
 
         var returnedClaims = await _command.ExecuteAsync();

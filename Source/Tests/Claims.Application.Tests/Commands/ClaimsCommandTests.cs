@@ -1,6 +1,4 @@
 ﻿using Claims.Application.Repositories;
-using Claims.Domain;
-using Claims.Testing;
 using Moq;
 
 namespace Claims.Application.Tests.Commands;
@@ -13,18 +11,5 @@ public abstract class ClaimsCommandTests
     protected ClaimsCommandTests()
     {
         _claimsRepositoryMock = new Mock<IClaimsRepository>();
-    }
-
-    protected static Claim RandomClaim()
-    {
-        return new Claim
-        {
-            Id = Guid.NewGuid(),
-            CoverId = Guid.NewGuid(),
-            Name = TestData.RandomString("name"),
-            Type = TestData.RandomEnum<ClaimType>(),
-            DamageCost = TestData.RandomInt(100),
-            Created = TestData.RandomUtcDateTime()
-        };
     }
 }

@@ -17,7 +17,7 @@ public class GetAllCoversCommandTests : CoversCommandTests
     [Fact]
     public async Task ReturnsAllCoversFromRepository()
     {
-        var covers = new[] { RandomCover(), RandomCover() };
+        var covers = new[] { TestDomainData.RandomCover(), TestDomainData.RandomCover() };
         StubGetAllCovers(covers);
 
         var returnedCovers = await _command.ExecuteAsync();
