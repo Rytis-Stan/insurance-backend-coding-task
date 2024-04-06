@@ -12,26 +12,29 @@ public class RabbitMqReceivingQueue<TMessage> : RabbitMqMessageQueue, IReceiving
     {
     }
 
-    public IConnectedReceivingQueue<TMessage> Connect()
+    public IConnectedReceivingQueue Connect(IQueueListener<TMessage> listener)
     {
         var (connection, channel, queueName) = DeclareQueueAndConnectToIt();
-        return new ConnectedRabbitMqReceivingQueue(connection, channel, queueName);
+        return new ConnectedRabbitMqReceivingQueue(connection, channel, queueName, listener);
     }
 
-    private class ConnectedRabbitMqReceivingQueue : ConnectedRabbitMqMessageQueue, IConnectedReceivingQueue<TMessage>
+    private class ConnectedRabbitMqReceivingQueue : ConnectedRabbitMqMessageQueue, IConnectedReceivingQueue
     {
-        public ConnectedRabbitMqReceivingQueue(IConnection connection, IModel channel, string queueName)
+        private readonly IQueueListener<TMessage> _listener;
+
+        public ConnectedRabbitMqReceivingQueue(IConnection connection, IModel channel, string queueName, IQueueListener<TMessage> listener)
             : base(connection, channel, queueName)
         {
+            _listener = listener;
         }
 
-        public void OnReceived(Action<TMessage> action)
+        public void StartListening()
         {
             var consumer = new EventingBasicConsumer(Channel);
             consumer.Received += (_, e) =>
             {
                 var message = ToMessage(e.Body);
-                action(message);
+                _listener.OnMessageReceived(message);
                 Channel.BasicAck(e.DeliveryTag, multiple: false);
             };
 

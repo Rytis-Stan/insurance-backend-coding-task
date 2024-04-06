@@ -37,21 +37,32 @@ public class App
         new EntityFrameworkAuditDatabase(connectionString).Migrate();
     }
 
+    // TODO: Return the disposables?
     private void StartListeningToAuditMessages()
     {
-        using var messageQueue = ConnectToQueue(_configuration.RabbitMq);
         using var auditDatabase = new EntityFrameworkAuditDatabase(_configuration.ConnectionString);
-        var auditor = new AuditingQueueListener(auditDatabase);
-        messageQueue.OnReceived(message =>
-        {
-            Console.WriteLine($"RECEIVED_AT: {DateTime.UtcNow}, MESSAGE: {message}");
-            auditor.OnMessageReceived(message);
-        });
+        using var messageQueue = ConnectToQueue(
+            _configuration.RabbitMq, 
+            new CompositeQueueListener<AuditMessage>(
+                new LoggingQueueListener<AuditMessage>(),
+                new AuditingQueueListener(auditDatabase)
+            )
+        );
+        messageQueue.StartListening();
     }
 
-    private static IConnectedReceivingQueue<AuditMessage> ConnectToQueue(RabbitMqConfiguration configuration)
+    private static IConnectedReceivingQueue ConnectToQueue(RabbitMqConfiguration configuration, IQueueListener<AuditMessage> listner)
     {
-        return new RabbitMqReceivingQueue<AuditMessage>(configuration.HostName, configuration.QueueName).Connect();
+        return new RabbitMqReceivingQueue<AuditMessage>(configuration.HostName, configuration.QueueName).Connect(listner);
+    }
+
+    private class LoggingQueueListener<TMessage> : IQueueListener<TMessage>
+    {
+        public void OnMessageReceived(TMessage message)
+        {
+            // TODO: Make the console writer an injectable dependency or change this into an actual log instance.
+            Console.WriteLine($"RECEIVED_AT: {DateTime.UtcNow}, MESSAGE: {message}");
+        }
     }
 
     // TODO: Move this code to "Claims.Auditing" project?
