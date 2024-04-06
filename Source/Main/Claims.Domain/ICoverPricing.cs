@@ -1,6 +1,4 @@
-using Claims.Domain;
-
-namespace Claims.Application.Commands;
+namespace Claims.Domain;
 
 public interface ICoverPricing
 {

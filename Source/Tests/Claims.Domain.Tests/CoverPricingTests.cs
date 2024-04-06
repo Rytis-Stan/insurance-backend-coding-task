@@ -1,9 +1,7 @@
-﻿using Claims.Application.Commands;
-using Claims.Domain;
-using Claims.Testing;
+﻿using Claims.Testing;
 using Xunit;
 
-namespace Claims.Application.Tests.Commands;
+namespace Claims.Domain.Tests;
 
 public class CoverPricingTests
 {

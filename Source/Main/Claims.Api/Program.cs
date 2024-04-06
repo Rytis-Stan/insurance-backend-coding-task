@@ -6,6 +6,7 @@ using Claims.Api.Configuration;
 using Claims.Application.Commands;
 using Claims.Auditing;
 using Claims.Auditing.MessageQueueBased;
+using Claims.Domain;
 using Claims.Persistence.Auditing;
 using Claims.Persistence.Claims;
 using Microsoft.Azure.Cosmos;
