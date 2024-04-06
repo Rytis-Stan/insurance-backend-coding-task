@@ -7,7 +7,6 @@ using Claims.Application.Commands;
 using Claims.Auditing;
 using Claims.Auditing.MessageQueueBased;
 using Claims.Domain;
-using Claims.Persistence.Auditing;
 using Claims.Persistence.Claims;
 using Microsoft.Azure.Cosmos;
 
@@ -25,29 +24,17 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         var configuration = new AppConfiguration(builder.Configuration);
-        var (claimsDatabase, auditQueue) = MigratedDatabases(configuration);
+        var auditQueue = InitializeAuditQueue(configuration.RabbitMq);
+        var claimsDatabase = MigrateClaimsDatabase(configuration.CosmosDb);
         AddServices(builder.Services, claimsDatabase, auditQueue);
         var app = builder.Build();
         ConfigureApp(app);
         return app;
     }
 
-    private static (IClaimsDatabase, ISendingQueue<AuditMessage>) MigratedDatabases(AppConfiguration configuration)
-    {
-        MigrateAuditDatabase(configuration.ConnectionString);
-        var auditQueue = InitializeAuditQueue(configuration.RabbitMq);
-        var claimsDatabase = MigrateClaimsDatabase(configuration.CosmosDb);
-        return (claimsDatabase, auditQueue);
-    }
-
     private static ISendingQueue<AuditMessage> InitializeAuditQueue(RabbitMqConfiguration configuration)
     {
         return new InactiveRabbitMqSendingQueue<AuditMessage>(configuration.HostName, configuration.QueueName).Activate();
-    }
-
-    private static void MigrateAuditDatabase(string connectionString)
-    {
-        new EntityFrameworkAuditDatabase(connectionString).Migrate();
     }
 
     private static IClaimsDatabase MigrateClaimsDatabase(CosmosDbConfiguration configuration)

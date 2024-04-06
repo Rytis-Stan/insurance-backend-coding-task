@@ -19,12 +19,23 @@ public class App
 
     public void Run()
     {
+        Console.WriteLine("Starting to migrate the auditing database.");
+        
+        MigrateAuditDatabase(_configuration.ConnectionString);
+
+        Console.WriteLine("Finishing migration of the auditing database.");
         Console.WriteLine("Starting to listed to messages.");
 
         StartListeningToAuditMessages();
         
-        Console.WriteLine("Press [enter] to quit.");
+        Console.WriteLine("Press [Enter] to quit.");
         Console.ReadLine();
+    }
+
+    // TODO: Ensure that the same audit database instance gets reused both for migration and for setting up the auditors.
+    private static void MigrateAuditDatabase(string connectionString)
+    {
+        new EntityFrameworkAuditDatabase(connectionString).Migrate();
     }
 
     private void StartListeningToAuditMessages()
