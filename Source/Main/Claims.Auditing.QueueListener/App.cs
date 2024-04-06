@@ -1,12 +1,11 @@
 ﻿using BuildingBlocks.MessageQueues;
 using BuildingBlocks.MessageQueues.RabbitMq;
-using Claims.AuditDaemon.Configuration;
-using Claims.Auditing;
 using Claims.Auditing.MessageQueueBased;
 using Claims.Auditing.PersistenceBased;
+using Claims.Auditing.QueueListener.Configuration;
 using Claims.Persistence.Auditing;
 
-namespace Claims.AuditDaemon;
+namespace Claims.Auditing.QueueListener;
 
 public class App
 {

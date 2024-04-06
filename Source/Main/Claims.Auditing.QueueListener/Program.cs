@@ -1,7 +1,7 @@
-﻿using Claims.AuditDaemon.Configuration;
+﻿using Claims.Auditing.QueueListener.Configuration;
 using Microsoft.Extensions.Configuration;
 
-namespace Claims.AuditDaemon;
+namespace Claims.Auditing.QueueListener;
 
 public class Program
 {
