@@ -4,7 +4,7 @@ namespace Claims.Application.Commands;
 
 public class CoverPricing : ICoverPricing
 {
-    public decimal CalculatePremium(DateOnly startDate, DateOnly endDate, CoverType coverType)
+    public decimal Premium(DateOnly startDate, DateOnly endDate, CoverType coverType)
     {
         var totalInsurancePeriodInDays = endDate.DayNumber - startDate.DayNumber + 1;
 

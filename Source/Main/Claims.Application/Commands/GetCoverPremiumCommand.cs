@@ -19,6 +19,6 @@ public class GetCoverPremiumCommand : IGetCoverPremiumCommand
 
     public Task<decimal> ExecuteAsync(GetCoverPremiumRequest request)
     {
-        return Task.FromResult(_coverPricing.CalculatePremium(request.StartDate, request.EndDate, request.CoverType));
+        return Task.FromResult(_coverPricing.Premium(request.StartDate, request.EndDate, request.CoverType));
     }
 }

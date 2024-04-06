@@ -4,5 +4,5 @@ namespace Claims.Application.Commands;
 
 public interface ICoverPricing
 {
-    decimal CalculatePremium(DateOnly startDate, DateOnly endDate, CoverType coverType);
+    decimal Premium(DateOnly startDate, DateOnly endDate, CoverType coverType);
 }

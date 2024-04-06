@@ -15,7 +15,7 @@ public class CoverPricingTests
     [InlineData(CoverType.BulkCarrier, 1625)]   // 30% of 1250
     public void PremiumForASingleDayIsEqualToBaseDayRateForTheSpecificCoverType(CoverType coverType, decimal expectedPremium)
     {
-        AssertComputersCorrectPremium(coverType, 1, expectedPremium);
+        AssertReturnsCorrectPremium(coverType, 1, expectedPremium);
     }
 
     [Theory]
@@ -46,7 +46,7 @@ public class CoverPricingTests
     public void PremiumForFirst30DaysIsEqualToBaseDayRateForTheSpecificCoverTypeMultipliedByNumberOfPeriodDays(
         CoverType coverType, int periodDurationInDays, decimal expectedPremium)
     {
-        AssertComputersCorrectPremium(coverType, periodDurationInDays, expectedPremium);
+        AssertReturnsCorrectPremium(coverType, periodDurationInDays, expectedPremium);
     }
 
     [Theory]
@@ -77,7 +77,7 @@ public class CoverPricingTests
     public void PremiumForNext150DaysAfterThe30ThIsEqualTo30DayPremiumPlusTheExtraDayBaseRateCalculatedWithADiscount(
         CoverType coverType, int periodDurationInDays, decimal expectedPremium)
     {
-        AssertComputersCorrectPremium(coverType, periodDurationInDays, expectedPremium);
+        AssertReturnsCorrectPremium(coverType, periodDurationInDays, expectedPremium);
     }
 
     [Theory]
@@ -103,15 +103,15 @@ public class CoverPricingTests
     public void PremiumForAllDaysAfterThe180ThIsEqualTo180DayPremiumPlusTheExtraDayBaseRateCalculatedWithADiscount(
         CoverType coverType, int periodDurationInDays, decimal expectedPremium)
     {
-        AssertComputersCorrectPremium(coverType, periodDurationInDays, expectedPremium);
+        AssertReturnsCorrectPremium(coverType, periodDurationInDays, expectedPremium);
     }
 
-    private static void AssertComputersCorrectPremium(CoverType coverType, int periodDurationInDays, decimal expectedPremium)
+    private static void AssertReturnsCorrectPremium(CoverType coverType, int periodDurationInDays, decimal expectedPremium)
     {
         var (startDate, endDate) = TestData.RandomFixedLengthPeriod(periodDurationInDays);
         Assert.Equal(
             expectedPremium,
-            new CoverPricing().CalculatePremium(startDate, endDate, coverType)
+            new CoverPricing().Premium(startDate, endDate, coverType)
         );
     }
 }

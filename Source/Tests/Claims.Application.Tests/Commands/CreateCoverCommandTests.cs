@@ -208,7 +208,7 @@ public class CreateCoverCommandTests : CoversCommandTests
     private void StubPremium(DateOnly startDate, DateOnly endDate, CoverType coverType, decimal premium)
     {
         _coverPricingMock
-            .Setup(x => x.CalculatePremium(startDate, endDate, coverType))
+            .Setup(x => x.Premium(startDate, endDate, coverType))
             .Returns(premium);
     }
 }

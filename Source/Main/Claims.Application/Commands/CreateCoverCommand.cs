@@ -54,6 +54,6 @@ public class CreateCoverCommand : ICreateCoverCommand
 
     private decimal PremiumFrom(CreateCoverRequest request)
     {
-        return _coverPricing.CalculatePremium(request.StartDate, request.EndDate, request.Type);
+        return _coverPricing.Premium(request.StartDate, request.EndDate, request.Type);
     }
 }
