@@ -51,7 +51,8 @@ public partial class ApiTests
         }
         catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
         {
-            // Database was not found. Do nothing.
+            // Database was not found. Can happen if the API start-up failed before
+            // creating the database. Ignore the exception.
         }
     }
 
