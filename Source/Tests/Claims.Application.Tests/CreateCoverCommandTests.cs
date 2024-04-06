@@ -49,7 +49,7 @@ public class CreateCoverCommandTests : CoversCommandTests
             var request = new CreateCoverRequest(startDate, endDate, AnyCoverType);
             StubUtcNow(utcNow);
 
-            await AssertExtended.ThrowsArgumentExceptionAsync(
+            await AssertExtended.ThrowsValidationExceptionAsync(
                 () => _command.ExecuteAsync(request),
                 "Start date cannot be in the past."
             );
@@ -82,7 +82,7 @@ public class CreateCoverCommandTests : CoversCommandTests
             var request = new CreateCoverRequest(startDate, endDate, AnyCoverType);
             StubUtcNow(utcNow);
 
-            await AssertExtended.ThrowsArgumentExceptionAsync(
+            await AssertExtended.ThrowsValidationExceptionAsync(
                 () => _command.ExecuteAsync(request),
                 "End date cannot be in the past."
             );
@@ -123,7 +123,7 @@ public class CreateCoverCommandTests : CoversCommandTests
             var request = new CreateCoverRequest(startDate, endDate, AnyCoverType);
             StubUtcNow(utcNow);
 
-            await AssertExtended.ThrowsArgumentExceptionAsync(
+            await AssertExtended.ThrowsValidationExceptionAsync(
                 () => _command.ExecuteAsync(request),
                 "End date cannot be earlier than the start date."
             );
@@ -168,7 +168,7 @@ public class CreateCoverCommandTests : CoversCommandTests
             var request = new CreateCoverRequest(startDate, endDate, AnyCoverType);
             StubUtcNow(utcNow);
 
-            await AssertExtended.ThrowsArgumentExceptionAsync(
+            await AssertExtended.ThrowsValidationExceptionAsync(
                 () => _command.ExecuteAsync(request),
                 "Total insurance period cannot exceed 1 year."
             );

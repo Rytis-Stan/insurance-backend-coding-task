@@ -25,25 +25,25 @@ public class CreateClaimCommand : ICreateClaimCommand
         var damageCost = request.DamageCost;
         if (damageCost <= 0.00m)
         {
-            throw new ArgumentException("Damage cost must be a positive value.");
+            throw new ValidationException("Damage cost must be a positive value.");
         }
         const decimal maxAllowedDamageCost = 100_000;
         if (damageCost > maxAllowedDamageCost)
         {
-            throw new ArgumentException($"Damage cost cannot exceed {maxAllowedDamageCost}.");
+            throw new ValidationException($"Damage cost cannot exceed {maxAllowedDamageCost}.");
         }
         var cover = await _coversRepository.FindByIdAsync(request.CoverId);
 #pragma warning disable IDE0270 // Use coalesce expression
         if (cover == null)
         {
-            throw new ArgumentException("Claim references a non-existing cover via the cover ID.");
+            throw new ValidationException("Claim references a non-existing cover via the cover ID.");
         }
 #pragma warning restore IDE0270 // Use coalesce expression
         var created = DateOnly.FromDateTime(request.Created);
         if (created < cover.StartDate ||
             created > cover.EndDate)
         {
-            throw new ArgumentException("Claim is outside the related cover period.");
+            throw new ValidationException("Claim is outside the related cover period.");
         }
     }
 

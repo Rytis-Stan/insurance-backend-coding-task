@@ -31,19 +31,19 @@ public class CreateCoverCommand : ICreateCoverCommand
 
         if (startDate < utcToday)
         {
-            throw new ArgumentException("Start date cannot be in the past.");
+            throw new ValidationException("Start date cannot be in the past.");
         }
         if (endDate < utcToday)
         {
-            throw new ArgumentException("End date cannot be in the past.");
+            throw new ValidationException("End date cannot be in the past.");
         }
         if (endDate < startDate)
         {
-            throw new ArgumentException("End date cannot be earlier than the start date.");
+            throw new ValidationException("End date cannot be earlier than the start date.");
         }
         if (startDate.AddYears(1) <= endDate)
         {
-            throw new ArgumentException("Total insurance period cannot exceed 1 year.");
+            throw new ValidationException("Total insurance period cannot exceed 1 year.");
         }
     }
 
