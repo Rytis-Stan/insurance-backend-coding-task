@@ -1,6 +1,6 @@
 ﻿namespace BuildingBlocks.MessageQueues;
 
-public interface IReceivingQueue<out TMessage> : IDisposable
+public interface IReceivingQueue<out TMessage>
 {
-    void OnReceived(Action<TMessage> action);
+    IConnectedReceivingQueue<TMessage> Connect();
 }

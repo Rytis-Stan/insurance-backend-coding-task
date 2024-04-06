@@ -5,19 +5,19 @@ using RabbitMQ.Client;
 namespace BuildingBlocks.MessageQueues.RabbitMq;
 
 public class RabbitMqSendingQueue<TMessage>
-    : RabbitMqMessageQueue<ISendingQueue<TMessage>>, IInactiveSendingQueue<TMessage>
+    : RabbitMqMessageQueue<IConnectedSendingQueue<TMessage>>, ISendingQueue<TMessage>
 {
     public RabbitMqSendingQueue(string hostName, string queueName)
         : base(hostName, queueName)
     {
     }
 
-    protected override ISendingQueue<TMessage> CreateConnectedQueue(IConnection connection, IModel channel, string queueName)
+    protected override IConnectedSendingQueue<TMessage> CreateConnectedQueue(IConnection connection, IModel channel, string queueName)
     {
         return new ConnectedRabbitMqSendingQueue(connection, channel, queueName);
     }
 
-    private class ConnectedRabbitMqSendingQueue : ConnectedRabbitMqMessageQueue, ISendingQueue<TMessage>
+    private class ConnectedRabbitMqSendingQueue : ConnectedRabbitMqMessageQueue, IConnectedSendingQueue<TMessage>
     {
         public ConnectedRabbitMqSendingQueue(IConnection connection, IModel channel, string queueName)
             : base(connection, channel, queueName)

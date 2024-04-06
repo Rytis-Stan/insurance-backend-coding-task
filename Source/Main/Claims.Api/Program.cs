@@ -32,7 +32,7 @@ public class Program
         return app;
     }
 
-    private static ISendingQueue<AuditMessage> InitializeAuditQueue(RabbitMqConfiguration configuration)
+    private static IConnectedSendingQueue<AuditMessage> InitializeAuditQueue(RabbitMqConfiguration configuration)
     {
         return new RabbitMqSendingQueue<AuditMessage>(configuration.HostName, configuration.QueueName).Connect();
     }
@@ -45,7 +45,7 @@ public class Program
         return database;
     }
 
-    private static void AddServices(IServiceCollection services, IClaimsDatabase claimsDatabase, ISendingQueue<AuditMessage> auditQueue)
+    private static void AddServices(IServiceCollection services, IClaimsDatabase claimsDatabase, IConnectedSendingQueue<AuditMessage> auditQueue)
     {
         AddControllers(services);
         AddRepositories(services, claimsDatabase);
@@ -94,7 +94,7 @@ public class Program
         services.AddTransient<IDeleteClaimCommand, DeleteClaimCommand>();
     }
 
-    private static void AddAuditing(IServiceCollection services, ISendingQueue<AuditMessage> auditQueue)
+    private static void AddAuditing(IServiceCollection services, IConnectedSendingQueue<AuditMessage> auditQueue)
     {
         services.AddScoped<IClaimAuditor>(_ => new MessageQueueClaimAuditor(auditQueue));
         services.AddScoped<ICoverAuditor>(_ => new MessageQueueCoverAuditor(auditQueue));

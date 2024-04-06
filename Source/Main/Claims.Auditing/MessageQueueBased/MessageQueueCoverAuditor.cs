@@ -4,7 +4,7 @@ namespace Claims.Auditing.MessageQueueBased;
 
 public class MessageQueueCoverAuditor : MessageQueueAuditor, ICoverAuditor
 {
-    public MessageQueueCoverAuditor(ISendingQueue<AuditMessage> queue)
+    public MessageQueueCoverAuditor(IConnectedSendingQueue<AuditMessage> queue)
         : base(queue, AuditEntityKind.Cover)
     {
     }

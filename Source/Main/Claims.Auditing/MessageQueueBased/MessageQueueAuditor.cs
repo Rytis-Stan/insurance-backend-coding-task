@@ -4,10 +4,10 @@ namespace Claims.Auditing.MessageQueueBased;
 
 public abstract class MessageQueueAuditor : IHttpRequestAuditor
 {
-    private readonly ISendingQueue<AuditMessage> _queue;
+    private readonly IConnectedSendingQueue<AuditMessage> _queue;
     private readonly AuditEntityKind _entityKind;
 
-    protected MessageQueueAuditor(ISendingQueue<AuditMessage> queue, AuditEntityKind entityKind)
+    protected MessageQueueAuditor(IConnectedSendingQueue<AuditMessage> queue, AuditEntityKind entityKind)
     {
         _queue = queue;
         _entityKind = entityKind;

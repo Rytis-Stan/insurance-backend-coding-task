@@ -1,6 +1,6 @@
 ﻿namespace BuildingBlocks.MessageQueues;
 
-public interface ISendingQueue<in TMessage> : IDisposable
+public interface ISendingQueue<in TMessage>
 {
-    void Send(TMessage message);
+    IConnectedSendingQueue<TMessage> Connect();
 }

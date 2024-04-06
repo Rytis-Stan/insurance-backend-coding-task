@@ -6,19 +6,19 @@ using RabbitMQ.Client.Events;
 namespace BuildingBlocks.MessageQueues.RabbitMq;
 
 public class RabbitMqReceivingQueue<TMessage>
-    : RabbitMqMessageQueue<IReceivingQueue<TMessage>>, IInactiveReceivingQueue<TMessage>
+    : RabbitMqMessageQueue<IConnectedReceivingQueue<TMessage>>, IReceivingQueue<TMessage>
 {
     public RabbitMqReceivingQueue(string hostName, string queueName)
         : base(hostName, queueName)
     {
     }
 
-    protected override IReceivingQueue<TMessage> CreateConnectedQueue(IConnection connection, IModel channel, string queueName)
+    protected override IConnectedReceivingQueue<TMessage> CreateConnectedQueue(IConnection connection, IModel channel, string queueName)
     {
         return new ConnectedRabbitMqReceivingQueue(connection, channel, queueName);
     }
 
-    public class ConnectedRabbitMqReceivingQueue : ConnectedRabbitMqMessageQueue, IReceivingQueue<TMessage>
+    public class ConnectedRabbitMqReceivingQueue : ConnectedRabbitMqMessageQueue, IConnectedReceivingQueue<TMessage>
     {
         public ConnectedRabbitMqReceivingQueue(IConnection connection, IModel channel, string queueName)
             : base(connection, channel, queueName)

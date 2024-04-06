@@ -49,7 +49,7 @@ public class App
         });
     }
 
-    private static IReceivingQueue<AuditMessage> ConnectToQueue(RabbitMqConfiguration configuration)
+    private static IConnectedReceivingQueue<AuditMessage> ConnectToQueue(RabbitMqConfiguration configuration)
     {
         return new RabbitMqReceivingQueue<AuditMessage>(configuration.HostName, configuration.QueueName).Connect();
     }
