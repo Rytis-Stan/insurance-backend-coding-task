@@ -1,5 +1,4 @@
 ﻿using Claims.Api.Dto;
-using Claims.Domain;
 using Claims.Testing;
 using System.Net;
 using Xunit;

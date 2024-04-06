@@ -32,13 +32,13 @@ public partial class ApiTests
 
     public ApiTests()
     {
+        DeleteCosmosDbIfExists();
         _client = new TestWebApplicationFactory<Program>().CreateClient();
     }
 
     public void Dispose()
     {
         _client.Dispose();
-        DeleteCosmosDbIfExists();
     }
 
     private static void DeleteCosmosDbIfExists()
@@ -51,8 +51,7 @@ public partial class ApiTests
         }
         catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
         {
-            // Database was not found. Can happen if the API start-up failed before
-            // creating the database. Ignore the exception.
+            // Database was not found.
         }
     }
 
