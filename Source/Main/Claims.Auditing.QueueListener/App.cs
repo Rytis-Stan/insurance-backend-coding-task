@@ -41,7 +41,7 @@ public class App
     {
         using var messageQueue = ConnectToQueue(_configuration.RabbitMq);
         using var auditDatabase = new EntityFrameworkAuditDatabase(_configuration.ConnectionString);
-        var auditor = new SwitchingAuditor(auditDatabase);
+        var auditor = new AuditingQueueListener(auditDatabase);
         messageQueue.OnReceived(message =>
         {
             Console.WriteLine($"RECEIVED_AT: {DateTime.UtcNow}, MESSAGE: {message}");
@@ -55,11 +55,11 @@ public class App
     }
 
     // TODO: Move this code to "Claims.Auditing" project?
-    private class SwitchingAuditor
+    private class AuditingQueueListener
     {
         private readonly Dictionary<AuditEntityKind, IHttpRequestAuditor> _auditorsByAuditEntityKind;
 
-        public SwitchingAuditor(IAuditDatabase auditDatabase)
+        public AuditingQueueListener(IAuditDatabase auditDatabase)
             : this(new Dictionary<AuditEntityKind, IHttpRequestAuditor>
             {
                 { AuditEntityKind.Cover, new PersistingCoverAuditor(auditDatabase.CoverAuditRepository) },
@@ -68,7 +68,7 @@ public class App
         {
         }
 
-        public SwitchingAuditor(Dictionary<AuditEntityKind, IHttpRequestAuditor> auditorsByAuditEntityKind)
+        public AuditingQueueListener(Dictionary<AuditEntityKind, IHttpRequestAuditor> auditorsByAuditEntityKind)
         {
             _auditorsByAuditEntityKind = auditorsByAuditEntityKind;
         }
