@@ -41,63 +41,29 @@ public class App
     private void StartListeningToAuditMessages()
     {
         using var auditDatabase = new EntityFrameworkAuditDatabase(_configuration.ConnectionString);
-        using var messageQueue = ConnectToQueue(
-            _configuration.RabbitMq, 
-            new CompositeQueueListener<AuditMessage>(
-                new LoggingQueueListener<AuditMessage>(),
-                new AuditingQueueListener(auditDatabase)
-            )
-        );
+        using var messageQueue = ConnectToQueue(_configuration.RabbitMq, RootListener(auditDatabase));
         messageQueue.StartListening();
     }
 
-    private static IConnectedReceivingQueue ConnectToQueue(RabbitMqConfiguration configuration, IQueueListener<AuditMessage> listner)
+    private static CompositeQueueListener<AuditMessage> RootListener(IAuditDatabase database)
     {
-        return new RabbitMqReceivingQueue<AuditMessage>(configuration.HostName, configuration.QueueName).Connect(listner);
+        return new CompositeQueueListener<AuditMessage>(
+            new LoggingQueueListener<AuditMessage>(),
+            new AuditingQueueListener(AuditorsByAuditEntityKind(database))
+        );
     }
 
-    private class LoggingQueueListener<TMessage> : IQueueListener<TMessage>
+    private static Dictionary<AuditEntityKind, IHttpRequestAuditor> AuditorsByAuditEntityKind(IAuditDatabase database)
     {
-        public void OnMessageReceived(TMessage message)
+        return new Dictionary<AuditEntityKind, IHttpRequestAuditor>
         {
-            // TODO: Make the console writer an injectable dependency or change this into an actual log instance.
-            Console.WriteLine($"RECEIVED_AT: {DateTime.UtcNow}, MESSAGE: {message}");
-        }
+            { AuditEntityKind.Cover, new PersistingCoverAuditor(database.CoverAuditRepository) },
+            { AuditEntityKind.Claim, new PersistingClaimAuditor(database.ClaimAuditRepository) }
+        };
     }
 
-    // TODO: Move this code to "Claims.Auditing" project?
-    private class AuditingQueueListener : IQueueListener<AuditMessage>
+    private static IConnectedReceivingQueue ConnectToQueue(RabbitMqConfiguration configuration, IQueueListener<AuditMessage> listener)
     {
-        private readonly Dictionary<AuditEntityKind, IHttpRequestAuditor> _auditorsByAuditEntityKind;
-
-        public AuditingQueueListener(IAuditDatabase auditDatabase)
-            : this(new Dictionary<AuditEntityKind, IHttpRequestAuditor>
-            {
-                { AuditEntityKind.Cover, new PersistingCoverAuditor(auditDatabase.CoverAuditRepository) },
-                { AuditEntityKind.Claim, new PersistingClaimAuditor(auditDatabase.ClaimAuditRepository) }
-            })
-        {
-        }
-
-        public AuditingQueueListener(Dictionary<AuditEntityKind, IHttpRequestAuditor> auditorsByAuditEntityKind)
-        {
-            _auditorsByAuditEntityKind = auditorsByAuditEntityKind;
-        }
-
-        public void OnMessageReceived(AuditMessage message)
-        {
-            var auditor = _auditorsByAuditEntityKind[message.EntityType];
-            switch (message.HttpRequestType)
-            {
-                case HttpRequestType.Post:
-                    auditor.AuditPost(message.EntityId);
-                    break;
-                case HttpRequestType.Delete:
-                    auditor.AuditDelete(message.EntityId);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
+        return new RabbitMqReceivingQueue<AuditMessage>(configuration.HostName, configuration.QueueName).Connect(listener);
     }
 }
