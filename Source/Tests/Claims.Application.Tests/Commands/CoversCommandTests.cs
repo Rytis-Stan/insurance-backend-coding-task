@@ -3,7 +3,7 @@ using Claims.Domain;
 using Claims.Testing;
 using Moq;
 
-namespace Claims.Application.Tests;
+namespace Claims.Application.Tests.Commands;
 
 // TODO: Decide where to put the "RandomCover()" method.
 public abstract class CoversCommandTests

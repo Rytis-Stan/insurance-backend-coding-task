@@ -3,7 +3,7 @@ using Claims.Domain;
 using Claims.Testing;
 using Xunit;
 
-namespace Claims.Application.Tests;
+namespace Claims.Application.Tests.Commands;
 
 public class CoverPricingTests
 {

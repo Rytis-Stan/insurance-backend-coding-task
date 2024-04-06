@@ -3,7 +3,7 @@ using Claims.Domain;
 using Moq;
 using Xunit;
 
-namespace Claims.Application.Tests;
+namespace Claims.Application.Tests.Commands;
 
 public class GetCoverCommandTests : CoversCommandTests
 {

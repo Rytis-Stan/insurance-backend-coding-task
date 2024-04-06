@@ -3,7 +3,7 @@ using Claims.Domain;
 using Claims.Testing;
 using Moq;
 
-namespace Claims.Application.Tests;
+namespace Claims.Application.Tests.Commands;
 
 // TODO: Decide what to do about this base tests class and the "RandomClaim()" method.
 public abstract class ClaimsCommandTests

@@ -6,7 +6,7 @@ using Moq;
 using Xunit;
 using static Claims.Testing.TestValueBuilder;
 
-namespace Claims.Application.Tests;
+namespace Claims.Application.Tests.Commands;
 
 public class CreateClaimCommandTests : ClaimsCommandTests
 {
