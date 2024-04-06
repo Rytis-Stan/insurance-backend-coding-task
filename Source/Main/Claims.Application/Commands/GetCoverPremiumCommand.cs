@@ -4,7 +4,11 @@ namespace Claims.Application.Commands;
 
 public record GetCoverPremiumRequest(DateOnly StartDate, DateOnly EndDate, CoverType CoverType);
 
-public class GetCoverPremiumCommand : ICommand<GetCoverPremiumRequest, decimal>
+public interface IGetCoverPremiumCommand : ICommand<GetCoverPremiumRequest, decimal>
+{
+}
+
+public class GetCoverPremiumCommand : IGetCoverPremiumCommand
 {
     private readonly ICoverPricing _coverPricing;
 
@@ -13,8 +17,8 @@ public class GetCoverPremiumCommand : ICommand<GetCoverPremiumRequest, decimal>
         _coverPricing = coverPricing;
     }
 
-    public async Task<decimal> ExecuteAsync(GetCoverPremiumRequest request)
+    public Task<decimal> ExecuteAsync(GetCoverPremiumRequest request)
     {
-        return _coverPricing.CalculatePremium(request.StartDate, request.EndDate, request.CoverType);
+        return Task.FromResult(_coverPricing.CalculatePremium(request.StartDate, request.EndDate, request.CoverType));
     }
 }
