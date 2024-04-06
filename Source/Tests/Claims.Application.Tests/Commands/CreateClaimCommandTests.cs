@@ -57,7 +57,6 @@ public class CreateClaimCommandTests : ClaimsCommandTests
         );
     }
 
-    // TODO: Should the thrown exception be an ArgumentException?
     [Fact]
     public async Task ThrowsExceptionWhenCreatingAClaimWithNonExistingCoverId()
     {
