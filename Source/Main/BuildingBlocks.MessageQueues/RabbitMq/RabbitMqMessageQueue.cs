@@ -35,7 +35,7 @@ public abstract class RabbitMqMessageQueue<TActiveQueue>
 
     protected abstract TActiveQueue CreateConnectedQueue(IConnection connection, IModel channel, string queueName);
 
-    public abstract class ConnectedRabbitMqMessageQueue
+    public abstract class ConnectedRabbitMqMessageQueue : IDisposable
     {
         private readonly IConnection _connection;
         protected readonly IModel Channel;
