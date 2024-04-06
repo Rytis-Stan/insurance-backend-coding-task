@@ -2,7 +2,7 @@
 
 namespace BuildingBlocks.MessageQueues.RabbitMq;
 
-public abstract class RabbitMqMessageQueue<TActiveQueue>
+public abstract class RabbitMqMessageQueue<TConnectedQueue>
 {
     private readonly string _hostName;
     private readonly string _queueName;
@@ -13,16 +13,22 @@ public abstract class RabbitMqMessageQueue<TActiveQueue>
         _queueName = queueName;
     }
 
-    public TActiveQueue Connect()
+    public TConnectedQueue Connect()
+    {
+        var (connection, channel) = DeclareQueueAndConnectToIt();
+        return CreateConnectedQueue(connection, channel, _queueName);
+    }
+
+    private (IConnection Connection, IModel Channel) DeclareQueueAndConnectToIt()
     {
         var factory = new ConnectionFactory { HostName = _hostName };
         var connection = factory.CreateConnection();
         var channel = connection.CreateModel();
-        EnsureQueueConstructed(channel);
-        return CreateConnectedQueue(connection, channel, _queueName);
+        DeclareQueue(channel);
+        return (connection, channel);
     }
 
-    private void EnsureQueueConstructed(IModel channel)
+    private void DeclareQueue(IModel channel)
     {
         channel.QueueDeclare(
             queue: _queueName,
@@ -33,7 +39,7 @@ public abstract class RabbitMqMessageQueue<TActiveQueue>
         );
     }
 
-    protected abstract TActiveQueue CreateConnectedQueue(IConnection connection, IModel channel, string queueName);
+    protected abstract TConnectedQueue CreateConnectedQueue(IConnection connection, IModel channel, string queueName);
 
     public abstract class ConnectedRabbitMqMessageQueue : IDisposable
     {
