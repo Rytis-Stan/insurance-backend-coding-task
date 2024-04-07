@@ -13,22 +13,16 @@ public partial class ApiTests
     [InlineData(182, CoverTypeDto.Yacht, 239717.50)]
     public async Task CoversPostReturnsNewlyCreatedCover(int periodDurationInDays, CoverTypeDto coverType, decimal expectedPremium)
     {
-        var utcNow = DateTime.UtcNow;
-        // NOTE: Start and end date should start at least 1 day after UTC Now to avoid the
-        // current date changing while the endpoint is being called (can happen if the
-        // test starts running just before a day's end).
-        var startDate = DateOnly.FromDateTime(utcNow).AddDays(TestData.RandomInt(1, 100));
-        var endDate = startDate.AddDays(periodDurationInDays - 1);
+        var request = RandomCreateCoverRequestDto(DateTime.UtcNow, periodDurationInDays, coverType);
 
-        var response = await CoversPostAsync(startDate, endDate, coverType);
+        var response = await CoversPostAsync(request);
 
-        response.EnsureSuccessStatusCode();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var cover = await response.ReadContentAsync<CoverDto>();
-
         Assert.NotNull(cover);
         Assert.NotEqual(Guid.Empty, cover.Id);
-        Assert.Equal(startDate, cover.StartDate);
-        Assert.Equal(endDate, cover.EndDate);
+        Assert.Equal(request.StartDate, cover.StartDate);
+        Assert.Equal(request.EndDate, cover.EndDate);
         Assert.Equal(coverType, cover.Type);
         Assert.Equal(expectedPremium, cover.Premium);
     }
@@ -38,7 +32,7 @@ public partial class ApiTests
     {
         var response = await CoversGetAsync();
 
-        response.EnsureSuccessStatusCode();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var covers = await response.ReadContentAsync<CoverDto[]>();
         Assert.NotNull(covers);
         Assert.Empty(covers);
@@ -52,6 +46,20 @@ public partial class ApiTests
         var response = await CoversGetAsync(id);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CoversGetWithIdReturnsCoverWhenItWasAlreadyCreatedPreviously()
+    {
+        var createRequest = RandomCreateCoverRequestDto(DateTime.UtcNow);
+        var createResponse = await CoversPostAsync(createRequest);
+        var createdCover = await createResponse.ReadContentAsync<CoverDto>();
+
+        var response = await CoversGetAsync(createdCover!.Id);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var cover = await response.ReadContentAsync<CoverDto>();
+        Assert.Equal(createdCover, cover);
     }
 
     [Fact]
@@ -73,8 +81,28 @@ public partial class ApiTests
     {
         var response = await CoversPremiumGetAsync(startDate, endDate, coverType);
 
-        response.EnsureSuccessStatusCode();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var premium = await response.ReadContentAsync<decimal>();
         Assert.Equal(expectedPremium, premium);
+    }
+
+    // TODO: Move this method out of this class.
+    private CreateCoverRequestDto RandomCreateCoverRequestDto(DateTime utcNow)
+    {
+        return RandomCreateCoverRequestDto(
+            utcNow,
+            TestData.RandomInt(1, 90),
+            TestData.RandomEnum<CoverTypeDto>()
+        );
+    }
+
+    private CreateCoverRequestDto RandomCreateCoverRequestDto(DateTime utcNow, int periodDurationInDays, CoverTypeDto coverType)
+    {
+        // NOTE: Start and end date should start at least 1 day after UTC Now to avoid the
+        // current date changing while the endpoint is being called (can happen if the test
+        // starts running just before a day's end).
+        var startDate = DateOnly.FromDateTime(utcNow).AddDays(TestData.RandomInt(1, 100));
+        var endDate = startDate.AddDays(periodDurationInDays - 1);
+        return new CreateCoverRequestDto(startDate, endDate, coverType);
     }
 }

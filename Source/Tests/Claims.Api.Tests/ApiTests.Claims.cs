@@ -20,7 +20,7 @@ public partial class ApiTests : IDisposable
 
         var response = await ClaimsPostAsync(cover.Id, name, claimType, damageCost, created);
 
-        response.EnsureSuccessStatusCode();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var claim = await response.ReadContentAsync<ClaimDto>();
         Assert.NotNull(claim);
         Assert.NotEqual(Guid.Empty, claim.Id);
@@ -36,7 +36,7 @@ public partial class ApiTests : IDisposable
     {
         var response = await ClaimsGetAsync();
 
-        response.EnsureSuccessStatusCode();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var claims = await response.ReadContentAsync<ClaimDto[]>();
         Assert.NotNull(claims);
         Assert.Empty(claims);
@@ -70,8 +70,8 @@ public partial class ApiTests : IDisposable
         var periodDurationInDays = 200;
         var endDate = startDate.AddDays(TestData.RandomInt(periodDurationInDays - 1));
         var coverType = TestData.RandomEnum<CoverTypeDto>();
-        var response = await CoversPostAsync(startDate, endDate, coverType);
-        response.EnsureSuccessStatusCode();
+        var response = await CoversPostAsync(new CreateCoverRequestDto(startDate, endDate, coverType));
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         return await response.ReadContentAsync<CoverDto>();
     }
 }

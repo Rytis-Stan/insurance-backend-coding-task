@@ -13,9 +13,9 @@ namespace Claims.Api.Tests;
 // ReSharper disable once UnusedMember.Global
 public partial class ApiTests
 {
-    private Task<HttpResponseMessage> CoversPostAsync(DateOnly startDate, DateOnly endDate, CoverTypeDto coverType)
+    private Task<HttpResponseMessage> CoversPostAsync(CreateCoverRequestDto request)
     {
-        return _client.PostAsync("/Covers", new CreateCoverRequestDto(startDate, endDate, coverType));
+        return _client.PostAsync("/Covers", request);
     }
 
     private Task<HttpResponseMessage> CoversGetAsync()
