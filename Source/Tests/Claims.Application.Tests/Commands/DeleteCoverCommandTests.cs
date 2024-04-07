@@ -9,7 +9,7 @@ public class DeleteCoverCommandTests : CoversCommandTests
 
     public DeleteCoverCommandTests()
     {
-        _command = new DeleteCoverCommand(_coversRepositoryMock.Object);
+        _command = new DeleteCoverCommand(CoversRepositoryMock.Object);
     }
 
     [Fact]
@@ -19,6 +19,6 @@ public class DeleteCoverCommandTests : CoversCommandTests
 
         await _command.ExecuteAsync(new DeleteCoverRequest(id));
 
-        _coversRepositoryMock.Verify(x => x.DeleteByIdAsync(id));
+        CoversRepositoryMock.Verify(x => x.DeleteByIdAsync(id));
     }
 }

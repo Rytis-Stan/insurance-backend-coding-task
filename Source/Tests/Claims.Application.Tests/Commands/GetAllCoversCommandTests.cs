@@ -11,7 +11,7 @@ public class GetAllCoversCommandTests : CoversCommandTests
 
     public GetAllCoversCommandTests()
     {
-        _command = new GetAllCoversCommand(_coversRepositoryMock.Object);
+        _command = new GetAllCoversCommand(CoversRepositoryMock.Object);
     }
 
     [Fact]
@@ -27,7 +27,7 @@ public class GetAllCoversCommandTests : CoversCommandTests
 
     private void StubGetAllCovers(IEnumerable<Cover> coversToReturn)
     {
-        _coversRepositoryMock
+        CoversRepositoryMock
             .Setup(x => x.GetAllAsync())
             .ReturnsAsync(coversToReturn);
     }

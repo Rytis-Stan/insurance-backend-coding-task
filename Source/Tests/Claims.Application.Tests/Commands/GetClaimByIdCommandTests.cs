@@ -11,7 +11,7 @@ public class GetClaimByIdCommandTests : ClaimsCommandTests
 
     public GetClaimByIdCommandTests()
     {
-        _command = new GetClaimByIdCommand(_claimsRepositoryMock.Object);
+        _command = new GetClaimByIdCommand(ClaimsRepositoryMock.Object);
     }
 
     [Fact]
@@ -28,7 +28,7 @@ public class GetClaimByIdCommandTests : ClaimsCommandTests
 
     private void StubFindClaim(Guid id, Claim claimToReturn)
     {
-        _claimsRepositoryMock
+        ClaimsRepositoryMock
             .Setup(x => x.FindByIdAsync(id))
             .ReturnsAsync(claimToReturn);
     }

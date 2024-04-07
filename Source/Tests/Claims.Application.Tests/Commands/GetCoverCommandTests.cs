@@ -11,7 +11,7 @@ public class GetCoverCommandTests : CoversCommandTests
 
     public GetCoverCommandTests()
     {
-        _command = new GetCoverCommand(_coversRepositoryMock.Object);
+        _command = new GetCoverCommand(CoversRepositoryMock.Object);
     }
 
     [Fact]
@@ -28,7 +28,7 @@ public class GetCoverCommandTests : CoversCommandTests
 
     private void StubFindCover(Guid id, Cover? coverToReturn)
     {
-        _coversRepositoryMock
+        CoversRepositoryMock
             .Setup(x => x.FindByIdAsync(id))
             .ReturnsAsync(coverToReturn);
     }

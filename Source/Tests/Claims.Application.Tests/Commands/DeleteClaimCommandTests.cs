@@ -9,7 +9,7 @@ public class DeleteClaimCommandTests : ClaimsCommandTests
 
     public DeleteClaimCommandTests()
     {
-        _command = new DeleteClaimCommand(_claimsRepositoryMock.Object);
+        _command = new DeleteClaimCommand(ClaimsRepositoryMock.Object);
     }
 
     [Fact]
@@ -19,6 +19,6 @@ public class DeleteClaimCommandTests : ClaimsCommandTests
 
         await _command.ExecuteAsync(new DeleteClaimRequest(id));
 
-        _claimsRepositoryMock.Verify(x => x.DeleteByIdAsync(id));
+        ClaimsRepositoryMock.Verify(x => x.DeleteByIdAsync(id));
     }
 }

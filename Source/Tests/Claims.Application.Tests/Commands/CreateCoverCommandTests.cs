@@ -20,7 +20,7 @@ public class CreateCoverCommandTests : CoversCommandTests
     {
         _coverPricingMock = new Mock<ICoverPricing>();
         _clockMock = new Mock<IClock>();
-        _command = new CreateCoverCommand(_coversRepositoryMock.Object, _coverPricingMock.Object, _clockMock.Object);
+        _command = new CreateCoverCommand(CoversRepositoryMock.Object, _coverPricingMock.Object, _clockMock.Object);
     }
 
     [Fact]
@@ -194,7 +194,7 @@ public class CreateCoverCommandTests : CoversCommandTests
 
             await _command.ExecuteAsync(request);
 
-            _coversRepositoryMock.Verify(x => x.CreateAsync(new NewCoverInfo(startDate, endDate, coverType, premium)));
+            CoversRepositoryMock.Verify(x => x.CreateAsync(new NewCoverInfo(startDate, endDate, coverType, premium)));
         }
     }
 
@@ -233,7 +233,7 @@ public class CreateCoverCommandTests : CoversCommandTests
 
     private void StubCreateCover(DateOnly startDate, DateOnly endDate, CoverType coverType, decimal premium, Cover coverToReturn)
     {
-        _coversRepositoryMock
+        CoversRepositoryMock
             .Setup(x => x.CreateAsync(new NewCoverInfo(startDate, endDate, coverType, premium)))
             .ReturnsAsync(coverToReturn);
     }

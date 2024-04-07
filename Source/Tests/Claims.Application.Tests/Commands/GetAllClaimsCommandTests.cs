@@ -11,7 +11,7 @@ public class GetAllClaimsCommandTests : ClaimsCommandTests
 
     public GetAllClaimsCommandTests()
     {
-        _command = new GetAllClaimsCommand(_claimsRepositoryMock.Object);
+        _command = new GetAllClaimsCommand(ClaimsRepositoryMock.Object);
     }
 
     [Fact]
@@ -27,7 +27,7 @@ public class GetAllClaimsCommandTests : ClaimsCommandTests
 
     private void StubGetAllClaims(IEnumerable<Claim> claimsToReturn)
     {
-        _claimsRepositoryMock
+        ClaimsRepositoryMock
             .Setup(x => x.GetAllAsync())
             .ReturnsAsync(claimsToReturn);
     }

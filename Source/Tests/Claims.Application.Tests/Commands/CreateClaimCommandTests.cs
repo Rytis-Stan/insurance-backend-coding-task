@@ -21,7 +21,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
     public CreateClaimCommandTests()
     {
         _coversRepositoryMock = new Mock<ICoversRepository>();
-        _command = new CreateClaimCommand(_claimsRepositoryMock.Object, _coversRepositoryMock.Object);
+        _command = new CreateClaimCommand(ClaimsRepositoryMock.Object, _coversRepositoryMock.Object);
     }
 
     [Theory]
@@ -139,7 +139,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
 
             await _command.ExecuteAsync(request);
 
-            _claimsRepositoryMock.Verify(x => x.CreateAsync(new NewClaimInfo(cover.Id, claimName, claimType, claimDamageCost, claimCreated)));
+            ClaimsRepositoryMock.Verify(x => x.CreateAsync(new NewClaimInfo(cover.Id, claimName, claimType, claimDamageCost, claimCreated)));
         }
     }
 
@@ -176,7 +176,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
 
     private void StubCreateClaim(Guid coverId, string name, ClaimType type, decimal damageCost, DateTime created, Claim claimToReturn)
     {
-        _claimsRepositoryMock
+        ClaimsRepositoryMock
             .Setup(x => x.CreateAsync(new NewClaimInfo(coverId, name, type, damageCost, created)))
             .ReturnsAsync(claimToReturn);
     }
