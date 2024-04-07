@@ -16,7 +16,9 @@ public interface IGetCoverCommand : ICommand<GetCoverRequest, GetCoverResponse>
     // Task<Cover?> ExecuteAsync(GetCoverRequest request);
 }
 
-public interface IGetAllCoversCommand : ICommand<IEnumerable<Cover>>
+public record GetAllCoversResponse(IEnumerable<Cover> Covers);
+
+public interface IGetAllCoversCommand : ICommand<GetAllCoversResponse>
 {
     // Task<IEnumerable<Cover>> ExecuteAsync();
 }

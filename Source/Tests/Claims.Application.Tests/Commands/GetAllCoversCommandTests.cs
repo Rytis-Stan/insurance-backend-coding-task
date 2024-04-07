@@ -20,9 +20,9 @@ public class GetAllCoversCommandTests : CoversCommandTests
         var covers = new[] { TestDomainData.RandomCover(), TestDomainData.RandomCover() };
         StubGetAllCovers(covers);
 
-        var returnedCovers = await _command.ExecuteAsync();
+        var response = await _command.ExecuteAsync();
 
-        Assert.Equal(covers, returnedCovers);
+        Assert.Equal(covers, response.Covers);
     }
 
     private void StubGetAllCovers(IEnumerable<Cover> coversToReturn)

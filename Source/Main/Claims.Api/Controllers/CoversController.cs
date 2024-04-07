@@ -49,7 +49,8 @@ public class CoversController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CoverDto>>> GetAsync()
     {
-        var covers = await _getAllCoversCommand.ExecuteAsync();
+        var response = await _getAllCoversCommand.ExecuteAsync();
+        var covers = response.Covers;
         return Ok(covers.Select(x => x.ToDto()));
     }
 

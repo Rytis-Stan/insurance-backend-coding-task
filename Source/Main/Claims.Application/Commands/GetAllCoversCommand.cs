@@ -1,5 +1,4 @@
 using Claims.Application.Repositories;
-using Claims.Domain;
 
 namespace Claims.Application.Commands;
 
@@ -12,8 +11,9 @@ public class GetAllCoversCommand : IGetAllCoversCommand
         _coversRepository = coversRepository;
     }
 
-    public async Task<IEnumerable<Cover>> ExecuteAsync()
+    public async Task<GetAllCoversResponse> ExecuteAsync()
     {
-        return await _coversRepository.GetAllAsync();
+        var covers = await _coversRepository.GetAllAsync();
+        return new GetAllCoversResponse(covers);
     }
 }
