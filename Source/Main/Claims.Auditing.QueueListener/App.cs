@@ -7,7 +7,7 @@ namespace Claims.Auditing.QueueListener;
 
 /// <summary>
 /// Represents the logic of whole application. Please see the comments of the
-/// <see cref="IAppContext" /> inteface for more details.
+/// <see cref="IAppContext" /> interface for more details.
 /// </summary>
 public class App
 {
@@ -24,11 +24,12 @@ public class App
             _context.Logger,
             _context.Database,
             _context.Queue,
-            _context.QueueListener
+            _context.QueueListener,
+            _context.Console
         );
     }
 
-    private static void Run(ILogger logger, IAuditDatabase database, IReceivingQueue<AuditMessage> queue, IQueueListener<AuditMessage> queueListener)
+    private static void Run(ILogger logger, IAuditDatabase database, IReceivingQueue<AuditMessage> queue, IQueueListener<AuditMessage> queueListener, IConsole console)
     {
         logger.LogInformation("Starting to migrate the auditing database.");
         database.Migrate();
@@ -39,7 +40,7 @@ public class App
         messageQueue.StartListening();
 
         logger.LogInformation("Press [Enter] to quit.");
-        Console.ReadLine();
+        console.WaitTillEnterKeyPressed();
     }
 
     // TODO: Return the disposables?

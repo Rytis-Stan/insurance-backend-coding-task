@@ -27,4 +27,5 @@ public interface IAppContext
     IAuditDatabase Database { get; }
     IReceivingQueue<AuditMessage> Queue { get; }
     IQueueListener<AuditMessage> QueueListener { get; }
+    IConsole Console { get; }
 }

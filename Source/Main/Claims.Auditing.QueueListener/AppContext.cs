@@ -14,6 +14,7 @@ public class AppContext : IAppContext
     public IAuditDatabase Database { get; }
     public IReceivingQueue<AuditMessage> Queue { get; }
     public IQueueListener<AuditMessage> QueueListener { get; }
+    public IConsole Console { get; }
 
     public AppContext(AppConfiguration configuration)
     {
@@ -21,6 +22,7 @@ public class AppContext : IAppContext
         Database = CreateDatabase(configuration);
         Queue = CreateReceivingQueue(configuration.RabbitMq);
         QueueListener = RootQueueListener(Database, Logger);
+        Console = new SystemConsole();
     }
 
     private static ILogger CreateLogger()
