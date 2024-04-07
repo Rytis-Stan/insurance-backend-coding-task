@@ -46,7 +46,8 @@ public class ClaimsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ClaimDto>>> GetAsync()
     {
-        var claims = await _getAllClaimsCommand.ExecuteAsync();
+        var response = await _getAllClaimsCommand.ExecuteAsync();
+        var claims = response.Claims;
         return Ok(claims.Select(x => x.ToDto()));
     }
 

@@ -20,9 +20,9 @@ public class GetAllClaimsCommandTests : ClaimsCommandTests
         var claims = new[] { TestDomainData.RandomClaim(), TestDomainData.RandomClaim() };
         StubGetAllClaims(claims);
 
-        var returnedClaims = await _command.ExecuteAsync();
+        var response = await _command.ExecuteAsync();
 
-        Assert.Equal(claims, returnedClaims);
+        Assert.Equal(claims, response.Claims);
     }
 
     private void StubGetAllClaims(IEnumerable<Claim> claimsToReturn)

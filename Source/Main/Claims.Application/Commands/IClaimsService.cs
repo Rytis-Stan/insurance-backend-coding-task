@@ -26,7 +26,9 @@ public interface IGetClaimByIdCommand : ICommand<GetClaimByIdRequest, GetClaimBy
     // Task<Claim?> ExecuteAsync(GetClaimByIdRequest request);
 }
 
-public interface IGetAllClaimsCommand : ICommand<IEnumerable<Claim>>
+public record GetAllClaimsResponse(IEnumerable<Claim> Claims);
+
+public interface IGetAllClaimsCommand : ICommand<GetAllClaimsResponse>
 {
     // Task<IEnumerable<Claim>> ExecuteAsync();
 }
