@@ -1,5 +1,6 @@
 ﻿using BuildingBlocks.MessageQueues;
 using Claims.Auditing.MessageQueueBased;
+using Claims.Auditing.QueueListener.IO;
 using Claims.Persistence.Auditing;
 using Microsoft.Extensions.Logging;
 

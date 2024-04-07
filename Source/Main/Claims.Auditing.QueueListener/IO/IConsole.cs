@@ -1,4 +1,4 @@
-﻿namespace Claims.Auditing.QueueListener;
+﻿namespace Claims.Auditing.QueueListener.IO;
 
 public interface IConsole
 {

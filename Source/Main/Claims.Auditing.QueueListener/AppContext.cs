@@ -3,6 +3,7 @@ using BuildingBlocks.MessageQueues.RabbitMq;
 using Claims.Auditing.MessageQueueBased;
 using Claims.Auditing.PersistenceBased;
 using Claims.Auditing.QueueListener.Configuration;
+using Claims.Auditing.QueueListener.IO;
 using Claims.Persistence.Auditing;
 using Microsoft.Extensions.Logging;
 
