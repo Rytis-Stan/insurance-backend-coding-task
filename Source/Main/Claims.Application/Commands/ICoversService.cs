@@ -15,9 +15,9 @@ public record GetCoverResponse(Cover? Cover);
 // }
 
 public record GetAllCoversResponse(IEnumerable<Cover> Covers);
-public interface IGetAllCoversCommand : INoParametersCommand<GetAllCoversResponse>
-{
-}
+// public interface IGetAllCoversCommand : INoParametersCommand<GetAllCoversResponse>
+// {
+// }
 
 public record DeleteCoverRequest(Guid Id);
 // public interface IDeleteCoverCommand : INoResultsCommand<DeleteCoverRequest>

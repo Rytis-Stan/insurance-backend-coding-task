@@ -84,12 +84,12 @@ public class Program
     {
         services.AddTransient<ICommand<CreateCoverRequest, CreateCoverResponse>, CreateCoverCommand>();
         services.AddTransient<ICommand<GetCoverRequest, GetCoverResponse>, GetCoverCommand>();
-        services.AddTransient<IGetAllCoversCommand, GetAllCoversCommand>();
+        services.AddTransient<INoParametersCommand<GetAllCoversResponse>, GetAllCoversCommand>();
         services.AddTransient<INoResultsCommand<DeleteCoverRequest>, DeleteCoverCommand>();
         
-        services.AddTransient<IGetCoverPremiumCommand, GetCoverPremiumCommand>();
+        services.AddTransient<ICommand<GetCoverPremiumRequest, GetCoverPremiumResponse>, GetCoverPremiumCommand>();
 
-        services.AddTransient<ICreateClaimCommand, CreateClaimCommand>();
+        services.AddTransient<ICommand<CreateClaimRequest, CreateClaimResponse>, CreateClaimCommand>();
         services.AddTransient<ICommand<GetClaimByIdRequest, GetClaimByIdResponse>, GetClaimByIdCommand>();
         services.AddTransient<IGetAllClaimsCommand, GetAllClaimsCommand>();
         services.AddTransient<IDeleteClaimCommand, DeleteClaimCommand>();

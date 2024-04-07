@@ -2,7 +2,7 @@ using Claims.Application.Repositories;
 
 namespace Claims.Application.Commands;
 
-public class CreateClaimCommand : ICreateClaimCommand
+public class CreateClaimCommand : ICommand<CreateClaimRequest, CreateClaimResponse>
 {
     private readonly IClaimsRepository _claimsRepository;
     private readonly ICoversRepository _coversRepository;

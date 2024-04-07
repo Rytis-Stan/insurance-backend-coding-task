@@ -26,9 +26,9 @@ public record CreateClaimRequest(
     DateTime Created
 );
 public record CreateClaimResponse(Claim Claim);
-public interface ICreateClaimCommand : ICommand<CreateClaimRequest, CreateClaimResponse>
-{
-}
+// public interface ICreateClaimCommand : ICommand<CreateClaimRequest, CreateClaimResponse>
+// {
+// }
 
 public record GetClaimByIdRequest(Guid Id);
 public record GetClaimByIdResponse(Claim? Claim);

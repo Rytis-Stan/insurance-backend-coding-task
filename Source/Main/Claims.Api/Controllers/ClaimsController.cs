@@ -18,7 +18,7 @@ public class ClaimsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ClaimDto>> CreateAsync([FromServices] ICreateClaimCommand command, CreateClaimRequestDto request)
+    public async Task<ActionResult<ClaimDto>> CreateAsync([FromServices] ICommand<CreateClaimRequest, CreateClaimResponse> command, CreateClaimRequestDto request)
     {
         var response = await command.ExecuteAsync(request.ToDomainRequest());
         var claim = response.Claim;

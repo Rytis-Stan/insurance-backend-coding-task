@@ -37,7 +37,7 @@ public class CoversController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<CoverDto>>> GetAsync([FromServices] IGetAllCoversCommand command)
+    public async Task<ActionResult<IEnumerable<CoverDto>>> GetAsync([FromServices] INoParametersCommand<GetAllCoversResponse> command)
     {
         var response = await command.ExecuteAsync();
         var covers = response.Covers;
@@ -53,7 +53,7 @@ public class CoversController : ControllerBase
     }
 
     [HttpGet("Premium")]
-    public async Task<ActionResult<decimal>> GetCoverPremiumAsync([FromServices] IGetCoverPremiumCommand command,
+    public async Task<ActionResult<decimal>> GetCoverPremiumAsync([FromServices] ICommand<GetCoverPremiumRequest, GetCoverPremiumResponse> command,
         DateOnly startDate, DateOnly endDate, CoverTypeDto coverType)
     {
         var response = await command.ExecuteAsync(new GetCoverPremiumRequest(startDate, endDate, coverType.ToDomainEnum()));
