@@ -1,4 +1,5 @@
 ﻿using Claims.Domain;
+using Claims.Testing;
 
 namespace Claims.Application.Tests;
 
@@ -12,10 +13,10 @@ public static class TestDomainData
         return new Cover
         {
             Id = Guid.NewGuid(),
-            StartDate = Testing.TestData.RandomDate(),
-            EndDate = Testing.TestData.RandomDate(),
-            Type = Testing.TestData.RandomEnum<CoverType>(),
-            Premium = Testing.TestData.RandomInt(100)
+            StartDate = TestData.RandomDate(),
+            EndDate = TestData.RandomDate(),
+            Type = TestData.RandomEnum<CoverType>(),
+            Premium = TestData.RandomInt(100)
         };
     }
 
@@ -25,10 +26,10 @@ public static class TestDomainData
         {
             Id = Guid.NewGuid(),
             CoverId = Guid.NewGuid(),
-            Name = Testing.TestData.RandomString("name"),
-            Type = Testing.TestData.RandomEnum<ClaimType>(),
-            DamageCost = Testing.TestData.RandomInt(100),
-            Created = Testing.TestData.RandomUtcDateTime()
+            Name = TestData.RandomString("name"),
+            Type = TestData.RandomEnum<ClaimType>(),
+            DamageCost = TestData.RandomInt(100),
+            Created = TestData.RandomUtcDateTime()
         };
     }
 }
