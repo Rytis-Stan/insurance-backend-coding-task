@@ -14,6 +14,7 @@ The API tests check the system like a black box.
 
 As the codebase evolves, a list of things should be considered:
 
+* **Command unit test structure**. Each command implementation, together with it's request and response types, is grouped into sub-folders based on the commands main name part. However, the command unit tests do not have these additional sub-folders. While under normal circumstances each unit test class should mimic the folder structure and naming of it's related type being tested, in this case it seemed like the right approach due to not wanting to create a folder for each test class separately. Alternatively, commands, requests and responses could all have their own folders ("Commands", "Requests", "Responses"), but that would make it harder to find related types when looking into three different folders.
 * **Validation. HTTP Responses for validation failures**. TODO: Introduce a global way to map command validation exceptions to an appropriate BadRequest response.
 * **Validation**. The deletion of a cover should handle the deletion of related claims in one of the following ways, because a claim without a cover cannot exist on it's own (it's a child the claim):
   * All child claims should simply be deleted, if any;
