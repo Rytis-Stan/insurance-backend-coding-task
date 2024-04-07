@@ -47,7 +47,7 @@ public class ClaimsController : ControllerBase
     [HttpDelete("{id}")]
     // TODO: Add proper attributes.
     //[ProducesResponseType(typeof(MyClass), (int)HttpStatusCode.Accepted)]
-    public async Task<ActionResult> DeleteAsync(IDeleteClaimCommand command, Guid id)
+    public async Task<ActionResult> DeleteAsync([FromServices] IDeleteClaimCommand command, Guid id)
     {
         await command.ExecuteAsync(new DeleteClaimRequest(id));
         _claimAuditor.AuditDelete(id);
