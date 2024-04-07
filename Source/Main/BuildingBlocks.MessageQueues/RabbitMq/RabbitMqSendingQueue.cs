@@ -38,12 +38,20 @@ public class RabbitMqSendingQueue<TMessage> : RabbitMqMessageQueue, ISendingQueu
         {
             var messageJson = JsonSerializer.Serialize(message);
             var messageJsonBytes = Encoding.UTF8.GetBytes(messageJson);
+
             Channel.BasicPublish(
                 exchange: "",
                 routingKey: _queueName,
-                basicProperties: null,
+                basicProperties: QueueProperties(),
                 body: messageJsonBytes
             );
+        }
+
+        private IBasicProperties QueueProperties()
+        {
+            var properties = Channel.CreateBasicProperties();
+            properties.Persistent = true;
+            return properties;
         }
     }
 }
