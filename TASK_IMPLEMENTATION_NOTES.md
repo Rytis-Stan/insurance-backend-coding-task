@@ -10,7 +10,7 @@ If You see something unexpected or weird in the implementation, there is probabl
 
 ## Future considerations and potential improvements
 
-The following is a list of various things to consider and improve, especially since the codebase is a constantly evolving thing:
+As the codebase evolves, a list of things should be considered:
 
 * **Resource ownership**. The system uses the following resources: a Cosmos DB database for claims (and covers), an SQL Server database for audit and a RabbitMQ queue for sending and receiving messages from the API to the audit message processing process. The API upgrades the claims database on startup, the message processing process does the same for the audit database, and the queue gets created by either party, depending on which program starts first. This might not be ideal, especially if multiple copies of either program get instantiated for sake scaling the system. The creation of all the mentioned resources might need to be migrated to a separate executable that is run independenly, being triggered by either code merges or other deployment pipeline triggers (which may or may not be manual, depending on the needs). In addition, some infrastructure as code should probably be used.
 * **Database handling in tests**. API tests delete the main Cosmos DB database before each test is run. A few related considerations:
