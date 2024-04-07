@@ -19,8 +19,8 @@ public abstract class RabbitMqMessageQueue
     protected QueueInfo DeclareQueueAndConnectToIt()
     {
         var factory = new ConnectionFactory { HostName = _hostName };
-        var connection = factory.CreateConnection();
-        var channel = connection.CreateModel();
+        var connection = factory.CreateConnection()!;
+        var channel = connection.CreateModel()!;
         DeclareQueue(channel);
         return new QueueInfo(connection, channel, _queueName);
     }

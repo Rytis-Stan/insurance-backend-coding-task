@@ -29,6 +29,7 @@ public class AppContext : IAppContext
     public void Dispose()
     {
         Database.Dispose();
+        GC.SuppressFinalize(this);
     }
 
     private static ILogger CreateLogger()

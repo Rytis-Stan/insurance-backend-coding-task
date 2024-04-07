@@ -12,54 +12,46 @@ public class RabbitMqReceivingQueue<TMessage> : RabbitMqMessageQueue, IReceiving
     {
     }
 
-    public IConnectedReceivingQueue Connect(IQueueListener<TMessage> listener)
+    public IConnectedReceivingQueue StartListening(IQueueListener<TMessage> listener)
     {
         var (connection, channel, queueName) = DeclareQueueAndConnectToIt();
-        return new ConnectedRabbitMqReceivingQueue(connection, channel, queueName, listener);
+        channel.BasicConsume(
+            queue: queueName,
+            autoAck: false,
+            consumer: CreateConsumer(channel, listener)
+        );
+        return new ConnectedRabbitMqReceivingQueue(connection, channel, queueName);
+    }
+
+    private static IBasicConsumer CreateConsumer(IModel channel, IQueueListener<TMessage> listener)
+    {
+        var consumer = new EventingBasicConsumer(channel);
+        consumer.Received += (_, e) =>
+        {
+            var message = ToMessage(e.Body);
+            listener.OnMessageReceived(message);
+            channel.BasicAck(e.DeliveryTag, multiple: false);
+        };
+        return consumer;
+    }
+
+    private static TMessage ToMessage(ReadOnlyMemory<byte> bytes)
+    {
+        var messageJsonBytes = bytes.ToArray();
+        var messageJson = Encoding.UTF8.GetString(messageJsonBytes);
+        var message = JsonSerializer.Deserialize<TMessage>(messageJson);
+        
+        // TODO: Improve error handling (change thrown exception type, etc.).
+        return message == null
+            ? throw new Exception("Invalid message received.")
+            : message;
     }
 
     private class ConnectedRabbitMqReceivingQueue : ConnectedRabbitMqMessageQueue, IConnectedReceivingQueue
     {
-        private readonly IQueueListener<TMessage> _listener;
-
-        public ConnectedRabbitMqReceivingQueue(IConnection connection, IModel channel, string queueName, IQueueListener<TMessage> listener)
+        public ConnectedRabbitMqReceivingQueue(IConnection connection, IModel channel, string queueName)
             : base(connection, channel, queueName)
         {
-            _listener = listener;
-        }
-
-        public void StartListening()
-        {
-            Channel.BasicConsume(
-                queue: QueueName,
-                autoAck: false,
-                consumer: CreateConsumer()
-            );
-        }
-
-        private IBasicConsumer CreateConsumer()
-        {
-            var consumer = new EventingBasicConsumer(Channel);
-            consumer.Received += (_, e) =>
-            {
-                var message = ToMessage(e.Body);
-                _listener.OnMessageReceived(message);
-                Channel.BasicAck(e.DeliveryTag, multiple: false);
-            };
-            return consumer;
-        }
-
-        private static TMessage ToMessage(ReadOnlyMemory<byte> bytes)
-        {
-            var messageJsonBytes = bytes.ToArray();
-            var messageJson = Encoding.UTF8.GetString(messageJsonBytes);
-            var message = JsonSerializer.Deserialize<TMessage>(messageJson);
-            if (message == null)
-            {
-                // TODO: Improve error handling (change thrown exception type, etc.).
-                throw new Exception("Invalid message received.");
-            }
-            return message;
         }
     }
 }

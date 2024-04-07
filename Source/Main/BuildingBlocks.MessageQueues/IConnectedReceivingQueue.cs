@@ -2,5 +2,4 @@
 
 public interface IConnectedReceivingQueue : IDisposable
 {
-    void StartListening();
 }

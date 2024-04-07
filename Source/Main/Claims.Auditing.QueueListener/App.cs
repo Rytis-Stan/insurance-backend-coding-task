@@ -39,8 +39,7 @@ public class App
         logger.LogInformation("Migration finished.");
         logger.LogInformation("Starting to listed to messages.");
 
-        using var messageQueue = queue.Connect(queueListener);
-        messageQueue.StartListening();
+        using var messageQueue = queue.StartListening(queueListener);
 
         logger.LogInformation("Press [Enter] to quit.");
         console.WaitTillEnterKeyPressed();
