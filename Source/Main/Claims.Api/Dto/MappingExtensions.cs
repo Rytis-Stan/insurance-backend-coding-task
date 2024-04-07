@@ -3,6 +3,9 @@ using Claims.Domain;
 
 namespace Claims.Api.Dto;
 
+/// <summary>
+/// An extension method class for mapping DTOs to domain objects and vice versa.
+/// </summary>
 public static class MappingExtensions
 {
     public static CreateCoverRequest ToDomainRequest(this CreateCoverRequestDto source)
