@@ -1,10 +1,18 @@
-﻿namespace BuildingBlocks.MessageQueues;
+﻿using Microsoft.Extensions.Logging;
+
+namespace BuildingBlocks.MessageQueues;
 
 public class LoggingQueueListener<TMessage> : IQueueListener<TMessage>
 {
+    private readonly ILogger _logger;
+
+    public LoggingQueueListener(ILogger logger)
+    {
+        _logger = logger;
+    }
+
     public void OnMessageReceived(TMessage message)
     {
-        // TODO: Make the console writer an injectable dependency or change this into an actual log instance.
-        Console.WriteLine($"[{DateTime.UtcNow:yyyy-MM-dd}]. Received message: {message}");
+        _logger.LogInformation("Received message: {Message}", message);
     }
 }

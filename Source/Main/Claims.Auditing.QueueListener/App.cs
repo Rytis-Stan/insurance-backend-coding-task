@@ -4,6 +4,7 @@ using Claims.Auditing.MessageQueueBased;
 using Claims.Auditing.PersistenceBased;
 using Claims.Auditing.QueueListener.Configuration;
 using Claims.Persistence.Auditing;
+using Microsoft.Extensions.Logging;
 
 namespace Claims.Auditing.QueueListener;
 
@@ -18,16 +19,17 @@ public class App
 
     public void Run()
     {
-        Console.WriteLine("Starting to migrate the auditing database.");
+        var logger = Logger();
+
+        logger.LogInformation("Starting to migrate the auditing database.");
         
         MigrateAuditDatabase(_configuration.ConnectionString);
 
-        Console.WriteLine("Finishing migration of the auditing database.");
-        Console.WriteLine("Starting to listed to messages.");
+        logger.LogInformation("Migration finished. Starting to listed to messages.");
 
-        StartListeningToAuditMessages();
+        StartListeningToAuditMessages(logger);
         
-        Console.WriteLine("Press [Enter] to quit.");
+        logger.LogInformation("Press [Enter] to quit.");
         Console.ReadLine();
     }
 
@@ -38,20 +40,32 @@ public class App
     }
 
     // TODO: Return the disposables?
-    private void StartListeningToAuditMessages()
+    private void StartListeningToAuditMessages(ILogger logger)
     {
         using var auditDatabase = new EntityFrameworkAuditDatabase(_configuration.ConnectionString);
-        using var messageQueue = ConnectToQueue(_configuration.RabbitMq, RootListener(auditDatabase));
+        using var messageQueue = ConnectToQueue(_configuration.RabbitMq, RootListener(auditDatabase, logger));
         messageQueue.StartListening();
     }
 
-    private static CompositeQueueListener<AuditMessage> RootListener(IAuditDatabase database)
+    private static CompositeQueueListener<AuditMessage> RootListener(IAuditDatabase database, ILogger logger)
     {
         return new CompositeQueueListener<AuditMessage>(
-            new LoggingQueueListener<AuditMessage>(),
+            new LoggingQueueListener<AuditMessage>(logger),
             new AuditingQueueListener(AuditorsByAuditEntityKind(database))
         );
     }
+
+    private static ILogger Logger()
+    {
+        var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+        return loggerFactory.CreateLogger<LoggingQueueListener<AuditMessage>>();
+    }
+
+    // private static ILogger<LoggingQueueListener<AuditMessage>> Logger()
+    // {
+    //     var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+    //     return loggerFactory.CreateLogger<LoggingQueueListener<AuditMessage>>();
+    // }
 
     private static Dictionary<AuditEntityKind, IHttpRequestAuditor> AuditorsByAuditEntityKind(IAuditDatabase database)
     {
