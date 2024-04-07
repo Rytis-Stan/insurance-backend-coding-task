@@ -45,6 +45,4 @@ public class App
         logger.LogInformation("Press [Enter] to quit.");
         console.WaitTillEnterKeyPressed();
     }
-
-    // TODO: Return the disposables?
 }
