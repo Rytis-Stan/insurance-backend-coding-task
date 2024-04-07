@@ -4,9 +4,9 @@ using Claims.Auditing.PersistenceBased;
 
 namespace Claims.Persistence.Auditing;
 
-internal class CoverAuditRepository : AuditRepository<CoverAudit>, ICoverAuditRepository
+internal class EntityFrameworkCoverAuditRepository : EntityFrameworkAuditRepository<CoverAudit>, ICoverAuditRepository
 {
-    public CoverAuditRepository(AuditContext auditContext, IClock clock)
+    public EntityFrameworkCoverAuditRepository(AuditContext auditContext, IClock clock)
         : base(auditContext, clock)
     {
     }

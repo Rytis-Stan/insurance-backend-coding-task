@@ -9,8 +9,8 @@ public class EntityFrameworkAuditDatabase : IAuditDatabase
     private readonly AuditContext _auditContext;
     private readonly IClock _clock;
 
-    public ICoverAuditRepository CoverAuditRepository => new CoverAuditRepository(_auditContext, _clock);
-    public IClaimAuditRepository ClaimAuditRepository => new ClaimAuditRepository(_auditContext, _clock);
+    public ICoverAuditRepository CoverAuditRepository => new EntityFrameworkCoverAuditRepository(_auditContext, _clock);
+    public IClaimAuditRepository ClaimAuditRepository => new EntityFrameworkClaimAuditRepository(_auditContext, _clock);
 
     public EntityFrameworkAuditDatabase(string connectionString)
         : this(CreateAuditContext(connectionString), new Clock())

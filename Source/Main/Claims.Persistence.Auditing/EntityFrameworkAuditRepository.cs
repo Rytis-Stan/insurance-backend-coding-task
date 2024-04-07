@@ -4,12 +4,12 @@ using Claims.Auditing.PersistenceBased;
 
 namespace Claims.Persistence.Auditing;
 
-public abstract class AuditRepository<TAuditEntry> : IAuditRepository
+public abstract class EntityFrameworkAuditRepository<TAuditEntry> : IAuditRepository
 {
     private readonly AuditContext _auditContext;
     private readonly IClock _clock;
 
-    protected AuditRepository(AuditContext auditContext, IClock clock)
+    protected EntityFrameworkAuditRepository(AuditContext auditContext, IClock clock)
     {
         _auditContext = auditContext;
         _clock = clock;
