@@ -8,7 +8,6 @@ public interface ICreateCoverCommand : ICommand<CreateCoverRequest, CreateCoverR
 }
 
 public record GetCoverRequest(Guid Id);
-
 public record GetCoverResponse(Cover? Cover);
 
 public interface IGetCoverCommand : ICommand<GetCoverRequest, GetCoverResponse>
@@ -18,14 +17,14 @@ public interface IGetCoverCommand : ICommand<GetCoverRequest, GetCoverResponse>
 
 public record GetAllCoversResponse(IEnumerable<Cover> Covers);
 
-public interface IGetAllCoversCommand : ICommand<GetAllCoversResponse>
+public interface IGetAllCoversCommand : INoParametersCommand<GetAllCoversResponse>
 {
     // Task<IEnumerable<Cover>> ExecuteAsync();
 }
 
 public record DeleteCoverRequest(Guid Id);
 
-public interface IDeleteCoverCommand : ICommand<DeleteCoverRequest, Cover?>
+public interface IDeleteCoverCommand : INoResultsCommand<DeleteCoverRequest>
 {
     // Task<Cover?> ExecuteAsync(DeleteCoverRequest request);
 }

@@ -7,9 +7,14 @@ public interface ICommand<in TRequest, TResponse>
     Task<TResponse> ExecuteAsync(TRequest request);
 }
 
-public interface ICommand<TResponse>
+public interface INoParametersCommand<TResponse>
 {
     Task<TResponse> ExecuteAsync();
+}
+
+public interface INoResultsCommand<in TRequest>
+{
+    Task ExecuteAsync(TRequest request);
 }
 
 public interface ICreateClaimCommand : ICommand<CreateClaimRequest, CreateClaimResponse>
@@ -28,14 +33,14 @@ public interface IGetClaimByIdCommand : ICommand<GetClaimByIdRequest, GetClaimBy
 
 public record GetAllClaimsResponse(IEnumerable<Claim> Claims);
 
-public interface IGetAllClaimsCommand : ICommand<GetAllClaimsResponse>
+public interface IGetAllClaimsCommand : INoParametersCommand<GetAllClaimsResponse>
 {
     // Task<IEnumerable<Claim>> ExecuteAsync();
 }
 
 public record DeleteClaimRequest(Guid Id);
 
-public interface IDeleteClaimCommand : ICommand<DeleteClaimRequest, Claim?>
+public interface IDeleteClaimCommand : INoResultsCommand<DeleteClaimRequest>
 {
     // Task<Claim?> ExecuteAsync(DeleteClaimRequest request);
 }

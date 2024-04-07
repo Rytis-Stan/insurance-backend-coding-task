@@ -1,5 +1,4 @@
 using Claims.Application.Repositories;
-using Claims.Domain;
 
 namespace Claims.Application.Commands;
 
@@ -12,8 +11,8 @@ public class DeleteClaimCommand : IDeleteClaimCommand
         _claimsRepository = claimsRepository;
     }
 
-    public async Task<Claim?> ExecuteAsync(DeleteClaimRequest request)
+    public async Task ExecuteAsync(DeleteClaimRequest request)
     {
-        return await _claimsRepository.DeleteByIdAsync(request.Id);
+        await _claimsRepository.DeleteByIdAsync(request.Id);
     }
 }

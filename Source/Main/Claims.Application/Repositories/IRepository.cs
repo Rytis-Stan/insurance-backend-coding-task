@@ -9,5 +9,5 @@ public interface IRepository<in TNewObjectInfo, TObject>
     Task<TObject?> FindByIdAsync(Guid id);
 
     Task<IEnumerable<TObject>> GetAllAsync();
-    Task<TObject?> DeleteByIdAsync(Guid id);
+    Task DeleteByIdAsync(Guid id);
 }

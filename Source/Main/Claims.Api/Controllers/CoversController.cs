@@ -55,11 +55,11 @@ public class CoversController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<CoverDto?>> DeleteAsync(Guid id)
+    public async Task<ActionResult> DeleteAsync(Guid id)
     {
-        var deletedCover = await _deleteCoverCommand.ExecuteAsync(new DeleteCoverRequest(id));
+        await _deleteCoverCommand.ExecuteAsync(new DeleteCoverRequest(id));
         _coverAuditor.AuditDelete(id);
-        return Ok(deletedCover.ToDto());
+        return Ok();
     }
 
     [HttpGet("Premium")]
