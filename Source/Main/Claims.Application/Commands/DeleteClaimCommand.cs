@@ -2,7 +2,7 @@ using Claims.Application.Repositories;
 
 namespace Claims.Application.Commands;
 
-public class DeleteClaimCommand : IDeleteClaimCommand
+public class DeleteClaimCommand : INoResultsCommand<DeleteClaimRequest>
 {
     private readonly IClaimsRepository _claimsRepository;
 

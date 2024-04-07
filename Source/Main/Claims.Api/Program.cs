@@ -91,8 +91,8 @@ public class Program
 
         services.AddTransient<ICommand<CreateClaimRequest, CreateClaimResponse>, CreateClaimCommand>();
         services.AddTransient<ICommand<GetClaimByIdRequest, GetClaimByIdResponse>, GetClaimByIdCommand>();
-        services.AddTransient<IGetAllClaimsCommand, GetAllClaimsCommand>();
-        services.AddTransient<IDeleteClaimCommand, DeleteClaimCommand>();
+        services.AddTransient<INoParametersCommand<GetAllClaimsResponse>, GetAllClaimsCommand>();
+        services.AddTransient<INoResultsCommand<DeleteClaimRequest>, DeleteClaimCommand>();
     }
 
     private static void AddAuditing(IServiceCollection services, IConnectedSendingQueue<AuditMessage> auditQueue)

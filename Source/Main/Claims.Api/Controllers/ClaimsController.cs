@@ -37,7 +37,7 @@ public class ClaimsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ClaimDto>>> GetAsync([FromServices] IGetAllClaimsCommand command)
+    public async Task<ActionResult<IEnumerable<ClaimDto>>> GetAsync([FromServices] INoParametersCommand<GetAllClaimsResponse> command)
     {
         var response = await command.ExecuteAsync();
         var claims = response.Claims;
@@ -47,7 +47,7 @@ public class ClaimsController : ControllerBase
     [HttpDelete("{id}")]
     // TODO: Add proper attributes.
     //[ProducesResponseType(typeof(MyClass), (int)HttpStatusCode.Accepted)]
-    public async Task<ActionResult> DeleteAsync([FromServices] IDeleteClaimCommand command, Guid id)
+    public async Task<ActionResult> DeleteAsync([FromServices] INoResultsCommand<DeleteClaimRequest> command, Guid id)
     {
         await command.ExecuteAsync(new DeleteClaimRequest(id));
         _claimAuditor.AuditDelete(id);

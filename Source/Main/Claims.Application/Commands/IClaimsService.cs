@@ -37,11 +37,11 @@ public record GetClaimByIdResponse(Claim? Claim);
 // }
 
 public record GetAllClaimsResponse(IEnumerable<Claim> Claims);
-public interface IGetAllClaimsCommand : INoParametersCommand<GetAllClaimsResponse>
-{
-}
+// public interface IGetAllClaimsCommand : INoParametersCommand<GetAllClaimsResponse>
+// {
+// }
 
 public record DeleteClaimRequest(Guid Id);
-public interface IDeleteClaimCommand : INoResultsCommand<DeleteClaimRequest>
-{
-}
+// public interface IDeleteClaimCommand : INoResultsCommand<DeleteClaimRequest>
+// {
+// }
