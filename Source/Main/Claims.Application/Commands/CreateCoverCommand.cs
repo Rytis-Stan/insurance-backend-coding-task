@@ -17,10 +17,11 @@ public class CreateCoverCommand : ICreateCoverCommand
         _clock = clock;
     }
 
-    public async Task<Cover> ExecuteAsync(CreateCoverRequest request)
+    public async Task<CreateCoverResponse> ExecuteAsync(CreateCoverRequest request)
     {
         Validate(request);
-        return await _coversRepository.CreateAsync(ToNewCoverInfo(request));
+        var cover = await _coversRepository.CreateAsync(ToNewCoverInfo(request));
+        return new CreateCoverResponse(cover);
     }
 
     private void Validate(CreateCoverRequest request)

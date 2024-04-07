@@ -2,14 +2,16 @@ using Claims.Domain;
 
 namespace Claims.Application.Commands;
 
-public interface ICreateCoverCommand : ICommand<CreateCoverRequest, Cover>
+public interface ICreateCoverCommand : ICommand<CreateCoverRequest, CreateCoverResponse>
 {
     // Task<Cover> ExecuteAsync(CreateCoverRequest request);
 }
 
 public record GetCoverRequest(Guid Id);
 
-public interface IGetCoverCommand : ICommand<GetCoverRequest, Cover?>
+public record GetCoverResponse(Cover? Cover);
+
+public interface IGetCoverCommand : ICommand<GetCoverRequest, GetCoverResponse>
 {
     // Task<Cover?> ExecuteAsync(GetCoverRequest request);
 }

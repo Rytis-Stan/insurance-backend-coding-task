@@ -7,3 +7,5 @@ public record CreateCoverRequest(
     DateOnly EndDate,
     CoverType Type
 );
+
+public record CreateCoverResponse(Cover Cover);

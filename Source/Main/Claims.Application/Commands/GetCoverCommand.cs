@@ -1,5 +1,4 @@
 using Claims.Application.Repositories;
-using Claims.Domain;
 
 namespace Claims.Application.Commands;
 
@@ -12,8 +11,9 @@ public class GetCoverCommand : IGetCoverCommand
         _coversRepository = coversRepository;
     }
 
-    public async Task<Cover?> ExecuteAsync(GetCoverRequest request)
+    public async Task<GetCoverResponse> ExecuteAsync(GetCoverRequest request)
     {
-        return await _coversRepository.FindByIdAsync(request.Id);
+        var cover = await _coversRepository.FindByIdAsync(request.Id);
+        return new GetCoverResponse(cover);
     }
 }

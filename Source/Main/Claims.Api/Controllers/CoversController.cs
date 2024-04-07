@@ -30,7 +30,8 @@ public class CoversController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<CoverDto>> CreateAsync(CreateCoverRequestDto request)
     {
-        var cover = await _createCoverCommand.ExecuteAsync(request.ToDomainRequest());
+        var response = await _createCoverCommand.ExecuteAsync(request.ToDomainRequest());
+        var cover = response.Cover;
         _coverAuditor.AuditPost(cover.Id);
         return Ok(cover.ToDto());
     }
@@ -38,9 +39,10 @@ public class CoversController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<CoverDto>> GetAsync(Guid id)
     {
-        var cover = (await _getCoverCommand.ExecuteAsync(new GetCoverRequest(id))).ToDto();
+        var response = await _getCoverCommand.ExecuteAsync(new GetCoverRequest(id));
+        var cover = response.Cover;
         return cover != null
-            ? Ok(cover)
+            ? Ok(cover.ToDto())
             : NotFound();
     }
 
