@@ -1,5 +1,4 @@
-﻿using Claims.Application.Commands;
-using Claims.Application.Commands.DeleteCover;
+﻿using Claims.Application.Commands.DeleteCover;
 using Xunit;
 
 namespace Claims.Application.Tests.Commands;

@@ -1,5 +1,4 @@
-﻿using Claims.Application.Commands;
-using Claims.Application.Commands.CreateClaim;
+﻿using Claims.Application.Commands.CreateClaim;
 using Claims.Application.Repositories;
 using Claims.Domain;
 using Claims.Testing;

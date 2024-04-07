@@ -1,5 +1,4 @@
-﻿using Claims.Application.Commands;
-using Claims.Application.Commands.GetClaimById;
+﻿using Claims.Application.Commands.GetClaimById;
 using Claims.Domain;
 using Moq;
 using Xunit;
