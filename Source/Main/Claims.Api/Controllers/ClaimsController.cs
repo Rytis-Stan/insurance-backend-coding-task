@@ -27,7 +27,7 @@ public class ClaimsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ClaimDto>> GetAsync([FromServices] IGetClaimByIdCommand command, Guid id)
+    public async Task<ActionResult<ClaimDto>> GetAsync([FromServices] ICommand<GetClaimByIdRequest, GetClaimByIdResponse> command, Guid id)
     {
         var response = await command.ExecuteAsync(new GetClaimByIdRequest(id));
         var claim = response.Claim;

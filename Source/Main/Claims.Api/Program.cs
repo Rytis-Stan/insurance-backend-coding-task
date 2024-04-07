@@ -82,14 +82,15 @@ public class Program
 
     private static void AddApplicationCommands(IServiceCollection services)
     {
-        services.AddTransient<ICreateCoverCommand, CreateCoverCommand>();
-        services.AddTransient<IGetCoverCommand, GetCoverCommand>();
+        services.AddTransient<ICommand<CreateCoverRequest, CreateCoverResponse>, CreateCoverCommand>();
+        services.AddTransient<ICommand<GetCoverRequest, GetCoverResponse>, GetCoverCommand>();
         services.AddTransient<IGetAllCoversCommand, GetAllCoversCommand>();
-        services.AddTransient<IDeleteCoverCommand, DeleteCoverCommand>();
+        services.AddTransient<INoResultsCommand<DeleteCoverRequest>, DeleteCoverCommand>();
+        
         services.AddTransient<IGetCoverPremiumCommand, GetCoverPremiumCommand>();
 
         services.AddTransient<ICreateClaimCommand, CreateClaimCommand>();
-        services.AddTransient<IGetClaimByIdCommand, GetClaimByIdCommand>();
+        services.AddTransient<ICommand<GetClaimByIdRequest, GetClaimByIdResponse>, GetClaimByIdCommand>();
         services.AddTransient<IGetAllClaimsCommand, GetAllClaimsCommand>();
         services.AddTransient<IDeleteClaimCommand, DeleteClaimCommand>();
     }

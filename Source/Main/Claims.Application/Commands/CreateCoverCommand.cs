@@ -4,7 +4,7 @@ using Claims.Domain;
 
 namespace Claims.Application.Commands;
 
-public class CreateCoverCommand : ICreateCoverCommand
+public class CreateCoverCommand : ICommand<CreateCoverRequest, CreateCoverResponse>
 {
     private readonly ICoversRepository _coversRepository;
     private readonly ICoverPricing _coverPricing;

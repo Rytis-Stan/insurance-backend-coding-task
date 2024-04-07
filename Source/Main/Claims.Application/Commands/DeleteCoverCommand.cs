@@ -2,7 +2,7 @@ using Claims.Application.Repositories;
 
 namespace Claims.Application.Commands;
 
-public class DeleteCoverCommand : IDeleteCoverCommand
+public class DeleteCoverCommand : INoResultsCommand<DeleteCoverRequest>
 {
     private readonly ICoversRepository _coversRepository;
 

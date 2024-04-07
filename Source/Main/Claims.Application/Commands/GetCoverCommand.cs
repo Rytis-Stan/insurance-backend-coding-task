@@ -2,7 +2,7 @@ using Claims.Application.Repositories;
 
 namespace Claims.Application.Commands;
 
-public class GetCoverCommand : IGetCoverCommand
+public class GetCoverCommand : ICommand<GetCoverRequest, GetCoverResponse>
 {
     private readonly ICoversRepository _coversRepository;
 

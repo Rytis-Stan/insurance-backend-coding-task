@@ -2,29 +2,24 @@ using Claims.Domain;
 
 namespace Claims.Application.Commands;
 
-public interface ICreateCoverCommand : ICommand<CreateCoverRequest, CreateCoverResponse>
-{
-    // Task<Cover> ExecuteAsync(CreateCoverRequest request);
-}
+public record CreateCoverRequest(DateOnly StartDate, DateOnly EndDate, CoverType Type);
+public record CreateCoverResponse(Cover Cover);
+// public interface ICreateCoverCommand : ICommand<CreateCoverRequest, CreateCoverResponse>
+// {
+// }
 
 public record GetCoverRequest(Guid Id);
 public record GetCoverResponse(Cover? Cover);
-
-public interface IGetCoverCommand : ICommand<GetCoverRequest, GetCoverResponse>
-{
-    // Task<Cover?> ExecuteAsync(GetCoverRequest request);
-}
+// public interface IGetCoverCommand : ICommand<GetCoverRequest, GetCoverResponse>
+// {
+// }
 
 public record GetAllCoversResponse(IEnumerable<Cover> Covers);
-
 public interface IGetAllCoversCommand : INoParametersCommand<GetAllCoversResponse>
 {
-    // Task<IEnumerable<Cover>> ExecuteAsync();
 }
 
 public record DeleteCoverRequest(Guid Id);
-
-public interface IDeleteCoverCommand : INoResultsCommand<DeleteCoverRequest>
-{
-    // Task<Cover?> ExecuteAsync(DeleteCoverRequest request);
-}
+// public interface IDeleteCoverCommand : INoResultsCommand<DeleteCoverRequest>
+// {
+// }
