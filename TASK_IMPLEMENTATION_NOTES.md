@@ -8,6 +8,8 @@ If You see something unexpected or weird in the implementation, there is probabl
 
 ## Architecture and code structure
 
+The API tests check the system like a black box.
+
 ## Future considerations and potential improvements
 
 As the codebase evolves, a list of things should be considered:
