@@ -17,7 +17,7 @@ public class CoversController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<CoverDto>> CreateAsync([FromServices] ICommand<CreateCoverRequest, CreateCoverResponse> command,
+    public async Task<ActionResult<CoverDto>> CreateCoverAsync([FromServices] ICommand<CreateCoverRequest, CreateCoverResponse> command,
         CreateCoverRequestDto request)
     {
         var response = await command.ExecuteAsync(request.ToDomainRequest());
@@ -27,7 +27,7 @@ public class CoversController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<CoverDto>> GetAsync([FromServices] ICommand<GetCoverRequest, GetCoverResponse> command, Guid id)
+    public async Task<ActionResult<CoverDto>> GetCoverAsync([FromServices] ICommand<GetCoverRequest, GetCoverResponse> command, Guid id)
     {
         var response = await command.ExecuteAsync(new GetCoverRequest(id));
         var cover = response.Cover;
@@ -37,7 +37,7 @@ public class CoversController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<CoverDto>>> GetAsync([FromServices] ICommandWithNoParameters<GetAllCoversResponse> command)
+    public async Task<ActionResult<IEnumerable<CoverDto>>> GetCoversAsync([FromServices] ICommandWithNoParameters<GetAllCoversResponse> command)
     {
         var response = await command.ExecuteAsync();
         var covers = response.Covers;
@@ -45,7 +45,7 @@ public class CoversController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteAsync([FromServices] ICommandWithNoResults<DeleteCoverRequest> command, Guid id)
+    public async Task<ActionResult> DeleteCoverAsync([FromServices] ICommandWithNoResults<DeleteCoverRequest> command, Guid id)
     {
         await command.ExecuteAsync(new DeleteCoverRequest(id));
         _auditor.AuditDelete(id);

@@ -17,7 +17,7 @@ public class ClaimsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ClaimDto>> CreateAsync([FromServices] ICommand<CreateClaimRequest, CreateClaimResponse> command, CreateClaimRequestDto request)
+    public async Task<ActionResult<ClaimDto>> CreateClaimAsync([FromServices] ICommand<CreateClaimRequest, CreateClaimResponse> command, CreateClaimRequestDto request)
     {
         var response = await command.ExecuteAsync(request.ToDomainRequest());
         var claim = response.Claim;
@@ -26,7 +26,7 @@ public class ClaimsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ClaimDto>> GetAsync([FromServices] ICommand<GetClaimByIdRequest, GetClaimByIdResponse> command, Guid id)
+    public async Task<ActionResult<ClaimDto>> GetClaimAsync([FromServices] ICommand<GetClaimByIdRequest, GetClaimByIdResponse> command, Guid id)
     {
         var response = await command.ExecuteAsync(new GetClaimByIdRequest(id));
         var claim = response.Claim;
@@ -36,7 +36,7 @@ public class ClaimsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ClaimDto>>> GetAsync([FromServices] ICommandWithNoParameters<GetAllClaimsResponse> command)
+    public async Task<ActionResult<IEnumerable<ClaimDto>>> GetClaimsAsync([FromServices] ICommandWithNoParameters<GetAllClaimsResponse> command)
     {
         var response = await command.ExecuteAsync();
         var claims = response.Claims;
@@ -46,7 +46,7 @@ public class ClaimsController : ControllerBase
     [HttpDelete("{id}")]
     // TODO: Add proper attributes.
     //[ProducesResponseType(typeof(MyClass), (int)HttpStatusCode.Accepted)]
-    public async Task<ActionResult> DeleteAsync([FromServices] ICommandWithNoResults<DeleteClaimRequest> command, Guid id)
+    public async Task<ActionResult> DeleteClaimAsync([FromServices] ICommandWithNoResults<DeleteClaimRequest> command, Guid id)
     {
         await command.ExecuteAsync(new DeleteClaimRequest(id));
         _auditor.AuditDelete(id);
