@@ -2,22 +2,6 @@ using Claims.Domain;
 
 namespace Claims.Application.Commands;
 
-public interface ICommand<in TRequest, TResponse>
-{
-    Task<TResponse> ExecuteAsync(TRequest request);
-}
-
-public interface ICommandWithNoParameters<TResponse>
-{
-    Task<TResponse> ExecuteAsync();
-}
-
-public interface ICommandWithNoResults<in TRequest>
-{
-    Task ExecuteAsync(TRequest request);
-}
-
-
 public record CreateClaimRequest(
     Guid CoverId,
     string Name,
