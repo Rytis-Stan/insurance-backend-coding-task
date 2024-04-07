@@ -30,6 +30,15 @@ public class RabbitMqReceivingQueue<TMessage> : RabbitMqMessageQueue, IReceiving
 
         public void StartListening()
         {
+            Channel.BasicConsume(
+                queue: QueueName,
+                autoAck: false,
+                consumer: CreateConsumer()
+            );
+        }
+
+        private IBasicConsumer CreateConsumer()
+        {
             var consumer = new EventingBasicConsumer(Channel);
             consumer.Received += (_, e) =>
             {
@@ -37,12 +46,7 @@ public class RabbitMqReceivingQueue<TMessage> : RabbitMqMessageQueue, IReceiving
                 _listener.OnMessageReceived(message);
                 Channel.BasicAck(e.DeliveryTag, multiple: false);
             };
-
-            Channel.BasicConsume(
-                queue: QueueName,
-                autoAck: false,
-                consumer: consumer
-            );
+            return consumer;
         }
 
         private static TMessage ToMessage(ReadOnlyMemory<byte> bytes)
