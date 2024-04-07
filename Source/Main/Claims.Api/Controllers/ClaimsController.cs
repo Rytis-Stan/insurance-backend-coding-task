@@ -9,34 +9,26 @@ namespace Claims.Api.Controllers;
 [Route("[controller]")]
 public class ClaimsController : ControllerBase
 {
-    private readonly ICreateClaimCommand _createClaimCommand;
-    private readonly IGetClaimByIdCommand _getClaimByIdCommand;
-    private readonly IGetAllClaimsCommand _getAllClaimsCommand;
-    private readonly IDeleteClaimCommand _deleteClaimCommand;
     private readonly IClaimAuditor _claimAuditor;
 
-    public ClaimsController(ICreateClaimCommand createClaimCommand, IGetClaimByIdCommand getClaimByIdCommand, IGetAllClaimsCommand getAllClaimsCommand, IDeleteClaimCommand deleteClaimCommand, IClaimAuditor claimAuditor)
+    public ClaimsController(IClaimAuditor claimAuditor)
     {
-        _createClaimCommand = createClaimCommand;
-        _getClaimByIdCommand = getClaimByIdCommand;
-        _getAllClaimsCommand = getAllClaimsCommand;
-        _deleteClaimCommand = deleteClaimCommand;
         _claimAuditor = claimAuditor;
     }
 
     [HttpPost]
-    public async Task<ActionResult<ClaimDto>> CreateAsync(CreateClaimRequestDto request)
+    public async Task<ActionResult<ClaimDto>> CreateAsync([FromServices] ICreateClaimCommand command, CreateClaimRequestDto request)
     {
-        var response = await _createClaimCommand.ExecuteAsync(request.ToDomainRequest());
+        var response = await command.ExecuteAsync(request.ToDomainRequest());
         var claim = response.Claim;
         _claimAuditor.AuditPost(claim.Id);
         return Ok(claim.ToDto());
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ClaimDto>> GetAsync(Guid id)
+    public async Task<ActionResult<ClaimDto>> GetAsync([FromServices] IGetClaimByIdCommand command, Guid id)
     {
-        var response = await _getClaimByIdCommand.ExecuteAsync(new GetClaimByIdRequest(id));
+        var response = await command.ExecuteAsync(new GetClaimByIdRequest(id));
         var claim = response.Claim;
         return claim != null
             ? Ok(claim)
@@ -44,17 +36,17 @@ public class ClaimsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ClaimDto>>> GetAsync()
+    public async Task<ActionResult<IEnumerable<ClaimDto>>> GetAsync([FromServices] IGetAllClaimsCommand command)
     {
-        var response = await _getAllClaimsCommand.ExecuteAsync();
+        var response = await command.ExecuteAsync();
         var claims = response.Claims;
         return Ok(claims.Select(x => x.ToDto()));
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteAsync(Guid id)
+    public async Task<ActionResult> DeleteAsync(IDeleteClaimCommand command, Guid id)
     {
-        await _deleteClaimCommand.ExecuteAsync(new DeleteClaimRequest(id));
+        await command.ExecuteAsync(new DeleteClaimRequest(id));
         _claimAuditor.AuditDelete(id);
         return NoContent();
     }
