@@ -57,7 +57,15 @@ public abstract class CosmosDbRepository<TNewObjectInfo, TObject, TJson>
 
     private async Task DeleteByIdAsync(string id)
     {
-        await _container.DeleteItemAsync<TJson>(id, new PartitionKey(id));
+        try
+        {
+            await _container.DeleteItemAsync<TJson>(id, new PartitionKey(id));
+        }
+        catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+        {
+            // Item not found in the database. Let's assume that it's ok to do a delete
+            // operation for a non-existing item. No further processing needed.
+        }
     }
 
     protected abstract TJson ToNewJson(string id, TNewObjectInfo item);
