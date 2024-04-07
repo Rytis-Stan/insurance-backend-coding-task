@@ -34,7 +34,8 @@ public class App
         logger.LogInformation("Starting to migrate the auditing database.");
         database.Migrate();
 
-        logger.LogInformation("Migration finished. Starting to listed to messages.");
+        logger.LogInformation("Migration finished.");
+        logger.LogInformation("Starting to listed to messages.");
 
         using var messageQueue = queue.Connect(queueListener);
         messageQueue.StartListening();
