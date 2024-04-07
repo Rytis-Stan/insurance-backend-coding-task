@@ -3,7 +3,7 @@
 namespace BuildingBlocks.MessageQueues.RabbitMq;
 
 /// <summary>
-/// Base class for RabbitMQ message queues in an unconnected state.
+/// Base class for a RabbitMQ message queue in an unconnected state.
 /// </summary>
 public abstract class RabbitMqMessageQueue
 {
