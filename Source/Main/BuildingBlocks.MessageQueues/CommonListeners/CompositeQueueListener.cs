@@ -1,4 +1,4 @@
-﻿namespace BuildingBlocks.MessageQueues;
+﻿namespace BuildingBlocks.MessageQueues.CommonListeners;
 
 public class CompositeQueueListener<TMessage> : IQueueListener<TMessage>
 {

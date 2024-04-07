@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace BuildingBlocks.MessageQueues;
+namespace BuildingBlocks.MessageQueues.CommonListeners;
 
 public class LoggingQueueListener<TMessage> : IQueueListener<TMessage>
 {

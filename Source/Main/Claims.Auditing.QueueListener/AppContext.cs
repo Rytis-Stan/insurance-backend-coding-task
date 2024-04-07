@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.MessageQueues;
+using BuildingBlocks.MessageQueues.CommonListeners;
 using BuildingBlocks.MessageQueues.RabbitMq;
 using Claims.Auditing.MessageQueueBased;
 using Claims.Auditing.PersistenceBased;
