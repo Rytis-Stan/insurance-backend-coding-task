@@ -198,6 +198,25 @@ public class CreateCoverCommandTests : CoversCommandTests
         }
     }
 
+    [Fact]
+    public async Task ReturnsCreatedCoverWhenCreatingAValidCover()
+    {
+        var cover = TestDomainData.RandomCover();
+        var utcNow = UtcDateTime(cover.StartDate);
+        var startDate = cover.StartDate;
+        var endDate = cover.EndDate;
+        var coverType = cover.Type;
+        var premium = cover.Premium;
+        var request = new CreateCoverRequest(startDate, endDate, coverType);
+        StubUtcNow(utcNow);
+        StubPremium(startDate, endDate, coverType, premium);
+        StubCreateCover(startDate, endDate, coverType, premium, cover);
+
+        var response = await _command.ExecuteAsync(request);
+
+        Assert.Equal(cover, response.Cover);
+    }
+
     private void StubUtcNow(DateTime utcNow)
     {
         _clockMock
@@ -210,5 +229,12 @@ public class CreateCoverCommandTests : CoversCommandTests
         _coverPricingMock
             .Setup(x => x.Premium(startDate, endDate, coverType))
             .Returns(premium);
+    }
+
+    private void StubCreateCover(DateOnly startDate, DateOnly endDate, CoverType coverType, decimal premium, Cover coverToReturn)
+    {
+        _coversRepositoryMock
+            .Setup(x => x.CreateAsync(new NewCoverInfo(startDate, endDate, coverType, premium)))
+            .ReturnsAsync(coverToReturn);
     }
 }

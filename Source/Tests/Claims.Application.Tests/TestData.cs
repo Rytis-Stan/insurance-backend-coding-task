@@ -10,11 +10,13 @@ public static class TestDomainData
     // TODO: Figure out if this object should be constructed with "real" relationships between its fields (the "EndDate" could go after the "StartDate" for example).
     public static Cover RandomCover()
     {
+        var startDate = TestData.RandomDate();
+        var periodDurationInDays = 200;
         return new Cover
         {
             Id = Guid.NewGuid(),
-            StartDate = TestData.RandomDate(),
-            EndDate = TestData.RandomDate(),
+            StartDate = startDate,
+            EndDate = startDate.AddDays(TestData.RandomInt(periodDurationInDays - 1)),
             Type = TestData.RandomEnum<CoverType>(),
             Premium = TestData.RandomInt(100)
         };
