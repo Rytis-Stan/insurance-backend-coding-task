@@ -14,6 +14,7 @@ The API tests check the system like a black box.
 
 As the codebase evolves, a list of things should be considered:
 
+* **Validation. HTTP Responses for validation failures**. TODO: Introduce a global way to map command validation exceptions to an appropriate BadRequest response.
 * **Validation**. The deletion of a cover should handle the deletion of related claims in one of the following ways, because a claim without a cover cannot exist on it's own (it's a child the claim):
   * All child claims should simply be deleted, if any;
   * An exceptions should be raised if at least one claim is attached to a cover.
