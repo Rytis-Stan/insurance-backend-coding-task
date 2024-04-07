@@ -6,9 +6,10 @@ namespace BuildingBlocks.MessageQueues.RabbitMq;
 
 /// <summary>
 /// Represents a RabbitMQ message queue in an unconnected state, which needs to establish
-/// a connection to the underlying RabbitMQ queue by calling the "StartSending" method.
-/// Once that method is called, a new type of queue object gets returned that can be used
-/// to send messages to the underlying RabbitMQ queue.
+/// a connection to the underlying RabbitMQ queue resource by calling the "StartSending"
+/// method. Once that method is called, a new type of queue object gets returned that can
+/// be used to send messages to the underlying RabbitMQ queue until the "Dispose" method
+/// gets called.
 /// </summary>
 public class RabbitMqSendingQueue<TMessage> : RabbitMqMessageQueue, ISendingQueue<TMessage>
 {
