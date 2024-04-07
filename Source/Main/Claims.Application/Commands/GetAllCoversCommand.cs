@@ -2,7 +2,7 @@ using Claims.Application.Repositories;
 
 namespace Claims.Application.Commands;
 
-public class GetAllCoversCommand : INoParametersCommand<GetAllCoversResponse>
+public class GetAllCoversCommand : ICommandWithNoParameters<GetAllCoversResponse>
 {
     private readonly ICoversRepository _coversRepository;
 
