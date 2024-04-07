@@ -16,6 +16,15 @@ public abstract class RabbitMqMessageQueue
         _queueName = queueName;
     }
 
+    /// <summary>
+    /// A utility method designed to be called by derived sending and receiving
+    /// queue classes. Establishes a connection to the underlying RabbitMQ queue
+    /// resource. But before that, if the queue resource does not exist, this method
+    /// creates it. Based on the current design, both the sending queue and receiving
+    /// queue classes cause the RabbitMQ queue resource to be created, but that might
+    /// need to be changed in the future.
+    /// </summary>
+    /// <returns></returns>
     protected QueueInfo DeclareQueueAndConnectToIt()
     {
         var factory = new ConnectionFactory { HostName = _hostName };
