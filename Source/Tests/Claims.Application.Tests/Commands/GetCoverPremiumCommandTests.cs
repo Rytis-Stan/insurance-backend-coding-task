@@ -27,9 +27,9 @@ public class GetCoverPremiumCommandTests
         var coverType = TestData.RandomEnum<CoverType>();
         StubPremium(startDate, endDate, coverType, expectedPremium);
 
-        var returnedPremium = await _command.ExecuteAsync(new GetCoverPremiumRequest(startDate, endDate, coverType));
+        var response = await _command.ExecuteAsync(new GetCoverPremiumRequest(startDate, endDate, coverType));
 
-        Assert.Equal(expectedPremium, returnedPremium);
+        Assert.Equal(expectedPremium, response.Premium);
     }
 
     private void StubPremium(DateOnly startDate, DateOnly endDate, CoverType coverType, decimal premium)
