@@ -143,6 +143,25 @@ public class CreateClaimCommandTests : ClaimsCommandTests
         }
     }
 
+    [Fact]
+    public async Task ReturnsCreatedClaimWhenCreatingAValidClaim()
+    {
+        var cover = TestDomainData.RandomCover();
+        var claim = TestDomainData.RandomClaim(UtcDateTime(cover.StartDate));
+        var name = claim.Name;
+        var claimType = claim.Type;
+        var damageCost = claim.DamageCost;
+        var created = claim.Created;
+        var request = new CreateClaimRequest(cover.Id, name, claimType, damageCost, created);
+        StubFindCover(cover.Id, cover);
+        StubCreateClaim(cover.Id, name, claimType, damageCost, created, claim);
+
+        var response = await _command.ExecuteAsync(request);
+
+        Assert.Equal(claim, response.Claim);
+    }
+
+    // TODO: Add the word "Random" to this name?
     private static Cover CreateCoverForPeriod(DateOnly startDate, DateOnly endDate)
     {
         return new Cover
@@ -153,6 +172,13 @@ public class CreateClaimCommandTests : ClaimsCommandTests
             Type = AnyCoverType,
             Premium = AnyPremium
         };
+    }
+
+    private void StubCreateClaim(Guid coverId, string name, ClaimType type, decimal damageCost, DateTime created, Claim claimToReturn)
+    {
+        _claimsRepositoryMock
+            .Setup(x => x.CreateAsync(new NewClaimInfo(coverId, name, type, damageCost, created)))
+            .ReturnsAsync(claimToReturn);
     }
 
     private void StubFindCover(Guid id, Cover? coverToReturn)

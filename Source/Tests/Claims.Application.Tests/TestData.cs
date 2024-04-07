@@ -24,6 +24,11 @@ public static class TestDomainData
 
     public static Claim RandomClaim()
     {
+        return RandomClaim(TestData.RandomUtcDateTime());
+    }
+
+    public static Claim RandomClaim(DateTime created)
+    {
         return new Claim
         {
             Id = Guid.NewGuid(),
@@ -31,7 +36,7 @@ public static class TestDomainData
             Name = TestData.RandomString("name"),
             Type = TestData.RandomEnum<ClaimType>(),
             DamageCost = TestData.RandomInt(100),
-            Created = TestData.RandomUtcDateTime()
+            Created = created
         };
     }
 }
