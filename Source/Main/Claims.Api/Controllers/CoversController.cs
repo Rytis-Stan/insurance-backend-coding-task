@@ -9,11 +9,11 @@ namespace Claims.Api.Controllers;
 [Route("[controller]")]
 public class CoversController : ControllerBase
 {
-    private readonly ICoverAuditor _coverAuditor;
+    private readonly ICoverAuditor _auditor;
 
-    public CoversController(ICoverAuditor coverAuditor)
+    public CoversController(ICoverAuditor auditor)
     {
-        _coverAuditor = coverAuditor;
+        _auditor = auditor;
     }
 
     [HttpPost]
@@ -22,7 +22,7 @@ public class CoversController : ControllerBase
     {
         var response = await command.ExecuteAsync(request.ToDomainRequest());
         var cover = response.Cover;
-        _coverAuditor.AuditPost(cover.Id);
+        _auditor.AuditPost(cover.Id);
         return Ok(cover.ToDto());
     }
 
@@ -48,7 +48,7 @@ public class CoversController : ControllerBase
     public async Task<ActionResult> DeleteAsync([FromServices] INoResultsCommand<DeleteCoverRequest> command, Guid id)
     {
         await command.ExecuteAsync(new DeleteCoverRequest(id));
-        _coverAuditor.AuditDelete(id);
+        _auditor.AuditDelete(id);
         return NoContent();
     }
 

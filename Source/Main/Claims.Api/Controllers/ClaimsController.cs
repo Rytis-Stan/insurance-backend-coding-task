@@ -1,4 +1,3 @@
-using System.Net;
 using Claims.Api.Dto;
 using Claims.Application.Commands;
 using Claims.Auditing;
@@ -10,11 +9,11 @@ namespace Claims.Api.Controllers;
 [Route("[controller]")]
 public class ClaimsController : ControllerBase
 {
-    private readonly IClaimAuditor _claimAuditor;
+    private readonly IClaimAuditor _auditor;
 
-    public ClaimsController(IClaimAuditor claimAuditor)
+    public ClaimsController(IClaimAuditor auditor)
     {
-        _claimAuditor = claimAuditor;
+        _auditor = auditor;
     }
 
     [HttpPost]
@@ -22,7 +21,7 @@ public class ClaimsController : ControllerBase
     {
         var response = await command.ExecuteAsync(request.ToDomainRequest());
         var claim = response.Claim;
-        _claimAuditor.AuditPost(claim.Id);
+        _auditor.AuditPost(claim.Id);
         return Ok(claim.ToDto());
     }
 
@@ -50,7 +49,7 @@ public class ClaimsController : ControllerBase
     public async Task<ActionResult> DeleteAsync([FromServices] INoResultsCommand<DeleteClaimRequest> command, Guid id)
     {
         await command.ExecuteAsync(new DeleteClaimRequest(id));
-        _claimAuditor.AuditDelete(id);
+        _auditor.AuditDelete(id);
         return NoContent();
     }
 }
