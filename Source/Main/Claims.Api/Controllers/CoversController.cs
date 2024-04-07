@@ -63,8 +63,9 @@ public class CoversController : ControllerBase
     }
 
     [HttpGet("Premium")]
-    public ActionResult<decimal> GetCoverPremiumAsync(DateOnly startDate, DateOnly endDate, CoverTypeDto coverType)
+    public async Task<ActionResult<decimal>> GetCoverPremiumAsync(DateOnly startDate, DateOnly endDate, CoverTypeDto coverType)
     {
-        return Ok(_getCoverPremiumCommand.ExecuteAsync(new GetCoverPremiumRequest(startDate, endDate, coverType.ToDomainEnum())));
+        var response = await _getCoverPremiumCommand.ExecuteAsync(new GetCoverPremiumRequest(startDate, endDate, coverType.ToDomainEnum()));
+        return Ok(response.Premium);
     }
 }
