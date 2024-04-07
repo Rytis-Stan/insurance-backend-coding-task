@@ -1,5 +1,4 @@
 using Claims.Application.Repositories;
-using Claims.Domain;
 
 namespace Claims.Application.Commands;
 
@@ -14,10 +13,11 @@ public class CreateClaimCommand : ICreateClaimCommand
         _coversRepository = coversRepository;
     }
 
-    public async Task<Claim> ExecuteAsync(CreateClaimRequest request)
+    public async Task<CreateClaimResponse> ExecuteAsync(CreateClaimRequest request)
     {
         await Validate(request);
-        return await _claimsRepository.CreateAsync(ToNewClaimInfo(request));
+        var claim = await _claimsRepository.CreateAsync(ToNewClaimInfo(request));
+        return new CreateClaimResponse(claim);
     }
 
     private async Task Validate(CreateClaimRequest request)

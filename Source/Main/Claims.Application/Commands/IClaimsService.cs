@@ -12,14 +12,16 @@ public interface ICommand<TResponse>
     Task<TResponse> ExecuteAsync();
 }
 
-public interface ICreateClaimCommand : ICommand<CreateClaimRequest, Claim>
+public interface ICreateClaimCommand : ICommand<CreateClaimRequest, CreateClaimResponse>
 {
     // Task<Claim> ExecuteAsync(CreateClaimRequest request);
 }
 
 public record GetClaimByIdRequest(Guid Id);
 
-public interface IGetClaimByIdCommand : ICommand<GetClaimByIdRequest, Claim?>
+public record GetClaimByIdResponse(Claim? Claim);
+
+public interface IGetClaimByIdCommand : ICommand<GetClaimByIdRequest, GetClaimByIdResponse>
 {
     // Task<Claim?> ExecuteAsync(GetClaimByIdRequest request);
 }

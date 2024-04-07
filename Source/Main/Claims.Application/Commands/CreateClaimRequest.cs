@@ -9,3 +9,5 @@ public record CreateClaimRequest(
     decimal DamageCost,
     DateTime Created
 );
+
+public record CreateClaimResponse(Claim Claim);

@@ -27,7 +27,8 @@ public class ClaimsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ClaimDto>> CreateAsync(CreateClaimRequestDto request)
     {
-        var claim = await _createClaimCommand.ExecuteAsync(request.ToDomainRequest());
+        var response = await _createClaimCommand.ExecuteAsync(request.ToDomainRequest());
+        var claim = response.Claim;
         _claimAuditor.AuditPost(claim.Id);
         return Ok(claim.ToDto());
     }
@@ -35,7 +36,8 @@ public class ClaimsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<ClaimDto>> GetAsync(Guid id)
     {
-        var claim = await _getClaimByIdCommand.ExecuteAsync(new GetClaimByIdRequest(id));
+        var response = await _getClaimByIdCommand.ExecuteAsync(new GetClaimByIdRequest(id));
+        var claim = response.Claim;
         return claim != null
             ? Ok(claim)
             : NotFound();

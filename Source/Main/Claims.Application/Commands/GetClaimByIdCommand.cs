@@ -1,5 +1,4 @@
 using Claims.Application.Repositories;
-using Claims.Domain;
 
 namespace Claims.Application.Commands;
 
@@ -12,8 +11,9 @@ public class GetClaimByIdCommand : IGetClaimByIdCommand
         _claimsRepository = claimsRepository;
     }
 
-    public async Task<Claim?> ExecuteAsync(GetClaimByIdRequest request)
+    public async Task<GetClaimByIdResponse> ExecuteAsync(GetClaimByIdRequest request)
     {
-        return await _claimsRepository.FindByIdAsync(request.Id);
+        var claim = await _claimsRepository.FindByIdAsync(request.Id);
+        return new GetClaimByIdResponse(claim);
     }
 }
