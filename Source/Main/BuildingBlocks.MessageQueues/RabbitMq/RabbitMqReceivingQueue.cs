@@ -20,7 +20,7 @@ public class RabbitMqReceivingQueue<TMessage> : RabbitMqMessageQueue, IReceiving
             autoAck: false,
             consumer: CreateConsumer(channel, listener)
         );
-        return new ConnectedRabbitMqReceivingQueue(connection, channel, queueName);
+        return new ConnectedRabbitMqReceivingQueue(connection, channel);
     }
 
     private static IBasicConsumer CreateConsumer(IModel channel, IQueueListener<TMessage> listener)
