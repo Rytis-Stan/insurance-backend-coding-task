@@ -1,83 +1,46 @@
 ﻿using BuildingBlocks.MessageQueues;
-using BuildingBlocks.MessageQueues.RabbitMq;
 using Claims.Auditing.MessageQueueBased;
-using Claims.Auditing.PersistenceBased;
-using Claims.Auditing.QueueListener.Configuration;
 using Claims.Persistence.Auditing;
 using Microsoft.Extensions.Logging;
 
 namespace Claims.Auditing.QueueListener;
 
+/// <summary>
+/// Represents the logic of whole application. Please see the comments of the
+/// <see cref="IAppContext" /> inteface for more details.
+/// </summary>
 public class App
 {
-    private readonly AppConfiguration _configuration;
+    private readonly IAppContext _context;
 
-    public App(AppConfiguration configuration)
+    public App(IAppContext context)
     {
-        _configuration = configuration;
+        _context = context;
     }
 
     public void Run()
     {
-        var logger = Logger();
+        Run(
+            _context.Logger,
+            _context.Database,
+            _context.Queue,
+            _context.QueueListener
+        );
+    }
 
+    private static void Run(ILogger logger, IAuditDatabase database, IReceivingQueue<AuditMessage> queue, IQueueListener<AuditMessage> queueListener)
+    {
         logger.LogInformation("Starting to migrate the auditing database.");
-        
-        MigrateAuditDatabase(_configuration.ConnectionString);
+        database.Migrate();
 
         logger.LogInformation("Migration finished. Starting to listed to messages.");
 
-        StartListeningToAuditMessages(logger);
-        
+        using var messageQueue = queue.Connect(queueListener);
+        messageQueue.StartListening();
+
         logger.LogInformation("Press [Enter] to quit.");
         Console.ReadLine();
     }
 
-    // TODO: Ensure that the same audit database instance gets reused both for migration and for setting up the auditors.
-    private static void MigrateAuditDatabase(string connectionString)
-    {
-        new EntityFrameworkAuditDatabase(connectionString).Migrate();
-    }
-
     // TODO: Return the disposables?
-    private void StartListeningToAuditMessages(ILogger logger)
-    {
-        using var auditDatabase = new EntityFrameworkAuditDatabase(_configuration.ConnectionString);
-        using var messageQueue = ConnectToQueue(_configuration.RabbitMq, RootListener(auditDatabase, logger));
-        messageQueue.StartListening();
-    }
-
-    private static CompositeQueueListener<AuditMessage> RootListener(IAuditDatabase database, ILogger logger)
-    {
-        return new CompositeQueueListener<AuditMessage>(
-            new LoggingQueueListener<AuditMessage>(logger),
-            new AuditingQueueListener(AuditorsByAuditEntityKind(database))
-        );
-    }
-
-    private static ILogger Logger()
-    {
-        var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
-        return loggerFactory.CreateLogger<LoggingQueueListener<AuditMessage>>();
-    }
-
-    // private static ILogger<LoggingQueueListener<AuditMessage>> Logger()
-    // {
-    //     var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
-    //     return loggerFactory.CreateLogger<LoggingQueueListener<AuditMessage>>();
-    // }
-
-    private static Dictionary<AuditEntityKind, IHttpRequestAuditor> AuditorsByAuditEntityKind(IAuditDatabase database)
-    {
-        return new Dictionary<AuditEntityKind, IHttpRequestAuditor>
-        {
-            { AuditEntityKind.Cover, new PersistingCoverAuditor(database.CoverAuditRepository) },
-            { AuditEntityKind.Claim, new PersistingClaimAuditor(database.ClaimAuditRepository) }
-        };
-    }
-
-    private static IConnectedReceivingQueue ConnectToQueue(RabbitMqConfiguration configuration, IQueueListener<AuditMessage> listener)
-    {
-        return new RabbitMqReceivingQueue<AuditMessage>(configuration.HostName, configuration.QueueName).Connect(listener);
-    }
 }
