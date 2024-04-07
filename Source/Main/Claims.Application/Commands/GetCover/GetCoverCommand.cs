@@ -1,6 +1,6 @@
 using Claims.Application.Repositories;
 
-namespace Claims.Application.Commands;
+namespace Claims.Application.Commands.GetCover;
 
 public class GetCoverCommand : ICommand<GetCoverRequest, GetCoverResponse>
 {

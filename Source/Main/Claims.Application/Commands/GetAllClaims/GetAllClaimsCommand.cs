@@ -1,6 +1,6 @@
 using Claims.Application.Repositories;
 
-namespace Claims.Application.Commands;
+namespace Claims.Application.Commands.GetAllClaims;
 
 public class GetAllClaimsCommand : ICommandWithNoParameters<GetAllClaimsResponse>
 {

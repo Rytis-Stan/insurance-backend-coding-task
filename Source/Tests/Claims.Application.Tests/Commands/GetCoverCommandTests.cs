@@ -1,4 +1,5 @@
 ﻿using Claims.Application.Commands;
+using Claims.Application.Commands.GetCover;
 using Claims.Domain;
 using Moq;
 using Xunit;

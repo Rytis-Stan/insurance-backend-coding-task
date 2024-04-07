@@ -1,5 +1,6 @@
 ﻿using BuildingBlocks.Temporal;
 using Claims.Application.Commands;
+using Claims.Application.Commands.CreateCover;
 using Claims.Application.Repositories;
 using Claims.Domain;
 using Moq;

@@ -1,5 +1,9 @@
 using Claims.Api.Dto;
 using Claims.Application.Commands;
+using Claims.Application.Commands.CreateClaim;
+using Claims.Application.Commands.DeleteClaim;
+using Claims.Application.Commands.GetAllClaims;
+using Claims.Application.Commands.GetClaimById;
 using Claims.Auditing;
 using Microsoft.AspNetCore.Mvc;
 

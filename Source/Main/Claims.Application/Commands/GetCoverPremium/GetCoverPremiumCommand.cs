@@ -1,6 +1,6 @@
 ﻿using Claims.Domain;
 
-namespace Claims.Application.Commands;
+namespace Claims.Application.Commands.GetCoverPremium;
 
 public class GetCoverPremiumCommand : ICommand<GetCoverPremiumRequest, GetCoverPremiumResponse>
 {

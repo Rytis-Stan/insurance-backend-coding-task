@@ -1,4 +1,5 @@
-﻿using Claims.Application.Commands;
+﻿using Claims.Application.Commands.CreateClaim;
+using Claims.Application.Commands.CreateCover;
 using Claims.Domain;
 
 namespace Claims.Api.Dto;

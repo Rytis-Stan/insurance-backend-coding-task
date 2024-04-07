@@ -1,6 +1,6 @@
 using Claims.Application.Repositories;
 
-namespace Claims.Application.Commands;
+namespace Claims.Application.Commands.GetAllCovers;
 
 public class GetAllCoversCommand : ICommandWithNoParameters<GetAllCoversResponse>
 {

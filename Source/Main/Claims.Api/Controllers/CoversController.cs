@@ -1,5 +1,10 @@
 using Claims.Api.Dto;
 using Claims.Application.Commands;
+using Claims.Application.Commands.CreateCover;
+using Claims.Application.Commands.DeleteCover;
+using Claims.Application.Commands.GetAllCovers;
+using Claims.Application.Commands.GetCover;
+using Claims.Application.Commands.GetCoverPremium;
 using Claims.Auditing;
 using Microsoft.AspNetCore.Mvc;
 

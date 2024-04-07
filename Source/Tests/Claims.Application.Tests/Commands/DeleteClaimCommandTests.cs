@@ -1,4 +1,5 @@
 ﻿using Claims.Application.Commands;
+using Claims.Application.Commands.DeleteClaim;
 using Xunit;
 
 namespace Claims.Application.Tests.Commands;

@@ -1,6 +1,6 @@
 using Claims.Application.Repositories;
 
-namespace Claims.Application.Commands;
+namespace Claims.Application.Commands.GetClaimById;
 
 public class GetClaimByIdCommand : ICommand<GetClaimByIdRequest, GetClaimByIdResponse>
 {

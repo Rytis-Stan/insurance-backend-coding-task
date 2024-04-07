@@ -2,7 +2,7 @@ using BuildingBlocks.Temporal;
 using Claims.Application.Repositories;
 using Claims.Domain;
 
-namespace Claims.Application.Commands;
+namespace Claims.Application.Commands.CreateCover;
 
 public class CreateCoverCommand : ICommand<CreateCoverRequest, CreateCoverResponse>
 {
