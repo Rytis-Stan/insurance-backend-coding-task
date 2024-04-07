@@ -3,7 +3,7 @@ using Microsoft.Azure.Cosmos;
 
 namespace Claims.Persistence.Claims;
 
-public class ClaimsDatabase : IClaimsDatabase
+public class CosmosDbClaimsDatabase : IClaimsDatabase
 {
     private readonly CosmosClient _client;
     private readonly string _name;
@@ -12,7 +12,7 @@ public class ClaimsDatabase : IClaimsDatabase
     public IClaimsRepository ClaimsRepository => new CosmosDbClaimsRepository(_client, _name, _idSource);
     public ICoversRepository CoversRepository => new CosmosDbCoversRepository(_client, _name, _idSource);
 
-    public ClaimsDatabase(CosmosClient client, string name, IIdSource idSource)
+    public CosmosDbClaimsDatabase(CosmosClient client, string name, IIdSource idSource)
     {
         _client = client;
         _name = name;

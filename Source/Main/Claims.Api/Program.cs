@@ -40,7 +40,7 @@ public class Program
     private static IClaimsDatabase MigrateClaimsDatabase(CosmosDbConfiguration configuration)
     {
         var cosmosClient = new CosmosClient(configuration.Account, configuration.Key);
-        var database = new ClaimsDatabase(cosmosClient, configuration.DatabaseName, new RandomIdGenerator());
+        var database = new CosmosDbClaimsDatabase(cosmosClient, configuration.DatabaseName, new RandomIdGenerator());
         database.InitializeAsync().GetAwaiter().GetResult();
         return database;
     }
