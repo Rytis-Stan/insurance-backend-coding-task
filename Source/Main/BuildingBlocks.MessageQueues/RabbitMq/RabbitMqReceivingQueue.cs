@@ -5,6 +5,12 @@ using RabbitMQ.Client.Events;
 
 namespace BuildingBlocks.MessageQueues.RabbitMq;
 
+/// <summary>
+/// Represents a RabbitMQ message queue in an unconnected state, which needs to establish
+/// a connection to the underlying RabbitMQ queue by calling the "StartListening" method.
+/// Once that method is called, a new type of queue object gets returned. The queue will
+/// keep receiving new messages until the new queue objects gets disposed of.
+/// </summary>
 public class RabbitMqReceivingQueue<TMessage> : RabbitMqMessageQueue, IReceivingQueue<TMessage>
 {
     public RabbitMqReceivingQueue(string hostName, string queueName)
