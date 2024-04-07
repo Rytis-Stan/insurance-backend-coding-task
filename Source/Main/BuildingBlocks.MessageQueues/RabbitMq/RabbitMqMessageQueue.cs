@@ -38,7 +38,7 @@ public abstract class RabbitMqMessageQueue
     {
         channel.QueueDeclare(
             queue: _queueName,
-            durable: false,
+            durable: true,
             exclusive: false,
             autoDelete: false,
             arguments: null
