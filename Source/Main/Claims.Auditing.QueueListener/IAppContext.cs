@@ -22,7 +22,7 @@ namespace Claims.Auditing.QueueListener;
 /// 7. Loggers;
 /// 8. etc.
 /// </summary>
-public interface IAppContext
+public interface IAppContext : IDisposable
 {
     ILogger Logger { get; }
     IAuditDatabase Database { get; }

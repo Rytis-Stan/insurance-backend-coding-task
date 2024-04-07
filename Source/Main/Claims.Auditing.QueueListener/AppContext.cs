@@ -26,6 +26,11 @@ public class AppContext : IAppContext
         Console = new SystemConsole();
     }
 
+    public void Dispose()
+    {
+        Database.Dispose();
+    }
+
     private static ILogger CreateLogger()
     {
         return LoggerFactory

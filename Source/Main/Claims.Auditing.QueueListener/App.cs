@@ -21,12 +21,13 @@ public class App
 
     public void Run()
     {
+        using var context = _context;
         Run(
-            _context.Logger,
-            _context.Database,
-            _context.Queue,
-            _context.QueueListener,
-            _context.Console
+            context.Logger,
+            context.Database,
+            context.Queue,
+            context.QueueListener,
+            context.Console
         );
     }
 
