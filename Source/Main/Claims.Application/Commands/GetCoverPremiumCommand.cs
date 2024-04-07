@@ -2,14 +2,6 @@
 
 namespace Claims.Application.Commands;
 
-public record GetCoverPremiumRequest(DateOnly StartDate, DateOnly EndDate, CoverType CoverType);
-
-public record GetCoverPremiumResponse(decimal Premium);
-//
-// public interface IGetCoverPremiumCommand : ICommand<GetCoverPremiumRequest, GetCoverPremiumResponse>
-// {
-// }
-
 public class GetCoverPremiumCommand : ICommand<GetCoverPremiumRequest, GetCoverPremiumResponse>
 {
     private readonly ICoverPricing _coverPricing;
