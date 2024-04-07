@@ -59,7 +59,7 @@ public class CoversController : ControllerBase
     {
         await _deleteCoverCommand.ExecuteAsync(new DeleteCoverRequest(id));
         _coverAuditor.AuditDelete(id);
-        return Ok();
+        return NoContent();
     }
 
     [HttpGet("Premium")]

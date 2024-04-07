@@ -56,6 +56,6 @@ public class ClaimsController : ControllerBase
     {
         await _deleteClaimCommand.ExecuteAsync(new DeleteClaimRequest(id));
         _claimAuditor.AuditDelete(id);
-        return Ok();
+        return NoContent();
     }
 }
