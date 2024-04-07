@@ -47,6 +47,13 @@ public class RabbitMqReceivingQueue<TMessage> : RabbitMqMessageQueue, IReceiving
             : message;
     }
 
+    /// <summary>
+    /// Represents a RabbitMQ message queue in a connected state that is already reacting to
+    /// incoming messages. Since the binding of the queue to an instance of <see cref="IQueueListener{TMessage}"/>
+    /// occurs when starting the listening, before the current queue object is constructed,
+    /// there is nothing "left to do" for this queue object but only to act as an implementation
+    /// of the <see cref="IDisposable"/> interface for the underlying RabbitMQ connection and channel.
+    /// </summary>
     private class ConnectedRabbitMqReceivingQueue : ConnectedRabbitMqMessageQueue, IConnectedReceivingQueue
     {
         public ConnectedRabbitMqReceivingQueue(IConnection connection, IModel channel)
