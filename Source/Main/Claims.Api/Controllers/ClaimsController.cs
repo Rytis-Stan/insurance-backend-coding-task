@@ -1,3 +1,4 @@
+using System.Net;
 using Claims.Api.Dto;
 using Claims.Application.Commands;
 using Claims.Auditing;
@@ -44,6 +45,8 @@ public class ClaimsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    // TODO: Add proper attributes.
+    //[ProducesResponseType(typeof(MyClass), (int)HttpStatusCode.Accepted)]
     public async Task<ActionResult> DeleteAsync(IDeleteClaimCommand command, Guid id)
     {
         await command.ExecuteAsync(new DeleteClaimRequest(id));
