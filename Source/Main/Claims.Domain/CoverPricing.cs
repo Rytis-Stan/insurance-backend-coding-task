@@ -40,15 +40,17 @@ public class CoverPricing : ICoverPricing
 
     private static decimal DayBaseRateCoefficientForLaterPeriod(CoverType coverType)
     {
-        return coverType == CoverType.Yacht
-            ? 1.00m - 0.05m
-            : 1.00m - 0.02m;
+        var discount = coverType == CoverType.Yacht
+            ? 0.05m
+            : 0.02m;
+        return 1.00m - discount;
     }
 
     private static decimal DayBaseRateCoefficientForRemainingPeriod(CoverType coverType)
     {
-        return coverType == CoverType.Yacht
-            ? 1.00m - 0.08m
-            : 1.00m - 0.03m;
+        var discount = coverType == CoverType.Yacht
+            ? 0.08m
+            : 0.03m;
+        return 1.00m - discount;
     }
 }
