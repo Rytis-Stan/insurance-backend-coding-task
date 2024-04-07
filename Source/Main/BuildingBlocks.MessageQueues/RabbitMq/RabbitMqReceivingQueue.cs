@@ -49,8 +49,8 @@ public class RabbitMqReceivingQueue<TMessage> : RabbitMqMessageQueue, IReceiving
 
     private class ConnectedRabbitMqReceivingQueue : ConnectedRabbitMqMessageQueue, IConnectedReceivingQueue
     {
-        public ConnectedRabbitMqReceivingQueue(IConnection connection, IModel channel, string queueName)
-            : base(connection, channel, queueName)
+        public ConnectedRabbitMqReceivingQueue(IConnection connection, IModel channel)
+            : base(connection, channel)
         {
         }
     }

@@ -45,13 +45,11 @@ public abstract class RabbitMqMessageQueue
     {
         private readonly IConnection _connection;
         protected readonly IModel Channel;
-        protected readonly string QueueName;
 
-        protected ConnectedRabbitMqMessageQueue(IConnection connection, IModel channel, string queueName)
+        protected ConnectedRabbitMqMessageQueue(IConnection connection, IModel channel)
         {
             _connection = connection;
             Channel = channel;
-            QueueName = queueName;
         }
 
         public void Dispose()

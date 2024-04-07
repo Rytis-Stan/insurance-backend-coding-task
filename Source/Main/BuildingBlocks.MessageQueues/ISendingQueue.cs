@@ -2,5 +2,5 @@
 
 public interface ISendingQueue<in TMessage>
 {
-    IConnectedSendingQueue<TMessage> Connect();
+    IConnectedSendingQueue<TMessage> StartSending();
 }

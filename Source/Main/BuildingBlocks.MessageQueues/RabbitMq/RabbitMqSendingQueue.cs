@@ -11,7 +11,7 @@ public class RabbitMqSendingQueue<TMessage> : RabbitMqMessageQueue, ISendingQueu
     {
     }
 
-    public IConnectedSendingQueue<TMessage> Connect()
+    public IConnectedSendingQueue<TMessage> StartSending()
     {
         var (connection, channel, queueName) = DeclareQueueAndConnectToIt();
         return new ConnectedRabbitMqSendingQueue(connection, channel, queueName);
@@ -19,9 +19,12 @@ public class RabbitMqSendingQueue<TMessage> : RabbitMqMessageQueue, ISendingQueu
 
     private class ConnectedRabbitMqSendingQueue : ConnectedRabbitMqMessageQueue, IConnectedSendingQueue<TMessage>
     {
+        private readonly string _queueName;
+
         public ConnectedRabbitMqSendingQueue(IConnection connection, IModel channel, string queueName)
-            : base(connection, channel, queueName)
+            : base(connection, channel)
         {
+            _queueName = queueName;
         }
 
         public void Send(TMessage message)
@@ -30,7 +33,7 @@ public class RabbitMqSendingQueue<TMessage> : RabbitMqMessageQueue, ISendingQueu
             var messageJsonBytes = Encoding.UTF8.GetBytes(messageJson);
             Channel.BasicPublish(
                 exchange: "",
-                routingKey: QueueName,
+                routingKey: _queueName,
                 basicProperties: null,
                 body: messageJsonBytes
             );
