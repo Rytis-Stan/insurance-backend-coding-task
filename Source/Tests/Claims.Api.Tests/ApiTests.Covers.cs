@@ -41,7 +41,7 @@ public partial class ApiTests
     [Theory]
     [InlineData(2)]
     [InlineData(3)]
-    public async Task CoversGetReturnsCoversThatHaveBeenAdded(int coverCount)
+    public async Task CoversGetReturnsAllCoversWhenCoversAdded(int coverCount)
     {
         var createdCovers = await CreateRandomCoversAsync(coverCount);
 

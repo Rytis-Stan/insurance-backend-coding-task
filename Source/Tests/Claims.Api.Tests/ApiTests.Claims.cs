@@ -41,7 +41,7 @@ public partial class ApiTests : IDisposable
     [Theory]
     [InlineData(2)]
     [InlineData(3)]
-    public async Task ClaimsGetReturnsClaimsThatHaveBeenAdded(int claimCount)
+    public async Task ClaimsGetReturnsAllClaimsWhenClaimsAdded(int claimCount)
     {
         var createdClaims = await CreateRandomCoverWithClaimsAsync(claimCount);
         
