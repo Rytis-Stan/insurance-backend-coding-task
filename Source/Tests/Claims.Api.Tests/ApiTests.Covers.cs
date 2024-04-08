@@ -203,8 +203,8 @@ public partial class ApiTests
 
         var httpResponse = await CoversPremiumGetAsync(cover.StartDate, cover.EndDate, cover.Type);
 
-        var premium = await httpResponse.OkReadContentAsync<decimal>();
-        Assert.Equal(premium, cover.Premium);
+        var response = await httpResponse.OkReadContentAsync<GetCoverPremiumResponse>();
+        Assert.Equal(cover.Premium, response.Premium);
     }
 
     // TODO: Move this method out of this class.
