@@ -23,7 +23,7 @@ public class CoversController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<CoverDto>> CreateCoverAsync([FromServices] ICommand<CreateCoverArgs, CreateCoverResponse> command,
+    public async Task<ActionResult<CoverDto>> CreateCoverAsync([FromServices] ICommand<CreateCoverArgs, CreateCoverResult> command,
         CreateCoverRequestDto request)
     {
         var response = await command.ExecuteAsync(request.ToDomainRequest());
@@ -33,7 +33,7 @@ public class CoversController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<CoverDto>> GetCoverAsync([FromServices] ICommand<GetCoverArgs, GetCoverResponse> command, Guid id)
+    public async Task<ActionResult<CoverDto>> GetCoverAsync([FromServices] ICommand<GetCoverArgs, GetCoverResult> command, Guid id)
     {
         var response = await command.ExecuteAsync(new GetCoverArgs(id));
         var cover = response.Cover.ToDto();
@@ -43,7 +43,7 @@ public class CoversController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<CoverDto>>> GetCoversAsync([FromServices] ICommandWithNoParameters<GetAllCoversResponse> command)
+    public async Task<ActionResult<IEnumerable<CoverDto>>> GetCoversAsync([FromServices] ICommandWithNoParameters<GetAllCoversResult> command)
     {
         var response = await command.ExecuteAsync();
         var covers = response.Covers.Select(x => x.ToDto());
@@ -59,7 +59,7 @@ public class CoversController : ControllerBase
     }
 
     [HttpGet("Premium")]
-    public async Task<ActionResult<decimal>> GetCoverPremiumAsync([FromServices] ICommand<GetCoverPremiumArgs, GetCoverPremiumResponse> command,
+    public async Task<ActionResult<decimal>> GetCoverPremiumAsync([FromServices] ICommand<GetCoverPremiumArgs, GetCoverPremiumResult> command,
         DateOnly startDate, DateOnly endDate, CoverTypeDto coverType)
     {
         var response = await command.ExecuteAsync(new GetCoverPremiumArgs(startDate, endDate, coverType.ToDomainEnum()));

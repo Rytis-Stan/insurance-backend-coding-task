@@ -91,16 +91,16 @@ public class Program
 
     private static void AddApplicationCommands(IServiceCollection services)
     {
-        services.AddTransient<ICommand<CreateCoverArgs, CreateCoverResponse>, CreateCoverCommand>();
-        services.AddTransient<ICommand<GetCoverArgs, GetCoverResponse>, GetCoverCommand>();
-        services.AddTransient<ICommandWithNoParameters<GetAllCoversResponse>, GetAllCoversCommand>();
+        services.AddTransient<ICommand<CreateCoverArgs, CreateCoverResult>, CreateCoverCommand>();
+        services.AddTransient<ICommand<GetCoverArgs, GetCoverResult>, GetCoverCommand>();
+        services.AddTransient<ICommandWithNoParameters<GetAllCoversResult>, GetAllCoversCommand>();
         services.AddTransient<ICommandWithNoResults<DeleteCoverArgs>, DeleteCoverCommand>();
         
-        services.AddTransient<ICommand<GetCoverPremiumArgs, GetCoverPremiumResponse>, GetCoverPremiumCommand>();
+        services.AddTransient<ICommand<GetCoverPremiumArgs, GetCoverPremiumResult>, GetCoverPremiumCommand>();
 
-        services.AddTransient<ICommand<CreateClaimArgs, CreateClaimResponse>, CreateClaimCommand>();
-        services.AddTransient<ICommand<GetClaimByIdArgs, GetClaimByIdResponse>, GetClaimByIdCommand>();
-        services.AddTransient<ICommandWithNoParameters<GetAllClaimsResponse>, GetAllClaimsCommand>();
+        services.AddTransient<ICommand<CreateClaimArgs, CreateClaimResult>, CreateClaimCommand>();
+        services.AddTransient<ICommand<GetClaimByIdArgs, GetClaimByIdResult>, GetClaimByIdCommand>();
+        services.AddTransient<ICommandWithNoParameters<GetAllClaimsResult>, GetAllClaimsCommand>();
         services.AddTransient<ICommandWithNoResults<DeleteClaimArgs>, DeleteClaimCommand>();
     }
 

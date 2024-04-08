@@ -2,7 +2,7 @@ using Claims.Application.Repositories;
 
 namespace Claims.Application.Commands.GetCover;
 
-public class GetCoverCommand : ICommand<GetCoverArgs, GetCoverResponse>
+public class GetCoverCommand : ICommand<GetCoverArgs, GetCoverResult>
 {
     private readonly ICoversRepository _coversRepository;
 
@@ -11,9 +11,9 @@ public class GetCoverCommand : ICommand<GetCoverArgs, GetCoverResponse>
         _coversRepository = coversRepository;
     }
 
-    public async Task<GetCoverResponse> ExecuteAsync(GetCoverArgs args)
+    public async Task<GetCoverResult> ExecuteAsync(GetCoverArgs args)
     {
         var cover = await _coversRepository.FindByIdAsync(args.Id);
-        return new GetCoverResponse(cover);
+        return new GetCoverResult(cover);
     }
 }

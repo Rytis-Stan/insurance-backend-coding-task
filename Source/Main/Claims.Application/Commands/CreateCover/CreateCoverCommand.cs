@@ -4,7 +4,7 @@ using Claims.Domain;
 
 namespace Claims.Application.Commands.CreateCover;
 
-public class CreateCoverCommand : ICommand<CreateCoverArgs, CreateCoverResponse>
+public class CreateCoverCommand : ICommand<CreateCoverArgs, CreateCoverResult>
 {
     private readonly ICoversRepository _coversRepository;
     private readonly ICoverPricing _coverPricing;
@@ -17,11 +17,11 @@ public class CreateCoverCommand : ICommand<CreateCoverArgs, CreateCoverResponse>
         _clock = clock;
     }
 
-    public async Task<CreateCoverResponse> ExecuteAsync(CreateCoverArgs args)
+    public async Task<CreateCoverResult> ExecuteAsync(CreateCoverArgs args)
     {
         Validate(args);
         var cover = await _coversRepository.CreateAsync(ToNewCoverInfo(args));
-        return new CreateCoverResponse(cover);
+        return new CreateCoverResult(cover);
     }
 
     private void Validate(CreateCoverArgs args)

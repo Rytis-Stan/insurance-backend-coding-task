@@ -1,3 +1,3 @@
 ﻿namespace Claims.Application.Commands.GetCoverPremium;
 
-public record GetCoverPremiumResponse(decimal Premium);
+public record GetCoverPremiumResult(decimal Premium);

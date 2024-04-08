@@ -2,7 +2,7 @@ using Claims.Application.Repositories;
 
 namespace Claims.Application.Commands.CreateClaim;
 
-public class CreateClaimCommand : ICommand<CreateClaimArgs, CreateClaimResponse>
+public class CreateClaimCommand : ICommand<CreateClaimArgs, CreateClaimResult>
 {
     private readonly IClaimsRepository _claimsRepository;
     private readonly ICoversRepository _coversRepository;
@@ -13,11 +13,11 @@ public class CreateClaimCommand : ICommand<CreateClaimArgs, CreateClaimResponse>
         _coversRepository = coversRepository;
     }
 
-    public async Task<CreateClaimResponse> ExecuteAsync(CreateClaimArgs args)
+    public async Task<CreateClaimResult> ExecuteAsync(CreateClaimArgs args)
     {
         await Validate(args);
         var claim = await _claimsRepository.CreateAsync(ToNewClaimInfo(args));
-        return new CreateClaimResponse(claim);
+        return new CreateClaimResult(claim);
     }
 
     private async Task Validate(CreateClaimArgs args)

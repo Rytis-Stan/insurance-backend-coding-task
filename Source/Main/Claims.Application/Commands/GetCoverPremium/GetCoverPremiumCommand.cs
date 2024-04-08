@@ -2,7 +2,7 @@
 
 namespace Claims.Application.Commands.GetCoverPremium;
 
-public class GetCoverPremiumCommand : ICommand<GetCoverPremiumArgs, GetCoverPremiumResponse>
+public class GetCoverPremiumCommand : ICommand<GetCoverPremiumArgs, GetCoverPremiumResult>
 {
     private readonly ICoverPricing _coverPricing;
 
@@ -11,9 +11,9 @@ public class GetCoverPremiumCommand : ICommand<GetCoverPremiumArgs, GetCoverPrem
         _coverPricing = coverPricing;
     }
 
-    public Task<GetCoverPremiumResponse> ExecuteAsync(GetCoverPremiumArgs args)
+    public Task<GetCoverPremiumResult> ExecuteAsync(GetCoverPremiumArgs args)
     {
         decimal premium = _coverPricing.Premium(args.StartDate, args.EndDate, args.CoverType);
-        return Task.FromResult(new GetCoverPremiumResponse(premium));
+        return Task.FromResult(new GetCoverPremiumResult(premium));
     }
 }

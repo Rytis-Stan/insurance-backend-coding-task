@@ -23,7 +23,7 @@ public class ClaimsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ClaimDto>> CreateClaimAsync([FromServices] ICommand<CreateClaimArgs, CreateClaimResponse> command, CreateClaimRequestDto request)
+    public async Task<ActionResult<ClaimDto>> CreateClaimAsync([FromServices] ICommand<CreateClaimArgs, CreateClaimResult> command, CreateClaimRequestDto request)
     {
         var response = await command.ExecuteAsync(request.ToDomainRequest());
         var claim = response.Claim.ToDto();
@@ -32,7 +32,7 @@ public class ClaimsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ClaimDto>> GetClaimAsync([FromServices] ICommand<GetClaimByIdArgs, GetClaimByIdResponse> command, Guid id)
+    public async Task<ActionResult<ClaimDto>> GetClaimAsync([FromServices] ICommand<GetClaimByIdArgs, GetClaimByIdResult> command, Guid id)
     {
         var response = await command.ExecuteAsync(new GetClaimByIdArgs(id));
         var claim = response.Claim.ToDto();
@@ -42,7 +42,7 @@ public class ClaimsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ClaimDto>>> GetClaimsAsync([FromServices] ICommandWithNoParameters<GetAllClaimsResponse> command)
+    public async Task<ActionResult<IEnumerable<ClaimDto>>> GetClaimsAsync([FromServices] ICommandWithNoParameters<GetAllClaimsResult> command)
     {
         var response = await command.ExecuteAsync();
         var claims = response.Claims.Select(x => x.ToDto());

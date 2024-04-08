@@ -2,7 +2,7 @@ using Claims.Application.Repositories;
 
 namespace Claims.Application.Commands.GetClaimById;
 
-public class GetClaimByIdCommand : ICommand<GetClaimByIdArgs, GetClaimByIdResponse>
+public class GetClaimByIdCommand : ICommand<GetClaimByIdArgs, GetClaimByIdResult>
 {
     private readonly IClaimsRepository _claimsRepository;
 
@@ -11,9 +11,9 @@ public class GetClaimByIdCommand : ICommand<GetClaimByIdArgs, GetClaimByIdRespon
         _claimsRepository = claimsRepository;
     }
 
-    public async Task<GetClaimByIdResponse> ExecuteAsync(GetClaimByIdArgs args)
+    public async Task<GetClaimByIdResult> ExecuteAsync(GetClaimByIdArgs args)
     {
         var claim = await _claimsRepository.FindByIdAsync(args.Id);
-        return new GetClaimByIdResponse(claim);
+        return new GetClaimByIdResult(claim);
     }
 }
