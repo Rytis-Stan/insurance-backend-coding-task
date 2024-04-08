@@ -31,10 +31,10 @@ public class CreateClaimCommandTests : ClaimsCommandTests
     {
         var coverId = Guid.NewGuid();
         var created = TestData.RandomUtcDateTime();
-        var request = new CreateClaimArgs(coverId, "anyName", AnyClaimType, damageCost, created);
+        var args = new CreateClaimArgs(coverId, "anyName", AnyClaimType, damageCost, created);
 
         await AssertExtended.ThrowsValidationExceptionAsync(
-            () => _command.ExecuteAsync(request),
+            () => _command.ExecuteAsync(args),
             "Damage cost must be a positive value."
         );
     }
@@ -47,10 +47,10 @@ public class CreateClaimCommandTests : ClaimsCommandTests
     {
         var coverId = Guid.NewGuid();
         var created = TestData.RandomUtcDateTime();
-        var request = new CreateClaimArgs(coverId, "anyName", AnyClaimType, damageCost, created);
+        var args = new CreateClaimArgs(coverId, "anyName", AnyClaimType, damageCost, created);
 
         await AssertExtended.ThrowsValidationExceptionAsync(
-            () => _command.ExecuteAsync(request),
+            () => _command.ExecuteAsync(args),
             "Damage cost cannot exceed 100000."
         );
     }
@@ -60,11 +60,11 @@ public class CreateClaimCommandTests : ClaimsCommandTests
     {
         var coverId = Guid.NewGuid();
         var created = TestData.RandomUtcDateTime();
-        var request = new CreateClaimArgs(coverId, "anyName", AnyClaimType, AnyDamageCost, created);
+        var args = new CreateClaimArgs(coverId, "anyName", AnyClaimType, AnyDamageCost, created);
         StubFindCover(coverId, null);
 
         await AssertExtended.ThrowsValidationExceptionAsync(
-            () => _command.ExecuteAsync(request),
+            () => _command.ExecuteAsync(args),
             "Claim references a non-existing cover via the cover ID."
         );
     }
@@ -132,10 +132,10 @@ public class CreateClaimCommandTests : ClaimsCommandTests
         async Task Test(DateOnly coverStartDate, DateOnly coverEndDate, string claimName, ClaimType claimType, decimal claimDamageCost, DateTime claimCreated)
         {
             var cover = RandomCoverForPeriod(coverStartDate, coverEndDate);
-            var request = new CreateClaimArgs(cover.Id, claimName, claimType, claimDamageCost, claimCreated);
+            var args = new CreateClaimArgs(cover.Id, claimName, claimType, claimDamageCost, claimCreated);
             StubFindCover(cover.Id, cover);
 
-            await _command.ExecuteAsync(request);
+            await _command.ExecuteAsync(args);
 
             ClaimsRepositoryMock.Verify(x => x.CreateAsync(new NewClaimInfo(cover.Id, claimName, claimType, claimDamageCost, claimCreated)));
         }
@@ -150,11 +150,11 @@ public class CreateClaimCommandTests : ClaimsCommandTests
         var claimType = claim.Type;
         var damageCost = claim.DamageCost;
         var created = claim.Created;
-        var request = new CreateClaimArgs(cover.Id, name, claimType, damageCost, created);
+        var args = new CreateClaimArgs(cover.Id, name, claimType, damageCost, created);
         StubFindCover(cover.Id, cover);
         StubCreateClaim(cover.Id, name, claimType, damageCost, created, claim);
 
-        var response = await _command.ExecuteAsync(request);
+        var response = await _command.ExecuteAsync(args);
 
         Assert.Equal(claim, response.Claim);
     }

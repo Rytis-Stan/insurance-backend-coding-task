@@ -1,5 +1,4 @@
-﻿using Claims.Application.Commands;
-using Claims.Application.Commands.GetCoverPremium;
+﻿using Claims.Application.Commands.GetCoverPremium;
 using Claims.Domain;
 using Claims.Testing;
 using Moq;
@@ -28,9 +27,9 @@ public class GetCoverPremiumCommandTests
         var coverType = TestData.RandomEnum<CoverType>();
         StubPremium(startDate, endDate, coverType, expectedPremium);
 
-        var response = await _command.ExecuteAsync(new GetCoverPremiumArgs(startDate, endDate, coverType));
+        var result = await _command.ExecuteAsync(new GetCoverPremiumArgs(startDate, endDate, coverType));
 
-        Assert.Equal(expectedPremium, response.Premium);
+        Assert.Equal(expectedPremium, result.Premium);
     }
 
     private void StubPremium(DateOnly startDate, DateOnly endDate, CoverType coverType, decimal premium)
