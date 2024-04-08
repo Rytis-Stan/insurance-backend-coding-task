@@ -106,11 +106,11 @@ public class CreateClaimCommandTests : ClaimsCommandTests
         async Task Test(DateOnly coverStartDate, DateOnly coverEndDate, DateTime claimCreated)
         {
             var cover = RandomCoverForPeriod(coverStartDate, coverEndDate);
-            var request = new CreateClaimArgs(cover.Id, "anyName", AnyClaimType, AnyDamageCost, claimCreated);
+            var args = new CreateClaimArgs(cover.Id, "anyName", AnyClaimType, AnyDamageCost, claimCreated);
             StubFindCover(cover.Id, cover);
 
             await AssertExtended.ThrowsValidationExceptionAsync(
-                () => _command.ExecuteAsync(request),
+                () => _command.ExecuteAsync(args),
                 "Claim is outside the related cover period."
             );
         }

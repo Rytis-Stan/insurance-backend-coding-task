@@ -46,11 +46,11 @@ public class CreateCoverCommandTests : CoversCommandTests
         async Task Test(DateTime utcNow, DateOnly startDate)
         {
             var endDate = DateOnly.FromDateTime(utcNow);
-            var request = new CreateCoverArgs(startDate, endDate, AnyCoverType);
+            var args = new CreateCoverArgs(startDate, endDate, AnyCoverType);
             StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsValidationExceptionAsync(
-                () => _command.ExecuteAsync(request),
+                () => _command.ExecuteAsync(args),
                 "Start date cannot be in the past."
             );
         }
@@ -79,11 +79,11 @@ public class CreateCoverCommandTests : CoversCommandTests
         async Task Test(DateTime utcNow, DateOnly endDate)
         {
             var startDate = DateOnly.FromDateTime(utcNow);
-            var request = new CreateCoverArgs(startDate, endDate, AnyCoverType);
+            var args = new CreateCoverArgs(startDate, endDate, AnyCoverType);
             StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsValidationExceptionAsync(
-                () => _command.ExecuteAsync(request),
+                () => _command.ExecuteAsync(args),
                 "End date cannot be in the past."
             );
         }
@@ -120,11 +120,11 @@ public class CreateCoverCommandTests : CoversCommandTests
 
         async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate)
         {
-            var request = new CreateCoverArgs(startDate, endDate, AnyCoverType);
+            var args = new CreateCoverArgs(startDate, endDate, AnyCoverType);
             StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsValidationExceptionAsync(
-                () => _command.ExecuteAsync(request),
+                () => _command.ExecuteAsync(args),
                 "End date cannot be earlier than the start date."
             );
         }
@@ -165,11 +165,11 @@ public class CreateCoverCommandTests : CoversCommandTests
 
         async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate)
         {
-            var request = new CreateCoverArgs(startDate, endDate, AnyCoverType);
+            var args = new CreateCoverArgs(startDate, endDate, AnyCoverType);
             StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsValidationExceptionAsync(
-                () => _command.ExecuteAsync(request),
+                () => _command.ExecuteAsync(args),
                 "Total insurance period cannot exceed 1 year."
             );
         }
@@ -188,11 +188,11 @@ public class CreateCoverCommandTests : CoversCommandTests
 
         async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate, CoverType coverType, decimal premium)
         {
-            var request = new CreateCoverArgs(startDate, endDate, coverType);
+            var args = new CreateCoverArgs(startDate, endDate, coverType);
             StubUtcNow(utcNow);
             StubPremium(startDate, endDate, coverType, premium);
 
-            await _command.ExecuteAsync(request);
+            await _command.ExecuteAsync(args);
 
             CoversRepositoryMock.Verify(x => x.CreateAsync(new NewCoverInfo(startDate, endDate, coverType, premium)));
         }
@@ -207,12 +207,12 @@ public class CreateCoverCommandTests : CoversCommandTests
         var endDate = cover.EndDate;
         var coverType = cover.Type;
         var premium = cover.Premium;
-        var request = new CreateCoverArgs(startDate, endDate, coverType);
+        var args = new CreateCoverArgs(startDate, endDate, coverType);
         StubUtcNow(utcNow);
         StubPremium(startDate, endDate, coverType, premium);
         StubCreateCover(startDate, endDate, coverType, premium, cover);
 
-        var response = await _command.ExecuteAsync(request);
+        var response = await _command.ExecuteAsync(args);
 
         Assert.Equal(cover, response.Cover);
     }
