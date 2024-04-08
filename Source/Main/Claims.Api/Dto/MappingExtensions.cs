@@ -9,7 +9,7 @@ namespace Claims.Api.Dto;
 /// </summary>
 public static class MappingExtensions
 {
-    public static CreateCoverArgs ToDomainRequest(this CreateCoverRequestDto source)
+    public static CreateCoverArgs ToCommandArgs(this CreateCoverRequestDto source)
     {
         return new CreateCoverArgs(source.StartDate, source.EndDate, source.Type.ToDomainEnum());
     }
@@ -21,7 +21,7 @@ public static class MappingExtensions
             : null;
     }
 
-    public static CreateClaimArgs ToDomainRequest(this CreateClaimRequestDto source)
+    public static CreateClaimArgs ToCommandArgs(this CreateClaimRequestDto source)
     {
         var claimTypeDto = source.Type;
         return new CreateClaimArgs(source.CoverId, source.Name, claimTypeDto.ToDomainEnum(), source.DamageCost, source.Created);

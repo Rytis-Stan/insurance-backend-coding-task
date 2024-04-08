@@ -26,7 +26,7 @@ public class CoversController : ControllerBase
     public async Task<ActionResult<CoverDto>> CreateCoverAsync([FromServices] ICommand<CreateCoverArgs, CreateCoverResult> command,
         CreateCoverRequestDto request)
     {
-        var response = await command.ExecuteAsync(request.ToDomainRequest());
+        var response = await command.ExecuteAsync(request.ToCommandArgs());
         var cover = response.Cover.ToDto();
         _auditor.AuditPost(cover.Id);
         return Ok(cover);
