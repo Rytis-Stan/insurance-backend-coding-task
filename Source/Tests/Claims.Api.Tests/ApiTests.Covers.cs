@@ -18,7 +18,7 @@ public partial class ApiTests
 
         var response = await CoversPostAsync(request);
     
-        await AssertReturnedBadRequestAsync(response, "Start date cannot be in the past.");
+        await AssertBadRequestAsync(response, "Start date cannot be in the past.");
     }
 
     [Fact]
@@ -32,7 +32,7 @@ public partial class ApiTests
 
         var response = await CoversPostAsync(request);
 
-        await AssertReturnedBadRequestAsync(response, "End date cannot be in the past.");
+        await AssertBadRequestAsync(response, "End date cannot be in the past.");
     }
 
     [Fact]
@@ -46,7 +46,7 @@ public partial class ApiTests
 
         var response = await CoversPostAsync(request);
 
-        await AssertReturnedBadRequestAsync(response, "End date cannot be earlier than the start date.");
+        await AssertBadRequestAsync(response, "End date cannot be earlier than the start date.");
     }
 
     [Fact]
@@ -65,7 +65,7 @@ public partial class ApiTests
 
         var httpResponse = await CoversPostAsync(request);
 
-        await AssertReturnedBadRequestAsync(httpResponse, "Total insurance period cannot exceed 1 year.");
+        await AssertBadRequestAsync(httpResponse, "Total insurance period cannot exceed 1 year.");
     }
 
     [Fact]
@@ -79,7 +79,7 @@ public partial class ApiTests
 
         var httpResponse = await CoversPostAsync(request);
 
-        await AssertReturnedBadRequestAsync(httpResponse, "Total insurance period cannot exceed 1 year.");
+        await AssertBadRequestAsync(httpResponse, "Total insurance period cannot exceed 1 year.");
     }
 
     [Theory]
