@@ -49,6 +49,39 @@ public partial class ApiTests
         await AssertReturnedBadRequestAsync(response, "End date cannot be earlier than the start date.");
     }
 
+    [Fact]
+    public async Task CoversPostReturnsBadRequestWhenCoverPeriodExceedsASingleYearByExactlyOneDay()
+    {
+        var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
+        var startDate = utcNow.AddDays(TestData.RandomInt(1, 100));
+        // NOTE: Even though "AddYears(1)" adds exactly a single year "calendar-wise", in practice
+        // the insurance period duration becomes 1 year + 1 extra day. This is due to the fact that
+        // insurance works from the start of the day on "startDate" to the end of the day of "endDate"
+        // (so if "startDate" and "endDate" match, it is still technically a single day of insurance).
+        var endDate = startDate.AddYears(1);
+        
+        var coverType = TestData.RandomEnum<CoverTypeDto>();
+        var request = new CreateCoverRequestDto(startDate, endDate, coverType);
+
+        var response = await CoversPostAsync(request);
+
+        await AssertReturnedBadRequestAsync(response, "Total insurance period cannot exceed 1 year.");
+    }
+
+    [Fact]
+    public async Task CoversPostReturnsBadRequestWhenCoverPeriodExceedsASingleYearByMoreThanOneDay()
+    {
+        var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
+        var startDate = utcNow.AddDays(TestData.RandomInt(1, 100));
+        var endDate = startDate.AddYears(1).AddDays(TestData.RandomInt(1, 90));
+        var coverType = TestData.RandomEnum<CoverTypeDto>();
+        var request = new CreateCoverRequestDto(startDate, endDate, coverType);
+
+        var response = await CoversPostAsync(request);
+
+        await AssertReturnedBadRequestAsync(response, "Total insurance period cannot exceed 1 year.");
+    }
+
     [Theory]
     [InlineData(1, CoverTypeDto.BulkCarrier, 1625.00)]
     [InlineData(179, CoverTypeDto.Tanker, 330037.50)]
