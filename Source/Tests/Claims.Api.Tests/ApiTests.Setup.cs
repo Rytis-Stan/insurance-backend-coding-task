@@ -39,6 +39,7 @@ public partial class ApiTests
     public void Dispose()
     {
         _client.Dispose();
+        GC.SuppressFinalize(this);
     }
 
     private static void DeleteCosmosDbIfExists()
