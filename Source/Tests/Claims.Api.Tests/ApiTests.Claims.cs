@@ -9,6 +9,17 @@ namespace Claims.Api.Tests;
 public partial class ApiTests : IDisposable
 {
     [Fact]
+    public async Task ClaimsPostReturnsBadRequestWhenCoverWithGivenIdDoesNotExist()
+    {
+        var coverId = Guid.NewGuid();
+        var request = RandomCreateClaimRequestDto(coverId, DateTime.UtcNow);
+
+        var response = await ClaimsPostAsync(request);
+
+        await AssertReturnedBadRequestAsync(response, "Claim references a non-existing cover via the cover ID.");
+    }
+
+    [Fact]
     public async Task ClaimsPostReturnsNewlyCreatedClaimWhenRequestValid()
     {
         var cover = await CreateRandomCoverAsync();
@@ -160,5 +171,14 @@ public partial class ApiTests : IDisposable
     {
         var tasks = claimIds.Select(ClaimsDeleteAsync);
         await Task.WhenAll(tasks);
+    }
+
+    // TODO: Move to "ExtendedAssert"?
+    private async Task AssertReturnedBadRequestAsync(HttpResponseMessage response, string expectedErrorMessage)
+    {
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        // var errorMessage = await response.ReadContentAsync<string>();
+        var errorMessage = await response.Content.ReadAsStringAsync();
+        Assert.Equal(expectedErrorMessage, errorMessage);
     }
 }
