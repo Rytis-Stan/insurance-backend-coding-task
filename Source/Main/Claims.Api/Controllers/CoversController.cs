@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Claims.Api.Dto;
 using Claims.Application.Commands;
 using Claims.Application.Commands.CreateCover;
@@ -62,7 +63,7 @@ public class CoversController : ControllerBase
     [HttpGet("Premium")]
     [ProducesResponseType(typeof(GetCoverPremiumResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCoverPremiumAsync([FromServices] ICommand<GetCoverPremiumArgs, GetCoverPremiumResult> command,
-        DateOnly startDate, DateOnly endDate, CoverTypeDto coverType)
+        [Required] DateOnly startDate, [Required] DateOnly endDate, [Required] CoverTypeDto coverType)
     {
         var response = (await command.ExecuteAsync(new GetCoverPremiumArgs(startDate, endDate, coverType.ToDomainEnum()))).ToResponse();
         return Ok(response);
