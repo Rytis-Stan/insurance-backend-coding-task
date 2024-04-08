@@ -43,8 +43,7 @@ public partial class ApiTests : IDisposable
     {
         var httpResponse = await ClaimsGetAsync();
 
-        Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-        var claims = await httpResponse.ReadContentAsync<ClaimDto[]>();
+        var claims = await httpResponse.ReadContentAsync<ClaimDto[]>(HttpStatusCode.OK);
         Assert.NotNull(claims);
         Assert.Empty(claims);
     }
@@ -130,7 +129,7 @@ public partial class ApiTests : IDisposable
         var request = RandomCreateCoverRequestDto(DateTime.UtcNow);
         var httpResponse = await CoversPostAsync(request);
         var response = await httpResponse.ReadContentAsync<CreateCoverResponse>();
-        return response!.Cover;
+        return response.Cover;
     }
 
     private async Task<ClaimDto> CreateRandomClaimAsync(CoverDto cover)
