@@ -11,7 +11,7 @@ public partial class ApiTests
     [InlineData(1, CoverTypeDto.BulkCarrier, 1625.00)]
     [InlineData(179, CoverTypeDto.Tanker, 330037.50)]
     [InlineData(182, CoverTypeDto.Yacht, 239717.50)]
-    public async Task CoversPostReturnsNewlyCreatedCover(int periodDurationInDays, CoverTypeDto coverType, decimal expectedPremium)
+    public async Task CoversPostReturnsNewlyCreatedCoverWhenRequestValid(int periodDurationInDays, CoverTypeDto coverType, decimal expectedPremium)
     {
         var request = RandomCreateCoverRequestDto(DateTime.UtcNow, periodDurationInDays, coverType);
 

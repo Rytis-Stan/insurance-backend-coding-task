@@ -9,7 +9,7 @@ namespace Claims.Api.Tests;
 public partial class ApiTests : IDisposable
 {
     [Fact]
-    public async Task ClaimsPostReturnsNewlyCreatedClaim()
+    public async Task ClaimsPostReturnsNewlyCreatedClaimWhenRequestValid()
     {
         var cover = await CreateRandomCoverAsync();
         var request = RandomCreateClaimRequestDto(cover.Id, UtcDateTime(cover.StartDate));
