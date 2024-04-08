@@ -21,6 +21,34 @@ public partial class ApiTests
         await AssertReturnedBadRequestAsync(response, "Start date cannot be in the past.");
     }
 
+    [Fact]
+    public async Task CoversPostReturnsBadRequestWhenEndDateIsInThePast()
+    {
+        var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
+        var startDate = utcNow;
+        var endDate = utcNow.AddDays(-TestData.RandomInt(1, 100));
+        var coverType = TestData.RandomEnum<CoverTypeDto>();
+        var request = new CreateCoverRequestDto(startDate, endDate, coverType);
+
+        var response = await CoversPostAsync(request);
+
+        await AssertReturnedBadRequestAsync(response, "End date cannot be in the past.");
+    }
+
+    [Fact]
+    public async Task CoversPostReturnsBadRequestWhenEndDateNotItThePastButGoesBeforeStartDate()
+    {
+        var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
+        var startDate = utcNow.AddDays(TestData.RandomInt(101, 200));
+        var endDate = utcNow.AddDays(TestData.RandomInt(1, 100));
+        var coverType = TestData.RandomEnum<CoverTypeDto>();
+        var request = new CreateCoverRequestDto(startDate, endDate, coverType);
+
+        var response = await CoversPostAsync(request);
+
+        await AssertReturnedBadRequestAsync(response, "End date cannot be earlier than the start date.");
+    }
+
     [Theory]
     [InlineData(1, CoverTypeDto.BulkCarrier, 1625.00)]
     [InlineData(179, CoverTypeDto.Tanker, 330037.50)]
