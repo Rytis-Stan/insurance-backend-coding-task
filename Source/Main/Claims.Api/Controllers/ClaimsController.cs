@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Claims.Api.Dto;
 using Claims.Application.Commands;
 using Claims.Application.Commands.CreateClaim;
@@ -23,7 +24,7 @@ public class ClaimsController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(CreateClaimResponse), StatusCodes.Status200OK)]
-    public async Task<IActionResult> CreateClaimAsync([FromServices] ICommand<CreateClaimArgs, CreateClaimResult> command, CreateClaimRequest request)
+    public async Task<IActionResult> CreateClaimAsync([FromServices] ICommand<CreateClaimArgs, CreateClaimResult> command, [Required] CreateClaimRequest request)
     {
         var response = (await command.ExecuteAsync(request.ToCommandArgs())).ToResponse();
         _auditor.AuditPost(response.Claim.Id);
