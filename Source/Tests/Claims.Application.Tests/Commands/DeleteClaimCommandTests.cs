@@ -17,7 +17,7 @@ public class DeleteClaimCommandTests : ClaimsCommandTests
     {
         var id = Guid.NewGuid();
 
-        await _command.ExecuteAsync(new DeleteClaimRequest(id));
+        await _command.ExecuteAsync(new DeleteClaimArgs(id));
 
         ClaimsRepositoryMock.Verify(x => x.DeleteByIdAsync(id));
     }

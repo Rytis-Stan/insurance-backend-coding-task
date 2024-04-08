@@ -4,7 +4,7 @@ using Claims.Domain;
 
 namespace Claims.Application.Commands.CreateCover;
 
-public class CreateCoverCommand : ICommand<CreateCoverRequest, CreateCoverResponse>
+public class CreateCoverCommand : ICommand<CreateCoverArgs, CreateCoverResponse>
 {
     private readonly ICoversRepository _coversRepository;
     private readonly ICoverPricing _coverPricing;
@@ -17,18 +17,18 @@ public class CreateCoverCommand : ICommand<CreateCoverRequest, CreateCoverRespon
         _clock = clock;
     }
 
-    public async Task<CreateCoverResponse> ExecuteAsync(CreateCoverRequest request)
+    public async Task<CreateCoverResponse> ExecuteAsync(CreateCoverArgs args)
     {
-        Validate(request);
-        var cover = await _coversRepository.CreateAsync(ToNewCoverInfo(request));
+        Validate(args);
+        var cover = await _coversRepository.CreateAsync(ToNewCoverInfo(args));
         return new CreateCoverResponse(cover);
     }
 
-    private void Validate(CreateCoverRequest request)
+    private void Validate(CreateCoverArgs args)
     {
         var utcToday = DateOnly.FromDateTime(_clock.UtcNow());
-        var startDate = request.StartDate;
-        var endDate = request.EndDate;
+        var startDate = args.StartDate;
+        var endDate = args.EndDate;
 
         if (startDate < utcToday)
         {
@@ -48,13 +48,13 @@ public class CreateCoverCommand : ICommand<CreateCoverRequest, CreateCoverRespon
         }
     }
 
-    private NewCoverInfo ToNewCoverInfo(CreateCoverRequest request)
+    private NewCoverInfo ToNewCoverInfo(CreateCoverArgs args)
     {
-        return new NewCoverInfo(request.StartDate, request.EndDate, request.Type, PremiumFrom(request));
+        return new NewCoverInfo(args.StartDate, args.EndDate, args.Type, PremiumFrom(args));
     }
 
-    private decimal PremiumFrom(CreateCoverRequest request)
+    private decimal PremiumFrom(CreateCoverArgs args)
     {
-        return _coverPricing.Premium(request.StartDate, request.EndDate, request.Type);
+        return _coverPricing.Premium(args.StartDate, args.EndDate, args.Type);
     }
 }

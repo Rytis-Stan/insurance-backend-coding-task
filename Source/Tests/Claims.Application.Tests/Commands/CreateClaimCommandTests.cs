@@ -33,7 +33,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
     {
         var coverId = Guid.NewGuid();
         var created = TestData.RandomUtcDateTime();
-        var request = new CreateClaimRequest(coverId, "anyName", AnyClaimType, damageCost, created);
+        var request = new CreateClaimArgs(coverId, "anyName", AnyClaimType, damageCost, created);
 
         await AssertExtended.ThrowsValidationExceptionAsync(
             () => _command.ExecuteAsync(request),
@@ -49,7 +49,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
     {
         var coverId = Guid.NewGuid();
         var created = TestData.RandomUtcDateTime();
-        var request = new CreateClaimRequest(coverId, "anyName", AnyClaimType, damageCost, created);
+        var request = new CreateClaimArgs(coverId, "anyName", AnyClaimType, damageCost, created);
 
         await AssertExtended.ThrowsValidationExceptionAsync(
             () => _command.ExecuteAsync(request),
@@ -62,7 +62,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
     {
         var coverId = Guid.NewGuid();
         var created = TestData.RandomUtcDateTime();
-        var request = new CreateClaimRequest(coverId, "anyName", AnyClaimType, AnyDamageCost, created);
+        var request = new CreateClaimArgs(coverId, "anyName", AnyClaimType, AnyDamageCost, created);
         StubFindCover(coverId, null);
 
         await AssertExtended.ThrowsValidationExceptionAsync(
@@ -108,7 +108,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
         async Task Test(DateOnly coverStartDate, DateOnly coverEndDate, DateTime claimCreated)
         {
             var cover = CreateCoverForPeriod(coverStartDate, coverEndDate);
-            var request = new CreateClaimRequest(cover.Id, "anyName", AnyClaimType, AnyDamageCost, claimCreated);
+            var request = new CreateClaimArgs(cover.Id, "anyName", AnyClaimType, AnyDamageCost, claimCreated);
             StubFindCover(cover.Id, cover);
 
             await AssertExtended.ThrowsValidationExceptionAsync(
@@ -134,7 +134,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
         async Task Test(DateOnly coverStartDate, DateOnly coverEndDate, string claimName, ClaimType claimType, decimal claimDamageCost, DateTime claimCreated)
         {
             var cover = CreateCoverForPeriod(coverStartDate, coverEndDate);
-            var request = new CreateClaimRequest(cover.Id, claimName, claimType, claimDamageCost, claimCreated);
+            var request = new CreateClaimArgs(cover.Id, claimName, claimType, claimDamageCost, claimCreated);
             StubFindCover(cover.Id, cover);
 
             await _command.ExecuteAsync(request);
@@ -152,7 +152,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
         var claimType = claim.Type;
         var damageCost = claim.DamageCost;
         var created = claim.Created;
-        var request = new CreateClaimRequest(cover.Id, name, claimType, damageCost, created);
+        var request = new CreateClaimArgs(cover.Id, name, claimType, damageCost, created);
         StubFindCover(cover.Id, cover);
         StubCreateClaim(cover.Id, name, claimType, damageCost, created, claim);
 

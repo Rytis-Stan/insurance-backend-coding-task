@@ -1,3 +1,3 @@
 namespace Claims.Application.Commands.GetCover;
 
-public record GetCoverRequest(Guid Id);
+public record GetCoverArgs(Guid Id);

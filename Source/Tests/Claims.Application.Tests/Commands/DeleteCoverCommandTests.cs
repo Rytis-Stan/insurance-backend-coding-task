@@ -17,7 +17,7 @@ public class DeleteCoverCommandTests : CoversCommandTests
     {
         var id = Guid.NewGuid();
 
-        await _command.ExecuteAsync(new DeleteCoverRequest(id));
+        await _command.ExecuteAsync(new DeleteCoverArgs(id));
 
         CoversRepositoryMock.Verify(x => x.DeleteByIdAsync(id));
     }

@@ -1,3 +1,3 @@
 namespace Claims.Application.Commands.GetClaimById;
 
-public record GetClaimByIdRequest(Guid Id);
+public record GetClaimByIdArgs(Guid Id);

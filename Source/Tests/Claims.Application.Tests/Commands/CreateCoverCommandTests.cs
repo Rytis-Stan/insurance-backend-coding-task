@@ -46,7 +46,7 @@ public class CreateCoverCommandTests : CoversCommandTests
         async Task Test(DateTime utcNow, DateOnly startDate)
         {
             var endDate = DateOnly.FromDateTime(utcNow);
-            var request = new CreateCoverRequest(startDate, endDate, AnyCoverType);
+            var request = new CreateCoverArgs(startDate, endDate, AnyCoverType);
             StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsValidationExceptionAsync(
@@ -79,7 +79,7 @@ public class CreateCoverCommandTests : CoversCommandTests
         async Task Test(DateTime utcNow, DateOnly endDate)
         {
             var startDate = DateOnly.FromDateTime(utcNow);
-            var request = new CreateCoverRequest(startDate, endDate, AnyCoverType);
+            var request = new CreateCoverArgs(startDate, endDate, AnyCoverType);
             StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsValidationExceptionAsync(
@@ -120,7 +120,7 @@ public class CreateCoverCommandTests : CoversCommandTests
 
         async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate)
         {
-            var request = new CreateCoverRequest(startDate, endDate, AnyCoverType);
+            var request = new CreateCoverArgs(startDate, endDate, AnyCoverType);
             StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsValidationExceptionAsync(
@@ -165,7 +165,7 @@ public class CreateCoverCommandTests : CoversCommandTests
 
         async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate)
         {
-            var request = new CreateCoverRequest(startDate, endDate, AnyCoverType);
+            var request = new CreateCoverArgs(startDate, endDate, AnyCoverType);
             StubUtcNow(utcNow);
 
             await AssertExtended.ThrowsValidationExceptionAsync(
@@ -188,7 +188,7 @@ public class CreateCoverCommandTests : CoversCommandTests
 
         async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate, CoverType coverType, decimal premium)
         {
-            var request = new CreateCoverRequest(startDate, endDate, coverType);
+            var request = new CreateCoverArgs(startDate, endDate, coverType);
             StubUtcNow(utcNow);
             StubPremium(startDate, endDate, coverType, premium);
 
@@ -207,7 +207,7 @@ public class CreateCoverCommandTests : CoversCommandTests
         var endDate = cover.EndDate;
         var coverType = cover.Type;
         var premium = cover.Premium;
-        var request = new CreateCoverRequest(startDate, endDate, coverType);
+        var request = new CreateCoverArgs(startDate, endDate, coverType);
         StubUtcNow(utcNow);
         StubPremium(startDate, endDate, coverType, premium);
         StubCreateCover(startDate, endDate, coverType, premium, cover);

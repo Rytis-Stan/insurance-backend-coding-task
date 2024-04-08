@@ -2,7 +2,7 @@ using Claims.Application.Repositories;
 
 namespace Claims.Application.Commands.DeleteCover;
 
-public class DeleteCoverCommand : ICommandWithNoResults<DeleteCoverRequest>
+public class DeleteCoverCommand : ICommandWithNoResults<DeleteCoverArgs>
 {
     private readonly ICoversRepository _coversRepository;
 
@@ -11,8 +11,8 @@ public class DeleteCoverCommand : ICommandWithNoResults<DeleteCoverRequest>
         _coversRepository = coversRepository;
     }
 
-    public async Task ExecuteAsync(DeleteCoverRequest request)
+    public async Task ExecuteAsync(DeleteCoverArgs args)
     {
-        await _coversRepository.DeleteByIdAsync(request.Id);
+        await _coversRepository.DeleteByIdAsync(args.Id);
     }
 }

@@ -2,7 +2,7 @@ using Claims.Application.Repositories;
 
 namespace Claims.Application.Commands.CreateClaim;
 
-public class CreateClaimCommand : ICommand<CreateClaimRequest, CreateClaimResponse>
+public class CreateClaimCommand : ICommand<CreateClaimArgs, CreateClaimResponse>
 {
     private readonly IClaimsRepository _claimsRepository;
     private readonly ICoversRepository _coversRepository;
@@ -13,16 +13,16 @@ public class CreateClaimCommand : ICommand<CreateClaimRequest, CreateClaimRespon
         _coversRepository = coversRepository;
     }
 
-    public async Task<CreateClaimResponse> ExecuteAsync(CreateClaimRequest request)
+    public async Task<CreateClaimResponse> ExecuteAsync(CreateClaimArgs args)
     {
-        await Validate(request);
-        var claim = await _claimsRepository.CreateAsync(ToNewClaimInfo(request));
+        await Validate(args);
+        var claim = await _claimsRepository.CreateAsync(ToNewClaimInfo(args));
         return new CreateClaimResponse(claim);
     }
 
-    private async Task Validate(CreateClaimRequest request)
+    private async Task Validate(CreateClaimArgs args)
     {
-        var damageCost = request.DamageCost;
+        var damageCost = args.DamageCost;
         if (damageCost <= 0.00m)
         {
             throw new ValidationException("Damage cost must be a positive value.");
@@ -32,14 +32,14 @@ public class CreateClaimCommand : ICommand<CreateClaimRequest, CreateClaimRespon
         {
             throw new ValidationException($"Damage cost cannot exceed {maxAllowedDamageCost}.");
         }
-        var cover = await _coversRepository.FindByIdAsync(request.CoverId);
+        var cover = await _coversRepository.FindByIdAsync(args.CoverId);
 #pragma warning disable IDE0270 // Use coalesce expression
         if (cover == null)
         {
             throw new ValidationException("Claim references a non-existing cover via the cover ID.");
         }
 #pragma warning restore IDE0270 // Use coalesce expression
-        var created = DateOnly.FromDateTime(request.Created);
+        var created = DateOnly.FromDateTime(args.Created);
         if (created < cover.StartDate ||
             created > cover.EndDate)
         {
@@ -47,8 +47,8 @@ public class CreateClaimCommand : ICommand<CreateClaimRequest, CreateClaimRespon
         }
     }
 
-    private static NewClaimInfo ToNewClaimInfo(CreateClaimRequest request)
+    private static NewClaimInfo ToNewClaimInfo(CreateClaimArgs args)
     {
-        return new NewClaimInfo(request.CoverId, request.Name, request.Type, request.DamageCost, request.Created);
+        return new NewClaimInfo(args.CoverId, args.Name, args.Type, args.DamageCost, args.Created);
     }
 }

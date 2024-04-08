@@ -2,7 +2,7 @@ using Claims.Domain;
 
 namespace Claims.Application.Commands.CreateClaim;
 
-public record CreateClaimRequest(
+public record CreateClaimArgs(
     Guid CoverId,
     string Name,
     ClaimType Type,
