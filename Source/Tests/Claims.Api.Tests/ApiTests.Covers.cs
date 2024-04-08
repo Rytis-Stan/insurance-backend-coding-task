@@ -60,8 +60,8 @@ public partial class ApiTests
     {
         var createdCovers = (await CreateRandomCoversAsync(addedCoverCount)).ToList();
         var createdCoversToKeep = createdCovers.Skip(deletedCoverCount);
-        var idsOfCreatedCoversToDelete = createdCovers.Take(deletedCoverCount).Select(x => x.Id);
-        await CoversDeleteMultipleAsync(idsOfCreatedCoversToDelete);
+        var createdCoversToDelete = createdCovers.Take(deletedCoverCount);
+        await CoversDeleteMultipleAsync(createdCoversToDelete.Select(x => x.Id));
 
         var response = await CoversGetAsync();
 
