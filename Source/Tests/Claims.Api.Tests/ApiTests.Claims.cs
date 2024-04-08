@@ -174,7 +174,7 @@ public partial class ApiTests : IDisposable
     }
 
     // TODO: Move to "ExtendedAssert"?
-    private async Task AssertReturnedBadRequestAsync(HttpResponseMessage response, string expectedErrorMessage)
+    private static async Task AssertReturnedBadRequestAsync(HttpResponseMessage response, string expectedErrorMessage)
     {
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         // var errorMessage = await response.ReadContentAsync<string>();
