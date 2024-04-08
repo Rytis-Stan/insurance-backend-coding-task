@@ -140,7 +140,7 @@ public partial class ApiTests
     }
 
     // TODO: Move this method out of this class.
-    private CreateCoverRequestDto RandomCreateCoverRequestDto(DateTime utcNow)
+    private static CreateCoverRequestDto RandomCreateCoverRequestDto(DateTime utcNow)
     {
         return RandomCreateCoverRequestDto(
             utcNow,
@@ -149,7 +149,7 @@ public partial class ApiTests
         );
     }
 
-    private CreateCoverRequestDto RandomCreateCoverRequestDto(DateTime utcNow, int periodDurationInDays, CoverTypeDto coverType)
+    private static CreateCoverRequestDto RandomCreateCoverRequestDto(DateTime utcNow, int periodDurationInDays, CoverTypeDto coverType)
     {
         // NOTE: Start and end date should start at least 1 day after UTC Now to avoid the
         // current date changing while the endpoint is being called (can happen if the test

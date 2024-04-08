@@ -145,7 +145,7 @@ public partial class ApiTests : IDisposable
         return await Task.WhenAll(tasks);
     }
 
-    private CreateClaimRequestDto RandomCreateClaimRequestDto(Guid coverId, DateTime created)
+    private static CreateClaimRequestDto RandomCreateClaimRequestDto(Guid coverId, DateTime created)
     {
         return new CreateClaimRequestDto(
             coverId,
