@@ -23,6 +23,7 @@ public class AuditingQueueListener : IQueueListener<AuditMessage>
                 auditor.AuditDelete(message.EntityId);
                 break;
             default:
+                // TODO: Use a custom exception type?
                 throw new ArgumentOutOfRangeException(nameof(message));
         }
     }
