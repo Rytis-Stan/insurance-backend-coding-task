@@ -21,16 +21,6 @@ public static class HttpClientExtensions
         return new StringContent(json, Encoding.UTF8, "application/json");
     }
 
-    public static async Task<T> ReadRawContentAsync<T>(this HttpResponseMessage response)
-    {
-        var contentJson = await response.Content.ReadAsStringAsync();
-        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        options.Converters.Add(new JsonStringEnumConverter());
-        var content = JsonSerializer.Deserialize<T?>(contentJson, options);
-        Assert.NotNull(content); // TODO: Replace with some custom exception type?
-        return content;
-    }
-
     // TODO: Fix method names.
     public static async Task<TContent> OkReadContentAsync<TContent>(this HttpResponseMessage response)
     {
@@ -41,5 +31,15 @@ public static class HttpClientExtensions
     {
         Assert.Equal(expectedStatusCode, response.StatusCode);
         return await response.ReadRawContentAsync<TContent>();
+    }
+
+    public static async Task<T> ReadRawContentAsync<T>(this HttpResponseMessage response)
+    {
+        var contentJson = await response.Content.ReadAsStringAsync();
+        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        options.Converters.Add(new JsonStringEnumConverter());
+        var content = JsonSerializer.Deserialize<T?>(contentJson, options);
+        Assert.NotNull(content); // TODO: Replace with some custom exception type?
+        return content;
     }
 }
