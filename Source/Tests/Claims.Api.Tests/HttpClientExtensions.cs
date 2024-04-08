@@ -33,13 +33,18 @@ public static class HttpClientExtensions
         return await response.ReadRawContentAsync<TContent>();
     }
 
-    public static async Task<T> ReadRawContentAsync<T>(this HttpResponseMessage response)
+    private static async Task<T> ReadRawContentAsync<T>(this HttpResponseMessage response)
     {
         var contentJson = await response.Content.ReadAsStringAsync();
-        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        options.Converters.Add(new JsonStringEnumConverter());
-        var content = JsonSerializer.Deserialize<T?>(contentJson, options);
+        var content = DeserializeJson<T>(contentJson);
         Assert.NotNull(content); // TODO: Replace with some custom exception type?
         return content;
+    }
+
+    private static T? DeserializeJson<T>(string contentJson)
+    {
+        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        options.Converters.Add(new JsonStringEnumConverter());
+        return JsonSerializer.Deserialize<T?>(contentJson, options);
     }
 }
