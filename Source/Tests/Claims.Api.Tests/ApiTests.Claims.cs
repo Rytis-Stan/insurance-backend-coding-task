@@ -38,6 +38,21 @@ public partial class ApiTests : IDisposable
         Assert.Empty(claims);
     }
 
+    [Theory]
+    [InlineData(2)]
+    [InlineData(3)]
+    public async Task ClaimsGetReturnCollectionWithPreviouslyAddedClaims(int claimCount)
+    {
+        var createdClaims = await CreateRandomCoverWithClaimsAsync(claimCount);
+        
+        var response = await ClaimsGetAsync();
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var claims = await response.ReadContentAsync<ClaimDto[]>();
+        Assert.NotNull(claims);
+        AssertExtended.EqualIgnoreOrder(createdClaims, claims, x => x.Id);
+    }
+
     [Fact]
     public async Task ClaimsGetWithIdReturnsNotFoundWhenNoClaimExistsWithGivenId()
     {
