@@ -106,20 +106,6 @@ public partial class ApiTests : IDisposable
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
-    private async Task<IEnumerable<ClaimDto>> CreateRandomCoverWithClaimsAsync(int claimCount)
-    {
-        var cover = await CreateRandomCoverAsync();
-        return await CreateRandomClaimsAsync(cover, claimCount);
-    }
-
-    private async Task<IEnumerable<ClaimDto>> CreateRandomClaimsAsync(CoverDto cover, int claimCount)
-    {
-        var tasks = Enumerable
-            .Range(0, claimCount)
-            .Select(_ => CreateRandomClaimAsync(cover));
-        return await Task.WhenAll(tasks);
-    }
-
     [Fact]
     public async Task ClaimsDeleteWithIdReturnsNoContentWhenNoClaimExistsWithGivenId()
     {
@@ -143,6 +129,20 @@ public partial class ApiTests : IDisposable
         var createClaimRequest = RandomCreateClaimRequestDto(cover.Id, UtcDateTime(cover.StartDate));
         var createClaimResponse = await ClaimsPostAsync(createClaimRequest);
         return (await createClaimResponse.ReadContentAsync<ClaimDto>())!;
+    }
+
+    private async Task<IEnumerable<ClaimDto>> CreateRandomCoverWithClaimsAsync(int claimCount)
+    {
+        var cover = await CreateRandomCoverAsync();
+        return await CreateRandomClaimsAsync(cover, claimCount);
+    }
+
+    private async Task<IEnumerable<ClaimDto>> CreateRandomClaimsAsync(CoverDto cover, int claimCount)
+    {
+        var tasks = Enumerable
+            .Range(0, claimCount)
+            .Select(_ => CreateRandomClaimAsync(cover));
+        return await Task.WhenAll(tasks);
     }
 
     private CreateClaimRequestDto RandomCreateClaimRequestDto(Guid coverId, DateTime created)
