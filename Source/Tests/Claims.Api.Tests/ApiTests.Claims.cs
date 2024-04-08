@@ -25,10 +25,11 @@ public partial class ApiTests : IDisposable
         var cover = await CreateRandomCoverAsync();
         var request = RandomCreateClaimRequestDto(cover.Id, UtcDateTime(cover.StartDate));
         
-        var response = await ClaimsPostAsync(request);
+        var httpResponse = await ClaimsPostAsync(request);
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var claim = await response.ReadContentAsync<ClaimDto>();
+        Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        var response = await httpResponse.ReadContentAsync<CreateClaimResponse>();
+        var claim = response!.Claim;
         Assert.NotNull(claim);
         Assert.NotEqual(Guid.Empty, claim.Id);
         Assert.Equal(cover.Id, claim.CoverId);
@@ -75,10 +76,10 @@ public partial class ApiTests : IDisposable
         var createdClaimsToDelete = createdClaims.Take(claimDeleteCount);
         await ClaimsDeleteMultipleAsync(createdClaimsToDelete.Select(x => x.Id));
 
-        var response = await ClaimsGetAsync();
+        var httpResponse = await ClaimsGetAsync();
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var claims = await response.ReadContentAsync<ClaimDto[]>();
+        Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        var claims = await httpResponse.ReadContentAsync<ClaimDto[]>();
         AssertExtended.EqualIgnoreOrder(createdClaimsToKeep, claims);
     }
 
@@ -98,10 +99,10 @@ public partial class ApiTests : IDisposable
         var createdCover = await CreateRandomCoverAsync();
         var createdClaim = await CreateRandomClaimAsync(createdCover);
 
-        var response = await ClaimsGetAsync(createdClaim.Id);
+        var httpResponse = await ClaimsGetAsync(createdClaim.Id);
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var claim = await response.ReadContentAsync<ClaimDto>();
+        Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        var claim = await httpResponse.ReadContentAsync<ClaimDto>();
         Assert.Equal(createdClaim, claim);
     }
 
@@ -112,9 +113,9 @@ public partial class ApiTests : IDisposable
         var createdClaim = await CreateRandomClaimAsync(createdCover);
         await ClaimsDeleteAsync(createdClaim.Id);
 
-        var response = await ClaimsGetAsync(createdClaim.Id);
+        var httpResponse = await ClaimsGetAsync(createdClaim.Id);
 
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
     }
 
     [Fact]
@@ -122,17 +123,18 @@ public partial class ApiTests : IDisposable
     {
         var id = Guid.NewGuid();
 
-        var response = await ClaimsDeleteAsync(id);
+        var httpResponse = await ClaimsDeleteAsync(id);
 
-        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        Assert.Equal(HttpStatusCode.NoContent, httpResponse.StatusCode);
     }
 
     // TODO: How should this method be named to make it clear that it does not just construct a DTO but actually calls an endpoint for the Cover creation?
     private async Task<CoverDto> CreateRandomCoverAsync()
     {
         var request = RandomCreateCoverRequestDto(DateTime.UtcNow);
-        var response = await CoversPostAsync(request);
-        return (await response.ReadContentAsync<CoverDto>())!;
+        var httpResponse = await CoversPostAsync(request);
+        var response = await httpResponse.ReadContentAsync<CreateCoverResponse>();
+        return response!.Cover;
     }
 
     private async Task<ClaimDto> CreateRandomClaimAsync(CoverDto cover)
@@ -174,11 +176,13 @@ public partial class ApiTests : IDisposable
     }
 
     // TODO: Move to "ExtendedAssert"?
-    private static async Task AssertReturnedBadRequestAsync(HttpResponseMessage response, string expectedErrorMessage)
+    private static async Task AssertReturnedBadRequestAsync(HttpResponseMessage httpResponse, string expectedErrorMessage)
     {
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        // var errorMessage = await response.ReadContentAsync<string>();
-        var errorMessage = await response.Content.ReadAsStringAsync();
-        Assert.Equal(expectedErrorMessage, errorMessage);
+        Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        var response = await httpResponse.ReadContentAsync<ValidationErrorResponse>();
+        Assert.Equal(
+            new ValidationErrorResponse(new ValidationErrorDto(expectedErrorMessage)),
+            response
+        );
     }
 }
