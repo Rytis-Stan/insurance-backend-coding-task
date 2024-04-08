@@ -12,7 +12,7 @@ public partial class ApiTests : IDisposable
     public async Task ClaimsPostReturnsBadRequestWhenCoverWithGivenIdDoesNotExist()
     {
         var coverId = Guid.NewGuid();
-        var request = RandomCreateClaimRequestDto(coverId, DateTime.UtcNow);
+        var request = RandomCreateClaimRequest(coverId, DateTime.UtcNow);
 
         var httpResponse = await ClaimsPostAsync(request);
 
@@ -23,7 +23,7 @@ public partial class ApiTests : IDisposable
     public async Task ClaimsPostReturnsNewlyCreatedClaimWhenRequestValid()
     {
         var cover = await CreateRandomCoverAsync();
-        var request = RandomCreateClaimRequestDto(cover.Id, UtcDateTime(cover.StartDate));
+        var request = RandomCreateClaimRequest(cover.Id, UtcDateTime(cover.StartDate));
         
         var httpResponse = await ClaimsPostAsync(request);
 
@@ -124,7 +124,7 @@ public partial class ApiTests : IDisposable
     // TODO: How should this method be named to make it clear that it does not just construct a DTO but actually calls an endpoint for the Cover creation?
     private async Task<CoverDto> CreateRandomCoverAsync()
     {
-        var request = RandomCreateCoverRequestDto(DateTime.UtcNow);
+        var request = RandomCreateCoverRequest(DateTime.UtcNow);
         var httpResponse = await CoversPostAsync(request);
         var response = await httpResponse.ReadRawContentAsync<CreateCoverResponse>();
         return response.Cover;
@@ -132,7 +132,7 @@ public partial class ApiTests : IDisposable
 
     private async Task<ClaimDto> CreateRandomClaimAsync(CoverDto cover)
     {
-        var createClaimRequest = RandomCreateClaimRequestDto(cover.Id, UtcDateTime(cover.StartDate));
+        var createClaimRequest = RandomCreateClaimRequest(cover.Id, UtcDateTime(cover.StartDate));
         var createClaimResponse = await ClaimsPostAsync(createClaimRequest);
         var response = await createClaimResponse.SuccessReadContentAsync<ClaimDto>();
         return response;
@@ -152,7 +152,7 @@ public partial class ApiTests : IDisposable
         return await Task.WhenAll(tasks);
     }
 
-    private static CreateClaimRequest RandomCreateClaimRequestDto(Guid coverId, DateTime created)
+    private static CreateClaimRequest RandomCreateClaimRequest(Guid coverId, DateTime created)
     {
         return new CreateClaimRequest(
             coverId,

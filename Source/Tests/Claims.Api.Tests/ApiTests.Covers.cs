@@ -88,7 +88,7 @@ public partial class ApiTests
     [InlineData(182, CoverTypeDto.Yacht, 239717.50)]
     public async Task CoversPostReturnsNewlyCreatedCoverWhenRequestValid(int periodDurationInDays, CoverTypeDto coverType, decimal expectedPremium)
     {
-        var request = RandomCreateCoverRequestDto(DateTime.UtcNow, periodDurationInDays, coverType);
+        var request = RandomCreateCoverRequest(DateTime.UtcNow, periodDurationInDays, coverType);
 
         var httpResponse = await CoversPostAsync(request);
 
@@ -208,16 +208,16 @@ public partial class ApiTests
     }
 
     // TODO: Move this method out of this class.
-    private static CreateCoverRequest RandomCreateCoverRequestDto(DateTime utcNow)
+    private static CreateCoverRequest RandomCreateCoverRequest(DateTime utcNow)
     {
-        return RandomCreateCoverRequestDto(
+        return RandomCreateCoverRequest(
             utcNow,
             TestData.RandomInt(1, 90),
             TestData.RandomEnum<CoverTypeDto>()
         );
     }
 
-    private static CreateCoverRequest RandomCreateCoverRequestDto(DateTime utcNow, int periodDurationInDays, CoverTypeDto coverType)
+    private static CreateCoverRequest RandomCreateCoverRequest(DateTime utcNow, int periodDurationInDays, CoverTypeDto coverType)
     {
         // NOTE: Start and end date should start at least 1 day after UTC Now to avoid the
         // current date changing while the endpoint is being called (can happen if the test
