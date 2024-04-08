@@ -27,8 +27,8 @@ public partial class ApiTests : IDisposable
         
         var httpResponse = await ClaimsPostAsync(request);
 
-        var response = await httpResponse.ReadContentAsync<CreateClaimResponse>(HttpStatusCode.OK);
-        var claim = response!.Claim;
+        var response = await httpResponse.SuccessReadContentAsync<CreateClaimResponse>();
+        var claim = response.Claim;
         Assert.NotNull(claim);
         Assert.NotEqual(Guid.Empty, claim.Id);
         Assert.Equal(cover.Id, claim.CoverId);
@@ -43,7 +43,7 @@ public partial class ApiTests : IDisposable
     {
         var httpResponse = await ClaimsGetAsync();
 
-        var claims = await httpResponse.ReadContentAsync<ClaimDto[]>(HttpStatusCode.OK);
+        var claims = await httpResponse.SuccessReadContentAsync<ClaimDto[]>();
         Assert.NotNull(claims);
         Assert.Empty(claims);
     }
@@ -57,7 +57,7 @@ public partial class ApiTests : IDisposable
         
         var httpResponse = await ClaimsGetAsync();
 
-        var claims = await httpResponse.ReadContentAsync<ClaimDto[]>(HttpStatusCode.OK);
+        var claims = await httpResponse.SuccessReadContentAsync<ClaimDto[]>();
         AssertExtended.EqualIgnoreOrder(createdClaims, claims);
     }
 
@@ -75,7 +75,7 @@ public partial class ApiTests : IDisposable
 
         var httpResponse = await ClaimsGetAsync();
 
-        var claims = await httpResponse.ReadContentAsync<ClaimDto[]>(HttpStatusCode.OK);
+        var claims = await httpResponse.SuccessReadContentAsync<ClaimDto[]>();
         AssertExtended.EqualIgnoreOrder(createdClaimsToKeep, claims);
     }
 
@@ -97,7 +97,7 @@ public partial class ApiTests : IDisposable
 
         var httpResponse = await ClaimsGetAsync(createdClaim.Id);
 
-        var claim = await httpResponse.ReadContentAsync<ClaimDto>(HttpStatusCode.OK);
+        var claim = await httpResponse.SuccessReadContentAsync<ClaimDto>();
         Assert.Equal(createdClaim, claim);
     }
 
@@ -128,7 +128,7 @@ public partial class ApiTests : IDisposable
     {
         var request = RandomCreateCoverRequestDto(DateTime.UtcNow);
         var httpResponse = await CoversPostAsync(request);
-        var response = await httpResponse.ReadContentAsync<CreateCoverResponse>();
+        var response = await httpResponse.ReadRawContentAsync<CreateCoverResponse>();
         return response.Cover;
     }
 
@@ -136,7 +136,7 @@ public partial class ApiTests : IDisposable
     {
         var createClaimRequest = RandomCreateClaimRequestDto(cover.Id, UtcDateTime(cover.StartDate));
         var createClaimResponse = await ClaimsPostAsync(createClaimRequest);
-        return (await createClaimResponse.ReadContentAsync<ClaimDto>());
+        return (await createClaimResponse.ReadRawContentAsync<ClaimDto>());
     }
 
     private async Task<IEnumerable<ClaimDto>> CreateRandomCoverWithClaimsAsync(int claimCount)
@@ -174,7 +174,7 @@ public partial class ApiTests : IDisposable
     private static async Task AssertReturnedBadRequestAsync(HttpResponseMessage httpResponse, string expectedErrorMessage)
     {
         Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
-        var response = await httpResponse.ReadContentAsync<ValidationErrorResponse>();
+        var response = await httpResponse.ReadRawContentAsync<ValidationErrorResponse>();
         Assert.Equal(
             new ValidationErrorResponse(new ValidationErrorDto(expectedErrorMessage)),
             response
