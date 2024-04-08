@@ -13,7 +13,7 @@ namespace Claims.Api.Tests;
 // ReSharper disable once UnusedMember.Global
 public partial class ApiTests
 {
-    private async Task<HttpResponseMessage> CoversPostAsync(CreateCoverRequestDto request)
+    private async Task<HttpResponseMessage> CoversPostAsync(CreateCoverRequest request)
     {
         return await _client.PostAsync("/Covers", request);
     }
@@ -43,7 +43,7 @@ public partial class ApiTests
         return await _client.GetAsync($"/Covers/Premium/?startDate={startDate}&endDate={endDate}&coverType={coverType}");
     }
 
-    private async Task<HttpResponseMessage> ClaimsPostAsync(CreateClaimRequestDto request)
+    private async Task<HttpResponseMessage> ClaimsPostAsync(CreateClaimRequest request)
     {
         return await _client.PostAsync("/Claims", request);
     }

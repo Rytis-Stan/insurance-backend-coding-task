@@ -1,6 +1,4 @@
-using Azure.Core;
 using Claims.Api.Dto;
-using Claims.Application;
 using Claims.Application.Commands;
 using Claims.Application.Commands.CreateClaim;
 using Claims.Application.Commands.DeleteClaim;
@@ -23,30 +21,31 @@ public class ClaimsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ClaimDto>> CreateClaimAsync([FromServices] ICommand<CreateClaimArgs, CreateClaimResult> command, CreateClaimRequestDto request)
+    [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(CreateClaimResponse), StatusCodes.Status200OK)]
+    public async Task<ActionResult<CreateClaimResponse>> CreateClaimAsync([FromServices] ICommand<CreateClaimArgs, CreateClaimResult> command, CreateClaimRequest request)
     {
-        var result = await command.ExecuteAsync(request.ToCommandArgs());
-        var claim = result.Claim.ToDto();
-        _auditor.AuditPost(claim.Id);
-        return Ok(claim);
+        var response = (await command.ExecuteAsync(request.ToCommandArgs())).ToResponse();
+        _auditor.AuditPost(response.Claim.Id);
+        return Ok(response);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ClaimDto>> GetClaimAsync([FromServices] ICommand<GetClaimByIdArgs, GetClaimByIdResult> command, Guid id)
+    [ProducesResponseType(typeof(GetClaimResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<GetClaimResponse>> GetClaimAsync([FromServices] ICommand<GetClaimByIdArgs, GetClaimByIdResult> command, Guid id)
     {
-        var result = await command.ExecuteAsync(new GetClaimByIdArgs(id));
-        var claim = result.Claim.ToDto();
-        return claim != null
-            ? Ok(claim)
+        var response = (await command.ExecuteAsync(new GetClaimByIdArgs(id))).ToResponse();
+        return response.Claim != null
+            ? Ok(response.Claim)
             : NotFound();
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ClaimDto>>> GetClaimsAsync([FromServices] ICommandWithNoArgs<GetAllClaimsResult> command)
+    public async Task<ActionResult<GetClaimsResponse>> GetClaimsAsync([FromServices] ICommandWithNoArgs<GetAllClaimsResult> command)
     {
-        var result = await command.ExecuteAsync();
-        var claims = result.Claims.Select(x => x.ToDto());
-        return Ok(claims);
+        var response = (await command.ExecuteAsync()).ToResponse();
+        return Ok(response);
     }
 
     [HttpDelete("{id}")]

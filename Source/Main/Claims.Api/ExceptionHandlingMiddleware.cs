@@ -1,3 +1,4 @@
+using Claims.Api.Dto;
 using Claims.Application;
 
 namespace Claims.Api;
@@ -20,7 +21,7 @@ public class ExceptionHandlingMiddleware
         catch (ValidationException ex)
         {
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
-            await context.Response.WriteAsync(ex.Message);
+            await context.Response.WriteAsJsonAsync(new ValidationErrorResponse(ex.Message));
         }
     }
 }

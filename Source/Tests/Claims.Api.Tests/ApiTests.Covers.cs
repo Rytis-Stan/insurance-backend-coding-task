@@ -14,7 +14,7 @@ public partial class ApiTests
         var startDate = utcNow.AddDays(-TestData.RandomInt(1, 100));
         var endDate = utcNow;
         var coverType = TestData.RandomEnum<CoverTypeDto>();
-        var request = new CreateCoverRequestDto(startDate, endDate, coverType);
+        var request = new CreateCoverRequest(startDate, endDate, coverType);
 
         var response = await CoversPostAsync(request);
     
@@ -28,7 +28,7 @@ public partial class ApiTests
         var startDate = utcNow;
         var endDate = utcNow.AddDays(-TestData.RandomInt(1, 100));
         var coverType = TestData.RandomEnum<CoverTypeDto>();
-        var request = new CreateCoverRequestDto(startDate, endDate, coverType);
+        var request = new CreateCoverRequest(startDate, endDate, coverType);
 
         var response = await CoversPostAsync(request);
 
@@ -42,7 +42,7 @@ public partial class ApiTests
         var startDate = utcNow.AddDays(TestData.RandomInt(101, 200));
         var endDate = utcNow.AddDays(TestData.RandomInt(1, 100));
         var coverType = TestData.RandomEnum<CoverTypeDto>();
-        var request = new CreateCoverRequestDto(startDate, endDate, coverType);
+        var request = new CreateCoverRequest(startDate, endDate, coverType);
 
         var response = await CoversPostAsync(request);
 
@@ -61,7 +61,7 @@ public partial class ApiTests
         var endDate = startDate.AddYears(1);
         
         var coverType = TestData.RandomEnum<CoverTypeDto>();
-        var request = new CreateCoverRequestDto(startDate, endDate, coverType);
+        var request = new CreateCoverRequest(startDate, endDate, coverType);
 
         var response = await CoversPostAsync(request);
 
@@ -75,7 +75,7 @@ public partial class ApiTests
         var startDate = utcNow.AddDays(TestData.RandomInt(1, 100));
         var endDate = startDate.AddYears(1).AddDays(TestData.RandomInt(1, 90));
         var coverType = TestData.RandomEnum<CoverTypeDto>();
-        var request = new CreateCoverRequestDto(startDate, endDate, coverType);
+        var request = new CreateCoverRequest(startDate, endDate, coverType);
 
         var response = await CoversPostAsync(request);
 
@@ -215,7 +215,7 @@ public partial class ApiTests
     }
 
     // TODO: Move this method out of this class.
-    private static CreateCoverRequestDto RandomCreateCoverRequestDto(DateTime utcNow)
+    private static CreateCoverRequest RandomCreateCoverRequestDto(DateTime utcNow)
     {
         return RandomCreateCoverRequestDto(
             utcNow,
@@ -224,14 +224,14 @@ public partial class ApiTests
         );
     }
 
-    private static CreateCoverRequestDto RandomCreateCoverRequestDto(DateTime utcNow, int periodDurationInDays, CoverTypeDto coverType)
+    private static CreateCoverRequest RandomCreateCoverRequestDto(DateTime utcNow, int periodDurationInDays, CoverTypeDto coverType)
     {
         // NOTE: Start and end date should start at least 1 day after UTC Now to avoid the
         // current date changing while the endpoint is being called (can happen if the test
         // starts running just before a day's end).
         var startDate = DateOnly.FromDateTime(utcNow).AddDays(TestData.RandomInt(1, 100));
         var endDate = startDate.AddDays(periodDurationInDays - 1);
-        return new CreateCoverRequestDto(startDate, endDate, coverType);
+        return new CreateCoverRequest(startDate, endDate, coverType);
     }
 
     private async Task CoversDeleteMultipleAsync(IEnumerable<Guid> coverIds)

@@ -1,5 +1,5 @@
+using System.Net;
 using Claims.Api.Dto;
-using Claims.Application;
 using Claims.Application.Commands;
 using Claims.Application.Commands.CreateCover;
 using Claims.Application.Commands.DeleteCover;
@@ -23,31 +23,31 @@ public class CoversController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<CoverDto>> CreateCoverAsync([FromServices] ICommand<CreateCoverArgs, CreateCoverResult> command,
-        CreateCoverRequestDto request)
+    [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(CreateCoverResponse), StatusCodes.Status200OK)]
+    public async Task<IActionResult> CreateCoverAsync([FromServices] ICommand<CreateCoverArgs, CreateCoverResult> command, CreateCoverRequest request)
     {
-        var result = await command.ExecuteAsync(request.ToCommandArgs());
-        var cover = result.Cover.ToDto();
-        _auditor.AuditPost(cover.Id);
-        return Ok(cover);
+        var response = (await command.ExecuteAsync(request.ToCommandArgs())).ToResponse();
+        _auditor.AuditPost(response.Cover.Id);
+        return Ok(response);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<CoverDto>> GetCoverAsync([FromServices] ICommand<GetCoverArgs, GetCoverResult> command, Guid id)
+    [ProducesResponseType(typeof(GetCoverResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<GetCoverResponse>> GetCoverAsync([FromServices] ICommand<GetCoverArgs, GetCoverResult> command, Guid id)
     {
-        var result = await command.ExecuteAsync(new GetCoverArgs(id));
-        var cover = result.Cover.ToDto();
-        return cover != null
-            ? Ok(cover)
+        var response = (await command.ExecuteAsync(new GetCoverArgs(id))).ToResponse();
+        return response.Cover != null
+            ? Ok(response.Cover)
             : NotFound();
     }
-
+    
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<CoverDto>>> GetCoversAsync([FromServices] ICommandWithNoArgs<GetAllCoversResult> command)
+    public async Task<ActionResult<GetCoversResponse>> GetCoversAsync([FromServices] ICommandWithNoArgs<GetAllCoversResult> command)
     {
-        var result = await command.ExecuteAsync();
-        var covers = result.Covers.Select(x => x.ToDto());
-        return Ok(covers);
+        var response = (await command.ExecuteAsync()).ToResponse();
+        return Ok(response);
     }
 
     [HttpDelete("{id}")]
@@ -59,10 +59,10 @@ public class CoversController : ControllerBase
     }
 
     [HttpGet("Premium")]
-    public async Task<ActionResult<decimal>> GetCoverPremiumAsync([FromServices] ICommand<GetCoverPremiumArgs, GetCoverPremiumResult> command,
+    public async Task<ActionResult<GetCoverPremiumResponse>> GetCoverPremiumAsync([FromServices] ICommand<GetCoverPremiumArgs, GetCoverPremiumResult> command,
         DateOnly startDate, DateOnly endDate, CoverTypeDto coverType)
     {
-        var result = await command.ExecuteAsync(new GetCoverPremiumArgs(startDate, endDate, coverType.ToDomainEnum()));
-        return Ok(result.Premium);
+        var response = (await command.ExecuteAsync(new GetCoverPremiumArgs(startDate, endDate, coverType.ToDomainEnum()))).ToResponse();
+        return Ok(response);
     }
 }

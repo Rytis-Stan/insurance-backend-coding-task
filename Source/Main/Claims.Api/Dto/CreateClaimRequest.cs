@@ -1,6 +1,6 @@
 ﻿namespace Claims.Api.Dto;
 
-public record CreateClaimRequestDto(
+public record CreateClaimRequest(
     Guid CoverId,
     string Name,
     ClaimTypeDto Type,

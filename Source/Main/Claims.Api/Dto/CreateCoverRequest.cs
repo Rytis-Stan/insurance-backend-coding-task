@@ -1,6 +1,6 @@
 ﻿namespace Claims.Api.Dto;
 
-public record CreateCoverRequestDto(
+public record CreateCoverRequest(
     DateOnly StartDate,
     DateOnly EndDate,
     CoverTypeDto Type
