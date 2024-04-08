@@ -4,6 +4,8 @@ namespace Claims.Application.Commands.CreateClaim;
 
 public class CreateClaimCommand : ICommand<CreateClaimArgs, CreateClaimResult>
 {
+    private const decimal MaxAllowedDamageCost = 100_000;
+
     private readonly IClaimsRepository _claimsRepository;
     private readonly ICoversRepository _coversRepository;
 
@@ -22,23 +24,18 @@ public class CreateClaimCommand : ICommand<CreateClaimArgs, CreateClaimResult>
 
     private async Task Validate(CreateClaimArgs args)
     {
-        var damageCost = args.DamageCost;
-        if (damageCost <= 0.00m)
+        if (args.DamageCost <= 0.00m)
         {
             throw new ValidationException("Damage cost must be a positive value.");
         }
-        const decimal maxAllowedDamageCost = 100_000;
-        if (damageCost > maxAllowedDamageCost)
+        if (args.DamageCost > MaxAllowedDamageCost)
         {
-            throw new ValidationException($"Damage cost cannot exceed {maxAllowedDamageCost}.");
+            throw new ValidationException($"Damage cost cannot exceed {MaxAllowedDamageCost}.");
         }
-        var cover = await _coversRepository.FindByIdAsync(args.CoverId);
-#pragma warning disable IDE0270 // Use coalesce expression
-        if (cover == null)
-        {
-            throw new ValidationException("Claim references a non-existing cover via the cover ID.");
-        }
-#pragma warning restore IDE0270 // Use coalesce expression
+
+        var cover = await _coversRepository.FindByIdAsync(args.CoverId)
+                    ?? throw new ValidationException("Claim references a non-existing cover via the cover ID.");
+
         var created = DateOnly.FromDateTime(args.Created);
         if (created < cover.StartDate ||
             created > cover.EndDate)
