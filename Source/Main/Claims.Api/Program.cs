@@ -93,15 +93,15 @@ public class Program
     {
         services.AddTransient<ICommand<CreateCoverArgs, CreateCoverResult>, CreateCoverCommand>();
         services.AddTransient<ICommand<GetCoverArgs, GetCoverResult>, GetCoverCommand>();
-        services.AddTransient<ICommandWithNoParameters<GetAllCoversResult>, GetAllCoversCommand>();
-        services.AddTransient<ICommandWithNoResults<DeleteCoverArgs>, DeleteCoverCommand>();
+        services.AddTransient<ICommandWithNoArgs<GetAllCoversResult>, GetAllCoversCommand>();
+        services.AddTransient<ICommandWithNoResult<DeleteCoverArgs>, DeleteCoverCommand>();
         
         services.AddTransient<ICommand<GetCoverPremiumArgs, GetCoverPremiumResult>, GetCoverPremiumCommand>();
 
         services.AddTransient<ICommand<CreateClaimArgs, CreateClaimResult>, CreateClaimCommand>();
         services.AddTransient<ICommand<GetClaimByIdArgs, GetClaimByIdResult>, GetClaimByIdCommand>();
-        services.AddTransient<ICommandWithNoParameters<GetAllClaimsResult>, GetAllClaimsCommand>();
-        services.AddTransient<ICommandWithNoResults<DeleteClaimArgs>, DeleteClaimCommand>();
+        services.AddTransient<ICommandWithNoArgs<GetAllClaimsResult>, GetAllClaimsCommand>();
+        services.AddTransient<ICommandWithNoResult<DeleteClaimArgs>, DeleteClaimCommand>();
     }
 
     private static void AddAuditing(IServiceCollection services, IConnectedSendingQueue<AuditMessage> auditQueue)

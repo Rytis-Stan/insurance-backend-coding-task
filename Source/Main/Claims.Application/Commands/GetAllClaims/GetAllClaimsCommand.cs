@@ -2,7 +2,7 @@ using Claims.Application.Repositories;
 
 namespace Claims.Application.Commands.GetAllClaims;
 
-public class GetAllClaimsCommand : ICommandWithNoParameters<GetAllClaimsResult>
+public class GetAllClaimsCommand : ICommandWithNoArgs<GetAllClaimsResult>
 {
     private readonly IClaimsRepository _claimsRepository;
 

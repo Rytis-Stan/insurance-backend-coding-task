@@ -43,7 +43,7 @@ public class CoversController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<CoverDto>>> GetCoversAsync([FromServices] ICommandWithNoParameters<GetAllCoversResult> command)
+    public async Task<ActionResult<IEnumerable<CoverDto>>> GetCoversAsync([FromServices] ICommandWithNoArgs<GetAllCoversResult> command)
     {
         var response = await command.ExecuteAsync();
         var covers = response.Covers.Select(x => x.ToDto());
@@ -51,7 +51,7 @@ public class CoversController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteCoverAsync([FromServices] ICommandWithNoResults<DeleteCoverArgs> command, Guid id)
+    public async Task<ActionResult> DeleteCoverAsync([FromServices] ICommandWithNoResult<DeleteCoverArgs> command, Guid id)
     {
         await command.ExecuteAsync(new DeleteCoverArgs(id));
         _auditor.AuditDelete(id);
