@@ -56,11 +56,11 @@ public partial class ApiTests
     [InlineData(2, 1)]
     [InlineData(4, 1)]
     [InlineData(4, 2)]
-    public async Task CoversGetReturnsNonDeletedCoversWhenCoversAddedAndSomeDeleted(int addedCoverCount, int deletedCoverCount)
+    public async Task CoversGetReturnsNonDeletedCoversWhenCoversAddedAndSomeDeleted(int coverAddCount, int coverDeleteCount)
     {
-        var createdCovers = (await CreateRandomCoversAsync(addedCoverCount)).ToList();
-        var createdCoversToKeep = createdCovers.Skip(deletedCoverCount);
-        var createdCoversToDelete = createdCovers.Take(deletedCoverCount);
+        var createdCovers = (await CreateRandomCoversAsync(coverAddCount)).ToList();
+        var createdCoversToKeep = createdCovers.Skip(coverDeleteCount);
+        var createdCoversToDelete = createdCovers.Take(coverDeleteCount);
         await CoversDeleteMultipleAsync(createdCoversToDelete.Select(x => x.Id));
 
         var response = await CoversGetAsync();

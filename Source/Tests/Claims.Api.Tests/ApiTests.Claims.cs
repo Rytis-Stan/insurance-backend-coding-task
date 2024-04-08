@@ -56,12 +56,12 @@ public partial class ApiTests : IDisposable
     [InlineData(2, 1)]
     [InlineData(4, 1)]
     [InlineData(4, 2)]
-    public async Task ClaimsGetReturnsNonDeletedClaimsWhenClaimsAddedAndSomeDeleted(int addedClaimCount, int deletedClaimCount)
+    public async Task ClaimsGetReturnsNonDeletedClaimsWhenClaimsAddedAndSomeDeleted(int claimAddCount, int claimDeleteCount)
     {
         var cover = await CreateRandomCoverAsync();
-        var createdClaims = (await CreateRandomClaimsAsync(cover, addedClaimCount)).ToList();
-        var createdClaimsToKeep = createdClaims.Skip(deletedClaimCount);
-        var createdClaimsToDelete = createdClaims.Take(deletedClaimCount);
+        var createdClaims = (await CreateRandomClaimsAsync(cover, claimAddCount)).ToList();
+        var createdClaimsToKeep = createdClaims.Skip(claimDeleteCount);
+        var createdClaimsToDelete = createdClaims.Take(claimDeleteCount);
         await ClaimsDeleteMultipleAsync(createdClaimsToDelete.Select(x => x.Id));
 
         var response = await ClaimsGetAsync();
