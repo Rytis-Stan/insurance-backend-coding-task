@@ -60,6 +60,7 @@ public class CoversController : ControllerBase
     }
 
     [HttpGet("Premium")]
+    [ProducesResponseType(typeof(GetCoverPremiumResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCoverPremiumAsync([FromServices] ICommand<GetCoverPremiumArgs, GetCoverPremiumResult> command,
         DateOnly startDate, DateOnly endDate, CoverTypeDto coverType)
     {
