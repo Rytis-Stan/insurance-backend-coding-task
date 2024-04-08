@@ -12,8 +12,6 @@ public class CreateClaimCommandTests : ClaimsCommandTests
 {
     private const ClaimType AnyClaimType = ClaimType.BadWeather;
     private const decimal AnyDamageCost = 10.00m;
-    private const CoverType AnyCoverType = CoverType.BulkCarrier;
-    private const decimal AnyPremium = 100.00m;
 
     private readonly Mock<ICoversRepository> _coversRepositoryMock;
     private readonly CreateClaimCommand _command;
@@ -107,7 +105,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
 
         async Task Test(DateOnly coverStartDate, DateOnly coverEndDate, DateTime claimCreated)
         {
-            var cover = CreateCoverForPeriod(coverStartDate, coverEndDate);
+            var cover = RandomCoverForPeriod(coverStartDate, coverEndDate);
             var request = new CreateClaimArgs(cover.Id, "anyName", AnyClaimType, AnyDamageCost, claimCreated);
             StubFindCover(cover.Id, cover);
 
@@ -133,7 +131,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
 
         async Task Test(DateOnly coverStartDate, DateOnly coverEndDate, string claimName, ClaimType claimType, decimal claimDamageCost, DateTime claimCreated)
         {
-            var cover = CreateCoverForPeriod(coverStartDate, coverEndDate);
+            var cover = RandomCoverForPeriod(coverStartDate, coverEndDate);
             var request = new CreateClaimArgs(cover.Id, claimName, claimType, claimDamageCost, claimCreated);
             StubFindCover(cover.Id, cover);
 
@@ -161,16 +159,15 @@ public class CreateClaimCommandTests : ClaimsCommandTests
         Assert.Equal(claim, response.Claim);
     }
 
-    // TODO: Add the word "Random" to this name?
-    private static Cover CreateCoverForPeriod(DateOnly startDate, DateOnly endDate)
+    private static Cover RandomCoverForPeriod(DateOnly startDate, DateOnly endDate)
     {
         return new Cover
         {
             Id = Guid.NewGuid(),
             StartDate = startDate,
             EndDate = endDate,
-            Type = AnyCoverType,
-            Premium = AnyPremium
+            Type = TestData.RandomEnum<CoverType>(),
+            Premium = TestData.RandomInt(1, 1000)
         };
     }
 
