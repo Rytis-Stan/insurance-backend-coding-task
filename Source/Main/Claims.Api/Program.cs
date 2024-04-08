@@ -33,8 +33,8 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         var configuration = new AppConfiguration(builder.Configuration);
-        var auditQueue = InitializeAuditQueue(configuration.RabbitMq);
         var claimsDatabase = MigrateClaimsDatabase(configuration.CosmosDb);
+        var auditQueue = InitializeAuditQueue(configuration.RabbitMq);
         AddServices(builder.Services, claimsDatabase, auditQueue);
         var app = builder.Build();
         ConfigureApp(app);
