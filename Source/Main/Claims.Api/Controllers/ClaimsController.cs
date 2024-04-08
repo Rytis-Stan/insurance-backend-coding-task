@@ -23,7 +23,7 @@ public class ClaimsController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(CreateClaimResponse), StatusCodes.Status200OK)]
-    public async Task<ActionResult<CreateClaimResponse>> CreateClaimAsync([FromServices] ICommand<CreateClaimArgs, CreateClaimResult> command, CreateClaimRequest request)
+    public async Task<IActionResult> CreateClaimAsync([FromServices] ICommand<CreateClaimArgs, CreateClaimResult> command, CreateClaimRequest request)
     {
         var response = (await command.ExecuteAsync(request.ToCommandArgs())).ToResponse();
         _auditor.AuditPost(response.Claim.Id);
@@ -33,7 +33,7 @@ public class ClaimsController : ControllerBase
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(GetClaimResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<GetClaimResponse>> GetClaimAsync([FromServices] ICommand<GetClaimByIdArgs, GetClaimByIdResult> command, Guid id)
+    public async Task<IActionResult> GetClaimAsync([FromServices] ICommand<GetClaimByIdArgs, GetClaimByIdResult> command, Guid id)
     {
         var response = (await command.ExecuteAsync(new GetClaimByIdArgs(id))).ToResponse();
         return response.Claim != null
@@ -42,16 +42,16 @@ public class ClaimsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<GetClaimsResponse>> GetClaimsAsync([FromServices] ICommandWithNoArgs<GetAllClaimsResult> command)
+    [ProducesResponseType(typeof(GetClaimsResponse), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetClaimsAsync([FromServices] ICommandWithNoArgs<GetAllClaimsResult> command)
     {
         var response = (await command.ExecuteAsync()).ToResponse();
         return Ok(response);
     }
 
     [HttpDelete("{id}")]
-    // TODO: Add proper attributes.
-    //[ProducesResponseType(typeof(MyClass), (int)HttpStatusCode.Accepted)]
-    public async Task<ActionResult> DeleteClaimAsync([FromServices] ICommandWithNoResult<DeleteClaimArgs> command, Guid id)
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> DeleteClaimAsync([FromServices] ICommandWithNoResult<DeleteClaimArgs> command, Guid id)
     {
         await command.ExecuteAsync(new DeleteClaimArgs(id));
         _auditor.AuditDelete(id);
