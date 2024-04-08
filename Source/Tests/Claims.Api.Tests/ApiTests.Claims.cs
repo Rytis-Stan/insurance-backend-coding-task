@@ -134,8 +134,8 @@ public partial class ApiTests : IDisposable
     {
         var createClaimRequest = RandomCreateClaimRequest(cover.Id, UtcDateTime(cover.StartDate));
         var createClaimResponse = await ClaimsPostAsync(createClaimRequest);
-        var response = await createClaimResponse.SuccessReadContentAsync<ClaimDto>();
-        return response;
+        var response = await createClaimResponse.SuccessReadContentAsync<CreateClaimResponse>();
+        return response.Claim;
     }
 
     private async Task<IEnumerable<ClaimDto>> CreateRandomCoverWithClaimsAsync(int claimCount)
