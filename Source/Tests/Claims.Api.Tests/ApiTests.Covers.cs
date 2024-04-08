@@ -63,9 +63,9 @@ public partial class ApiTests
         var coverType = TestData.RandomEnum<CoverTypeDto>();
         var request = new CreateCoverRequest(startDate, endDate, coverType);
 
-        var response = await CoversPostAsync(request);
+        var httpResponse = await CoversPostAsync(request);
 
-        await AssertReturnedBadRequestAsync(response, "Total insurance period cannot exceed 1 year.");
+        await AssertReturnedBadRequestAsync(httpResponse, "Total insurance period cannot exceed 1 year.");
     }
 
     [Fact]
@@ -77,9 +77,9 @@ public partial class ApiTests
         var coverType = TestData.RandomEnum<CoverTypeDto>();
         var request = new CreateCoverRequest(startDate, endDate, coverType);
 
-        var response = await CoversPostAsync(request);
+        var httpResponse = await CoversPostAsync(request);
 
-        await AssertReturnedBadRequestAsync(response, "Total insurance period cannot exceed 1 year.");
+        await AssertReturnedBadRequestAsync(httpResponse, "Total insurance period cannot exceed 1 year.");
     }
 
     [Theory]
@@ -90,10 +90,9 @@ public partial class ApiTests
     {
         var request = RandomCreateCoverRequestDto(DateTime.UtcNow, periodDurationInDays, coverType);
 
-        var response = await CoversPostAsync(request);
+        var httpResponse = await CoversPostAsync(request);
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var cover = await response.ReadContentAsync<CoverDto>();
+        var cover = await httpResponse.ReadContentAsync<CoverDto>(HttpStatusCode.OK);
         Assert.NotNull(cover);
         Assert.NotEqual(Guid.Empty, cover.Id);
         Assert.Equal(request.StartDate, cover.StartDate);
@@ -107,8 +106,7 @@ public partial class ApiTests
     {
         var response = await CoversGetAsync();
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var covers = await response.ReadContentAsync<CoverDto[]>();
+        var covers = await response.ReadContentAsync<CoverDto[]>(HttpStatusCode.OK);
         Assert.NotNull(covers);
         Assert.Empty(covers);
     }
@@ -120,10 +118,9 @@ public partial class ApiTests
     {
         var createdCovers = await CreateRandomCoversAsync(coverCount);
 
-        var response = await CoversGetAsync();
+        var httpResponse = await CoversGetAsync();
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var covers = await response.ReadContentAsync<CoverDto[]>();
+        var covers = await httpResponse.ReadContentAsync<CoverDto[]>(HttpStatusCode.OK);
         AssertExtended.EqualIgnoreOrder(createdCovers, covers);
     }
 
@@ -138,10 +135,9 @@ public partial class ApiTests
         var createdCoversToDelete = createdCovers.Take(coverDeleteCount);
         await CoversDeleteMultipleAsync(createdCoversToDelete.Select(x => x.Id));
 
-        var response = await CoversGetAsync();
+        var httpResponse = await CoversGetAsync();
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var covers = await response.ReadContentAsync<CoverDto[]>();
+        var covers = await httpResponse.ReadContentAsync<CoverDto[]>(HttpStatusCode.OK);
         AssertExtended.EqualIgnoreOrder(createdCoversToKeep, covers);
     }
 
@@ -150,9 +146,9 @@ public partial class ApiTests
     {
         var id = Guid.NewGuid();
 
-        var response = await CoversGetAsync(id);
+        var httpResponse = await CoversGetAsync(id);
 
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
     }
 
     [Fact]
@@ -160,10 +156,9 @@ public partial class ApiTests
     {
         var createdCover = await CreateRandomCoverAsync();
 
-        var response = await CoversGetAsync(createdCover.Id);
+        var httpResponse = await CoversGetAsync(createdCover.Id);
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var cover = await response.ReadContentAsync<CoverDto>();
+        var cover = await httpResponse.ReadContentAsync<CoverDto>(HttpStatusCode.OK);
         Assert.Equal(createdCover, cover);
     }
 
@@ -173,9 +168,9 @@ public partial class ApiTests
         var createdCover = await CreateRandomCoverAsync();
         await CoversDeleteAsync(createdCover.Id);
 
-        var response = await CoversGetAsync(createdCover.Id);
+        var httpResponse = await CoversGetAsync(createdCover.Id);
 
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
     }
 
     [Fact]
@@ -183,9 +178,9 @@ public partial class ApiTests
     {
         var id = Guid.NewGuid();
 
-        var response = await CoversDeleteAsync(id);
+        var httpResponse = await CoversDeleteAsync(id);
 
-        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        Assert.Equal(HttpStatusCode.NoContent, httpResponse.StatusCode);
     }
 
     [Theory]
@@ -197,8 +192,7 @@ public partial class ApiTests
     {
         var response = await CoversPremiumGetAsync(startDate, endDate, coverType);
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var premium = await response.ReadContentAsync<decimal>();
+        var premium = await response.ReadContentAsync<decimal>(HttpStatusCode.OK);
         Assert.Equal(expectedPremium, premium);
     }
 
@@ -209,8 +203,7 @@ public partial class ApiTests
 
         var response = await CoversPremiumGetAsync(cover.StartDate, cover.EndDate, cover.Type);
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var premium = await response.ReadContentAsync<decimal>();
+        var premium = await response.ReadContentAsync<decimal>(HttpStatusCode.OK);
         Assert.Equal(premium, cover.Premium);
     }
 

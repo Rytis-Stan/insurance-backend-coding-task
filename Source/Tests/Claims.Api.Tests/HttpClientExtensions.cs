@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Xunit;
 
 namespace Claims.Api.Tests;
 
@@ -19,11 +21,19 @@ public static class HttpClientExtensions
         return new StringContent(json, Encoding.UTF8, "application/json");
     }
 
-    public static async Task<T?> ReadContentAsync<T>(this HttpResponseMessage response)
+    public static async Task<T> ReadContentAsync<T>(this HttpResponseMessage response)
     {
         var contentJson = await response.Content.ReadAsStringAsync();
         var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         options.Converters.Add(new JsonStringEnumConverter());
-        return JsonSerializer.Deserialize<T?>(contentJson, options);
+        var content = JsonSerializer.Deserialize<T?>(contentJson, options);
+        Assert.NotNull(content); // TODO: Replace with some custom exception type?
+        return content;
+    }
+
+    public static async Task<TContent> ReadContentAsync<TContent>(this HttpResponseMessage response, HttpStatusCode expectedStatusCode)
+    {
+        Assert.Equal(expectedStatusCode, response.StatusCode);
+        return await response.ReadContentAsync<TContent>();
     }
 }
