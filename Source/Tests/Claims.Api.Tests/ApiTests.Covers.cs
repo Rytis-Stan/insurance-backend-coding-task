@@ -7,6 +7,20 @@ namespace Claims.Api.Tests;
 
 public partial class ApiTests
 {
+    [Fact]
+    public async Task CoversPostReturnsBadRequestWhenStartDateIsInThePast()
+    {
+        var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
+        var startDate = utcNow.AddDays(-TestData.RandomInt(1, 100));
+        var endDate = utcNow;
+        var coverType = TestData.RandomEnum<CoverTypeDto>();
+        var request = new CreateCoverRequestDto(startDate, endDate, coverType);
+
+        var response = await CoversPostAsync(request);
+    
+        await AssertReturnedBadRequestAsync(response, "Start date cannot be in the past.");
+    }
+
     [Theory]
     [InlineData(1, CoverTypeDto.BulkCarrier, 1625.00)]
     [InlineData(179, CoverTypeDto.Tanker, 330037.50)]
