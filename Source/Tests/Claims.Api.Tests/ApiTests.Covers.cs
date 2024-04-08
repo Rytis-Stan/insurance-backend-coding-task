@@ -16,9 +16,9 @@ public partial class ApiTests
         var coverType = TestData.RandomEnum<CoverTypeDto>();
         var request = new CreateCoverRequest(startDate, endDate, coverType);
 
-        var response = await CoversPostAsync(request);
+        var httpResponse = await CoversPostAsync(request);
     
-        await AssertBadRequestAsync(response, "Start date cannot be in the past.");
+        await AssertBadRequestAsync(httpResponse, "Start date cannot be in the past.");
     }
 
     [Fact]
@@ -30,9 +30,9 @@ public partial class ApiTests
         var coverType = TestData.RandomEnum<CoverTypeDto>();
         var request = new CreateCoverRequest(startDate, endDate, coverType);
 
-        var response = await CoversPostAsync(request);
+        var httpResponse = await CoversPostAsync(request);
 
-        await AssertBadRequestAsync(response, "End date cannot be in the past.");
+        await AssertBadRequestAsync(httpResponse, "End date cannot be in the past.");
     }
 
     [Fact]
@@ -44,9 +44,9 @@ public partial class ApiTests
         var coverType = TestData.RandomEnum<CoverTypeDto>();
         var request = new CreateCoverRequest(startDate, endDate, coverType);
 
-        var response = await CoversPostAsync(request);
+        var httpResponse = await CoversPostAsync(request);
 
-        await AssertBadRequestAsync(response, "End date cannot be earlier than the start date.");
+        await AssertBadRequestAsync(httpResponse, "End date cannot be earlier than the start date.");
     }
 
     [Fact]
@@ -92,7 +92,8 @@ public partial class ApiTests
 
         var httpResponse = await CoversPostAsync(request);
 
-        var cover = await httpResponse.SuccessReadContentAsync<CoverDto>();
+        var response = await httpResponse.SuccessReadContentAsync<CreateCoverResponse>();
+        var cover = response.Cover;
         Assert.NotNull(cover);
         Assert.NotEqual(Guid.Empty, cover.Id);
         Assert.Equal(request.StartDate, cover.StartDate);
@@ -104,11 +105,10 @@ public partial class ApiTests
     [Fact]
     public async Task CoversGetReturnEmptyCoverCollectionWhenNoClaimsAdded()
     {
-        var response = await CoversGetAsync();
+        var httpResponse = await CoversGetAsync();
 
-        var covers = await response.SuccessReadContentAsync<CoverDto[]>();
-        Assert.NotNull(covers);
-        Assert.Empty(covers);
+        var response = await httpResponse.SuccessReadContentAsync<GetCoversResponse>();
+        Assert.Empty(response.Covers);
     }
 
     [Theory]
@@ -120,8 +120,8 @@ public partial class ApiTests
 
         var httpResponse = await CoversGetAsync();
 
-        var covers = await httpResponse.SuccessReadContentAsync<CoverDto[]>();
-        AssertExtended.EqualIgnoreOrder(createdCovers, covers);
+        var response = await httpResponse.SuccessReadContentAsync<GetCoversResponse>();
+        AssertExtended.EqualIgnoreOrder(createdCovers, response.Covers);
     }
 
     [Theory]
@@ -137,8 +137,8 @@ public partial class ApiTests
 
         var httpResponse = await CoversGetAsync();
 
-        var covers = await httpResponse.SuccessReadContentAsync<CoverDto[]>();
-        AssertExtended.EqualIgnoreOrder(createdCoversToKeep, covers);
+        var response = await httpResponse.SuccessReadContentAsync<GetCoversResponse>();
+        AssertExtended.EqualIgnoreOrder(createdCoversToKeep, response.Covers);
     }
 
     [Fact]
@@ -158,8 +158,8 @@ public partial class ApiTests
 
         var httpResponse = await CoversGetAsync(createdCover.Id);
 
-        var cover = await httpResponse.SuccessReadContentAsync<CoverDto>();
-        Assert.Equal(createdCover, cover);
+        var response = await httpResponse.SuccessReadContentAsync<GetCoverResponse>();
+        Assert.Equal(createdCover, response.Cover);
     }
 
     [Fact]
@@ -190,10 +190,10 @@ public partial class ApiTests
     public async Task CoversPremiumGetReturnsCalculatedPremiumForGivenPeriodBasedOnCoverType(
         string startDate, string endDate, CoverTypeDto coverType, decimal expectedPremium)
     {
-        var response = await CoversPremiumGetAsync(startDate, endDate, coverType);
+        var httpResponse = await CoversPremiumGetAsync(startDate, endDate, coverType);
 
-        var premium = await response.SuccessReadContentAsync<decimal>();
-        Assert.Equal(expectedPremium, premium);
+        var response = await httpResponse.SuccessReadContentAsync<GetCoverPremiumResponse>();
+        Assert.Equal(expectedPremium, response.Premium);
     }
 
     [Fact]
@@ -201,9 +201,9 @@ public partial class ApiTests
     {
         var cover = await CreateRandomCoverAsync();
 
-        var response = await CoversPremiumGetAsync(cover.StartDate, cover.EndDate, cover.Type);
+        var httpResponse = await CoversPremiumGetAsync(cover.StartDate, cover.EndDate, cover.Type);
 
-        var premium = await response.SuccessReadContentAsync<decimal>();
+        var premium = await httpResponse.SuccessReadContentAsync<decimal>();
         Assert.Equal(premium, cover.Premium);
     }
 
