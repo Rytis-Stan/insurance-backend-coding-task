@@ -38,6 +38,21 @@ public partial class ApiTests
         Assert.Empty(covers);
     }
 
+    [Theory]
+    [InlineData(2)]
+    [InlineData(3)]
+    public async Task CoversGetReturnsCoversThatHaveBeenAdded(int coverCount)
+    {
+        var createdCovers = await CreateRandomCoversAsync(coverCount);
+
+        var response = await CoversGetAsync();
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var covers = await response.ReadContentAsync<CoverDto[]>();
+        Assert.NotNull(covers);
+        AssertExtended.EqualIgnoreOrder(createdCovers, covers, x => x.Id);
+    }
+
     [Fact]
     public async Task CoversGetWithIdReturnsNotFoundWhenNoCoverExistsWithGivenId()
     {
@@ -51,11 +66,9 @@ public partial class ApiTests
     [Fact]
     public async Task CoversGetWithIdReturnsCoverWhenItWasAlreadyCreatedPreviously()
     {
-        var createRequest = RandomCreateCoverRequestDto(DateTime.UtcNow);
-        var createResponse = await CoversPostAsync(createRequest);
-        var createdCover = await createResponse.ReadContentAsync<CoverDto>();
+        var createdCover = await CreateRandomCoverAsync();
 
-        var response = await CoversGetAsync(createdCover!.Id);
+        var response = await CoversGetAsync(createdCover.Id);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var cover = await response.ReadContentAsync<CoverDto>();
@@ -104,5 +117,13 @@ public partial class ApiTests
         var startDate = DateOnly.FromDateTime(utcNow).AddDays(TestData.RandomInt(1, 100));
         var endDate = startDate.AddDays(periodDurationInDays - 1);
         return new CreateCoverRequestDto(startDate, endDate, coverType);
+    }
+
+    private async Task<IEnumerable<CoverDto>> CreateRandomCoversAsync(int coverCount)
+    {
+        var tasks = Enumerable
+            .Range(0, coverCount)
+            .Select(_ => CreateRandomCoverAsync());
+        return await Task.WhenAll(tasks);
     }
 }

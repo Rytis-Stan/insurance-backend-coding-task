@@ -41,7 +41,7 @@ public partial class ApiTests : IDisposable
     [Theory]
     [InlineData(2)]
     [InlineData(3)]
-    public async Task ClaimsGetReturnCollectionWithPreviouslyAddedClaims(int claimCount)
+    public async Task ClaimsGetReturnsClaimsThatHaveBeenAdded(int claimCount)
     {
         var createdClaims = await CreateRandomCoverWithClaimsAsync(claimCount);
         
@@ -79,6 +79,11 @@ public partial class ApiTests : IDisposable
     private async Task<IEnumerable<ClaimDto>> CreateRandomCoverWithClaimsAsync(int claimCount)
     {
         var cover = await CreateRandomCoverAsync();
+        return await CreateRandomClaimsAsync(cover, claimCount);
+    }
+
+    private async Task<IEnumerable<ClaimDto>> CreateRandomClaimsAsync(CoverDto cover, int claimCount)
+    {
         var tasks = Enumerable
             .Range(0, claimCount)
             .Select(_ => CreateRandomClaimAsync(cover));
