@@ -52,6 +52,24 @@ public partial class ApiTests
         AssertExtended.EqualIgnoreOrder(createdCovers, covers);
     }
 
+    [Theory]
+    [InlineData(2, 1)]
+    [InlineData(4, 1)]
+    [InlineData(4, 2)]
+    public async Task CoversGetReturnsNonDeletedCoversWhenCoversAddedAndSomeDeleted(int addedCoverCount, int deletedCoverCount)
+    {
+        var createdCovers = (await CreateRandomCoversAsync(addedCoverCount)).ToList();
+        var createdCoversToKeep = createdCovers.Skip(deletedCoverCount);
+        var idsOfCreatedCoversToDelete = createdCovers.Take(deletedCoverCount).Select(x => x.Id);
+        await CoversDeleteMultipleAsync(idsOfCreatedCoversToDelete);
+
+        var response = await CoversGetAsync();
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var covers = await response.ReadContentAsync<CoverDto[]>();
+        AssertExtended.EqualIgnoreOrder(createdCoversToKeep, covers);
+    }
+
     [Fact]
     public async Task CoversGetWithIdReturnsNotFoundWhenNoCoverCreatedWithGivenId()
     {
@@ -139,6 +157,12 @@ public partial class ApiTests
         var startDate = DateOnly.FromDateTime(utcNow).AddDays(TestData.RandomInt(1, 100));
         var endDate = startDate.AddDays(periodDurationInDays - 1);
         return new CreateCoverRequestDto(startDate, endDate, coverType);
+    }
+
+    private async Task CoversDeleteMultipleAsync(IEnumerable<Guid> coverIds)
+    {
+        var tasks = coverIds.Select(CoversDeleteAsync);
+        await Task.WhenAll(tasks);
     }
 
     private async Task<IEnumerable<CoverDto>> CreateRandomCoversAsync(int coverCount)
