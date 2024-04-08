@@ -76,6 +76,18 @@ public partial class ApiTests : IDisposable
         Assert.Equal(createdClaim, claim);
     }
 
+    [Fact]
+    public async Task ClaimsGetWithIdReturnsNotFoundWhenClaimCreatedButLaterDeleted()
+    {
+        var createdCover = await CreateRandomCoverAsync();
+        var createdClaim = await CreateRandomClaimAsync(createdCover);
+        await ClaimsDeleteAsync(createdClaim.Id);
+
+        var response = await ClaimsGetAsync(createdClaim.Id);
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
     private async Task<IEnumerable<ClaimDto>> CreateRandomCoverWithClaimsAsync(int claimCount)
     {
         var cover = await CreateRandomCoverAsync();
