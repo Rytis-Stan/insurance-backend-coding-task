@@ -35,7 +35,7 @@ public partial class ApiTests
 
     private async Task<HttpResponseMessage> CoversPremiumGetAsync(DateOnly startDate, DateOnly endDate, CoverTypeDto coverType)
     {
-        return await CoversPremiumGetAsync(startDate.ToString("yyyy-MM-dd"), endDate.ToString("yyyy-MM-dd"), coverType);
+        return await CoversPremiumGetAsync($"{startDate:yyyy-MM-dd}", $"{endDate:yyyy-MM-dd}", coverType);
     }
 
     private async Task<HttpResponseMessage> CoversPremiumGetAsync(string startDate, string endDate, CoverTypeDto coverType)
