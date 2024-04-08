@@ -24,16 +24,16 @@ public class ClaimsController : ControllerBase
     public async Task<ActionResult<ClaimDto>> CreateClaimAsync([FromServices] ICommand<CreateClaimRequest, CreateClaimResponse> command, CreateClaimRequestDto request)
     {
         var response = await command.ExecuteAsync(request.ToDomainRequest());
-        var claim = response.Claim;
+        var claim = response.Claim.ToDto();
         _auditor.AuditPost(claim.Id);
-        return Ok(claim.ToDto());
+        return Ok(claim);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<ClaimDto>> GetClaimAsync([FromServices] ICommand<GetClaimByIdRequest, GetClaimByIdResponse> command, Guid id)
     {
         var response = await command.ExecuteAsync(new GetClaimByIdRequest(id));
-        var claim = response.Claim;
+        var claim = response.Claim.ToDto();
         return claim != null
             ? Ok(claim)
             : NotFound();
@@ -43,8 +43,8 @@ public class ClaimsController : ControllerBase
     public async Task<ActionResult<IEnumerable<ClaimDto>>> GetClaimsAsync([FromServices] ICommandWithNoParameters<GetAllClaimsResponse> command)
     {
         var response = await command.ExecuteAsync();
-        var claims = response.Claims;
-        return Ok(claims.Select(x => x.ToDto()));
+        var claims = response.Claims.Select(x => x.ToDto());
+        return Ok(claims);
     }
 
     [HttpDelete("{id}")]

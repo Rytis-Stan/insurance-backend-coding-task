@@ -38,9 +38,9 @@ public partial class ApiTests
         return _client.GetAsync($"/Covers/Premium/?startDate={startDate}&endDate={endDate}&coverType={coverType}");
     }
 
-    private Task<HttpResponseMessage> ClaimsPostAsync(Guid coverId, string name, ClaimTypeDto claimType, int damageCost, DateTime created)
+    private Task<HttpResponseMessage> ClaimsPostAsync(CreateClaimRequestDto request)
     {
-        return _client.PostAsync("/Claims", new CreateClaimRequestDto(coverId, name, claimType, damageCost, created));
+        return _client.PostAsync("/Claims", request);
     }
 
     private Task<HttpResponseMessage> ClaimsGetAsync()

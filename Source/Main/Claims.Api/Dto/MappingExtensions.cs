@@ -30,7 +30,7 @@ public static class MappingExtensions
     public static ClaimDto? ToDto(this Claim? source)
     {
         return source != null
-            ? new ClaimDto(source.Id, source.CoverId, source.Created, source.Name, source.Type.ToDtoEnum(), source.DamageCost)
+            ? new ClaimDto(source.Id, source.CoverId, source.Name, source.Type.ToDtoEnum(), source.DamageCost, source.Created)
             : null;
     }
 

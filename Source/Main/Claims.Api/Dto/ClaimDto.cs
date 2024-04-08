@@ -3,8 +3,8 @@
 public record ClaimDto(
     Guid Id,
     Guid CoverId,
-    DateTime Created,
     string Name,
     ClaimTypeDto Type,
-    decimal DamageCost
+    decimal DamageCost,
+    DateTime Created
 );
