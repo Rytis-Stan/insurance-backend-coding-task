@@ -1,6 +1,6 @@
 namespace Claims.Application.Commands;
 
-public interface ICommandWithNoResult<in TRequest>
+public interface ICommandWithNoResult<in TArgs>
 {
-    Task ExecuteAsync(TRequest request);
+    Task ExecuteAsync(TArgs args);
 }

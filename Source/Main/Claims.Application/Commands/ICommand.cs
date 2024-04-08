@@ -1,6 +1,6 @@
 namespace Claims.Application.Commands;
 
-public interface ICommand<in TRequest, TResponse>
+public interface ICommand<in TArgs, TResult>
 {
-    Task<TResponse> ExecuteAsync(TRequest request);
+    Task<TResult> ExecuteAsync(TArgs args);
 }
