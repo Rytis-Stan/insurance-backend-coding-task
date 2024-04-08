@@ -126,6 +126,7 @@ public class Program
 
         app.UseHttpsRedirection();
         app.UseAuthorization();
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
         app.MapControllers();
     }
 }

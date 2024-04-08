@@ -26,25 +26,10 @@ public class CoversController : ControllerBase
     public async Task<ActionResult<CoverDto>> CreateCoverAsync([FromServices] ICommand<CreateCoverRequest, CreateCoverResponse> command,
         CreateCoverRequestDto request)
     {
-        return await WithValidationHandling(async () =>
-        {
-            var response = await command.ExecuteAsync(request.ToDomainRequest());
-            var cover = response.Cover.ToDto();
-            _auditor.AuditPost(cover.Id);
-            return Ok(cover);
-        });
-    }
-
-    private async Task<ActionResult> WithValidationHandling(Func<Task<ActionResult>> action)
-    {
-        try
-        {
-            return await action();
-        }
-        catch (ValidationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var response = await command.ExecuteAsync(request.ToDomainRequest());
+        var cover = response.Cover.ToDto();
+        _auditor.AuditPost(cover.Id);
+        return Ok(cover);
     }
 
     [HttpGet("{id}")]

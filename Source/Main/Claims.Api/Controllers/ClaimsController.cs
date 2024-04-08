@@ -25,25 +25,10 @@ public class ClaimsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ClaimDto>> CreateClaimAsync([FromServices] ICommand<CreateClaimRequest, CreateClaimResponse> command, CreateClaimRequestDto request)
     {
-        return await WithValidationHandling(async () =>
-        {
-            var response = await command.ExecuteAsync(request.ToDomainRequest());
-            var claim = response.Claim.ToDto();
-            _auditor.AuditPost(claim.Id);
-            return Ok(claim);
-        });
-    }
-
-    private async Task<ActionResult> WithValidationHandling(Func<Task<ActionResult>> action)
-    {
-        try
-        {
-            return await action();
-        }
-        catch (ValidationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var response = await command.ExecuteAsync(request.ToDomainRequest());
+        var claim = response.Claim.ToDto();
+        _auditor.AuditPost(claim.Id);
+        return Ok(claim);
     }
 
     [HttpGet("{id}")]
