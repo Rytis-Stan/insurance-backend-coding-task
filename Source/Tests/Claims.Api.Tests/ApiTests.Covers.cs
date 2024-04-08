@@ -54,7 +54,7 @@ public partial class ApiTests
     }
 
     [Fact]
-    public async Task CoversGetWithIdReturnsNotFoundWhenNoCoverExistsWithGivenId()
+    public async Task CoversGetWithIdReturnsNotFoundWhenNoCoverCreatedWithGivenId()
     {
         var id = Guid.NewGuid();
 

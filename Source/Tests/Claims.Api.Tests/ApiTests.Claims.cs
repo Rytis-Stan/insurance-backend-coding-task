@@ -54,7 +54,7 @@ public partial class ApiTests : IDisposable
     }
 
     [Fact]
-    public async Task ClaimsGetWithIdReturnsNotFoundWhenNoClaimExistsWithGivenId()
+    public async Task ClaimsGetWithIdReturnsNotFoundWhenNoClaimCreatedWithGivenId()
     {
         var id = Guid.NewGuid();
 
