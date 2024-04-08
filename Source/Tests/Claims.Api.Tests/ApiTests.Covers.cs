@@ -76,6 +76,17 @@ public partial class ApiTests
     }
 
     [Fact]
+    public async Task CoversGetWithIdReturnsNotFoundWhenCoverCreatedButLaterDeleted()
+    {
+        var createdCover = await CreateRandomCoverAsync();
+        await CoversDeleteAsync(createdCover.Id);
+
+        var response = await CoversGetAsync(createdCover.Id);
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
     public async Task CoversDeleteWithIdReturnsNoContentWhenNoCoverExistsWithGivenId()
     {
         var id = Guid.NewGuid();
