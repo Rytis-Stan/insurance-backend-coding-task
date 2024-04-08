@@ -80,8 +80,8 @@ public class Program
 
     private static void AddRepositories(IServiceCollection services, IClaimsDatabase database)
     {
-        services.AddScoped(_ => database.ClaimsRepository);
-        services.AddScoped(_ => database.CoversRepository);
+        services.AddTransient(_ => database.ClaimsRepository);
+        services.AddTransient(_ => database.CoversRepository);
     }
 
     private static void AddDomain(IServiceCollection services)
@@ -106,8 +106,8 @@ public class Program
 
     private static void AddAuditing(IServiceCollection services, IConnectedSendingQueue<AuditMessage> auditQueue)
     {
-        services.AddScoped<IClaimAuditor>(_ => new MessageQueueClaimAuditor(auditQueue));
-        services.AddScoped<ICoverAuditor>(_ => new MessageQueueCoverAuditor(auditQueue));
+        services.AddTransient<IClaimAuditor>(_ => new MessageQueueClaimAuditor(auditQueue));
+        services.AddTransient<ICoverAuditor>(_ => new MessageQueueCoverAuditor(auditQueue));
     }
 
     private static void AddSwagger(IServiceCollection services)
