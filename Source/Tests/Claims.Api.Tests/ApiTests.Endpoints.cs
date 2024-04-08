@@ -13,48 +13,53 @@ namespace Claims.Api.Tests;
 // ReSharper disable once UnusedMember.Global
 public partial class ApiTests
 {
-    private Task<HttpResponseMessage> CoversPostAsync(CreateCoverRequestDto request)
+    private async Task<HttpResponseMessage> CoversPostAsync(CreateCoverRequestDto request)
     {
-        return _client.PostAsync("/Covers", request);
+        return await _client.PostAsync("/Covers", request);
     }
 
-    private Task<HttpResponseMessage> CoversGetAsync()
+    private async Task<HttpResponseMessage> CoversGetAsync()
     {
-        return _client.GetAsync("/Covers");
+        return await _client.GetAsync("/Covers");
     }
 
-    private Task<HttpResponseMessage> CoversGetAsync(Guid id)
+    private async Task<HttpResponseMessage> CoversGetAsync(Guid id)
     {
-        return _client.GetAsync($"/Covers/{id}");
+        return await _client.GetAsync($"/Covers/{id}");
     }
 
-    private Task<HttpResponseMessage> CoversDeleteAsync(Guid id)
+    private async Task<HttpResponseMessage> CoversDeleteAsync(Guid id)
     {
-        return _client.DeleteAsync($"/Covers/{id}");
+        return await _client.DeleteAsync($"/Covers/{id}");
     }
 
-    private Task<HttpResponseMessage> CoversPremiumGetAsync(string startDate, string endDate, CoverTypeDto coverType)
+    private async Task<HttpResponseMessage> CoversPremiumGetAsync(DateOnly startDate, DateOnly endDate, CoverTypeDto coverType)
     {
-        return _client.GetAsync($"/Covers/Premium/?startDate={startDate}&endDate={endDate}&coverType={coverType}");
+        return await CoversPremiumGetAsync(startDate.ToString("yyyy-MM-dd"), endDate.ToString("yyyy-MM-dd"), coverType);
     }
 
-    private Task<HttpResponseMessage> ClaimsPostAsync(CreateClaimRequestDto request)
+    private async Task<HttpResponseMessage> CoversPremiumGetAsync(string startDate, string endDate, CoverTypeDto coverType)
     {
-        return _client.PostAsync("/Claims", request);
+        return await _client.GetAsync($"/Covers/Premium/?startDate={startDate}&endDate={endDate}&coverType={coverType}");
     }
 
-    private Task<HttpResponseMessage> ClaimsGetAsync()
+    private async Task<HttpResponseMessage> ClaimsPostAsync(CreateClaimRequestDto request)
     {
-        return _client.GetAsync("/Claims");
+        return await _client.PostAsync("/Claims", request);
     }
 
-    private Task<HttpResponseMessage> ClaimsGetAsync(Guid id)
+    private async Task<HttpResponseMessage> ClaimsGetAsync()
     {
-        return _client.GetAsync($"/Claims/{id}");
+        return await _client.GetAsync("/Claims");
     }
 
-    private Task<HttpResponseMessage> ClaimsDeleteAsync(Guid id)
+    private async Task<HttpResponseMessage> ClaimsGetAsync(Guid id)
     {
-        return _client.DeleteAsync($"/Claims/{id}");
+        return await _client.GetAsync($"/Claims/{id}");
+    }
+
+    private async Task<HttpResponseMessage> ClaimsDeleteAsync(Guid id)
+    {
+        return await _client.DeleteAsync($"/Claims/{id}");
     }
 }

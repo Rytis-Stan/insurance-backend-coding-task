@@ -110,6 +110,18 @@ public partial class ApiTests
         Assert.Equal(expectedPremium, premium);
     }
 
+    [Fact]
+    public async Task CoversPremiumGetReturnsSamePremiumAsForNewlyCreatedCoverWhenParametersAreTheSame()
+    {
+        var cover = await CreateRandomCoverAsync();
+
+        var response = await CoversPremiumGetAsync(cover.StartDate, cover.EndDate, cover.Type);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var premium = await response.ReadContentAsync<decimal>();
+        Assert.Equal(premium, cover.Premium);
+    }
+
     // TODO: Move this method out of this class.
     private CreateCoverRequestDto RandomCreateCoverRequestDto(DateTime utcNow)
     {
