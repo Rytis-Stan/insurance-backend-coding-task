@@ -12,6 +12,7 @@ public class ExceptionHandlingMiddleware
         _next = next;
     }
 
+    // ReSharper disable once UnusedMember.Global
     public async Task InvokeAsync(HttpContext context)
     {
         try
@@ -21,7 +22,11 @@ public class ExceptionHandlingMiddleware
         catch (ValidationException ex)
         {
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
-            await context.Response.WriteAsJsonAsync(new ValidationErrorResponse(ex.Message));
+            await context.Response.WriteAsJsonAsync(
+                new ValidationErrorResponse(
+                    new ValidationErrorDto(ex.Message)
+                )
+            );
         }
     }
 }

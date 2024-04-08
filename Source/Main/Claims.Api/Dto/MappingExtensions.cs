@@ -19,8 +19,8 @@ public record GetCoverResponse(CoverDto? Cover);
 public record GetCoversResponse(IEnumerable<CoverDto> Covers);
 public record GetCoverPremiumResponse(decimal Premium);
 
-public record ValidationErrorResponse(string ErrorMessage);
-
+public record ValidationErrorDto(string Message);
+public record ValidationErrorResponse(ValidationErrorDto Error);
 
 /// <summary>
 /// An extension method class for mapping DTOs to domain objects and vice versa.
