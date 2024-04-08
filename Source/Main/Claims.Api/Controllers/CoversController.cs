@@ -26,8 +26,8 @@ public class CoversController : ControllerBase
     public async Task<ActionResult<CoverDto>> CreateCoverAsync([FromServices] ICommand<CreateCoverArgs, CreateCoverResult> command,
         CreateCoverRequestDto request)
     {
-        var response = await command.ExecuteAsync(request.ToCommandArgs());
-        var cover = response.Cover.ToDto();
+        var result = await command.ExecuteAsync(request.ToCommandArgs());
+        var cover = result.Cover.ToDto();
         _auditor.AuditPost(cover.Id);
         return Ok(cover);
     }
@@ -35,8 +35,8 @@ public class CoversController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<CoverDto>> GetCoverAsync([FromServices] ICommand<GetCoverArgs, GetCoverResult> command, Guid id)
     {
-        var response = await command.ExecuteAsync(new GetCoverArgs(id));
-        var cover = response.Cover.ToDto();
+        var result = await command.ExecuteAsync(new GetCoverArgs(id));
+        var cover = result.Cover.ToDto();
         return cover != null
             ? Ok(cover)
             : NotFound();
@@ -45,8 +45,8 @@ public class CoversController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CoverDto>>> GetCoversAsync([FromServices] ICommandWithNoArgs<GetAllCoversResult> command)
     {
-        var response = await command.ExecuteAsync();
-        var covers = response.Covers.Select(x => x.ToDto());
+        var result = await command.ExecuteAsync();
+        var covers = result.Covers.Select(x => x.ToDto());
         return Ok(covers);
     }
 
@@ -62,7 +62,7 @@ public class CoversController : ControllerBase
     public async Task<ActionResult<decimal>> GetCoverPremiumAsync([FromServices] ICommand<GetCoverPremiumArgs, GetCoverPremiumResult> command,
         DateOnly startDate, DateOnly endDate, CoverTypeDto coverType)
     {
-        var response = await command.ExecuteAsync(new GetCoverPremiumArgs(startDate, endDate, coverType.ToDomainEnum()));
-        return Ok(response.Premium);
+        var result = await command.ExecuteAsync(new GetCoverPremiumArgs(startDate, endDate, coverType.ToDomainEnum()));
+        return Ok(result.Premium);
     }
 }

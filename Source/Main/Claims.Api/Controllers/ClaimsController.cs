@@ -25,8 +25,8 @@ public class ClaimsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ClaimDto>> CreateClaimAsync([FromServices] ICommand<CreateClaimArgs, CreateClaimResult> command, CreateClaimRequestDto request)
     {
-        var response = await command.ExecuteAsync(request.ToCommandArgs());
-        var claim = response.Claim.ToDto();
+        var result = await command.ExecuteAsync(request.ToCommandArgs());
+        var claim = result.Claim.ToDto();
         _auditor.AuditPost(claim.Id);
         return Ok(claim);
     }
@@ -34,8 +34,8 @@ public class ClaimsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<ClaimDto>> GetClaimAsync([FromServices] ICommand<GetClaimByIdArgs, GetClaimByIdResult> command, Guid id)
     {
-        var response = await command.ExecuteAsync(new GetClaimByIdArgs(id));
-        var claim = response.Claim.ToDto();
+        var result = await command.ExecuteAsync(new GetClaimByIdArgs(id));
+        var claim = result.Claim.ToDto();
         return claim != null
             ? Ok(claim)
             : NotFound();
@@ -44,8 +44,8 @@ public class ClaimsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ClaimDto>>> GetClaimsAsync([FromServices] ICommandWithNoArgs<GetAllClaimsResult> command)
     {
-        var response = await command.ExecuteAsync();
-        var claims = response.Claims.Select(x => x.ToDto());
+        var result = await command.ExecuteAsync();
+        var claims = result.Claims.Select(x => x.ToDto());
         return Ok(claims);
     }
 

@@ -154,9 +154,9 @@ public class CreateClaimCommandTests : ClaimsCommandTests
         StubFindCover(cover.Id, cover);
         StubCreateClaim(cover.Id, name, claimType, damageCost, created, claim);
 
-        var response = await _command.ExecuteAsync(args);
+        var result = await _command.ExecuteAsync(args);
 
-        Assert.Equal(claim, response.Claim);
+        Assert.Equal(claim, result.Claim);
     }
 
     private static Cover RandomCoverForPeriod(DateOnly startDate, DateOnly endDate)

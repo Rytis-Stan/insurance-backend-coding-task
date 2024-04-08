@@ -212,9 +212,9 @@ public class CreateCoverCommandTests : CoversCommandTests
         StubPremium(startDate, endDate, coverType, premium);
         StubCreateCover(startDate, endDate, coverType, premium, cover);
 
-        var response = await _command.ExecuteAsync(args);
+        var result = await _command.ExecuteAsync(args);
 
-        Assert.Equal(cover, response.Cover);
+        Assert.Equal(cover, result.Cover);
     }
 
     private void StubUtcNow(DateTime utcNow)
