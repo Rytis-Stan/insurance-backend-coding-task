@@ -4,7 +4,7 @@ namespace Claims.Testing;
 
 public class TestData
 {
-    private static readonly Random Random = new Random();
+    private static readonly Random Random = new();
 
     public static int RandomInt(int inclusiveMinValue, int inclusiveMaxValue)
     {
