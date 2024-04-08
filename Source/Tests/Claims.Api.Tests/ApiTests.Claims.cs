@@ -49,7 +49,6 @@ public partial class ApiTests : IDisposable
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var claims = await response.ReadContentAsync<ClaimDto[]>();
-        Assert.NotNull(claims);
         AssertExtended.EqualIgnoreOrder(createdClaims, claims);
     }
 

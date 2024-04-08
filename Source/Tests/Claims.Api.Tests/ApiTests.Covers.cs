@@ -49,7 +49,6 @@ public partial class ApiTests
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var covers = await response.ReadContentAsync<CoverDto[]>();
-        Assert.NotNull(covers);
         AssertExtended.EqualIgnoreOrder(createdCovers, covers);
     }
 
