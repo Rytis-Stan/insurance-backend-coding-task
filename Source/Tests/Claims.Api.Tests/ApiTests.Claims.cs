@@ -27,17 +27,6 @@ public partial class ApiTests : IDisposable
         Assert.Equal(request.Created, claim.Created);
     }
 
-    private CreateClaimRequestDto RandomCreateClaimRequestDto(Guid coverId, DateTime created)
-    {
-        return new CreateClaimRequestDto(
-            coverId,
-            TestData.RandomString("name"),
-            TestData.RandomEnum<ClaimTypeDto>(),
-            TestData.RandomInt(10_000),
-            created
-        );
-    }
-
     [Fact]
     public async Task ClaimsGetReturnEmptyClaimCollectionWhenNoClaimsAdded()
     {
@@ -104,5 +93,16 @@ public partial class ApiTests : IDisposable
         var createClaimRequest = RandomCreateClaimRequestDto(cover.Id, UtcDateTime(cover.StartDate));
         var createClaimResponse = await ClaimsPostAsync(createClaimRequest);
         return (await createClaimResponse.ReadContentAsync<ClaimDto>())!;
+    }
+
+    private CreateClaimRequestDto RandomCreateClaimRequestDto(Guid coverId, DateTime created)
+    {
+        return new CreateClaimRequestDto(
+            coverId,
+            TestData.RandomString("name"),
+            TestData.RandomEnum<ClaimTypeDto>(),
+            TestData.RandomInt(10_000),
+            created
+        );
     }
 }
