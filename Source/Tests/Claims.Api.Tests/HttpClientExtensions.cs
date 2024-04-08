@@ -32,7 +32,7 @@ public static class HttpClientExtensions
     }
 
     // TODO: Fix method names.
-    public static async Task<TContent> SuccessReadContentAsync<TContent>(this HttpResponseMessage response)
+    public static async Task<TContent> OkReadContentAsync<TContent>(this HttpResponseMessage response)
     {
         return await response.ReadContentAsync<TContent>(HttpStatusCode.OK);
     }

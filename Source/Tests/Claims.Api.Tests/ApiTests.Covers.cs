@@ -92,7 +92,7 @@ public partial class ApiTests
 
         var httpResponse = await CoversPostAsync(request);
 
-        var response = await httpResponse.SuccessReadContentAsync<CreateCoverResponse>();
+        var response = await httpResponse.OkReadContentAsync<CreateCoverResponse>();
         var cover = response.Cover;
         Assert.NotNull(cover);
         Assert.NotEqual(Guid.Empty, cover.Id);
@@ -107,7 +107,7 @@ public partial class ApiTests
     {
         var httpResponse = await CoversGetAsync();
 
-        var response = await httpResponse.SuccessReadContentAsync<GetCoversResponse>();
+        var response = await httpResponse.OkReadContentAsync<GetCoversResponse>();
         Assert.Empty(response.Covers);
     }
 
@@ -120,7 +120,7 @@ public partial class ApiTests
 
         var httpResponse = await CoversGetAsync();
 
-        var response = await httpResponse.SuccessReadContentAsync<GetCoversResponse>();
+        var response = await httpResponse.OkReadContentAsync<GetCoversResponse>();
         AssertExtended.EqualIgnoreOrder(createdCovers, response.Covers);
     }
 
@@ -137,7 +137,7 @@ public partial class ApiTests
 
         var httpResponse = await CoversGetAsync();
 
-        var response = await httpResponse.SuccessReadContentAsync<GetCoversResponse>();
+        var response = await httpResponse.OkReadContentAsync<GetCoversResponse>();
         AssertExtended.EqualIgnoreOrder(createdCoversToKeep, response.Covers);
     }
 
@@ -158,7 +158,7 @@ public partial class ApiTests
 
         var httpResponse = await CoversGetAsync(createdCover.Id);
 
-        var response = await httpResponse.SuccessReadContentAsync<GetCoverResponse>();
+        var response = await httpResponse.OkReadContentAsync<GetCoverResponse>();
         Assert.Equal(createdCover, response.Cover);
     }
 
@@ -192,7 +192,7 @@ public partial class ApiTests
     {
         var httpResponse = await CoversPremiumGetAsync(startDate, endDate, coverType);
 
-        var response = await httpResponse.SuccessReadContentAsync<GetCoverPremiumResponse>();
+        var response = await httpResponse.OkReadContentAsync<GetCoverPremiumResponse>();
         Assert.Equal(expectedPremium, response.Premium);
     }
 
@@ -203,7 +203,7 @@ public partial class ApiTests
 
         var httpResponse = await CoversPremiumGetAsync(cover.StartDate, cover.EndDate, cover.Type);
 
-        var premium = await httpResponse.SuccessReadContentAsync<decimal>();
+        var premium = await httpResponse.OkReadContentAsync<decimal>();
         Assert.Equal(premium, cover.Premium);
     }
 

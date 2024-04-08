@@ -27,7 +27,7 @@ public partial class ApiTests : IDisposable
         
         var httpResponse = await ClaimsPostAsync(request);
 
-        var response = await httpResponse.SuccessReadContentAsync<CreateClaimResponse>();
+        var response = await httpResponse.OkReadContentAsync<CreateClaimResponse>();
         var claim = response.Claim;
         Assert.NotEqual(Guid.Empty, claim.Id);
         Assert.Equal(cover.Id, claim.CoverId);
@@ -42,7 +42,7 @@ public partial class ApiTests : IDisposable
     {
         var httpResponse = await ClaimsGetAsync();
 
-        var response = await httpResponse.SuccessReadContentAsync<GetClaimsResponse>();
+        var response = await httpResponse.OkReadContentAsync<GetClaimsResponse>();
         Assert.Empty(response.Claims);
     }
 
@@ -55,7 +55,7 @@ public partial class ApiTests : IDisposable
         
         var httpResponse = await ClaimsGetAsync();
 
-        var response = await httpResponse.SuccessReadContentAsync<GetClaimsResponse>();
+        var response = await httpResponse.OkReadContentAsync<GetClaimsResponse>();
         AssertExtended.EqualIgnoreOrder(createdClaims, response.Claims);
     }
 
@@ -73,7 +73,7 @@ public partial class ApiTests : IDisposable
 
         var httpResponse = await ClaimsGetAsync();
 
-        var response = await httpResponse.SuccessReadContentAsync<GetClaimsResponse>();
+        var response = await httpResponse.OkReadContentAsync<GetClaimsResponse>();
         AssertExtended.EqualIgnoreOrder(createdClaimsToKeep, response.Claims);
     }
 
@@ -95,7 +95,7 @@ public partial class ApiTests : IDisposable
 
         var httpResponse = await ClaimsGetAsync(createdClaim.Id);
 
-        var response = await httpResponse.SuccessReadContentAsync<GetClaimResponse>();
+        var response = await httpResponse.OkReadContentAsync<GetClaimResponse>();
         Assert.Equal(createdClaim, response.Claim);
     }
 
@@ -126,7 +126,7 @@ public partial class ApiTests : IDisposable
     {
         var request = RandomCreateCoverRequest(DateTime.UtcNow);
         var httpResponse = await CoversPostAsync(request);
-        var response = await httpResponse.ReadRawContentAsync<CreateCoverResponse>();
+        var response = await httpResponse.OkReadContentAsync<CreateCoverResponse>();
         return response.Cover;
     }
 
@@ -134,7 +134,7 @@ public partial class ApiTests : IDisposable
     {
         var createClaimRequest = RandomCreateClaimRequest(cover.Id, UtcDateTime(cover.StartDate));
         var createClaimResponse = await ClaimsPostAsync(createClaimRequest);
-        var response = await createClaimResponse.SuccessReadContentAsync<CreateClaimResponse>();
+        var response = await createClaimResponse.OkReadContentAsync<CreateClaimResponse>();
         return response.Claim;
     }
 
@@ -172,8 +172,7 @@ public partial class ApiTests : IDisposable
     // TODO: Move to "ExtendedAssert"?
     private static async Task AssertBadRequestAsync(HttpResponseMessage httpResponse, string expectedErrorMessage)
     {
-        Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
-        var response = await httpResponse.ReadRawContentAsync<ValidationErrorResponse>();
+        var response = await httpResponse.ReadContentAsync<ValidationErrorResponse>(HttpStatusCode.BadRequest);
         Assert.Equal(
             new ValidationErrorResponse(new ValidationErrorDto(expectedErrorMessage)),
             response
