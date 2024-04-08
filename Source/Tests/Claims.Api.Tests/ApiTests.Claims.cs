@@ -52,6 +52,25 @@ public partial class ApiTests : IDisposable
         AssertExtended.EqualIgnoreOrder(createdClaims, claims);
     }
 
+    [Theory]
+    [InlineData(2, 1)]
+    [InlineData(4, 1)]
+    [InlineData(4, 2)]
+    public async Task ClaimsGetReturnsNonDeletedClaimsWhenClaimsAddedAndSomeDeleted(int addedClaimCount, int deletedClaimCount)
+    {
+        var cover = await CreateRandomCoverAsync();
+        var createdClaims = (await CreateRandomClaimsAsync(cover, addedClaimCount)).ToList();
+        var createdClaimsToKeep = createdClaims.Skip(deletedClaimCount);
+        var createdClaimsToDelete = createdClaims.Take(deletedClaimCount);
+        await ClaimsDeleteMultipleAsync(createdClaimsToDelete.Select(x => x.Id));
+
+        var response = await ClaimsGetAsync();
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var claims = await response.ReadContentAsync<ClaimDto[]>();
+        AssertExtended.EqualIgnoreOrder(createdClaimsToKeep, claims);
+    }
+
     [Fact]
     public async Task ClaimsGetWithIdReturnsNotFoundWhenNoClaimCreatedWithGivenId()
     {
@@ -135,5 +154,11 @@ public partial class ApiTests : IDisposable
             TestData.RandomInt(10_000),
             created
         );
+    }
+
+    private async Task ClaimsDeleteMultipleAsync(IEnumerable<Guid> claimIds)
+    {
+        var tasks = claimIds.Select(ClaimsDeleteAsync);
+        await Task.WhenAll(tasks);
     }
 }
