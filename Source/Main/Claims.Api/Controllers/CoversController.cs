@@ -39,7 +39,7 @@ public class CoversController : ControllerBase
     {
         var response = (await command.ExecuteAsync(new GetCoverArgs(id))).ToResponse();
         return response.Cover != null
-            ? Ok(response.Cover)
+            ? Ok(response)
             : NotFound();
     }
     

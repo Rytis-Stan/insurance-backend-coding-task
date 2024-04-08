@@ -37,7 +37,7 @@ public class ClaimsController : ControllerBase
     {
         var response = (await command.ExecuteAsync(new GetClaimByIdArgs(id))).ToResponse();
         return response.Claim != null
-            ? Ok(response.Claim)
+            ? Ok(response)
             : NotFound();
     }
 
