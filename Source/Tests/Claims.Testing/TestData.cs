@@ -16,6 +16,10 @@ public class TestData
         return Random.Next(inclusiveMaxValue + 1);
     }
 
+    /// <summary>
+    /// Generates a random string. Uses the "prefix" parameter just to make it
+    /// easier to figure out the purpose of the string when debugging.
+    /// </summary>
     public static string RandomString(string prefix)
     {
         return $"{prefix}-{Guid.NewGuid()}";
