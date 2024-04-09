@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Claims.Persistence.Auditing;
+namespace Claims.Auditing.Persistence;
 
 public class AuditContext : DbContext
 {

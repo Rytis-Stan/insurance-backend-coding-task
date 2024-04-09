@@ -1,8 +1,7 @@
 ﻿using BuildingBlocks.Temporal;
-using Claims.Auditing;
 using Claims.Auditing.PersistenceBased;
 
-namespace Claims.Persistence.Auditing;
+namespace Claims.Auditing.Persistence;
 
 internal class EntityFrameworkClaimAuditRepository : EntityFrameworkAuditRepository<ClaimAudit>, IClaimAuditRepository
 {

@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Claims.Persistence.Auditing\Claims.Persistence.Auditing.csproj" />
+    <ProjectReference Include="..\Claims.Auditing.Persistence\Claims.Auditing.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

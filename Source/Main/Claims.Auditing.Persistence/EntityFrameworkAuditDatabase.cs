@@ -2,7 +2,7 @@
 using Claims.Auditing.PersistenceBased;
 using Microsoft.EntityFrameworkCore;
 
-namespace Claims.Persistence.Auditing;
+namespace Claims.Auditing.Persistence;
 
 public class EntityFrameworkAuditDatabase : IAuditDatabase
 {

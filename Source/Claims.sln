@@ -29,11 +29,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.Temporal", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Persistence.Claims", "Main\Claims.Persistence.Claims\Claims.Persistence.Claims.csproj", "{D21AB839-614F-46BF-86F9-5E7B1CDE937A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Persistence.Auditing", "Main\Claims.Persistence.Auditing\Claims.Persistence.Auditing.csproj", "{FF9A919F-69A0-4939-8941-5A17AE248C6F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Domain.Tests", "Tests\Claims.Domain.Tests\Claims.Domain.Tests.csproj", "{4049588D-2FE2-46C5-B608-67C61C3E1E8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claims.Auditing.QueueListener", "Main\Claims.Auditing.QueueListener\Claims.Auditing.QueueListener.csproj", "{71753861-CEAC-4F6B-9063-5895BB4D55E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Auditing.QueueListener", "Main\Claims.Auditing.QueueListener\Claims.Auditing.QueueListener.csproj", "{71753861-CEAC-4F6B-9063-5895BB4D55E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claims.Auditing.Persistence", "Main\Claims.Auditing.Persistence\Claims.Auditing.Persistence.csproj", "{467C4458-3B48-4879-B6F1-577F59E4C254}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,10 +81,6 @@ Global
 		{D21AB839-614F-46BF-86F9-5E7B1CDE937A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D21AB839-614F-46BF-86F9-5E7B1CDE937A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D21AB839-614F-46BF-86F9-5E7B1CDE937A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FF9A919F-69A0-4939-8941-5A17AE248C6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF9A919F-69A0-4939-8941-5A17AE248C6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FF9A919F-69A0-4939-8941-5A17AE248C6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FF9A919F-69A0-4939-8941-5A17AE248C6F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4049588D-2FE2-46C5-B608-67C61C3E1E8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4049588D-2FE2-46C5-B608-67C61C3E1E8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4049588D-2FE2-46C5-B608-67C61C3E1E8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -93,6 +89,10 @@ Global
 		{71753861-CEAC-4F6B-9063-5895BB4D55E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71753861-CEAC-4F6B-9063-5895BB4D55E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71753861-CEAC-4F6B-9063-5895BB4D55E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{467C4458-3B48-4879-B6F1-577F59E4C254}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{467C4458-3B48-4879-B6F1-577F59E4C254}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{467C4458-3B48-4879-B6F1-577F59E4C254}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{467C4458-3B48-4879-B6F1-577F59E4C254}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,9 +108,9 @@ Global
 		{0F4780EE-473F-41F6-A8B9-7FC8D873B01B} = {6C8A7F8D-2103-4C17-8246-FC6CEC214383}
 		{A5C07096-BB14-45F5-B745-BFD052E224BA} = {6C8A7F8D-2103-4C17-8246-FC6CEC214383}
 		{D21AB839-614F-46BF-86F9-5E7B1CDE937A} = {6C8A7F8D-2103-4C17-8246-FC6CEC214383}
-		{FF9A919F-69A0-4939-8941-5A17AE248C6F} = {6C8A7F8D-2103-4C17-8246-FC6CEC214383}
 		{4049588D-2FE2-46C5-B608-67C61C3E1E8C} = {003F7774-8202-4837-8C40-72297F3876C1}
 		{71753861-CEAC-4F6B-9063-5895BB4D55E7} = {81D11772-48EE-4362-9131-9F42E3E0BF6B}
+		{467C4458-3B48-4879-B6F1-577F59E4C254} = {6C8A7F8D-2103-4C17-8246-FC6CEC214383}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9D4C1340-FBC4-4F35-944F-26237883E032}

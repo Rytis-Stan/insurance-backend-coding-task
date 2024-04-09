@@ -1,6 +1,6 @@
 ﻿using Claims.Auditing.PersistenceBased;
 
-namespace Claims.Persistence.Auditing;
+namespace Claims.Auditing.Persistence;
 
 public interface IAuditDatabase : IDisposable
 {

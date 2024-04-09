@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Claims.Auditing.Migrations
+namespace Claims.Auditing.Persistence.Migrations
 {
     public partial class _1stMigration : Migration
     {
