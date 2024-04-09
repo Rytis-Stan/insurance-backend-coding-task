@@ -19,6 +19,11 @@ public class CoverPricing : ICoverPricing
         // the insurance period duration becomes 1 year + 1 extra day. This is due to the fact that
         // insurance works from the start of the day on "startDate" to the end of the day of "endDate"
         // (so if "startDate" and "endDate" match, it is still technically a single day of insurance).
+        //
+        // In addition, the validation code is based on an assumption that a 1-year period for
+        // insurance takes into consideration the fact that different years might have a different
+        // number of days. In this situation, the insurance is considered valid right until the same
+        // day happens the next year after the insurance start.
         if (startDate.AddYears(1) <= endDate)
         {
             throw new ValidationException("Total insurance period cannot exceed 1 year.");

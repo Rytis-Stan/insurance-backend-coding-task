@@ -51,10 +51,6 @@ public class CoverPricingTests
     [Fact]
     public void ThrowsExceptionWhenCoverPeriodExceedsASingleYear()
     {
-        // NOTE: Making an assumption that a 1-year period for insurance takes
-        // into consideration the fact that different years might have a different
-        // number of days. In this situation, the insurance is considered valid
-        // right until the same day happens the next year after the insurance start.
         Test(
             Date(2000, 01, 01),
             Date(2001, 01, 01)
