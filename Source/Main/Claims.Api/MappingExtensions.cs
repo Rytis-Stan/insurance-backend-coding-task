@@ -12,8 +12,18 @@ using Claims.Domain;
 namespace Claims.Api;
 
 /// <summary>
-/// An extension method class for mapping DTOs to domain objects and vice versa.
+/// An extension method class for mapping:
+/// 1. DTOs to domain entities;
+/// 2. Domain entities to DTOs;
+/// 3. DTO-level enums to domain enums;
+/// 4. Domain enums to DTO-level enums;
+/// 5. Requests to command arguments;
+/// 6. Command results to responses.
 /// </summary>
+/// <remarks>
+/// In case of too many mappings get cluttered here as the application expands,
+/// there is always the option of splitting this class up into separate pieces.
+/// </remarks>
 public static class MappingExtensions
 {
     public static CreateCoverArgs ToCommandArgs(this CreateCoverRequest source)
