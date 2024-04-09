@@ -14,6 +14,11 @@ public class CoverPricing : ICoverPricing
         {
             throw new ValidationException("End date cannot be earlier than the start date.");
         }
+
+        // NOTE: Even though "AddYears(1)" adds exactly a single year "calendar-wise", in practice
+        // the insurance period duration becomes 1 year + 1 extra day. This is due to the fact that
+        // insurance works from the start of the day on "startDate" to the end of the day of "endDate"
+        // (so if "startDate" and "endDate" match, it is still technically a single day of insurance).
         if (startDate.AddYears(1) <= endDate)
         {
             throw new ValidationException("Total insurance period cannot exceed 1 year.");

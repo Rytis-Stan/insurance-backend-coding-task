@@ -55,7 +55,7 @@ public partial class ApiTests
     {
         var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
         var startDate = utcNow.AddDays(TestData.RandomInt(1, 100));
-        var endDate = CoverPeriodEndAfter1YearAnd1Day(startDate);
+        var endDate = OneYearPlus1DayCoverPeriodEnd(startDate);
         var coverType = TestData.RandomEnum<CoverDtoType>();
         var request = new CreateCoverRequest(startDate, endDate, coverType);
 
@@ -69,7 +69,7 @@ public partial class ApiTests
     {
         var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
         var startDate = utcNow.AddDays(TestData.RandomInt(1, 100));
-        var endDate = CoverPeriodEndAfter1YearAnd1Day(startDate).AddDays(TestData.RandomInt(1, 90));
+        var endDate = OneYearPlus1DayCoverPeriodEnd(startDate).AddDays(TestData.RandomInt(1, 90));
         var coverType = TestData.RandomEnum<CoverDtoType>();
         var request = new CreateCoverRequest(startDate, endDate, coverType);
 
@@ -209,7 +209,7 @@ public partial class ApiTests
     {
         var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
         var startDate = utcNow.AddDays(TestData.RandomInt(1, 100));
-        var endDate = CoverPeriodEndAfter1YearAnd1Day(startDate);
+        var endDate = OneYearPlus1DayCoverPeriodEnd(startDate);
         var coverType = TestData.RandomEnum<CoverDtoType>();
 
         var httpResponse = await CoversPremiumGetAsync(startDate, endDate, coverType);
@@ -222,7 +222,7 @@ public partial class ApiTests
     {
         var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
         var startDate = utcNow.AddDays(TestData.RandomInt(1, 100));
-        var endDate = CoverPeriodEndAfter1YearAnd1Day(startDate).AddDays(TestData.RandomInt(1, 90));
+        var endDate = OneYearPlus1DayCoverPeriodEnd(startDate).AddDays(TestData.RandomInt(1, 90));
         var coverType = TestData.RandomEnum<CoverDtoType>();
 
         var httpResponse = await CoversPremiumGetAsync(startDate, endDate, coverType);
@@ -254,12 +254,9 @@ public partial class ApiTests
         Assert.Equal(cover.Premium, response.Premium);
     }
 
-    private static DateOnly CoverPeriodEndAfter1YearAnd1Day(DateOnly startDate)
+    private static DateOnly OneYearPlus1DayCoverPeriodEnd(DateOnly startDate)
     {
-        // NOTE: Even though "AddYears(1)" adds exactly a single year "calendar-wise", in practice
-        // the insurance period duration becomes 1 year + 1 extra day. This is due to the fact that
-        // insurance works from the start of the day on "startDate" to the end of the day of "endDate"
-        // (so if "startDate" and "endDate" match, it is still technically a single day of insurance).
+        // NOTE: Please see the "CoverPricing" class for an explanation about the 1-year insurance duration.
         return startDate.AddYears(1);
     }
 
