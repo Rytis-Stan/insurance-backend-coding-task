@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using Microsoft.Azure.Cosmos;
 
-namespace Claims.Persistence.Claims;
+namespace Claims.Persistence;
 
 public abstract class CosmosDbRepository<TNewObjectInfo, TObject, TJson>
     where TNewObjectInfo : class

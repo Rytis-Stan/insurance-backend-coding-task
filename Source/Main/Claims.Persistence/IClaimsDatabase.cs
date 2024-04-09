@@ -1,6 +1,6 @@
 using Claims.Application.Repositories;
 
-namespace Claims.Persistence.Claims;
+namespace Claims.Persistence;
 
 public interface IClaimsDatabase
 {

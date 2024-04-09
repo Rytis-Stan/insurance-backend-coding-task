@@ -2,7 +2,7 @@ using Claims.Application.Repositories;
 using Claims.Domain;
 using Microsoft.Azure.Cosmos;
 
-namespace Claims.Persistence.Claims;
+namespace Claims.Persistence;
 
 internal class CosmosDbCoversRepository : CosmosDbRepository<NewCoverInfo, Cover, CoverJson>, ICoversRepository
 {

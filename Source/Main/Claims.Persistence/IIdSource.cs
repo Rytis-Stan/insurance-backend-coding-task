@@ -1,4 +1,4 @@
-﻿namespace Claims.Persistence.Claims;
+﻿namespace Claims.Persistence;
 
 public interface IIdSource
 {

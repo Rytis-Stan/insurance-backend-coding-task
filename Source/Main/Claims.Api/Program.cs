@@ -16,7 +16,7 @@ using Claims.Application.Commands.GetCoverPremium;
 using Claims.Auditing;
 using Claims.Auditing.MessageQueueBased;
 using Claims.Domain;
-using Claims.Persistence.Claims;
+using Claims.Persistence;
 using Microsoft.Azure.Cosmos;
 
 namespace Claims.Api;

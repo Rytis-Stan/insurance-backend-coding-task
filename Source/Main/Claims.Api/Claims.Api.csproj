@@ -13,7 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Claims.Application\Claims.Application.csproj" />
     <ProjectReference Include="..\Claims.Auditing\Claims.Auditing.csproj" />
-    <ProjectReference Include="..\Claims.Persistence.Claims\Claims.Persistence.Claims.csproj" />
+    <ProjectReference Include="..\Claims.Persistence\Claims.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

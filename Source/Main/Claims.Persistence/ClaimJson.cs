@@ -1,7 +1,7 @@
 ﻿using Claims.Domain;
 using Newtonsoft.Json;
 
-namespace Claims.Persistence.Claims;
+namespace Claims.Persistence;
 
 public class ClaimJson
 {

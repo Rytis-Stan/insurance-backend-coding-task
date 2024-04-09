@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Claims.Application\Claims.Application.csproj" />
-    <ProjectReference Include="..\Claims.Domain\Claims.Domain.csproj" />
   </ItemGroup>
 
 </Project>

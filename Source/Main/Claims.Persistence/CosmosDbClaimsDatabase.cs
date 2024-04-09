@@ -1,7 +1,7 @@
 using Claims.Application.Repositories;
 using Microsoft.Azure.Cosmos;
 
-namespace Claims.Persistence.Claims;
+namespace Claims.Persistence;
 
 public class CosmosDbClaimsDatabase : IClaimsDatabase
 {
