@@ -3,5 +3,5 @@
 public record CreateCoverRequest(
     DateOnly StartDate,
     DateOnly EndDate,
-    CoverTypeDto Type
+    CoverDtoType Type
 );

@@ -1,6 +1,6 @@
 ﻿namespace Claims.Api.Dto;
 
-public enum ClaimTypeDto
+public enum ClaimDtoType
 {
     Collision,
     Grounding,

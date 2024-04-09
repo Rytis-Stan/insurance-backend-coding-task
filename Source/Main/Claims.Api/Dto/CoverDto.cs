@@ -4,6 +4,6 @@ public record CoverDto(
     Guid Id,
     DateOnly StartDate,
     DateOnly EndDate,
-    CoverTypeDto Type,
+    CoverDtoType Type,
     decimal Premium
 );

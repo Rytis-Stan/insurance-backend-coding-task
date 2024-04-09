@@ -13,7 +13,7 @@ public partial class ApiTests
         var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
         var startDate = utcNow.AddDays(-TestData.RandomInt(1, 100));
         var endDate = utcNow;
-        var coverType = TestData.RandomEnum<CoverTypeDto>();
+        var coverType = TestData.RandomEnum<CoverDtoType>();
         var request = new CreateCoverRequest(startDate, endDate, coverType);
 
         var httpResponse = await CoversPostAsync(request);
@@ -27,7 +27,7 @@ public partial class ApiTests
         var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
         var startDate = utcNow;
         var endDate = utcNow.AddDays(-TestData.RandomInt(1, 100));
-        var coverType = TestData.RandomEnum<CoverTypeDto>();
+        var coverType = TestData.RandomEnum<CoverDtoType>();
         var request = new CreateCoverRequest(startDate, endDate, coverType);
 
         var httpResponse = await CoversPostAsync(request);
@@ -41,7 +41,7 @@ public partial class ApiTests
         var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
         var startDate = utcNow.AddDays(TestData.RandomInt(101, 200));
         var endDate = utcNow.AddDays(TestData.RandomInt(1, 100));
-        var coverType = TestData.RandomEnum<CoverTypeDto>();
+        var coverType = TestData.RandomEnum<CoverDtoType>();
         var request = new CreateCoverRequest(startDate, endDate, coverType);
 
         var httpResponse = await CoversPostAsync(request);
@@ -60,7 +60,7 @@ public partial class ApiTests
         // (so if "startDate" and "endDate" match, it is still technically a single day of insurance).
         var endDate = startDate.AddYears(1);
         
-        var coverType = TestData.RandomEnum<CoverTypeDto>();
+        var coverType = TestData.RandomEnum<CoverDtoType>();
         var request = new CreateCoverRequest(startDate, endDate, coverType);
 
         var httpResponse = await CoversPostAsync(request);
@@ -74,7 +74,7 @@ public partial class ApiTests
         var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
         var startDate = utcNow.AddDays(TestData.RandomInt(1, 100));
         var endDate = startDate.AddYears(1).AddDays(TestData.RandomInt(1, 90));
-        var coverType = TestData.RandomEnum<CoverTypeDto>();
+        var coverType = TestData.RandomEnum<CoverDtoType>();
         var request = new CreateCoverRequest(startDate, endDate, coverType);
 
         var httpResponse = await CoversPostAsync(request);
@@ -83,10 +83,10 @@ public partial class ApiTests
     }
 
     [Theory]
-    [InlineData(1, CoverTypeDto.BulkCarrier, 1625.00)]
-    [InlineData(179, CoverTypeDto.Tanker, 330037.50)]
-    [InlineData(182, CoverTypeDto.Yacht, 239717.50)]
-    public async Task CoversPostReturnsNewlyCreatedCoverWhenRequestValid(int periodDurationInDays, CoverTypeDto coverType, decimal expectedPremium)
+    [InlineData(1, CoverDtoType.BulkCarrier, 1625.00)]
+    [InlineData(179, CoverDtoType.Tanker, 330037.50)]
+    [InlineData(182, CoverDtoType.Yacht, 239717.50)]
+    public async Task CoversPostReturnsNewlyCreatedCoverWhenRequestValid(int periodDurationInDays, CoverDtoType coverType, decimal expectedPremium)
     {
         var request = RandomCreateCoverRequest(DateTime.UtcNow, periodDurationInDays, coverType);
 
@@ -196,11 +196,11 @@ public partial class ApiTests
     }
 
     [Theory]
-    [InlineData("2001-01-01", "2001-01-01", CoverTypeDto.Yacht, 1375.00)]
-    [InlineData("2024-03-02", "2024-03-31", CoverTypeDto.ContainerShip, 48750)]
-    [InlineData("1995-06-05", "1995-12-04", CoverTypeDto.Tanker, 337331.25)]
+    [InlineData("2001-01-01", "2001-01-01", CoverDtoType.Yacht, 1375.00)]
+    [InlineData("2024-03-02", "2024-03-31", CoverDtoType.ContainerShip, 48750)]
+    [InlineData("1995-06-05", "1995-12-04", CoverDtoType.Tanker, 337331.25)]
     public async Task CoversPremiumGetReturnsCalculatedPremiumForGivenPeriodBasedOnCoverType(
-        string startDate, string endDate, CoverTypeDto coverType, decimal expectedPremium)
+        string startDate, string endDate, CoverDtoType coverType, decimal expectedPremium)
     {
         var httpResponse = await CoversPremiumGetAsync(startDate, endDate, coverType);
 
@@ -225,11 +225,11 @@ public partial class ApiTests
         return RandomCreateCoverRequest(
             utcNow,
             TestData.RandomInt(1, 90),
-            TestData.RandomEnum<CoverTypeDto>()
+            TestData.RandomEnum<CoverDtoType>()
         );
     }
 
-    private static CreateCoverRequest RandomCreateCoverRequest(DateTime utcNow, int periodDurationInDays, CoverTypeDto coverType)
+    private static CreateCoverRequest RandomCreateCoverRequest(DateTime utcNow, int periodDurationInDays, CoverDtoType coverType)
     {
         // NOTE: Start and end date should start at least 1 day after UTC Now to avoid the
         // current date changing while the endpoint is being called (can happen if the test

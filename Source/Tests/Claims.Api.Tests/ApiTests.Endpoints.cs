@@ -33,12 +33,12 @@ public partial class ApiTests
         return await _client.DeleteAsync($"/Covers/{id}");
     }
 
-    private async Task<HttpResponseMessage> CoversPremiumGetAsync(DateOnly startDate, DateOnly endDate, CoverTypeDto coverType)
+    private async Task<HttpResponseMessage> CoversPremiumGetAsync(DateOnly startDate, DateOnly endDate, CoverDtoType coverType)
     {
         return await CoversPremiumGetAsync($"{startDate:yyyy-MM-dd}", $"{endDate:yyyy-MM-dd}", coverType);
     }
 
-    private async Task<HttpResponseMessage> CoversPremiumGetAsync(string startDate, string endDate, CoverTypeDto coverType)
+    private async Task<HttpResponseMessage> CoversPremiumGetAsync(string startDate, string endDate, CoverDtoType coverType)
     {
         return await _client.GetAsync($"/Covers/Premium/?startDate={startDate}&endDate={endDate}&coverType={coverType}");
     }

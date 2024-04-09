@@ -3,7 +3,7 @@
 public record CreateClaimRequest(
     Guid CoverId,
     string Name,
-    ClaimTypeDto Type,
+    ClaimDtoType Type,
     decimal DamageCost,
     DateTime Created
 );

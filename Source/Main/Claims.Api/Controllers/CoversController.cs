@@ -63,7 +63,7 @@ public class CoversController : ControllerBase
     [HttpGet("Premium")]
     [ProducesResponseType(typeof(GetCoverPremiumResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCoverPremiumAsync([FromServices] ICommand<GetCoverPremiumArgs, GetCoverPremiumResult> command,
-        [Required] DateOnly startDate, [Required] DateOnly endDate, [Required] CoverTypeDto coverType)
+        [Required] DateOnly startDate, [Required] DateOnly endDate, [Required] CoverDtoType coverType)
     {
         var response = (await command.ExecuteAsync(new GetCoverPremiumArgs(startDate, endDate, coverType.ToDomainEnum()))).ToResponse();
         return Ok(response);

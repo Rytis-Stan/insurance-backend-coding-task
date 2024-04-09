@@ -69,52 +69,52 @@ public static class MappingExtensions
         return new ClaimDto(source.Id, source.CoverId, source.Name, source.Type.ToDtoEnum(), source.DamageCost, source.Created);
     }
 
-    public static CoverType ToDomainEnum(this CoverTypeDto source)
+    public static CoverType ToDomainEnum(this CoverDtoType source)
     {
         return source switch
         {
-            CoverTypeDto.Yacht => CoverType.Yacht,
-            CoverTypeDto.PassengerShip => CoverType.PassengerShip,
-            CoverTypeDto.ContainerShip => CoverType.ContainerShip,
-            CoverTypeDto.BulkCarrier => CoverType.BulkCarrier,
-            CoverTypeDto.Tanker => CoverType.Tanker,
+            CoverDtoType.Yacht => CoverType.Yacht,
+            CoverDtoType.PassengerShip => CoverType.PassengerShip,
+            CoverDtoType.ContainerShip => CoverType.ContainerShip,
+            CoverDtoType.BulkCarrier => CoverType.BulkCarrier,
+            CoverDtoType.Tanker => CoverType.Tanker,
             _ => throw new ArgumentOutOfRangeException(nameof(source))
         };
     }
 
-    public static CoverTypeDto ToDtoEnum(this CoverType source)
+    public static CoverDtoType ToDtoEnum(this CoverType source)
     {
         return source switch
         {
-            CoverType.Yacht => CoverTypeDto.Yacht,
-            CoverType.PassengerShip => CoverTypeDto.PassengerShip,
-            CoverType.ContainerShip => CoverTypeDto.ContainerShip,
-            CoverType.BulkCarrier => CoverTypeDto.BulkCarrier,
-            CoverType.Tanker => CoverTypeDto.Tanker,
+            CoverType.Yacht => CoverDtoType.Yacht,
+            CoverType.PassengerShip => CoverDtoType.PassengerShip,
+            CoverType.ContainerShip => CoverDtoType.ContainerShip,
+            CoverType.BulkCarrier => CoverDtoType.BulkCarrier,
+            CoverType.Tanker => CoverDtoType.Tanker,
             _ => throw new ArgumentOutOfRangeException(nameof(source), source, null)
         };
     }
 
-    public static ClaimType ToDomainEnum(this ClaimTypeDto source)
+    public static ClaimType ToDomainEnum(this ClaimDtoType source)
     {
         return source switch
         {
-            ClaimTypeDto.Collision => ClaimType.Collision,
-            ClaimTypeDto.Grounding => ClaimType.Grounding,
-            ClaimTypeDto.BadWeather => ClaimType.BadWeather,
-            ClaimTypeDto.Fire => ClaimType.Fire,
+            ClaimDtoType.Collision => ClaimType.Collision,
+            ClaimDtoType.Grounding => ClaimType.Grounding,
+            ClaimDtoType.BadWeather => ClaimType.BadWeather,
+            ClaimDtoType.Fire => ClaimType.Fire,
             _ => throw new ArgumentOutOfRangeException(nameof(source))
         };
     }
 
-    public static ClaimTypeDto ToDtoEnum(this ClaimType source)
+    public static ClaimDtoType ToDtoEnum(this ClaimType source)
     {
         return source switch
         {
-            ClaimType.Collision => ClaimTypeDto.Collision,
-            ClaimType.Grounding => ClaimTypeDto.Grounding,
-            ClaimType.BadWeather => ClaimTypeDto.BadWeather,
-            ClaimType.Fire => ClaimTypeDto.Fire,
+            ClaimType.Collision => ClaimDtoType.Collision,
+            ClaimType.Grounding => ClaimDtoType.Grounding,
+            ClaimType.BadWeather => ClaimDtoType.BadWeather,
+            ClaimType.Fire => ClaimDtoType.Fire,
             _ => throw new ArgumentOutOfRangeException(nameof(source))
         };
     }

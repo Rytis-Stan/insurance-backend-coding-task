@@ -171,7 +171,7 @@ public partial class ApiTests : IDisposable
         return new CreateClaimRequest(
             coverId,
             TestData.RandomString("name"),
-            TestData.RandomEnum<ClaimTypeDto>(),
+            TestData.RandomEnum<ClaimDtoType>(),
             TestData.RandomInt(10_000),
             created
         );

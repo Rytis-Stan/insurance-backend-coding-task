@@ -1,6 +1,6 @@
 ﻿namespace Claims.Api.Dto;
 
-public enum CoverTypeDto
+public enum CoverDtoType
 {
     Yacht,
     PassengerShip,
