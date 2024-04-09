@@ -1,5 +1,5 @@
-﻿using Claims.Domain;
-using Claims.Testing;
+﻿using BuildingBlocks.Testing;
+using Claims.Domain;
 
 namespace Claims.Application.Tests;
 

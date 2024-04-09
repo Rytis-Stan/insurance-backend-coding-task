@@ -1,6 +1,6 @@
-﻿using Claims.Testing;
+﻿using BuildingBlocks.Testing;
 using Xunit;
-using static Claims.Testing.TestValueBuilder;
+using static BuildingBlocks.Testing.TestValueBuilder;
 
 namespace Claims.Domain.Tests;
 

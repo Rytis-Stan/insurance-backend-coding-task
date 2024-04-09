@@ -1,6 +1,6 @@
 ﻿using Claims.Api.Contracts.Messages;
-using Claims.Testing;
 using System.Net;
+using BuildingBlocks.Testing;
 using Claims.Api.Contracts.Dto;
 using Xunit;
 

@@ -1,10 +1,10 @@
-﻿using Claims.Application.Commands.CreateClaim;
+﻿using BuildingBlocks.Testing;
+using Claims.Application.Commands.CreateClaim;
 using Claims.Application.Repositories;
 using Claims.Domain;
-using Claims.Testing;
 using Moq;
 using Xunit;
-using static Claims.Testing.TestValueBuilder;
+using static BuildingBlocks.Testing.TestValueBuilder;
 
 namespace Claims.Application.Tests.Commands;
 

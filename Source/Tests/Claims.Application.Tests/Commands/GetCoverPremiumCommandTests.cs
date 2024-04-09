@@ -1,6 +1,6 @@
-﻿using Claims.Application.Commands.GetCoverPremium;
+﻿using BuildingBlocks.Testing;
+using Claims.Application.Commands.GetCoverPremium;
 using Claims.Domain;
-using Claims.Testing;
 using Moq;
 using Xunit;
 

@@ -1,6 +1,6 @@
-﻿using static Claims.Testing.TestValueBuilder;
+﻿using static BuildingBlocks.Testing.TestValueBuilder;
 
-namespace Claims.Testing;
+namespace BuildingBlocks.Testing;
 
 public class TestData
 {

@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Main\BuildingBlocks.Testing\BuildingBlocks.Testing.csproj" />
     <ProjectReference Include="..\..\Main\Claims.Application\Claims.Application.csproj" />
-    <ProjectReference Include="..\Claims.Testing\Claims.Testing.csproj" />
   </ItemGroup>
 
 </Project>
