@@ -91,47 +91,6 @@ public class CreateCoverCommandTests : CoversCommandTests
     }
 
     [Fact]
-    public async Task ThrowsExceptionWhenEndDateNotItThePastButGoesBeforeStartDate()
-    {
-        await Test(
-            UtcDateTime(2000, 01, 10),
-            Date(2010, 01, 10),
-            Date(2010, 01, 08)
-        );
-        await Test(
-            UtcDateTime(2000, 01, 10),
-            Date(2010, 01, 10),
-            Date(2010, 01, 09)
-        );
-        await Test(
-            UtcDateTime(1981, 06, 07),
-            Date(2010, 01, 10),
-            Date(2010, 01, 09)
-        );
-        await Test(
-            UtcDateTime(1981, 06, 07),
-            Date(1981, 06, 10),
-            Date(1981, 06, 09)
-        );
-        await Test(
-            UtcDateTime(1981, 06, 07),
-            Date(1981, 06, 11),
-            Date(1981, 06, 10)
-        );
-
-        async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate)
-        {
-            var args = new CreateCoverArgs(startDate, endDate, AnyCoverType);
-            StubUtcNow(utcNow);
-
-            await AssertExtended.ThrowsAsync<ValidationException>(
-                () => _command.ExecuteAsync(args),
-                "End date cannot be earlier than the start date."
-            );
-        }
-    }
-
-    [Fact]
     public async Task AddsCoverToRepositoryWhenCreatingAValidCover()
     {
         await Test(UtcDateTime(2000, 10, 10), Date(2000, 10, 10), Date(2000, 10, 20), CoverType.BulkCarrier, 123.45m);

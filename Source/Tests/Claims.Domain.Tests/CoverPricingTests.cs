@@ -16,6 +16,39 @@ public class CoverPricingTests
     }
 
     [Fact]
+    public void ThrowsExceptionWhenEndDateGoesBeforeStartDate()
+    {
+        Test(
+            Date(2010, 01, 10),
+            Date(2010, 01, 08)
+        );
+        Test(
+            Date(2010, 01, 10),
+            Date(2010, 01, 09)
+        );
+        Test(
+            Date(2010, 01, 10),
+            Date(2010, 01, 09)
+        );
+        Test(
+            Date(1981, 06, 10),
+            Date(1981, 06, 09)
+        );
+        Test(
+            Date(1981, 06, 11),
+            Date(1981, 06, 10)
+        );
+
+        void Test(DateOnly startDate, DateOnly endDate)
+        {
+            AssertExtended.Throws<ValidationException>(
+                () => _coverPricing.Premium(startDate, endDate, AnyCoverType),
+                "End date cannot be earlier than the start date."
+            );
+        }
+    }
+
+    [Fact]
     public void ThrowsExceptionWhenCoverPeriodExceedsASingleYear()
     {
         // NOTE: Making an assumption that a 1-year period for insurance takes

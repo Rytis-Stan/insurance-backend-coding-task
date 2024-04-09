@@ -192,6 +192,19 @@ public partial class ApiTests
     }
 
     [Fact]
+    public async Task CoversPremiumGetReturnsBadRequestWhenEndDateGoesBeforeStartDate()
+    {
+        var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
+        var startDate = utcNow.AddDays(TestData.RandomInt(101, 200));
+        var endDate = utcNow.AddDays(TestData.RandomInt(1, 100));
+        var coverType = TestData.RandomEnum<CoverDtoType>();
+
+        var httpResponse = await CoversPremiumGetAsync(startDate, endDate, coverType);
+
+        await AssertBadRequestAsync(httpResponse, "End date cannot be earlier than the start date.");
+    }
+
+    [Fact]
     public async Task CoversPremiumGetReturnsBadRequestWhenCoverPeriodExceedsASingleYearByExactlyOneDay()
     {
         var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);

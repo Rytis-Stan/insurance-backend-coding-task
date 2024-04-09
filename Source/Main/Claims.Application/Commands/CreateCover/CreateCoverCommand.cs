@@ -38,10 +38,6 @@ public class CreateCoverCommand : ICommand<CreateCoverArgs, CreateCoverResult>
         {
             throw new ValidationException("End date cannot be in the past.");
         }
-        if (endDate < startDate)
-        {
-            throw new ValidationException("End date cannot be earlier than the start date.");
-        }
     }
 
     private NewCoverInfo ToNewCoverInfo(CreateCoverArgs args)
