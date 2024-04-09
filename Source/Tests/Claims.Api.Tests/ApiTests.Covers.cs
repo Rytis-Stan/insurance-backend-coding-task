@@ -102,7 +102,7 @@ public partial class ApiTests
     }
 
     [Fact]
-    public async Task CoversPostReturnsLocationOfNewResourceThatCanBeUsedToRetrieveItLaterWhenRequestIsValid()
+    public async Task CoversPostReturnsLocationOfNewCoverThatCanBeUsedToRetrieveItLaterWhenRequestIsValid()
     {
         var request = RandomCreateCoverRequest(DateTime.UtcNow);
 

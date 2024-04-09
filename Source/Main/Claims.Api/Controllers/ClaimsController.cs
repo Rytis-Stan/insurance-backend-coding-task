@@ -28,7 +28,7 @@ public class ClaimsController : ControllerBase
     {
         var response = (await command.ExecuteAsync(request.ToCommandArgs())).ToResponse();
         _auditor.AuditPost(response.Claim.Id);
-        return Ok(response);
+        return CreatedAtAction(nameof(GetClaimAsync), new { response.Claim.Id }, response);
     }
 
     [HttpGet("{id}")]

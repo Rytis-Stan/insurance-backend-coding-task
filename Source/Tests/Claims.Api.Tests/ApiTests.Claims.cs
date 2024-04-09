@@ -27,7 +27,7 @@ public partial class ApiTests : IDisposable
         
         var httpResponse = await ClaimsPostAsync(request);
 
-        var response = await httpResponse.OkReadContentAsync<CreateClaimResponse>();
+        var response = await httpResponse.ReadContentAsync<CreateClaimResponse>(HttpStatusCode.Created);
         var claim = response.Claim;
         Assert.NotEqual(Guid.Empty, claim.Id);
         Assert.Equal(cover.Id, claim.CoverId);
@@ -35,6 +35,20 @@ public partial class ApiTests : IDisposable
         Assert.Equal(request.Type, claim.Type);
         Assert.Equal(request.DamageCost, claim.DamageCost);
         Assert.Equal(request.Created, claim.Created);
+    }
+
+    [Fact]
+    public async Task ClaimsPostReturnsLocationOfNewClaimThatCanBeUsedToRetrieveItLaterWhenRequestIsValid()
+    {
+        var cover = await CreateRandomCoverAsync();
+        var request = RandomCreateClaimRequest(cover.Id, UtcDateTime(cover.StartDate));
+
+        var httpCreateResponse = await ClaimsPostAsync(request);
+
+        var httpGetResponse = await _client.GetAsync(httpCreateResponse.Headers.Location);
+        var createResponse = await httpCreateResponse.ReadContentAsync<CreateClaimResponse>(HttpStatusCode.Created);
+        var getResponse = await httpGetResponse.OkReadContentAsync<GetClaimResponse>();
+        Assert.Equal(createResponse.Claim, getResponse.Claim);
     }
 
     [Fact]
@@ -126,7 +140,7 @@ public partial class ApiTests : IDisposable
     {
         var request = RandomCreateCoverRequest(DateTime.UtcNow);
         var httpResponse = await CoversPostAsync(request);
-        var response = await httpResponse.OkReadContentAsync<CreateCoverResponse>();
+        var response = await httpResponse.ReadContentAsync<CreateCoverResponse>(HttpStatusCode.Created);
         return response.Cover;
     }
 
@@ -134,7 +148,7 @@ public partial class ApiTests : IDisposable
     {
         var createClaimRequest = RandomCreateClaimRequest(cover.Id, UtcDateTime(cover.StartDate));
         var createClaimResponse = await ClaimsPostAsync(createClaimRequest);
-        var response = await createClaimResponse.OkReadContentAsync<CreateClaimResponse>();
+        var response = await createClaimResponse.ReadContentAsync<CreateClaimResponse>(HttpStatusCode.Created);
         return response.Claim;
     }
 
