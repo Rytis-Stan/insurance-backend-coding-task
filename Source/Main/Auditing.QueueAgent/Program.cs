@@ -1,6 +1,6 @@
-﻿using Auditing.QueueListener.Configuration;
+﻿using Auditing.QueueAgent.Configuration;
 
-namespace Auditing.QueueListener;
+namespace Auditing.QueueAgent;
 
 public class Program
 {

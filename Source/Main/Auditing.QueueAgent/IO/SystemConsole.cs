@@ -1,4 +1,4 @@
-﻿namespace Auditing.QueueListener.IO;
+﻿namespace Auditing.QueueAgent.IO;
 
 public class SystemConsole : IConsole
 {

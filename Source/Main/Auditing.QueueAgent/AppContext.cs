@@ -1,6 +1,6 @@
 ﻿using Auditing.Persistence;
-using Auditing.QueueListener.Configuration;
-using Auditing.QueueListener.IO;
+using Auditing.QueueAgent.Configuration;
+using Auditing.QueueAgent.IO;
 using BuildingBlocks.MessageQueues;
 using BuildingBlocks.MessageQueues.CommonListeners;
 using BuildingBlocks.MessageQueues.RabbitMq;
@@ -9,7 +9,7 @@ using Shared.Auditing;
 using Shared.Auditing.MessageQueueBased;
 using Shared.Auditing.PersistenceBased;
 
-namespace Auditing.QueueListener;
+namespace Auditing.QueueAgent;
 
 public class AppContext : IAppContext
 {

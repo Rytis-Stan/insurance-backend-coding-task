@@ -1,10 +1,10 @@
 ﻿using Auditing.Persistence;
-using Auditing.QueueListener.IO;
+using Auditing.QueueAgent.IO;
 using BuildingBlocks.MessageQueues;
 using Microsoft.Extensions.Logging;
 using Shared.Auditing.MessageQueueBased;
 
-namespace Auditing.QueueListener;
+namespace Auditing.QueueAgent;
 
 /// <summary>
 /// Represents the "root object" of the whole application. It's responsible for constructing
