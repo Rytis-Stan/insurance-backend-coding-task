@@ -7,8 +7,8 @@ using Claims.Application.Commands.DeleteCover;
 using Claims.Application.Commands.GetAllCovers;
 using Claims.Application.Commands.GetCover;
 using Claims.Application.Commands.GetCoverPremium;
-using Claims.Auditing;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Auditing;
 
 namespace Claims.Api.Controllers;
 

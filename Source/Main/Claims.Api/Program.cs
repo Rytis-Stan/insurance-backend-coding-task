@@ -13,11 +13,11 @@ using Claims.Application.Commands.GetAllCovers;
 using Claims.Application.Commands.GetClaimById;
 using Claims.Application.Commands.GetCover;
 using Claims.Application.Commands.GetCoverPremium;
-using Claims.Auditing;
-using Claims.Auditing.MessageQueueBased;
 using Claims.Domain;
 using Claims.Persistence;
 using Microsoft.Azure.Cosmos;
+using Shared.Auditing;
+using Shared.Auditing.MessageQueueBased;
 
 namespace Claims.Api;
 
