@@ -19,7 +19,7 @@ internal class CosmosDbCoversRepository : CosmosDbRepository<NewCoverInfo, Cover
             Id = id,
             StartDate = entityInfo.StartDate,
             EndDate = entityInfo.EndDate,
-            Type = entityInfo.Type,
+            Type = ToDbEnum(entityInfo.Type),
             Premium = entityInfo.Premium
         };
     }
@@ -31,8 +31,34 @@ internal class CosmosDbCoversRepository : CosmosDbRepository<NewCoverInfo, Cover
             Id = Guid.Parse(item.Id),
             StartDate = item.StartDate,
             EndDate = item.EndDate,
-            Type = item.Type,
+            Type = ToDomainEnum(item.Type),
             Premium = item.Premium
+        };
+    }
+
+    private static CoverItemType ToDbEnum(CoverType source)
+    {
+        return source switch
+        {
+            CoverType.Yacht => CoverItemType.Yacht,
+            CoverType.PassengerShip => CoverItemType.PassengerShip,
+            CoverType.ContainerShip => CoverItemType.ContainerShip,
+            CoverType.BulkCarrier => CoverItemType.BulkCarrier,
+            CoverType.Tanker => CoverItemType.Tanker,
+            _ => throw new ArgumentOutOfRangeException(nameof(source))
+        };
+    }
+
+    private static CoverType ToDomainEnum(CoverItemType source)
+    {
+        return source switch
+        {
+            CoverItemType.Yacht => CoverType.Yacht,
+            CoverItemType.PassengerShip => CoverType.PassengerShip,
+            CoverItemType.ContainerShip => CoverType.ContainerShip,
+            CoverItemType.BulkCarrier => CoverType.BulkCarrier,
+            CoverItemType.Tanker => CoverType.Tanker,
+            _ => throw new ArgumentOutOfRangeException(nameof(source))
         };
     }
 }
