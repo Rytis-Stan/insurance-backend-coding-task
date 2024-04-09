@@ -1,3 +1,3 @@
-﻿namespace Claims.Api.Dto;
+﻿namespace Claims.Api.Contracts.Messages;
 
 public record GetCoverPremiumResponse(decimal Premium);

@@ -1,4 +1,6 @@
-﻿namespace Claims.Api.Dto;
+﻿using Claims.Api.Contracts.Dto;
+
+namespace Claims.Api.Contracts.Messages;
 
 public record CreateClaimRequest(
     Guid CoverId,

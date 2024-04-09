@@ -1,4 +1,4 @@
-﻿namespace Claims.Api.Dto;
+﻿namespace Claims.Api.Contracts.Dto;
 
 public record ClaimDto(
     Guid Id,

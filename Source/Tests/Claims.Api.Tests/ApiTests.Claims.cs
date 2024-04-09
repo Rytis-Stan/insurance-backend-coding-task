@@ -1,5 +1,6 @@
 ﻿using System.Net;
-using Claims.Api.Dto;
+using Claims.Api.Contracts.Dto;
+using Claims.Api.Contracts.Messages;
 using Claims.Testing;
 using Xunit;
 using static Claims.Testing.TestValueBuilder;

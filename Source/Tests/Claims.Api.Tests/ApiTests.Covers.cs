@@ -1,6 +1,7 @@
-﻿using Claims.Api.Dto;
+﻿using Claims.Api.Contracts.Messages;
 using Claims.Testing;
 using System.Net;
+using Claims.Api.Contracts.Dto;
 using Xunit;
 
 namespace Claims.Api.Tests;

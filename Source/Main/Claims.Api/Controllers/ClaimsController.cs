@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using Claims.Api.Dto;
+using Claims.Api.Contracts.Messages;
 using Claims.Application.Commands;
 using Claims.Application.Commands.CreateClaim;
 using Claims.Application.Commands.DeleteClaim;

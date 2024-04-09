@@ -1,4 +1,6 @@
-﻿using Claims.Application.Commands.CreateClaim;
+﻿using Claims.Api.Contracts.Dto;
+using Claims.Api.Contracts.Messages;
+using Claims.Application.Commands.CreateClaim;
 using Claims.Application.Commands.CreateCover;
 using Claims.Application.Commands.GetAllClaims;
 using Claims.Application.Commands.GetAllCovers;
@@ -7,7 +9,7 @@ using Claims.Application.Commands.GetCover;
 using Claims.Application.Commands.GetCoverPremium;
 using Claims.Domain;
 
-namespace Claims.Api.Dto;
+namespace Claims.Api;
 
 /// <summary>
 /// An extension method class for mapping DTOs to domain objects and vice versa.

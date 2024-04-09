@@ -1,4 +1,5 @@
-﻿using Claims.Api.Dto;
+﻿using Claims.Api.Contracts.Dto;
+using Claims.Api.Contracts.Messages;
 
 namespace Claims.Api.Tests;
 
