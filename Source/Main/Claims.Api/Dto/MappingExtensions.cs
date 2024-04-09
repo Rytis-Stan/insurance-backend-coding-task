@@ -91,7 +91,7 @@ public static class MappingExtensions
             CoverType.ContainerShip => CoverDtoType.ContainerShip,
             CoverType.BulkCarrier => CoverDtoType.BulkCarrier,
             CoverType.Tanker => CoverDtoType.Tanker,
-            _ => throw new ArgumentOutOfRangeException(nameof(source), source, null)
+            _ => throw new ArgumentOutOfRangeException(nameof(source))
         };
     }
 
