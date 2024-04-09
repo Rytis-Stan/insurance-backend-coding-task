@@ -3,7 +3,6 @@ namespace Claims.Api.Configuration;
 
 public class AppConfiguration
 {
-    public string ConnectionString { get; init; }
     public CosmosDbConfiguration CosmosDb { get; init; }
     public RabbitMqConfiguration RabbitMq { get; init; }
 
