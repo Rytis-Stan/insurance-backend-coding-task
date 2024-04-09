@@ -1,4 +1,5 @@
 using Claims.Application.Repositories;
+using Claims.Domain;
 
 namespace Claims.Application.Commands.CreateClaim;
 

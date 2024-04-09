@@ -2,6 +2,7 @@
 using Claims.Application.Commands.CreateCover;
 using Claims.Application.Repositories;
 using Claims.Domain;
+using Claims.Testing;
 using Moq;
 using Xunit;
 using static Claims.Testing.TestValueBuilder;
@@ -49,7 +50,7 @@ public class CreateCoverCommandTests : CoversCommandTests
             var args = new CreateCoverArgs(startDate, endDate, AnyCoverType);
             StubUtcNow(utcNow);
 
-            await AssertExtended.ThrowsValidationExceptionAsync(
+            await AssertExtended.ThrowsAsync<ValidationException>(
                 () => _command.ExecuteAsync(args),
                 "Start date cannot be in the past."
             );
@@ -82,7 +83,7 @@ public class CreateCoverCommandTests : CoversCommandTests
             var args = new CreateCoverArgs(startDate, endDate, AnyCoverType);
             StubUtcNow(utcNow);
 
-            await AssertExtended.ThrowsValidationExceptionAsync(
+            await AssertExtended.ThrowsAsync<ValidationException>(
                 () => _command.ExecuteAsync(args),
                 "End date cannot be in the past."
             );
@@ -123,54 +124,9 @@ public class CreateCoverCommandTests : CoversCommandTests
             var args = new CreateCoverArgs(startDate, endDate, AnyCoverType);
             StubUtcNow(utcNow);
 
-            await AssertExtended.ThrowsValidationExceptionAsync(
+            await AssertExtended.ThrowsAsync<ValidationException>(
                 () => _command.ExecuteAsync(args),
                 "End date cannot be earlier than the start date."
-            );
-        }
-    }
-
-    [Fact]
-    public async Task ThrowsExceptionWhenCoverPeriodExceedsASingleYear()
-    {
-        // NOTE: Making an assumption that a 1-year period for insurance takes
-        // into consideration the fact that different years might have a different
-        // number of days. In this situation, the insurance is considered valid
-        // right until the same day happens the next year after the insurance start.
-        await Test(
-            UtcDateTime(2000, 01, 01),
-            Date(2000, 01, 01),
-            Date(2001, 01, 01)
-        );
-        await Test(
-            UtcDateTime(1972, 01, 01),
-            Date(1972, 01, 01),
-            Date(1973, 01, 01)
-        );
-        await Test(
-            UtcDateTime(1972, 01, 01),
-            Date(1972, 01, 01),
-            Date(1999, 01, 01)
-        );
-        await Test(
-            UtcDateTime(1972, 01, 01),
-            Date(1972, 01, 01),
-            Date(1999, 02, 03)
-        );
-        await Test(
-            UtcDateTime(1972, 01, 01),
-            Date(1998, 02, 03),
-            Date(1999, 02, 03)
-        );
-
-        async Task Test(DateTime utcNow, DateOnly startDate, DateOnly endDate)
-        {
-            var args = new CreateCoverArgs(startDate, endDate, AnyCoverType);
-            StubUtcNow(utcNow);
-
-            await AssertExtended.ThrowsValidationExceptionAsync(
-                () => _command.ExecuteAsync(args),
-                "Total insurance period cannot exceed 1 year."
             );
         }
     }

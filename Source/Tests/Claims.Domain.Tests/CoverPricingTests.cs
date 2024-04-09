@@ -1,10 +1,57 @@
 ﻿using Claims.Testing;
 using Xunit;
+using static Claims.Testing.TestValueBuilder;
 
 namespace Claims.Domain.Tests;
 
 public class CoverPricingTests
 {
+    private const CoverType AnyCoverType = CoverType.Tanker;
+
+    private readonly CoverPricing _coverPricing;
+
+    public CoverPricingTests()
+    {
+        _coverPricing = new CoverPricing();
+    }
+
+    [Fact]
+    public void ThrowsExceptionWhenCoverPeriodExceedsASingleYear()
+    {
+        // NOTE: Making an assumption that a 1-year period for insurance takes
+        // into consideration the fact that different years might have a different
+        // number of days. In this situation, the insurance is considered valid
+        // right until the same day happens the next year after the insurance start.
+        Test(
+            Date(2000, 01, 01),
+            Date(2001, 01, 01)
+        );
+        Test(
+            Date(1972, 01, 01),
+            Date(1973, 01, 01)
+        );
+        Test(
+            Date(1972, 01, 01),
+            Date(1999, 01, 01)
+        );
+        Test(
+            Date(1972, 01, 01),
+            Date(1999, 02, 03)
+        );
+        Test(
+            Date(1998, 02, 03),
+            Date(1999, 02, 03)
+        );
+
+        void Test(DateOnly startDate, DateOnly endDate)
+        {
+            AssertExtended.Throws<ValidationException>(
+                () => _coverPricing.Premium(startDate, endDate, AnyCoverType),
+                "Total insurance period cannot exceed 1 year."
+            );
+        }
+    }
+
     [Theory]
     [InlineData(CoverType.Yacht, 1375)]         // 10% of 1250
     [InlineData(CoverType.PassengerShip, 1500)] // 20% of 1250
@@ -104,12 +151,12 @@ public class CoverPricingTests
         AssertReturnsCorrectPremium(coverType, periodDurationInDays, expectedPremium);
     }
 
-    private static void AssertReturnsCorrectPremium(CoverType coverType, int periodDurationInDays, decimal expectedPremium)
+    private void AssertReturnsCorrectPremium(CoverType coverType, int periodDurationInDays, decimal expectedPremium)
     {
         var (startDate, endDate) = TestData.RandomFixedLengthPeriod(periodDurationInDays);
         Assert.Equal(
             expectedPremium,
-            new CoverPricing().Premium(startDate, endDate, coverType)
+            _coverPricing.Premium(startDate, endDate, coverType)
         );
     }
 }

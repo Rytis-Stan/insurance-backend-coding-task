@@ -1,4 +1,4 @@
-﻿namespace Claims.Application;
+﻿namespace Claims.Domain;
 
 public class ValidationException : Exception
 {

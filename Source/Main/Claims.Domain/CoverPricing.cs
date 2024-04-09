@@ -4,6 +4,20 @@ public class CoverPricing : ICoverPricing
 {
     public decimal Premium(DateOnly startDate, DateOnly endDate, CoverType coverType)
     {
+        ValidatePeriodNotTooLong(startDate, endDate);
+        return PremiumFor(startDate, endDate, coverType);
+    }
+
+    private static void ValidatePeriodNotTooLong(DateOnly startDate, DateOnly endDate)
+    {
+        if (startDate.AddYears(1) <= endDate)
+        {
+            throw new ValidationException("Total insurance period cannot exceed 1 year.");
+        }
+    }
+
+    private static decimal PremiumFor(DateOnly startDate, DateOnly endDate, CoverType coverType)
+    {
         var totalInsurancePeriodInDays = endDate.DayNumber - startDate.DayNumber + 1;
 
         const int initialPeriodDurationInDays = 30;

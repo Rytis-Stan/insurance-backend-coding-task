@@ -1,6 +1,6 @@
 using Claims.Api.Contracts.Dto;
 using Claims.Api.Contracts.Messages;
-using Claims.Application;
+using Claims.Domain;
 
 namespace Claims.Api;
 

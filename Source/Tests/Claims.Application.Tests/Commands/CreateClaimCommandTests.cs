@@ -33,7 +33,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
         var created = TestData.RandomUtcDateTime();
         var args = new CreateClaimArgs(coverId, "anyName", AnyClaimType, damageCost, created);
 
-        await AssertExtended.ThrowsValidationExceptionAsync(
+        await AssertExtended.ThrowsAsync<ValidationException>(
             () => _command.ExecuteAsync(args),
             "Damage cost must be a positive value."
         );
@@ -49,7 +49,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
         var created = TestData.RandomUtcDateTime();
         var args = new CreateClaimArgs(coverId, "anyName", AnyClaimType, damageCost, created);
 
-        await AssertExtended.ThrowsValidationExceptionAsync(
+        await AssertExtended.ThrowsAsync<ValidationException>(
             () => _command.ExecuteAsync(args),
             "Damage cost cannot exceed 100000."
         );
@@ -63,7 +63,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
         var args = new CreateClaimArgs(coverId, "anyName", AnyClaimType, AnyDamageCost, created);
         StubFindCover(coverId, null);
 
-        await AssertExtended.ThrowsValidationExceptionAsync(
+        await AssertExtended.ThrowsAsync<ValidationException>(
             () => _command.ExecuteAsync(args),
             "Claim references a non-existing cover via the cover ID."
         );
@@ -109,7 +109,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
             var args = new CreateClaimArgs(cover.Id, "anyName", AnyClaimType, AnyDamageCost, claimCreated);
             StubFindCover(cover.Id, cover);
 
-            await AssertExtended.ThrowsValidationExceptionAsync(
+            await AssertExtended.ThrowsAsync<ValidationException>(
                 () => _command.ExecuteAsync(args),
                 "Claim is outside the related cover period."
             );

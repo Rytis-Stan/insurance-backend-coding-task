@@ -55,12 +55,7 @@ public partial class ApiTests
     {
         var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
         var startDate = utcNow.AddDays(TestData.RandomInt(1, 100));
-        // NOTE: Even though "AddYears(1)" adds exactly a single year "calendar-wise", in practice
-        // the insurance period duration becomes 1 year + 1 extra day. This is due to the fact that
-        // insurance works from the start of the day on "startDate" to the end of the day of "endDate"
-        // (so if "startDate" and "endDate" match, it is still technically a single day of insurance).
-        var endDate = startDate.AddYears(1);
-        
+        var endDate = CoverPeriodEndAfter1YearAnd1Day(startDate);
         var coverType = TestData.RandomEnum<CoverDtoType>();
         var request = new CreateCoverRequest(startDate, endDate, coverType);
 
@@ -74,7 +69,7 @@ public partial class ApiTests
     {
         var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
         var startDate = utcNow.AddDays(TestData.RandomInt(1, 100));
-        var endDate = startDate.AddYears(1).AddDays(TestData.RandomInt(1, 90));
+        var endDate = CoverPeriodEndAfter1YearAnd1Day(startDate).AddDays(TestData.RandomInt(1, 90));
         var coverType = TestData.RandomEnum<CoverDtoType>();
         var request = new CreateCoverRequest(startDate, endDate, coverType);
 
@@ -196,11 +191,37 @@ public partial class ApiTests
         Assert.Equal(HttpStatusCode.NoContent, httpResponse.StatusCode);
     }
 
+    [Fact]
+    public async Task CoversPremiumGetReturnsBadRequestWhenCoverPeriodExceedsASingleYearByExactlyOneDay()
+    {
+        var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
+        var startDate = utcNow.AddDays(TestData.RandomInt(1, 100));
+        var endDate = CoverPeriodEndAfter1YearAnd1Day(startDate);
+        var coverType = TestData.RandomEnum<CoverDtoType>();
+
+        var httpResponse = await CoversPremiumGetAsync(startDate, endDate, coverType);
+
+        await AssertBadRequestAsync(httpResponse, "Total insurance period cannot exceed 1 year.");
+    }
+
+    [Fact]
+    public async Task CoversPremiumGetReturnsBadRequestWhenCoverPeriodExceedsASingleYearByMoreThanOneDay()
+    {
+        var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
+        var startDate = utcNow.AddDays(TestData.RandomInt(1, 100));
+        var endDate = CoverPeriodEndAfter1YearAnd1Day(startDate).AddDays(TestData.RandomInt(1, 90));
+        var coverType = TestData.RandomEnum<CoverDtoType>();
+
+        var httpResponse = await CoversPremiumGetAsync(startDate, endDate, coverType);
+
+        await AssertBadRequestAsync(httpResponse, "Total insurance period cannot exceed 1 year.");
+    }
+
     [Theory]
     [InlineData("2001-01-01", "2001-01-01", CoverDtoType.Yacht, 1375.00)]
     [InlineData("2024-03-02", "2024-03-31", CoverDtoType.ContainerShip, 48750)]
     [InlineData("1995-06-05", "1995-12-04", CoverDtoType.Tanker, 337331.25)]
-    public async Task CoversPremiumGetReturnsCalculatedPremiumForGivenPeriodBasedOnCoverType(
+    public async Task CoversPremiumGetReturnsPremiumForGivenPeriodBasedOnCoverTypeWhenRequestValid(
         string startDate, string endDate, CoverDtoType coverType, decimal expectedPremium)
     {
         var httpResponse = await CoversPremiumGetAsync(startDate, endDate, coverType);
@@ -210,7 +231,7 @@ public partial class ApiTests
     }
 
     [Fact]
-    public async Task CoversPremiumGetReturnsSamePremiumAsForNewlyCreatedCoverWhenParametersAreTheSame()
+    public async Task CoversPremiumGetReturnsSamePremiumAsForNewlyCreatedCoverWhenRequestValidAndParametersAreSame()
     {
         var cover = await CreateRandomCoverAsync();
 
@@ -218,6 +239,15 @@ public partial class ApiTests
 
         var response = await httpResponse.OkReadContentAsync<GetCoverPremiumResponse>();
         Assert.Equal(cover.Premium, response.Premium);
+    }
+
+    private static DateOnly CoverPeriodEndAfter1YearAnd1Day(DateOnly startDate)
+    {
+        // NOTE: Even though "AddYears(1)" adds exactly a single year "calendar-wise", in practice
+        // the insurance period duration becomes 1 year + 1 extra day. This is due to the fact that
+        // insurance works from the start of the day on "startDate" to the end of the day of "endDate"
+        // (so if "startDate" and "endDate" match, it is still technically a single day of insurance).
+        return startDate.AddYears(1);
     }
 
     // TODO: Move this method out of this class.

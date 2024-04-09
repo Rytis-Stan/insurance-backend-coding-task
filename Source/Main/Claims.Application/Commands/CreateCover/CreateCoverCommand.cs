@@ -42,10 +42,6 @@ public class CreateCoverCommand : ICommand<CreateCoverArgs, CreateCoverResult>
         {
             throw new ValidationException("End date cannot be earlier than the start date.");
         }
-        if (startDate.AddYears(1) <= endDate)
-        {
-            throw new ValidationException("Total insurance period cannot exceed 1 year.");
-        }
     }
 
     private NewCoverInfo ToNewCoverInfo(CreateCoverArgs args)
