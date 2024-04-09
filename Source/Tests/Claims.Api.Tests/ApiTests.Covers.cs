@@ -92,14 +92,26 @@ public partial class ApiTests
 
         var httpResponse = await CoversPostAsync(request);
 
-        var response = await httpResponse.OkReadContentAsync<CreateCoverResponse>();
+        var response = await httpResponse.ReadContentAsync<CreateCoverResponse>(HttpStatusCode.Created);
         var cover = response.Cover;
-        Assert.NotNull(cover);
         Assert.NotEqual(Guid.Empty, cover.Id);
         Assert.Equal(request.StartDate, cover.StartDate);
         Assert.Equal(request.EndDate, cover.EndDate);
         Assert.Equal(coverType, cover.Type);
         Assert.Equal(expectedPremium, cover.Premium);
+    }
+
+    [Fact]
+    public async Task CoversPostReturnsLocationOfNewResourceThatCanBeUsedToRetrieveItLaterWhenRequestIsValid()
+    {
+        var request = RandomCreateCoverRequest(DateTime.UtcNow);
+
+        var httpCreateResponse = await CoversPostAsync(request);
+
+        var httpGetResponse = await _client.GetAsync(httpCreateResponse.Headers.Location);
+        var createResponse = await httpCreateResponse.ReadContentAsync<CreateCoverResponse>(HttpStatusCode.Created);
+        var getResponse = await httpGetResponse.OkReadContentAsync<GetCoverResponse>();
+        Assert.Equal(createResponse.Cover, getResponse.Cover);
     }
 
     [Fact]

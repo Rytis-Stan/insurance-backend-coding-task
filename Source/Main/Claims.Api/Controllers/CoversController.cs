@@ -29,7 +29,7 @@ public class CoversController : ControllerBase
     {
         var response = (await command.ExecuteAsync(request.ToCommandArgs())).ToResponse();
         _auditor.AuditPost(response.Cover.Id);
-        return Ok(response);
+        return CreatedAtAction(nameof(GetCoverAsync), new { response.Cover.Id }, response);
     }
 
     [HttpGet("{id}")]

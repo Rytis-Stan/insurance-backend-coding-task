@@ -67,10 +67,10 @@ public class Program
 
     private static void AddControllers(IServiceCollection services)
     {
-        services.AddControllers().AddJsonOptions(x =>
-        {
-            x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-        });
+        services
+            // NOTE: Suffix suppression is required for "CreatedAtAction" method to work properly.
+            .AddControllers(options => options.SuppressAsyncSuffixInActionNames = false)
+            .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
     }
 
     private static void AddInfrastructure(IServiceCollection services)
