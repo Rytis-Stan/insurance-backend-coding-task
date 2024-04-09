@@ -1,6 +1,6 @@
 ﻿using BuildingBlocks.MessageQueues;
 
-namespace Shared.Auditing.MessageQueueBased;
+namespace Auditing.Auditors.MessageQueueBased;
 
 public abstract class MessageQueueAuditor : IHttpRequestAuditor
 {

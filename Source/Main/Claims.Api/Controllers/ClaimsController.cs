@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Auditing.Auditors;
 using Claims.Api.Contracts.Messages;
 using Claims.Application.Commands;
 using Claims.Application.Commands.CreateClaim;
@@ -6,7 +7,6 @@ using Claims.Application.Commands.DeleteClaim;
 using Claims.Application.Commands.GetAllClaims;
 using Claims.Application.Commands.GetClaimById;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Auditing;
 
 namespace Claims.Api.Controllers;
 

@@ -1,8 +1,8 @@
-﻿using Auditing.Persistence;
+﻿using Auditing.Auditors.MessageQueueBased;
+using Auditing.Persistence;
 using Auditing.QueueAgent.IO;
 using BuildingBlocks.MessageQueues;
 using Microsoft.Extensions.Logging;
-using Shared.Auditing.MessageQueueBased;
 
 namespace Auditing.QueueAgent;
 

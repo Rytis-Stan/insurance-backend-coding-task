@@ -1,4 +1,4 @@
-﻿namespace Shared.Auditing;
+﻿namespace Auditing.Auditors;
 
 public enum HttpRequestType
 {

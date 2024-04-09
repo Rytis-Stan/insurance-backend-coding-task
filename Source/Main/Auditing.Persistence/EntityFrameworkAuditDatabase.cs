@@ -1,6 +1,6 @@
-﻿using BuildingBlocks.Temporal;
+﻿using Auditing.Auditors.PersistenceBased;
+using BuildingBlocks.Temporal;
 using Microsoft.EntityFrameworkCore;
-using Shared.Auditing.PersistenceBased;
 
 namespace Auditing.Persistence;
 

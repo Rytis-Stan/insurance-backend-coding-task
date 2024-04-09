@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using Auditing.Auditors;
+using Auditing.Auditors.MessageQueueBased;
 using BuildingBlocks.MessageQueues;
 using BuildingBlocks.MessageQueues.RabbitMq;
 using BuildingBlocks.Temporal;
@@ -16,8 +18,6 @@ using Claims.Application.Commands.GetCoverPremium;
 using Claims.Domain;
 using Claims.Persistence;
 using Microsoft.Azure.Cosmos;
-using Shared.Auditing;
-using Shared.Auditing.MessageQueueBased;
 
 namespace Claims.Api;
 

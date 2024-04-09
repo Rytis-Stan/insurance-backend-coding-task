@@ -1,4 +1,4 @@
-﻿namespace Shared.Auditing.MessageQueueBased;
+﻿namespace Auditing.Auditors.MessageQueueBased;
 
 public enum AuditEntityKind
 {

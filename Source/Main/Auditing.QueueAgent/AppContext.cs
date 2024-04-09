@@ -1,13 +1,13 @@
-﻿using Auditing.Persistence;
+﻿using Auditing.Auditors;
+using Auditing.Auditors.MessageQueueBased;
+using Auditing.Auditors.PersistenceBased;
+using Auditing.Persistence;
 using Auditing.QueueAgent.Configuration;
 using Auditing.QueueAgent.IO;
 using BuildingBlocks.MessageQueues;
 using BuildingBlocks.MessageQueues.CommonListeners;
 using BuildingBlocks.MessageQueues.RabbitMq;
 using Microsoft.Extensions.Logging;
-using Shared.Auditing;
-using Shared.Auditing.MessageQueueBased;
-using Shared.Auditing.PersistenceBased;
 
 namespace Auditing.QueueAgent;
 

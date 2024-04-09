@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Auditing.Auditors\Auditing.Auditors.csproj" />
     <ProjectReference Include="..\Auditing.Persistence\Auditing.Persistence.csproj" />
     <ProjectReference Include="..\BuildingBlocks.MessageQueues\BuildingBlocks.MessageQueues.csproj" />
   </ItemGroup>

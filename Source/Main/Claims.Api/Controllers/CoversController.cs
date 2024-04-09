@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Auditing.Auditors;
 using Claims.Api.Contracts.Dto;
 using Claims.Api.Contracts.Messages;
 using Claims.Application.Commands;
@@ -8,7 +9,6 @@ using Claims.Application.Commands.GetAllCovers;
 using Claims.Application.Commands.GetCover;
 using Claims.Application.Commands.GetCoverPremium;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Auditing;
 
 namespace Claims.Api.Controllers;
 

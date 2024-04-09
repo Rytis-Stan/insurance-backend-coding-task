@@ -1,4 +1,4 @@
-﻿using Shared.Auditing.PersistenceBased;
+﻿using Auditing.Auditors.PersistenceBased;
 
 namespace Auditing.Persistence;
 

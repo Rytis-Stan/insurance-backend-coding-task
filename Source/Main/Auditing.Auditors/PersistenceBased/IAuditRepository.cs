@@ -1,4 +1,4 @@
-﻿namespace Shared.Auditing.PersistenceBased;
+﻿namespace Auditing.Auditors.PersistenceBased;
 
 public interface IAuditRepository
 {

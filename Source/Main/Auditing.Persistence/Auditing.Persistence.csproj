@@ -19,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Auditing.Auditors\Auditing.Auditors.csproj" />
     <ProjectReference Include="..\BuildingBlocks.Temporal\BuildingBlocks.Temporal.csproj" />
-    <ProjectReference Include="..\Shared.Auditing\Shared.Auditing.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace Shared.Auditing.PersistenceBased;
+﻿namespace Auditing.Auditors.PersistenceBased;
 
 public abstract class PersistingAuditor<TRepository> : IHttpRequestAuditor
     where TRepository : IAuditRepository
