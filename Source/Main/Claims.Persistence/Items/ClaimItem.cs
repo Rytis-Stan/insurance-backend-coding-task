@@ -1,9 +1,9 @@
 ﻿using Claims.Domain;
 using Newtonsoft.Json;
 
-namespace Claims.Persistence;
+namespace Claims.Persistence.Items;
 
-public class ClaimJson
+public class ClaimItem
 {
     [JsonProperty(PropertyName = "id")]
     public required string Id { get; init; }

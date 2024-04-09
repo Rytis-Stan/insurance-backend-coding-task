@@ -3,10 +3,10 @@ using Microsoft.Azure.Cosmos;
 
 namespace Claims.Persistence;
 
-public abstract class CosmosDbRepository<TNewObjectInfo, TObject, TJson>
-    where TNewObjectInfo : class
-    where TObject : class
-    where TJson : class
+public abstract class CosmosDbRepository<TNewDomainEntityInfo, TDomainEntity, TDbItem>
+    where TNewDomainEntityInfo : class
+    where TDomainEntity : class
+    where TDbItem : class
 {
     private readonly Container _container;
     private readonly IIdSource _idSource;
@@ -18,19 +18,19 @@ public abstract class CosmosDbRepository<TNewObjectInfo, TObject, TJson>
         _idSource = idSource;
     }
 
-    public async Task<TObject> CreateAsync(TNewObjectInfo newObject)
+    public async Task<TDomainEntity> CreateAsync(TNewDomainEntityInfo entity)
     {
         var id = _idSource.NewId().ToString();
-        var json = ToNewJson(id, newObject);
-        return ToItem(await _container.CreateItemAsync(json, new PartitionKey(id)));
+        var item = ToItem(id, entity);
+        return ToEntity(await _container.CreateItemAsync(item, new PartitionKey(id)));
     }
 
-    public async Task<TObject?> FindByIdAsync(Guid id)
+    public async Task<TDomainEntity?> FindByIdAsync(Guid id)
     {
         try
         {
-            var response = await _container.ReadItemAsync<TJson>(id.ToString(), new PartitionKey(id.ToString()));
-            return ToItem(response.Resource);
+            var response = await _container.ReadItemAsync<TDbItem>(id.ToString(), new PartitionKey(id.ToString()));
+            return ToEntity(response.Resource);
         }
         catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
         {
@@ -38,14 +38,14 @@ public abstract class CosmosDbRepository<TNewObjectInfo, TObject, TJson>
         }
     }
 
-    public async Task<IEnumerable<TObject>> GetAllAsync()
+    public async Task<IEnumerable<TDomainEntity>> GetAllAsync()
     {
-        var query = _container.GetItemQueryIterator<TJson>(new QueryDefinition("SELECT * FROM c"));
-        var results = new List<TObject>();
+        var query = _container.GetItemQueryIterator<TDbItem>(new QueryDefinition("SELECT * FROM c"));
+        var results = new List<TDomainEntity>();
         while (query.HasMoreResults)
         {
             var response = await query.ReadNextAsync();
-            results.AddRange(response.Select(ToItem));
+            results.AddRange(response.Select(ToEntity));
         }
         return results;
     }
@@ -59,7 +59,7 @@ public abstract class CosmosDbRepository<TNewObjectInfo, TObject, TJson>
     {
         try
         {
-            await _container.DeleteItemAsync<TJson>(id, new PartitionKey(id));
+            await _container.DeleteItemAsync<TDbItem>(id, new PartitionKey(id));
         }
         catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
         {
@@ -68,6 +68,6 @@ public abstract class CosmosDbRepository<TNewObjectInfo, TObject, TJson>
         }
     }
 
-    protected abstract TJson ToNewJson(string id, TNewObjectInfo item);
-    protected abstract TObject ToItem(TJson json);
+    protected abstract TDbItem ToItem(string id, TNewDomainEntityInfo entity);
+    protected abstract TDomainEntity ToEntity(TDbItem item);
 }

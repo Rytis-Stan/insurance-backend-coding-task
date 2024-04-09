@@ -1,13 +1,13 @@
 namespace Claims.Application.Repositories;
 
-public interface IRepository<in TNewObjectInfo, TObject>
+public interface IRepository<in TNewDomainEntityInfo, TDomainEntity>
 {
-    Task<TObject> CreateAsync(TNewObjectInfo newObject);
+    Task<TDomainEntity> CreateAsync(TNewDomainEntityInfo entityInfo);
 
     // NOTE: Using the term "Find" instead of "Get" to imply that the result
     // might not be available, in which case a null value is returned.
-    Task<TObject?> FindByIdAsync(Guid id);
+    Task<TDomainEntity?> FindByIdAsync(Guid id);
 
-    Task<IEnumerable<TObject>> GetAllAsync();
+    Task<IEnumerable<TDomainEntity>> GetAllAsync();
     Task DeleteByIdAsync(Guid id);
 }
