@@ -12,15 +12,15 @@ internal class CosmosDbCoversRepository : CosmosDbRepository<NewCoverInfo, Cover
     {
     }
 
-    protected override CoverItem ToItem(string id, NewCoverInfo entity)
+    protected override CoverItem ToItem(string id, NewCoverInfo entityInfo)
     {
         return new CoverItem
         {
             Id = id,
-            StartDate = entity.StartDate,
-            EndDate = entity.EndDate,
-            Type = entity.Type,
-            Premium = entity.Premium
+            StartDate = entityInfo.StartDate,
+            EndDate = entityInfo.EndDate,
+            Type = entityInfo.Type,
+            Premium = entityInfo.Premium
         };
     }
 

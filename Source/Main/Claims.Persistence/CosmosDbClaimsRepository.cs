@@ -12,16 +12,16 @@ internal class CosmosDbClaimsRepository : CosmosDbRepository<NewClaimInfo, Claim
     {
     }
 
-    protected override ClaimItem ToItem(string id, NewClaimInfo entity)
+    protected override ClaimItem ToItem(string id, NewClaimInfo entityInfo)
     {
         return new ClaimItem
         {
             Id = id,
-            CoverId = entity.CoverId.ToString(),
-            Name = entity.Name,
-            Type = entity.Type,
-            DamageCost = entity.DamageCost,
-            Created = entity.Created
+            CoverId = entityInfo.CoverId.ToString(),
+            Name = entityInfo.Name,
+            Type = entityInfo.Type,
+            DamageCost = entityInfo.DamageCost,
+            Created = entityInfo.Created
         };
     }
 

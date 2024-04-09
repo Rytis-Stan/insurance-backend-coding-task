@@ -18,10 +18,10 @@ public abstract class CosmosDbRepository<TNewDomainEntityInfo, TDomainEntity, TD
         _idSource = idSource;
     }
 
-    public async Task<TDomainEntity> CreateAsync(TNewDomainEntityInfo entity)
+    public async Task<TDomainEntity> CreateAsync(TNewDomainEntityInfo entityInfo)
     {
         var id = _idSource.NewId().ToString();
-        var item = ToItem(id, entity);
+        var item = ToItem(id, entityInfo);
         return ToEntity(await _container.CreateItemAsync(item, new PartitionKey(id)));
     }
 
@@ -68,6 +68,6 @@ public abstract class CosmosDbRepository<TNewDomainEntityInfo, TDomainEntity, TD
         }
     }
 
-    protected abstract TDbItem ToItem(string id, TNewDomainEntityInfo entity);
+    protected abstract TDbItem ToItem(string id, TNewDomainEntityInfo entityInfo);
     protected abstract TDomainEntity ToEntity(TDbItem item);
 }
