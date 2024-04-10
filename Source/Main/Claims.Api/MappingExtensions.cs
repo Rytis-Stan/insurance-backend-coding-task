@@ -4,7 +4,7 @@ using Claims.Application.Commands.CreateClaim;
 using Claims.Application.Commands.CreateCover;
 using Claims.Application.Commands.GetAllClaims;
 using Claims.Application.Commands.GetAllCovers;
-using Claims.Application.Commands.GetClaimById;
+using Claims.Application.Commands.GetClaim;
 using Claims.Application.Commands.GetCover;
 using Claims.Application.Commands.GetCoverPremium;
 using Claims.Domain;
@@ -41,7 +41,7 @@ public static class MappingExtensions
         return new CreateClaimResponse(source.Claim.ToDto());
     }
 
-    public static GetClaimResponse ToResponse(this GetClaimByIdResult source)
+    public static GetClaimResponse ToResponse(this GetClaimResult source)
     {
         return new GetClaimResponse(source.Claim?.ToDto());
     }

@@ -12,7 +12,7 @@ using Claims.Application.Commands.DeleteClaim;
 using Claims.Application.Commands.DeleteCover;
 using Claims.Application.Commands.GetAllClaims;
 using Claims.Application.Commands.GetAllCovers;
-using Claims.Application.Commands.GetClaimById;
+using Claims.Application.Commands.GetClaim;
 using Claims.Application.Commands.GetCover;
 using Claims.Application.Commands.GetCoverPremium;
 using Claims.Domain;
@@ -93,7 +93,7 @@ public class Program
         services.AddTransient<ICommand<GetCoverPremiumArgs, GetCoverPremiumResult>, GetCoverPremiumCommand>();
 
         services.AddTransient<ICommand<CreateClaimArgs, CreateClaimResult>, CreateClaimCommand>();
-        services.AddTransient<ICommand<GetClaimByIdArgs, GetClaimByIdResult>, GetClaimByIdCommand>();
+        services.AddTransient<ICommand<GetClaimArgs, GetClaimResult>, GetClaimCommand>();
         services.AddTransient<ICommandWithNoArgs<GetAllClaimsResult>, GetAllClaimsCommand>();
         services.AddTransient<ICommandWithNoResult<DeleteClaimArgs>, DeleteClaimCommand>();
     }

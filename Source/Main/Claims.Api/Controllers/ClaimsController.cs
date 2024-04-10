@@ -6,7 +6,7 @@ using Claims.Application.Commands;
 using Claims.Application.Commands.CreateClaim;
 using Claims.Application.Commands.DeleteClaim;
 using Claims.Application.Commands.GetAllClaims;
-using Claims.Application.Commands.GetClaimById;
+using Claims.Application.Commands.GetClaim;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Claims.Api.Controllers;
@@ -40,9 +40,9 @@ public class ClaimsController : ControllerBase
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(GetClaimResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetClaimAsync([FromServices] ICommand<GetClaimByIdArgs, GetClaimByIdResult> command, Guid id)
+    public async Task<IActionResult> GetClaimAsync([FromServices] ICommand<GetClaimArgs, GetClaimResult> command, Guid id)
     {
-        var response = (await command.ExecuteAsync(new GetClaimByIdArgs(id))).ToResponse();
+        var response = (await command.ExecuteAsync(new GetClaimArgs(id))).ToResponse();
         return response.Claim != null
             ? Ok(response)
             : NotFound();

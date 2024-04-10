@@ -1,4 +1,4 @@
-﻿using Claims.Application.Commands.GetClaimById;
+﻿using Claims.Application.Commands.GetClaim;
 using Claims.Domain;
 using Moq;
 using Xunit;
@@ -6,13 +6,13 @@ using static Claims.Application.Tests.TestDomainData;
 
 namespace Claims.Application.Tests.Commands;
 
-public class GetClaimByIdCommandTests : ClaimsCommandTests
+public class GetClaimCommandTests : ClaimsCommandTests
 {
-    private readonly GetClaimByIdCommand _command;
+    private readonly GetClaimCommand _command;
 
-    public GetClaimByIdCommandTests()
+    public GetClaimCommandTests()
     {
-        _command = new GetClaimByIdCommand(ClaimsRepositoryMock.Object);
+        _command = new GetClaimCommand(ClaimsRepositoryMock.Object);
     }
 
     [Fact]
@@ -22,7 +22,7 @@ public class GetClaimByIdCommandTests : ClaimsCommandTests
         var claim = RandomClaim();
         StubFindClaim(id, claim);
 
-        var result = await _command.ExecuteAsync(new GetClaimByIdArgs(id));
+        var result = await _command.ExecuteAsync(new GetClaimArgs(id));
 
         Assert.Equal(claim, result.Claim);
     }
