@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using Claims.Api.Contracts.Messages;
 using Xunit;
-using static BuildingBlocks.Testing.TestValueBuilder;
+using static BuildingBlocks.Testing.Temporals;
 
 namespace Claims.Api.Tests;
 

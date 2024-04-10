@@ -1,14 +1,15 @@
 ﻿namespace BuildingBlocks.Testing;
 
 /// <summary>
-/// A static utility class for creating various types of test data. The main concern of
-/// the construction methods is to make them as short as possible, to help with the
-/// readability of tests cases.
+/// A static utility class for creating various types of dates and date-times. The main
+/// concern of the construction methods is to make them as short as possible, to help
+/// with the readability of tests cases.
 ///
 /// It is expected that this class will be imported statically for same reason of
 /// making the method calls look brief.
 /// </summary>
-public static class TestValueBuilder
+// ReSharper disable once IdentifierTypo
+public static class Temporals
 {
     public static DateOnly Date(int year, int month, int day)
     {

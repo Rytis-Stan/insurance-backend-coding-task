@@ -5,7 +5,7 @@ using Claims.Application.Repositories;
 using Claims.Domain;
 using Moq;
 using Xunit;
-using static BuildingBlocks.Testing.TestValueBuilder;
+using static BuildingBlocks.Testing.Temporals;
 using static Claims.Application.Tests.TestDomainData;
 
 namespace Claims.Application.Tests.Commands;
