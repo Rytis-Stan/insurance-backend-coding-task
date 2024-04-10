@@ -22,8 +22,9 @@ public class AuditingQueueListener : IQueueListener<AuditMessage>
                 _auditor.AuditDelete(message.EntityId);
                 break;
             default:
-                // TODO: Use a custom exception type?
-                throw new ArgumentOutOfRangeException(nameof(message));
+                throw new MessageQueueException(
+                    $"Received message contains an unsupported HTTP request type: {message.HttpRequestType}"
+                );
         }
     }
 }
