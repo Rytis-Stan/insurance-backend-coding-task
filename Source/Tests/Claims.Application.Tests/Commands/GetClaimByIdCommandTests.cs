@@ -2,6 +2,7 @@
 using Claims.Domain;
 using Moq;
 using Xunit;
+using static Claims.Application.Tests.TestDomainData;
 
 namespace Claims.Application.Tests.Commands;
 
@@ -18,7 +19,7 @@ public class GetClaimByIdCommandTests : ClaimsCommandTests
     public async Task ReturnsClaimByIdFromRepository()
     {
         var id = Guid.NewGuid();
-        var claim = TestDomainData.RandomClaim();
+        var claim = RandomClaim();
         StubFindClaim(id, claim);
 
         var result = await _command.ExecuteAsync(new GetClaimByIdArgs(id));
