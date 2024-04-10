@@ -12,13 +12,7 @@ public class EntityFrameworkAuditDatabase : IAuditDatabase
     public IAuditRepository CoverAuditRepository => new EntityFrameworkCoverAuditRepository(_auditContext, _clock);
     public IAuditRepository ClaimAuditRepository => new EntityFrameworkClaimAuditRepository(_auditContext, _clock);
 
-    // TODO: Move out the "AuditContext" creation to the outside of this database.
-    public EntityFrameworkAuditDatabase(string connectionString)
-        : this(CreateAuditContext(connectionString), new Clock())
-    {
-    }
-
-    private EntityFrameworkAuditDatabase(AuditContext auditContext, IClock clock)
+    public EntityFrameworkAuditDatabase(AuditContext auditContext, IClock clock)
     {
         _auditContext = auditContext;
         _clock = clock;
@@ -33,15 +27,5 @@ public class EntityFrameworkAuditDatabase : IAuditDatabase
     public void Migrate()
     {
         _auditContext.Database.Migrate();
-    }
-
-    public static AuditContext CreateAuditContext(string connectionString)
-    {
-        return new AuditContext(DbContextOptions(connectionString));
-    }
-
-    private static DbContextOptions<AuditContext> DbContextOptions(string connectionString)
-    {
-        return new DbContextOptionsBuilder<AuditContext>().UseSqlServer(connectionString).Options;
     }
 }

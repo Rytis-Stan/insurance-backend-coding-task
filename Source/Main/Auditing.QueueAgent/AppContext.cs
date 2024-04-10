@@ -6,6 +6,8 @@ using Auditing.QueueAgent.IO;
 using BuildingBlocks.MessageQueues;
 using BuildingBlocks.MessageQueues.CommonListeners;
 using BuildingBlocks.MessageQueues.RabbitMq;
+using BuildingBlocks.Temporal;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Auditing.QueueAgent;
@@ -40,7 +42,17 @@ public class AppContext : IAppContext
 
     private static IAuditDatabase CreateDatabase(AppConfiguration configuration)
     {
-        return new EntityFrameworkAuditDatabase(configuration.ConnectionString);
+        return new EntityFrameworkAuditDatabase(CreateAuditContext(configuration.ConnectionString), new Clock());
+    }
+
+    public static AuditContext CreateAuditContext(string connectionString)
+    {
+        return new AuditContext(DbContextOptions(connectionString));
+    }
+
+    private static DbContextOptions<AuditContext> DbContextOptions(string connectionString)
+    {
+        return new DbContextOptionsBuilder<AuditContext>().UseSqlServer(connectionString).Options;
     }
 
     private static IEnumerable<IReceivingQueue<AuditMessage>> CreateQueues(RabbitMqConfiguration configuration, ILogger logger, IAuditDatabase database)
