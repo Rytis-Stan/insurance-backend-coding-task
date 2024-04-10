@@ -6,6 +6,7 @@ using static BuildingBlocks.Testing.TestValueBuilder;
 
 namespace Claims.Api.Tests;
 
+// ReSharper disable once UnusedMember.Global
 public partial class ApiTests
 {
     // TODO: How should this method be named to make it clear that it does not just construct a DTO but actually calls an endpoint for the Cover creation?
