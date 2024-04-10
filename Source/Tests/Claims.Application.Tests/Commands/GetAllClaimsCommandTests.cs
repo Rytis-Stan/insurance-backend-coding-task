@@ -2,6 +2,7 @@
 using Claims.Domain;
 using Moq;
 using Xunit;
+using static Claims.Application.Tests.TestDomainData;
 
 namespace Claims.Application.Tests.Commands;
 
@@ -17,7 +18,7 @@ public class GetAllClaimsCommandTests : ClaimsCommandTests
     [Fact]
     public async Task ReturnsAllClaimsFromRepository()
     {
-        var claims = new[] { TestDomainData.RandomClaim(), TestDomainData.RandomClaim() };
+        var claims = new[] { RandomClaim(), RandomClaim() };
         StubGetAllClaims(claims);
 
         var result = await _command.ExecuteAsync();

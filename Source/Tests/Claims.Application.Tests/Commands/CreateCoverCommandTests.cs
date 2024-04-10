@@ -6,6 +6,7 @@ using Claims.Domain;
 using Moq;
 using Xunit;
 using static BuildingBlocks.Testing.TestValueBuilder;
+using static Claims.Application.Tests.TestDomainData;
 
 namespace Claims.Application.Tests.Commands;
 
@@ -116,7 +117,7 @@ public class CreateCoverCommandTests : CoversCommandTests
     [Fact]
     public async Task ReturnsCreatedCoverWhenCreatingAValidCover()
     {
-        var cover = TestDomainData.RandomCover();
+        var cover = RandomCover();
         var utcNow = UtcDateTime(cover.StartDate);
         var startDate = cover.StartDate;
         var endDate = cover.EndDate;

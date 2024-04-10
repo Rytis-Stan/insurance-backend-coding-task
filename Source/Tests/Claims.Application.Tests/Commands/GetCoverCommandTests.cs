@@ -2,6 +2,7 @@
 using Claims.Domain;
 using Moq;
 using Xunit;
+using static Claims.Application.Tests.TestDomainData;
 
 namespace Claims.Application.Tests.Commands;
 
@@ -18,7 +19,7 @@ public class GetCoverCommandTests : CoversCommandTests
     public async Task ReturnsCoverByIdFromRepository()
     {
         var id = Guid.NewGuid();
-        var cover = TestDomainData.RandomCover();
+        var cover = RandomCover();
         StubFindCover(id, cover);
 
         var result = await _command.ExecuteAsync(new GetCoverArgs(id));

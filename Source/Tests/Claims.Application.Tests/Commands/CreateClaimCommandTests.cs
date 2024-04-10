@@ -6,6 +6,7 @@ using Moq;
 using Xunit;
 using static BuildingBlocks.Testing.TestData;
 using static BuildingBlocks.Testing.TestValueBuilder;
+using static Claims.Application.Tests.TestDomainData;
 
 namespace Claims.Application.Tests.Commands;
 
@@ -145,8 +146,8 @@ public class CreateClaimCommandTests : ClaimsCommandTests
     [Fact]
     public async Task ReturnsCreatedClaimWhenCreatingAValidClaim()
     {
-        var cover = TestDomainData.RandomCover();
-        var claim = TestDomainData.RandomClaim(UtcDateTime(cover.StartDate));
+        var cover = RandomCover();
+        var claim = RandomClaim(UtcDateTime(cover.StartDate));
         var name = claim.Name;
         var claimType = claim.Type;
         var damageCost = claim.DamageCost;
