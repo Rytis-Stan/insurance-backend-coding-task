@@ -33,12 +33,11 @@ In addition to the main entry point, there is an additional executable called **
 
 ## Future considerations and potential improvements
 
-As the codebase evolves, a list of things should be considered:
+As the codebase evolves, a list of things should be considered (in no particular order):
 
-* **Enum serialization**. To make enums serializable to their labels instead of numeric values in Cosmos DB, the enums were decorated with the  [JsonConverter(typeof(StringEnumConverter))] attribute (the enums being "CoverItemType" and "ClaimItemType"). It would be better if this could be configured globally in a single place.
-* **.NET Version**. I wasn't sure if it's ok to upgrade the .NET version to the newest one, so decided to keep it as is. Though I did try to update the NuGet packages to the latest ones possible for the current .NET version. All version updates should be done as often as possible, especially when some packages contain security vulnerabilities, such as "Microsoft.Azure.Cosmos" package version "3.38.1" referencing a "Newtonsoft.Json" package version that has security vulnerabilities.
+* **Enum serialization**. To make enums serializable to their labels instead of numeric values in Cosmos DB, the enums were decorated with the _[JsonConverter(typeof(StringEnumConverter))]_ attribute (the enums being _CoverItemType_ and _ClaimItemType_). It would be better if this could be configured globally in a single place.
+* **.NET Version**. I wasn't sure if it's ok to upgrade the .NET version to the newest one, so decided to keep it as is. Though I did try to update the NuGet packages to the latest ones possible for the current .NET version. All version updates should be done as often as possible, especially when some packages contain security vulnerabilities, such as _Microsoft.Azure.Cosmos_ package version _3.38.1_ referencing a _Newtonsoft.Json_ package version that has security vulnerabilities.
 * **Command unit test structure**. Each command implementation, together with it's request and response types, is grouped into sub-folders based on the commands main name part. However, the command unit tests do not have these additional sub-folders. While under normal circumstances each unit test class should mimic the folder structure and naming of it's related type being tested, in this case it seemed like the right approach due to not wanting to create a folder for each test class separately. Alternatively, commands, requests and responses could all have their own folders ("Commands", "Requests", "Responses"), but that would make it harder to find related types when looking into three different folders.
-* **Validation. HTTP Responses for validation failures**. TODO: Introduce a global way to map command validation exceptions to an appropriate BadRequest response.
 * **Validation**. The deletion of a cover should handle the deletion of related claims in one of the following ways, because a claim without a cover cannot exist on it's own (it's a child the claim):
   * All child claims should simply be deleted, if any;
   * An exceptions should be raised if at least one claim is attached to a cover.
