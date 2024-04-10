@@ -1,4 +1,4 @@
-﻿using Claims.Application.Commands.GetAllCovers;
+﻿using Claims.Application.Commands.GetCovers;
 using Claims.Domain;
 using Moq;
 using Xunit;
@@ -6,13 +6,13 @@ using static Claims.Application.Tests.TestDomainData;
 
 namespace Claims.Application.Tests.Commands;
 
-public class GetAllCoversCommandTests : CoversCommandTests
+public class GetCoversCommandTests : CoversCommandTests
 {
-    private readonly GetAllCoversCommand _command;
+    private readonly GetCoversCommand _command;
 
-    public GetAllCoversCommandTests()
+    public GetCoversCommandTests()
     {
-        _command = new GetAllCoversCommand(CoversRepositoryMock.Object);
+        _command = new GetCoversCommand(CoversRepositoryMock.Object);
     }
 
     [Fact]

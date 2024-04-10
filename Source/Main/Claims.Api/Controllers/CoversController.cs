@@ -6,9 +6,9 @@ using Claims.Api.DependencyInjection;
 using Claims.Application.Commands;
 using Claims.Application.Commands.CreateCover;
 using Claims.Application.Commands.DeleteCover;
-using Claims.Application.Commands.GetAllCovers;
 using Claims.Application.Commands.GetCover;
 using Claims.Application.Commands.GetCoverPremium;
+using Claims.Application.Commands.GetCovers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Claims.Api.Controllers;
@@ -52,7 +52,7 @@ public class CoversController : ControllerBase
     
     [HttpGet]
     [ProducesResponseType(typeof(GetCoversResponse), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetCoversAsync([FromServices] ICommandWithNoArgs<GetAllCoversResult> command)
+    public async Task<IActionResult> GetCoversAsync([FromServices] ICommandWithNoArgs<GetCoversResult> command)
     {
         var response = (await command.ExecuteAsync()).ToResponse();
         return Ok(response);

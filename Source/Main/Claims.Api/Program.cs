@@ -11,10 +11,10 @@ using Claims.Application.Commands.CreateCover;
 using Claims.Application.Commands.DeleteClaim;
 using Claims.Application.Commands.DeleteCover;
 using Claims.Application.Commands.GetAllClaims;
-using Claims.Application.Commands.GetAllCovers;
 using Claims.Application.Commands.GetClaim;
 using Claims.Application.Commands.GetCover;
 using Claims.Application.Commands.GetCoverPremium;
+using Claims.Application.Commands.GetCovers;
 using Claims.Domain;
 using Claims.Persistence;
 using Microsoft.Azure.Cosmos;
@@ -87,7 +87,7 @@ public class Program
     {
         services.AddTransient<ICommand<CreateCoverArgs, CreateCoverResult>, CreateCoverCommand>();
         services.AddTransient<ICommand<GetCoverArgs, GetCoverResult>, GetCoverCommand>();
-        services.AddTransient<ICommandWithNoArgs<GetAllCoversResult>, GetAllCoversCommand>();
+        services.AddTransient<ICommandWithNoArgs<GetCoversResult>, GetCoversCommand>();
         services.AddTransient<ICommandWithNoResult<DeleteCoverArgs>, DeleteCoverCommand>();
         
         services.AddTransient<ICommand<GetCoverPremiumArgs, GetCoverPremiumResult>, GetCoverPremiumCommand>();

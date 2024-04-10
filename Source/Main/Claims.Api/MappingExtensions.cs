@@ -3,10 +3,10 @@ using Claims.Api.Contracts.Messages;
 using Claims.Application.Commands.CreateClaim;
 using Claims.Application.Commands.CreateCover;
 using Claims.Application.Commands.GetAllClaims;
-using Claims.Application.Commands.GetAllCovers;
 using Claims.Application.Commands.GetClaim;
 using Claims.Application.Commands.GetCover;
 using Claims.Application.Commands.GetCoverPremium;
+using Claims.Application.Commands.GetCovers;
 using Claims.Domain;
 
 namespace Claims.Api;
@@ -61,7 +61,7 @@ public static class MappingExtensions
         return new GetCoverResponse(source.Cover?.ToDto());
     }
 
-    public static GetCoversResponse ToResponse(this GetAllCoversResult source)
+    public static GetCoversResponse ToResponse(this GetCoversResult source)
     {
         return new GetCoversResponse(source.Covers.Select(x => x.ToDto()));
     }
