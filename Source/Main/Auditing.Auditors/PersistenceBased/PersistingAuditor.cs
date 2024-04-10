@@ -1,11 +1,10 @@
 ﻿namespace Auditing.Auditors.PersistenceBased;
 
-public abstract class PersistingAuditor<TRepository> : IHttpRequestAuditor
-    where TRepository : IAuditRepository
+public class PersistingAuditor : IHttpRequestAuditor
 {
-    private readonly TRepository _repository;
+    private readonly IAuditRepository _repository;
 
-    protected PersistingAuditor(TRepository repository)
+    public PersistingAuditor(IAuditRepository repository)
     {
         _repository = repository;
     }

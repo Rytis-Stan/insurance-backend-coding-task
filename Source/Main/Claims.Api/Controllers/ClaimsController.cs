@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Auditing.Auditors;
 using Claims.Api.Contracts.Messages;
+using Claims.Api.DependencyInjection;
 using Claims.Application.Commands;
 using Claims.Application.Commands.CreateClaim;
 using Claims.Application.Commands.DeleteClaim;
@@ -14,9 +15,14 @@ namespace Claims.Api.Controllers;
 [Route("[controller]")]
 public class ClaimsController : ControllerBase
 {
-    private readonly IClaimAuditor _auditor;
+    private readonly IHttpRequestAuditor _auditor;
 
-    public ClaimsController(IClaimAuditor auditor)
+    public ClaimsController(ClaimAuditorSource auditorSource)
+        : this(auditorSource.Obj)
+    {
+    }
+
+    private ClaimsController(IHttpRequestAuditor auditor)
     {
         _auditor = auditor;
     }

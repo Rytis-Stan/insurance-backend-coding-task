@@ -13,18 +13,21 @@ namespace BuildingBlocks.MessageQueues.RabbitMq;
 /// </summary>
 public class RabbitMqReceivingQueue<TMessage> : RabbitMqMessageQueue, IReceivingQueue<TMessage>
 {
-    public RabbitMqReceivingQueue(string hostName, string queueName)
+    private readonly IQueueListener<TMessage> _listener;
+
+    public RabbitMqReceivingQueue(string hostName, string queueName, IQueueListener<TMessage> listener)
         : base(hostName, queueName)
     {
+        _listener = listener;
     }
 
-    public IConnectedReceivingQueue StartListening(IQueueListener<TMessage> listener)
+    public IConnectedReceivingQueue StartListening()
     {
         var (connection, channel, queueName) = DeclareQueueAndConnectToIt();
         channel.BasicConsume(
             queue: queueName,
             autoAck: false,
-            consumer: CreateConsumer(channel, listener)
+            consumer: CreateConsumer(channel, _listener)
         );
         return new ConnectedRabbitMqReceivingQueue(connection, channel);
     }

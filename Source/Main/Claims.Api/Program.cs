@@ -1,10 +1,10 @@
 using System.Text.Json.Serialization;
 using Auditing.Auditors;
 using Auditing.Auditors.MessageQueueBased;
-using BuildingBlocks.MessageQueues;
 using BuildingBlocks.MessageQueues.RabbitMq;
 using BuildingBlocks.Temporal;
 using Claims.Api.Configuration;
+using Claims.Api.DependencyInjection;
 using Claims.Application.Commands;
 using Claims.Application.Commands.CreateClaim;
 using Claims.Application.Commands.CreateCover;
@@ -34,16 +34,10 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
         var configuration = new AppConfiguration(builder.Configuration);
         var claimsDatabase = MigrateClaimsDatabase(configuration.CosmosDb);
-        var auditQueue = InitializeAuditQueue(configuration.RabbitMq);
-        AddServices(builder.Services, claimsDatabase, auditQueue);
+        AddServices(builder.Services, claimsDatabase, configuration.RabbitMq);
         var app = builder.Build();
         ConfigureApp(app);
         return app;
-    }
-
-    private static IConnectedSendingQueue<AuditMessage> InitializeAuditQueue(RabbitMqConfiguration configuration)
-    {
-        return new RabbitMqSendingQueue<AuditMessage>(configuration.HostName, configuration.QueueName).StartSending();
     }
 
     private static IClaimsDatabase MigrateClaimsDatabase(CosmosDbConfiguration configuration)
@@ -54,14 +48,14 @@ public class Program
         return database;
     }
 
-    private static void AddServices(IServiceCollection services, IClaimsDatabase claimsDatabase, IConnectedSendingQueue<AuditMessage> auditQueue)
+    private static void AddServices(IServiceCollection services, IClaimsDatabase claimsDatabase, RabbitMqConfiguration configuration)
     {
         AddControllers(services);
         AddRepositories(services, claimsDatabase);
         AddInfrastructure(services);
         AddDomain(services);
         AddApplicationCommands(services);
-        AddAuditing(services, auditQueue);
+        AddAuditing(services, configuration);
         AddSwagger(services);
     }
 
@@ -104,10 +98,17 @@ public class Program
         services.AddTransient<ICommandWithNoResult<DeleteClaimArgs>, DeleteClaimCommand>();
     }
 
-    private static void AddAuditing(IServiceCollection services, IConnectedSendingQueue<AuditMessage> auditQueue)
+    private static void AddAuditing(IServiceCollection services, RabbitMqConfiguration configuration)
     {
-        services.AddTransient<IClaimAuditor>(_ => new MessageQueueClaimAuditor(auditQueue));
-        services.AddTransient<ICoverAuditor>(_ => new MessageQueueCoverAuditor(auditQueue));
+        AddQueueAuditor<ClaimAuditorSource>(services, configuration.HostName, configuration.QueueNames.ClaimAudit);
+        AddQueueAuditor<CoverAuditorSource>(services, configuration.HostName, configuration.QueueNames.CoverAudit);
+    }
+
+    private static void AddQueueAuditor<TSource>(IServiceCollection services, string hostName, string queueName)
+        where TSource : SourceOf<IHttpRequestAuditor>, new()
+    {
+        var queue = new RabbitMqSendingQueue<AuditMessage>(hostName, queueName).StartSending();
+        services.AddTransient(_ => new TSource { Obj = new MessageQueueAuditor(queue) });
     }
 
     private static void AddSwagger(IServiceCollection services)

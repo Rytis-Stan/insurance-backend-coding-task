@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Auditing.Auditors;
 using Claims.Api.Contracts.Dto;
 using Claims.Api.Contracts.Messages;
+using Claims.Api.DependencyInjection;
 using Claims.Application.Commands;
 using Claims.Application.Commands.CreateCover;
 using Claims.Application.Commands.DeleteCover;
@@ -16,9 +17,14 @@ namespace Claims.Api.Controllers;
 [Route("[controller]")]
 public class CoversController : ControllerBase
 {
-    private readonly ICoverAuditor _auditor;
+    private readonly IHttpRequestAuditor _auditor;
 
-    public CoversController(ICoverAuditor auditor)
+    public CoversController(CoverAuditorSource auditorSource)
+        : this(auditorSource.Obj)
+    {
+    }
+
+    private CoversController(IHttpRequestAuditor auditor)
     {
         _auditor = auditor;
     }

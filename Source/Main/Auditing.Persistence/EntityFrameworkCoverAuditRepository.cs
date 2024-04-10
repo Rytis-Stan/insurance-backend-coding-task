@@ -1,10 +1,9 @@
 ﻿using Auditing.Auditors;
-using Auditing.Auditors.PersistenceBased;
 using BuildingBlocks.Temporal;
 
 namespace Auditing.Persistence;
 
-internal class EntityFrameworkCoverAuditRepository : EntityFrameworkAuditRepository<CoverAudit>, ICoverAuditRepository
+internal class EntityFrameworkCoverAuditRepository : EntityFrameworkAuditRepository<CoverAudit>
 {
     public EntityFrameworkCoverAuditRepository(AuditContext auditContext, IClock clock)
         : base(auditContext, clock)

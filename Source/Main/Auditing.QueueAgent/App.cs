@@ -25,13 +25,12 @@ public class App
         Run(
             context.Logger,
             context.Database,
-            context.Queue,
-            context.QueueListener,
+            context.Queues,
             context.Console
         );
     }
 
-    private static void Run(ILogger logger, IAuditDatabase database, IReceivingQueue<AuditMessage> queue, IQueueListener<AuditMessage> queueListener, IConsole console)
+    private static void Run(ILogger logger, IAuditDatabase database, IEnumerable<IReceivingQueue<AuditMessage>> queues, IConsole console)
     {
         logger.LogInformation("Starting to migrate the auditing database.");
         database.Migrate();
@@ -39,9 +38,11 @@ public class App
         logger.LogInformation("Migration finished.");
         logger.LogInformation("Starting to listed to messages.");
 
-        using var messageQueue = queue.StartListening(queueListener);
+        var connectedQueues = queues.Select(x => x.StartListening()).ToList();
 
         logger.LogInformation("Press [Enter] to quit.");
         console.WaitTillEnterKeyPressed();
+
+        connectedQueues.ForEach(x => x.Dispose());
     }
 }

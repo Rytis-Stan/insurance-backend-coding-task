@@ -1,10 +1,9 @@
 ﻿using Auditing.Auditors;
-using Auditing.Auditors.PersistenceBased;
 using BuildingBlocks.Temporal;
 
 namespace Auditing.Persistence;
 
-internal class EntityFrameworkClaimAuditRepository : EntityFrameworkAuditRepository<ClaimAudit>, IClaimAuditRepository
+internal class EntityFrameworkClaimAuditRepository : EntityFrameworkAuditRepository<ClaimAudit>
 {
     public EntityFrameworkClaimAuditRepository(AuditContext auditContext, IClock clock)
         : base(auditContext, clock)

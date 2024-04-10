@@ -1,5 +1,4 @@
-﻿using Auditing.Auditors;
-using Auditing.Auditors.MessageQueueBased;
+﻿using Auditing.Auditors.MessageQueueBased;
 using Auditing.Auditors.PersistenceBased;
 using Auditing.Persistence;
 using Auditing.QueueAgent.Configuration;
@@ -15,16 +14,14 @@ public class AppContext : IAppContext
 {
     public ILogger Logger { get; }
     public IAuditDatabase Database { get; }
-    public IReceivingQueue<AuditMessage> Queue { get; }
-    public IQueueListener<AuditMessage> QueueListener { get; }
+    public IEnumerable<IReceivingQueue<AuditMessage>> Queues { get; }
     public IConsole Console { get; }
 
     public AppContext(AppConfiguration configuration)
     {
         Logger = CreateLogger();
         Database = CreateDatabase(configuration);
-        Queue = CreateReceivingQueue(configuration.RabbitMq);
-        QueueListener = RootQueueListener(Database, Logger);
+        Queues = CreateQueues(configuration.RabbitMq, Logger, Database);
         Console = new SystemConsole();
     }
 
@@ -46,25 +43,22 @@ public class AppContext : IAppContext
         return new EntityFrameworkAuditDatabase(configuration.ConnectionString);
     }
 
-    private static IReceivingQueue<AuditMessage> CreateReceivingQueue(RabbitMqConfiguration configuration)
+    private static IEnumerable<IReceivingQueue<AuditMessage>> CreateQueues(RabbitMqConfiguration configuration, ILogger logger, IAuditDatabase database)
     {
-        return new RabbitMqReceivingQueue<AuditMessage>(configuration.HostName, configuration.QueueName);
-    }
-
-    public static IQueueListener<AuditMessage> RootQueueListener(IAuditDatabase database, ILogger logger)
-    {
-        return new CompositeQueueListener<AuditMessage>(
-            new LoggingQueueListener<AuditMessage>(logger),
-            new AuditingQueueListener(AuditorsByAuditEntityKind(database))
-        );
-    }
-
-    private static Dictionary<AuditEntityKind, IHttpRequestAuditor> AuditorsByAuditEntityKind(IAuditDatabase database)
-    {
-        return new Dictionary<AuditEntityKind, IHttpRequestAuditor>
+        return new[]
         {
-            { AuditEntityKind.Cover, new PersistingCoverAuditor(database.CoverAuditRepository) },
-            { AuditEntityKind.Claim, new PersistingClaimAuditor(database.ClaimAuditRepository) }
+            CreateQueue(configuration.HostName, configuration.QueueNames.CoverAudit, logger, database.CoverAuditRepository),
+            CreateQueue(configuration.HostName, configuration.QueueNames.ClaimAudit, logger, database.ClaimAuditRepository),
         };
+    }
+
+    private static IReceivingQueue<AuditMessage> CreateQueue(string hostName, string queueName, ILogger logger, IAuditRepository repository)
+    {
+        return new RabbitMqReceivingQueue<AuditMessage>(hostName, queueName,
+            new CompositeQueueListener<AuditMessage>(
+                new LoggingQueueListener<AuditMessage>(logger, queueName),
+                new AuditingQueueListener(new PersistingAuditor(repository))
+            )
+        );
     }
 }

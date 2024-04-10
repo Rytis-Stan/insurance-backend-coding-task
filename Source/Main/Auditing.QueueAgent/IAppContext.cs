@@ -26,7 +26,6 @@ public interface IAppContext : IDisposable
 {
     ILogger Logger { get; }
     IAuditDatabase Database { get; }
-    IReceivingQueue<AuditMessage> Queue { get; }
-    IQueueListener<AuditMessage> QueueListener { get; }
+    IEnumerable<IReceivingQueue<AuditMessage>> Queues { get; }
     IConsole Console { get; }
 }

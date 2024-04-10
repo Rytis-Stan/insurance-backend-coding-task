@@ -4,23 +4,22 @@ namespace Auditing.Auditors.MessageQueueBased;
 
 public class AuditingQueueListener : IQueueListener<AuditMessage>
 {
-    private readonly Dictionary<AuditEntityKind, IHttpRequestAuditor> _auditorsByAuditEntityKind;
+    private readonly IHttpRequestAuditor _auditor;
 
-    public AuditingQueueListener(Dictionary<AuditEntityKind, IHttpRequestAuditor> auditorsByAuditEntityKind)
+    public AuditingQueueListener(IHttpRequestAuditor auditor)
     {
-        _auditorsByAuditEntityKind = auditorsByAuditEntityKind;
+        _auditor = auditor;
     }
 
     public void OnMessageReceived(AuditMessage message)
     {
-        var auditor = _auditorsByAuditEntityKind[message.EntityType];
         switch (message.HttpRequestType)
         {
             case HttpRequestType.Post:
-                auditor.AuditPost(message.EntityId);
+                _auditor.AuditPost(message.EntityId);
                 break;
             case HttpRequestType.Delete:
-                auditor.AuditDelete(message.EntityId);
+                _auditor.AuditDelete(message.EntityId);
                 break;
             default:
                 // TODO: Use a custom exception type?

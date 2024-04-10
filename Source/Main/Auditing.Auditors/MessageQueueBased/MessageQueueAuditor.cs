@@ -2,15 +2,13 @@
 
 namespace Auditing.Auditors.MessageQueueBased;
 
-public abstract class MessageQueueAuditor : IHttpRequestAuditor
+public class MessageQueueAuditor : IHttpRequestAuditor
 {
     private readonly IConnectedSendingQueue<AuditMessage> _queue;
-    private readonly AuditEntityKind _entityKind;
 
-    protected MessageQueueAuditor(IConnectedSendingQueue<AuditMessage> queue, AuditEntityKind entityKind)
+    public MessageQueueAuditor(IConnectedSendingQueue<AuditMessage> queue)
     {
         _queue = queue;
-        _entityKind = entityKind;
     }
 
     public void AuditPost(Guid entityId)
@@ -25,6 +23,6 @@ public abstract class MessageQueueAuditor : IHttpRequestAuditor
 
     private void Audit(Guid entityId, HttpRequestType httpRequestType)
     {
-        _queue.Send(new AuditMessage(_entityKind, entityId, httpRequestType));
+        _queue.Send(new AuditMessage(entityId, httpRequestType));
     }
 }

@@ -2,5 +2,5 @@
 
 public interface IReceivingQueue<out TMessage>
 {
-    IConnectedReceivingQueue StartListening(IQueueListener<TMessage> listener);
+    IConnectedReceivingQueue StartListening();
 }
