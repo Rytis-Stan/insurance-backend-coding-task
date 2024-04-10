@@ -27,32 +27,30 @@ public class RabbitMqReceivingQueue<TMessage> : RabbitMqMessageQueue, IReceiving
         channel.BasicConsume(
             queue: queueName,
             autoAck: false,
-            consumer: CreateConsumer(channel, _listener)
+            consumer: CreateConsumer(channel, _listener, queueName)
         );
         return new ConnectedRabbitMqReceivingQueue(connection, channel);
     }
 
-    private static IBasicConsumer CreateConsumer(IModel channel, IQueueListener<TMessage> listener)
+    private static IBasicConsumer CreateConsumer(IModel channel, IQueueListener<TMessage> listener, string queueName)
     {
         var consumer = new EventingBasicConsumer(channel);
         consumer.Received += (_, e) =>
         {
-            var message = ToMessage(e.Body);
+            var message = ToMessage(e.Body, queueName);
             listener.OnMessageReceived(message);
             channel.BasicAck(e.DeliveryTag, multiple: false);
         };
         return consumer;
     }
 
-    private static TMessage ToMessage(ReadOnlyMemory<byte> bytes)
+    private static TMessage ToMessage(ReadOnlyMemory<byte> messageBody, string queueName)
     {
-        var messageJsonBytes = bytes.ToArray();
+        var messageJsonBytes = messageBody.ToArray();
         var messageJson = Encoding.UTF8.GetString(messageJsonBytes);
         var message = JsonSerializer.Deserialize<TMessage>(messageJson);
-        
-        // TODO: Improve error handling (change thrown exception type, etc.).
         return message == null
-            ? throw new Exception("Invalid message received.")
+            ? throw new MessageQueueException($"Message queue \"{queueName}\" received an invalid message.")
             : message;
     }
 
