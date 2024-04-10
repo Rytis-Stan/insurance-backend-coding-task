@@ -141,7 +141,7 @@ public partial class ApiTests
         var createdCovers = (await CreateRandomCoversAsync(coverAddCount)).ToList();
         var createdCoversToKeep = createdCovers.Skip(coverDeleteCount);
         var createdCoversToDelete = createdCovers.Take(coverDeleteCount);
-        await CoversDeleteMultipleAsync(createdCoversToDelete.Select(x => x.Id));
+        await DeleteMultipleCoversAsync(createdCoversToDelete.Select(x => x.Id));
 
         var httpResponse = await CoversGetAsync();
 

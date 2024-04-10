@@ -82,7 +82,7 @@ public partial class ApiTests : IDisposable
         var createdClaims = (await CreateRandomClaimsAsync(cover, claimAddCount)).ToList();
         var createdClaimsToKeep = createdClaims.Skip(claimDeleteCount);
         var createdClaimsToDelete = createdClaims.Take(claimDeleteCount);
-        await ClaimsDeleteMultipleAsync(createdClaimsToDelete.Select(x => x.Id));
+        await DeleteMultipleClaimsAsync(createdClaimsToDelete.Select(x => x.Id));
 
         var httpResponse = await ClaimsGetAsync();
 
