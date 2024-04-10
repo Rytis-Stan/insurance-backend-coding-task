@@ -21,23 +21,26 @@ public static class HttpClientExtensions
         return new StringContent(json, Encoding.UTF8, "application/json");
     }
 
-    // TODO: Fix method names.
+    /// <summary>
+    /// The method works as if calling "ReadContentAsync" with the status code set to "HttpStatusCode.OK".
+    /// </summary>
     public static async Task<TContent> OkReadContentAsync<TContent>(this HttpResponseMessage response)
     {
         return await response.ReadContentAsync<TContent>(HttpStatusCode.OK);
     }
 
+    /// <summary>
+    /// Ensures that a given response contains the expected status code and if so, tries to deserialize
+    /// its contents as if they were a serialized JSON version of the given type of "TContent".
+    /// If the status code does not even match, no attempt is made to deserialize the contents and an
+    /// exception is thrown.
+    /// </summary>
     public static async Task<TContent> ReadContentAsync<TContent>(this HttpResponseMessage response, HttpStatusCode expectedStatusCode)
     {
         Assert.Equal(expectedStatusCode, response.StatusCode);
-        return await response.ReadRawContentAsync<TContent>();
-    }
-
-    private static async Task<T> ReadRawContentAsync<T>(this HttpResponseMessage response)
-    {
         var contentJson = await response.Content.ReadAsStringAsync();
-        var content = DeserializeJson<T>(contentJson);
-        Assert.NotNull(content); // TODO: Replace with some custom exception type?
+        var content = DeserializeJson<TContent>(contentJson);
+        Assert.NotNull(content);
         return content;
     }
 
