@@ -26,6 +26,7 @@ public class EntityFrameworkAuditDatabase : IAuditDatabase
     public void Dispose()
     {
         _auditContext.Dispose();
+        GC.SuppressFinalize(this);
     }
 
     public void Migrate()
