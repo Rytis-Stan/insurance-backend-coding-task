@@ -19,7 +19,7 @@ public partial class ApiTests
 
         var httpResponse = await CoversPostAsync(request);
     
-        await AssertBadRequestAsync(httpResponse, "Start date cannot be in the past.");
+        await AssertApi.BadRequestAsync(httpResponse, "Start date cannot be in the past.");
     }
 
     [Fact]
@@ -33,7 +33,7 @@ public partial class ApiTests
 
         var httpResponse = await CoversPostAsync(request);
 
-        await AssertBadRequestAsync(httpResponse, "End date cannot be in the past.");
+        await AssertApi.BadRequestAsync(httpResponse, "End date cannot be in the past.");
     }
 
     [Fact]
@@ -47,7 +47,7 @@ public partial class ApiTests
 
         var httpResponse = await CoversPostAsync(request);
 
-        await AssertBadRequestAsync(httpResponse, "End date cannot be earlier than the start date.");
+        await AssertApi.BadRequestAsync(httpResponse, "End date cannot be earlier than the start date.");
     }
 
     [Fact]
@@ -61,7 +61,7 @@ public partial class ApiTests
 
         var httpResponse = await CoversPostAsync(request);
 
-        await AssertBadRequestAsync(httpResponse, "Total insurance period cannot exceed 1 year.");
+        await AssertApi.BadRequestAsync(httpResponse, "Total insurance period cannot exceed 1 year.");
     }
 
     [Fact]
@@ -75,7 +75,7 @@ public partial class ApiTests
 
         var httpResponse = await CoversPostAsync(request);
 
-        await AssertBadRequestAsync(httpResponse, "Total insurance period cannot exceed 1 year.");
+        await AssertApi.BadRequestAsync(httpResponse, "Total insurance period cannot exceed 1 year.");
     }
 
     [Theory]
@@ -129,7 +129,7 @@ public partial class ApiTests
         var httpResponse = await CoversGetAsync();
 
         var response = await httpResponse.OkReadContentAsync<GetCoversResponse>();
-        AssertExtended.EqualIgnoreOrder(createdCovers, response.Covers);
+        AssertApi.EqualIgnoreOrder(createdCovers, response.Covers);
     }
 
     [Theory]
@@ -146,7 +146,7 @@ public partial class ApiTests
         var httpResponse = await CoversGetAsync();
 
         var response = await httpResponse.OkReadContentAsync<GetCoversResponse>();
-        AssertExtended.EqualIgnoreOrder(createdCoversToKeep, response.Covers);
+        AssertApi.EqualIgnoreOrder(createdCoversToKeep, response.Covers);
     }
 
     [Fact]
@@ -201,7 +201,7 @@ public partial class ApiTests
 
         var httpResponse = await CoversPremiumGetAsync(startDate, endDate, coverType);
 
-        await AssertBadRequestAsync(httpResponse, "End date cannot be earlier than the start date.");
+        await AssertApi.BadRequestAsync(httpResponse, "End date cannot be earlier than the start date.");
     }
 
     [Fact]
@@ -214,7 +214,7 @@ public partial class ApiTests
 
         var httpResponse = await CoversPremiumGetAsync(startDate, endDate, coverType);
 
-        await AssertBadRequestAsync(httpResponse, "Total insurance period cannot exceed 1 year.");
+        await AssertApi.BadRequestAsync(httpResponse, "Total insurance period cannot exceed 1 year.");
     }
 
     [Fact]
@@ -227,7 +227,7 @@ public partial class ApiTests
 
         var httpResponse = await CoversPremiumGetAsync(startDate, endDate, coverType);
 
-        await AssertBadRequestAsync(httpResponse, "Total insurance period cannot exceed 1 year.");
+        await AssertApi.BadRequestAsync(httpResponse, "Total insurance period cannot exceed 1 year.");
     }
 
     [Theory]

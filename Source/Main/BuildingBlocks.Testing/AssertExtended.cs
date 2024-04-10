@@ -17,4 +17,13 @@ public static class AssertExtended
         var exception = await Assert.ThrowsAsync<TException>(action);
         Assert.Equal(expectedMessage, exception.Message);
     }
+
+    public static void EqualIgnoreOrder<T, TSortKey>(IEnumerable<T>? expected, IEnumerable<T>? actual, Func<T, TSortKey> keyToSortBy)
+    {
+        Assert.NotNull(expected);
+        Assert.NotNull(actual);
+        var expectedOrdered = expected.OrderBy(keyToSortBy).ToList();
+        var actualOrdered = actual.OrderBy(keyToSortBy).ToList();
+        Assert.Equal(expectedOrdered, actualOrdered);
+    }
 }

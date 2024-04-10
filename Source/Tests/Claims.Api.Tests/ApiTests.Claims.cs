@@ -17,7 +17,7 @@ public partial class ApiTests : IDisposable
 
         var httpResponse = await ClaimsPostAsync(request);
 
-        await AssertBadRequestAsync(httpResponse, "Claim references a non-existing cover via the cover ID.");
+        await AssertApi.BadRequestAsync(httpResponse, "Claim references a non-existing cover via the cover ID.");
     }
 
     [Fact]
@@ -71,7 +71,7 @@ public partial class ApiTests : IDisposable
         var httpResponse = await ClaimsGetAsync();
 
         var response = await httpResponse.OkReadContentAsync<GetClaimsResponse>();
-        AssertExtended.EqualIgnoreOrder(createdClaims, response.Claims);
+        AssertApi.EqualIgnoreOrder(createdClaims, response.Claims);
     }
 
     [Theory]
@@ -89,7 +89,7 @@ public partial class ApiTests : IDisposable
         var httpResponse = await ClaimsGetAsync();
 
         var response = await httpResponse.OkReadContentAsync<GetClaimsResponse>();
-        AssertExtended.EqualIgnoreOrder(createdClaimsToKeep, response.Claims);
+        AssertApi.EqualIgnoreOrder(createdClaimsToKeep, response.Claims);
     }
 
     [Fact]
@@ -182,15 +182,5 @@ public partial class ApiTests : IDisposable
     {
         var tasks = claimIds.Select(ClaimsDeleteAsync);
         await Task.WhenAll(tasks);
-    }
-
-    // TODO: Move to "ExtendedAssert"?
-    private static async Task AssertBadRequestAsync(HttpResponseMessage httpResponse, string expectedErrorMessage)
-    {
-        var response = await httpResponse.ReadContentAsync<ValidationErrorResponse>(HttpStatusCode.BadRequest);
-        Assert.Equal(
-            new ValidationErrorResponse(new ValidationErrorDto(expectedErrorMessage)),
-            response
-        );
     }
 }
