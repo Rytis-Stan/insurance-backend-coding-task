@@ -1,8 +1,8 @@
-﻿using BuildingBlocks.Testing;
-using Claims.Application.Commands.GetCoverPremium;
+﻿using Claims.Application.Commands.GetCoverPremium;
 using Claims.Domain;
 using Moq;
 using Xunit;
+using static BuildingBlocks.Testing.TestData;
 
 namespace Claims.Application.Tests.Commands;
 
@@ -22,9 +22,9 @@ public class GetCoverPremiumCommandTests
     [InlineData(456.78)]
     public async Task ReturnsPremiumFromCoverPricing(decimal expectedPremium)
     {
-        var startDate = TestData.RandomDate();
-        var endDate = TestData.RandomDate();
-        var coverType = TestData.RandomEnum<CoverType>();
+        var startDate = RandomDate();
+        var endDate = RandomDate();
+        var coverType = RandomEnum<CoverType>();
         StubPremium(startDate, endDate, coverType, expectedPremium);
 
         var result = await _command.ExecuteAsync(new GetCoverPremiumArgs(startDate, endDate, coverType));

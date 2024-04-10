@@ -4,6 +4,7 @@ using Claims.Application.Repositories;
 using Claims.Domain;
 using Moq;
 using Xunit;
+using static BuildingBlocks.Testing.TestData;
 using static BuildingBlocks.Testing.TestValueBuilder;
 
 namespace Claims.Application.Tests.Commands;
@@ -30,7 +31,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
     public async Task ThrowsExceptionWhenCreatingAClaimWithNonPositiveDamageCost(decimal damageCost)
     {
         var coverId = Guid.NewGuid();
-        var created = TestData.RandomUtcDateTime();
+        var created = RandomUtcDateTime();
         var args = new CreateClaimArgs(coverId, "anyName", AnyClaimType, damageCost, created);
 
         await AssertExtended.ThrowsAsync<ValidationException>(
@@ -46,7 +47,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
     public async Task ThrowsExceptionWhenCreatingAClaimWithDamageCostExceedingMaxAllowedValueOfAHundredThousand(decimal damageCost)
     {
         var coverId = Guid.NewGuid();
-        var created = TestData.RandomUtcDateTime();
+        var created = RandomUtcDateTime();
         var args = new CreateClaimArgs(coverId, "anyName", AnyClaimType, damageCost, created);
 
         await AssertExtended.ThrowsAsync<ValidationException>(
@@ -59,7 +60,7 @@ public class CreateClaimCommandTests : ClaimsCommandTests
     public async Task ThrowsExceptionWhenCreatingAClaimWithNonExistingCoverId()
     {
         var coverId = Guid.NewGuid();
-        var created = TestData.RandomUtcDateTime();
+        var created = RandomUtcDateTime();
         var args = new CreateClaimArgs(coverId, "anyName", AnyClaimType, AnyDamageCost, created);
         StubFindCover(coverId, null);
 
@@ -166,8 +167,8 @@ public class CreateClaimCommandTests : ClaimsCommandTests
             Id = Guid.NewGuid(),
             StartDate = startDate,
             EndDate = endDate,
-            Type = TestData.RandomEnum<CoverType>(),
-            Premium = TestData.RandomInt(1, 1000)
+            Type = RandomEnum<CoverType>(),
+            Premium = RandomInt(1, 1000)
         };
     }
 
