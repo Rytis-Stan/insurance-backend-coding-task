@@ -1,4 +1,4 @@
-﻿using Claims.Application.Commands.GetAllClaims;
+﻿using Claims.Application.Commands.GetClaims;
 using Claims.Domain;
 using Moq;
 using Xunit;
@@ -6,13 +6,13 @@ using static Claims.Application.Tests.TestDomainData;
 
 namespace Claims.Application.Tests.Commands;
 
-public class GetAllClaimsCommandTests : ClaimsCommandTests
+public class GetClaimsCommandTests : ClaimsCommandTests
 {
-    private readonly GetAllClaimsCommand _command;
+    private readonly GetClaimsCommand _command;
 
-    public GetAllClaimsCommandTests()
+    public GetClaimsCommandTests()
     {
-        _command = new GetAllClaimsCommand(ClaimsRepositoryMock.Object);
+        _command = new GetClaimsCommand(ClaimsRepositoryMock.Object);
     }
 
     [Fact]

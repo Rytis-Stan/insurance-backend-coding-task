@@ -5,8 +5,8 @@ using Claims.Api.DependencyInjection;
 using Claims.Application.Commands;
 using Claims.Application.Commands.CreateClaim;
 using Claims.Application.Commands.DeleteClaim;
-using Claims.Application.Commands.GetAllClaims;
 using Claims.Application.Commands.GetClaim;
+using Claims.Application.Commands.GetClaims;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Claims.Api.Controllers;
@@ -50,7 +50,7 @@ public class ClaimsController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(GetClaimsResponse), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetClaimsAsync([FromServices] ICommandWithNoArgs<GetAllClaimsResult> command)
+    public async Task<IActionResult> GetClaimsAsync([FromServices] ICommandWithNoArgs<GetClaimsResult> command)
     {
         var response = (await command.ExecuteAsync()).ToResponse();
         return Ok(response);

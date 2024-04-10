@@ -10,8 +10,8 @@ using Claims.Application.Commands.CreateClaim;
 using Claims.Application.Commands.CreateCover;
 using Claims.Application.Commands.DeleteClaim;
 using Claims.Application.Commands.DeleteCover;
-using Claims.Application.Commands.GetAllClaims;
 using Claims.Application.Commands.GetClaim;
+using Claims.Application.Commands.GetClaims;
 using Claims.Application.Commands.GetCover;
 using Claims.Application.Commands.GetCoverPremium;
 using Claims.Application.Commands.GetCovers;
@@ -94,7 +94,7 @@ public class Program
 
         services.AddTransient<ICommand<CreateClaimArgs, CreateClaimResult>, CreateClaimCommand>();
         services.AddTransient<ICommand<GetClaimArgs, GetClaimResult>, GetClaimCommand>();
-        services.AddTransient<ICommandWithNoArgs<GetAllClaimsResult>, GetAllClaimsCommand>();
+        services.AddTransient<ICommandWithNoArgs<GetClaimsResult>, GetClaimsCommand>();
         services.AddTransient<ICommandWithNoResult<DeleteClaimArgs>, DeleteClaimCommand>();
     }
 
