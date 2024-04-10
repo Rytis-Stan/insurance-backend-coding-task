@@ -8,7 +8,24 @@ If You see something unexpected or weird in the implementation, there is probabl
 
 ## Architecture and code structure
 
-The API tests check the system like a black box.
+The solution is composed of the following types of projects:
+* Auditing code:
+  * _Auditing.Auditors_
+  * _Auditing.Persistence_
+  * **_Auditing.QueueAgent_**
+* Main code for handling covers and claims:
+  * **_Claims.Api_**
+  * _Claims.Application_
+  * _Claims.Domain_
+  * _Claims.Persistence_
+* Reusable library code, that can be reused in various other projects:
+  * _BuildingBlocks.MessageQueues_
+  * _BuildingBlocks.Temporal_
+  * _BuildingBlocks.Testing_
+* Test code:
+  * _Claims.Api.Tests_
+  * _Claims.Application.Tests_
+  * _Claims.Domain.Tests_
 
 ## Future considerations and potential improvements
 
