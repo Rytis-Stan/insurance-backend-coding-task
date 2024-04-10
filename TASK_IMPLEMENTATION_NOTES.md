@@ -27,7 +27,9 @@ The solution is composed of the following types of projects:
   * _Claims.Application.Tests_
   * _Claims.Domain.Tests_
 
-The main API entry point project is **_Claims.Api_**. When the API's cover and claim creation and deletion endpoints get triggered (after passing validation), controllers call injected implementations of the _IHttpRequestAuditor_ interface. The interface has 2 implementations: the _PersistingAuditor_ and the _MessageQueueAuditor_. The _PersistingAuditor_ saves an auditing message directly to the SQL database (via an injected _IAuditRepository_ instance). It is simply a cleaned-up version of the initial _Claims_ project code. On the other hand, the _MessageQueueAuditor_ adds the capability of sending... TODO
+The main API entry point project is **_Claims.Api_**. When the API's cover and claim creation and deletion endpoints get triggered (after passing validation), controllers call injected implementations of the _IHttpRequestAuditor_ interface. The interface has 2 implementations: the _PersistingAuditor_ and the _MessageQueueAuditor_. The _PersistingAuditor_ saves an auditing message directly to the SQL database (via an injected _IAuditRepository_ instance). It is simply a cleaned-up version of the initial _Claims_ project code. On the other hand, the _MessageQueueAuditor_ adds the capability of turning each auditing request into a RabbitMQ message queue message. This allows the system to defer the actual audit entry saving.
+
+In addition to the main entry point, there is an additional executable called **_Auditing.QueueAgent_**. It is a console application that connects to the same RabbitMQ message queues (cover and claim audits have separate queues now, though earlier implementations used a single one for both) that the auditors from the API project emit. Whenever new messages come in, the agent picks them up via instances of _AuditingQueueListener_, where each such listener is connected to instances of _PersistingAuditor_ via the same _IHttpRequestAuditor_ interface.
 
 ## Future considerations and potential improvements
 
