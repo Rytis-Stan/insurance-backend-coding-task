@@ -1,8 +1,8 @@
 ﻿using Claims.Api.Contracts.Messages;
 using System.Net;
-using BuildingBlocks.Testing;
 using Claims.Api.Contracts.Dto;
 using Xunit;
+using static BuildingBlocks.Testing.TestData;
 
 namespace Claims.Api.Tests;
 
@@ -12,9 +12,9 @@ public partial class ApiTests
     public async Task CoversPostReturnsBadRequestWhenStartDateIsInThePast()
     {
         var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
-        var startDate = utcNow.AddDays(-TestData.RandomInt(1, 100));
+        var startDate = utcNow.AddDays(-RandomInt(1, 100));
         var endDate = utcNow;
-        var coverType = TestData.RandomEnum<CoverDtoType>();
+        var coverType = RandomEnum<CoverDtoType>();
         var request = new CreateCoverRequest(startDate, endDate, coverType);
 
         var httpResponse = await CoversPostAsync(request);
@@ -27,8 +27,8 @@ public partial class ApiTests
     {
         var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
         var startDate = utcNow;
-        var endDate = utcNow.AddDays(-TestData.RandomInt(1, 100));
-        var coverType = TestData.RandomEnum<CoverDtoType>();
+        var endDate = utcNow.AddDays(-RandomInt(1, 100));
+        var coverType = RandomEnum<CoverDtoType>();
         var request = new CreateCoverRequest(startDate, endDate, coverType);
 
         var httpResponse = await CoversPostAsync(request);
@@ -40,9 +40,9 @@ public partial class ApiTests
     public async Task CoversPostReturnsBadRequestWhenEndDateNotItThePastButGoesBeforeStartDate()
     {
         var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
-        var startDate = utcNow.AddDays(TestData.RandomInt(101, 200));
-        var endDate = utcNow.AddDays(TestData.RandomInt(1, 100));
-        var coverType = TestData.RandomEnum<CoverDtoType>();
+        var startDate = utcNow.AddDays(RandomInt(101, 200));
+        var endDate = utcNow.AddDays(RandomInt(1, 100));
+        var coverType = RandomEnum<CoverDtoType>();
         var request = new CreateCoverRequest(startDate, endDate, coverType);
 
         var httpResponse = await CoversPostAsync(request);
@@ -54,9 +54,9 @@ public partial class ApiTests
     public async Task CoversPostReturnsBadRequestWhenCoverPeriodExceedsASingleYearByExactlyOneDay()
     {
         var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
-        var startDate = utcNow.AddDays(TestData.RandomInt(1, 100));
+        var startDate = utcNow.AddDays(RandomInt(1, 100));
         var endDate = OneYearPlus1DayCoverPeriodEnd(startDate);
-        var coverType = TestData.RandomEnum<CoverDtoType>();
+        var coverType = RandomEnum<CoverDtoType>();
         var request = new CreateCoverRequest(startDate, endDate, coverType);
 
         var httpResponse = await CoversPostAsync(request);
@@ -68,9 +68,9 @@ public partial class ApiTests
     public async Task CoversPostReturnsBadRequestWhenCoverPeriodExceedsASingleYearByMoreThanOneDay()
     {
         var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
-        var startDate = utcNow.AddDays(TestData.RandomInt(1, 100));
-        var endDate = OneYearPlus1DayCoverPeriodEnd(startDate).AddDays(TestData.RandomInt(1, 90));
-        var coverType = TestData.RandomEnum<CoverDtoType>();
+        var startDate = utcNow.AddDays(RandomInt(1, 100));
+        var endDate = OneYearPlus1DayCoverPeriodEnd(startDate).AddDays(RandomInt(1, 90));
+        var coverType = RandomEnum<CoverDtoType>();
         var request = new CreateCoverRequest(startDate, endDate, coverType);
 
         var httpResponse = await CoversPostAsync(request);
@@ -195,9 +195,9 @@ public partial class ApiTests
     public async Task CoversPremiumGetReturnsBadRequestWhenEndDateGoesBeforeStartDate()
     {
         var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
-        var startDate = utcNow.AddDays(TestData.RandomInt(101, 200));
-        var endDate = utcNow.AddDays(TestData.RandomInt(1, 100));
-        var coverType = TestData.RandomEnum<CoverDtoType>();
+        var startDate = utcNow.AddDays(RandomInt(101, 200));
+        var endDate = utcNow.AddDays(RandomInt(1, 100));
+        var coverType = RandomEnum<CoverDtoType>();
 
         var httpResponse = await CoversPremiumGetAsync(startDate, endDate, coverType);
 
@@ -208,9 +208,9 @@ public partial class ApiTests
     public async Task CoversPremiumGetReturnsBadRequestWhenCoverPeriodExceedsASingleYearByExactlyOneDay()
     {
         var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
-        var startDate = utcNow.AddDays(TestData.RandomInt(1, 100));
+        var startDate = utcNow.AddDays(RandomInt(1, 100));
         var endDate = OneYearPlus1DayCoverPeriodEnd(startDate);
-        var coverType = TestData.RandomEnum<CoverDtoType>();
+        var coverType = RandomEnum<CoverDtoType>();
 
         var httpResponse = await CoversPremiumGetAsync(startDate, endDate, coverType);
 
@@ -221,9 +221,9 @@ public partial class ApiTests
     public async Task CoversPremiumGetReturnsBadRequestWhenCoverPeriodExceedsASingleYearByMoreThanOneDay()
     {
         var utcNow = DateOnly.FromDateTime(DateTime.UtcNow);
-        var startDate = utcNow.AddDays(TestData.RandomInt(1, 100));
-        var endDate = OneYearPlus1DayCoverPeriodEnd(startDate).AddDays(TestData.RandomInt(1, 90));
-        var coverType = TestData.RandomEnum<CoverDtoType>();
+        var startDate = utcNow.AddDays(RandomInt(1, 100));
+        var endDate = OneYearPlus1DayCoverPeriodEnd(startDate).AddDays(RandomInt(1, 90));
+        var coverType = RandomEnum<CoverDtoType>();
 
         var httpResponse = await CoversPremiumGetAsync(startDate, endDate, coverType);
 

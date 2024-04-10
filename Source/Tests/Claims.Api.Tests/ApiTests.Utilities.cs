@@ -1,7 +1,7 @@
-﻿using BuildingBlocks.Testing;
-using Claims.Api.Contracts.Dto;
+﻿using Claims.Api.Contracts.Dto;
 using Claims.Api.Contracts.Messages;
 using System.Net;
+using static BuildingBlocks.Testing.TestData;
 using static BuildingBlocks.Testing.TestValueBuilder;
 
 namespace Claims.Api.Tests;
@@ -22,9 +22,9 @@ public partial class ApiTests
     {
         return new CreateClaimRequest(
             coverId,
-            TestData.RandomString("name"),
-            TestData.RandomEnum<ClaimDtoType>(),
-            TestData.RandomInt(10_000),
+            RandomString("name"),
+            RandomEnum<ClaimDtoType>(),
+            RandomInt(10_000),
             created
         );
     }
@@ -33,8 +33,8 @@ public partial class ApiTests
     {
         return RandomCreateCoverRequest(
             utcNow,
-            TestData.RandomInt(1, 90),
-            TestData.RandomEnum<CoverDtoType>()
+            RandomInt(1, 90),
+            RandomEnum<CoverDtoType>()
         );
     }
 
@@ -43,7 +43,7 @@ public partial class ApiTests
         // NOTE: Start and end date should start at least 1 day after UTC Now to avoid the
         // current date changing while the endpoint is being called (can happen if the test
         // starts running just before a day's end).
-        var startDate = DateOnly.FromDateTime(utcNow).AddDays(TestData.RandomInt(1, 100));
+        var startDate = DateOnly.FromDateTime(utcNow).AddDays(RandomInt(1, 100));
         var endDate = startDate.AddDays(periodDurationInDays - 1);
         return new CreateCoverRequest(startDate, endDate, coverType);
     }
