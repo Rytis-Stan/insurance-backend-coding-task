@@ -12,9 +12,9 @@ The solution is composed of the following types of projects:
 * Auditing code:
   * _Auditing.Auditors_
   * _Auditing.Persistence_
-  * **_Auditing.QueueAgent_**
+  * _Auditing.QueueAgent_
 * Main code for handling covers and claims:
-  * **_Claims.Api_**
+  * _Claims.Api_
   * _Claims.Application_
   * _Claims.Domain_
   * _Claims.Persistence_
@@ -26,6 +26,8 @@ The solution is composed of the following types of projects:
   * _Claims.Api.Tests_
   * _Claims.Application.Tests_
   * _Claims.Domain.Tests_
+
+The main API entry point project is **_Claims.Api_**. When the API's cover and claim creation and deletion endpoints get triggered (after passing validation), controllers call injected implementations of the _IHttpRequestAuditor_ interface. The interface has 2 implementations: the _PersistingAuditor_ and the _MessageQueueAuditor_. The _PersistingAuditor_ saves an auditing message directly to the SQL database (via an injected _IAuditRepository_ instance). It is simply a cleaned-up version of the initial _Claims_ project code. On the other hand, the _MessageQueueAuditor_ adds the capability of sending... TODO
 
 ## Future considerations and potential improvements
 
