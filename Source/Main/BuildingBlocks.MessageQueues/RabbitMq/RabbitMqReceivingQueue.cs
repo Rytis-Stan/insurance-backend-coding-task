@@ -11,7 +11,7 @@ namespace BuildingBlocks.MessageQueues.RabbitMq;
 /// method. Once that method is called, a new type of queue object gets returned. The queue
 /// will keep receiving new messages until the new queue object gets disposed of.
 /// </summary>
-public class RabbitMqReceivingQueue<TMessage> : RabbitMqMessageQueue, IReceivingQueue<TMessage>
+public class RabbitMqReceivingQueue<TMessage> : RabbitMqMessageQueue, IReceivingQueue
 {
     private readonly IQueueListener<TMessage> _listener;
 

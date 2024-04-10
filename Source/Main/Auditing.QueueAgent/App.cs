@@ -1,5 +1,4 @@
-﻿using Auditing.Auditors.MessageQueueBased;
-using Auditing.Persistence;
+﻿using Auditing.Persistence;
 using Auditing.QueueAgent.IO;
 using BuildingBlocks.MessageQueues;
 using Microsoft.Extensions.Logging;
@@ -30,7 +29,7 @@ public class App
         );
     }
 
-    private static void Run(ILogger logger, IAuditDatabase database, IEnumerable<IReceivingQueue<AuditMessage>> queues, IConsole console)
+    private static void Run(ILogger logger, IAuditDatabase database, IEnumerable<IReceivingQueue> queues, IConsole console)
     {
         logger.LogInformation("Starting to migrate the auditing database.");
         database.Migrate();

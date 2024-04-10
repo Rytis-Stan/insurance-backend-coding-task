@@ -1,5 +1,4 @@
-﻿using Auditing.Auditors.MessageQueueBased;
-using Auditing.Persistence;
+﻿using Auditing.Persistence;
 using Auditing.QueueAgent.IO;
 using BuildingBlocks.MessageQueues;
 using Microsoft.Extensions.Logging;
@@ -26,6 +25,6 @@ public interface IAppContext : IDisposable
 {
     ILogger Logger { get; }
     IAuditDatabase Database { get; }
-    IEnumerable<IReceivingQueue<AuditMessage>> Queues { get; }
+    IEnumerable<IReceivingQueue> Queues { get; }
     IConsole Console { get; }
 }

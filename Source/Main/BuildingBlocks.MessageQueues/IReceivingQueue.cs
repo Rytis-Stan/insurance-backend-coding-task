@@ -1,6 +1,6 @@
 ﻿namespace BuildingBlocks.MessageQueues;
 
-public interface IReceivingQueue<out TMessage>
+public interface IReceivingQueue
 {
     IConnectedReceivingQueue StartListening();
 }

@@ -16,7 +16,7 @@ public class AppContext : IAppContext
 {
     public ILogger Logger { get; }
     public IAuditDatabase Database { get; }
-    public IEnumerable<IReceivingQueue<AuditMessage>> Queues { get; }
+    public IEnumerable<IReceivingQueue> Queues { get; }
     public IConsole Console { get; }
 
     public AppContext(AppConfiguration configuration)
@@ -55,7 +55,7 @@ public class AppContext : IAppContext
         return new DbContextOptionsBuilder<AuditContext>().UseSqlServer(connectionString).Options;
     }
 
-    private static IEnumerable<IReceivingQueue<AuditMessage>> CreateQueues(RabbitMqConfiguration configuration, ILogger logger, IAuditDatabase database)
+    private static IEnumerable<IReceivingQueue> CreateQueues(RabbitMqConfiguration configuration, ILogger logger, IAuditDatabase database)
     {
         return new[]
         {
@@ -64,7 +64,7 @@ public class AppContext : IAppContext
         };
     }
 
-    private static IReceivingQueue<AuditMessage> CreateQueue(string hostName, string queueName, ILogger logger, IAuditRepository repository)
+    private static IReceivingQueue CreateQueue(string hostName, string queueName, ILogger logger, IAuditRepository repository)
     {
         return new RabbitMqReceivingQueue<AuditMessage>(hostName, queueName,
             new CompositeQueueListener<AuditMessage>(
