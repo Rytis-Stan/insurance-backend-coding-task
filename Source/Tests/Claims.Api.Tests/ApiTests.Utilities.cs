@@ -6,6 +6,9 @@ using static BuildingBlocks.Testing.TestValueBuilder;
 
 namespace Claims.Api.Tests;
 
+// This partial class segment is dedicated to various utility/helper methods that
+// might be needed by various tests.
+//
 // ReSharper disable once UnusedMember.Global
 public partial class ApiTests
 {
