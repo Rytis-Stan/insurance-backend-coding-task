@@ -36,6 +36,7 @@ In addition to the main entry point, there is an additional executable called **
 As the codebase evolves, a list of things should be considered (in no particular order):
 
 * **.NET Version**. I wasn't sure if it's ok to upgrade the .NET version to the newest one, so decided to keep it as is. Though I did try to update the NuGet packages to the latest ones possible for the current .NET version. All version updates should be done as often as possible, especially when some packages contain security vulnerabilities, such as _Microsoft.Azure.Cosmos_ package version _3.38.1_ referencing a _Newtonsoft.Json_ package version that has security vulnerabilities.
+* **Field length restrictions.**. Code should be added to ensure that any string field (columns/property) values coming into the system, be it via the controllers, or via the databases, have maximum length restrictions using length restriction attributes and/or any other necessary code.
 * **Cover deletion**. The deletion of a cover should handle the deletion of related claims in one of the following ways, because a claim without a cover cannot exist on it's own (it's a child of the claim):
   * All child claims should simply be deleted, if any;
   * An exception should be raised if at least one claim is attached to a cover.
