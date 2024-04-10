@@ -29,7 +29,7 @@ public class ClaimsController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(CreateClaimResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(CreateClaimResponse), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateClaimAsync([FromServices] ICommand<CreateClaimArgs, CreateClaimResult> command, [Required] CreateClaimRequest request)
     {
         var response = (await command.ExecuteAsync(request.ToCommandArgs())).ToResponse();

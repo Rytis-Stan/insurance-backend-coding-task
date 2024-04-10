@@ -31,7 +31,7 @@ public class CoversController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(CreateCoverResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(CreateCoverResponse), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateCoverAsync([FromServices] ICommand<CreateCoverArgs, CreateCoverResult> command, [Required] CreateCoverRequest request)
     {
         var response = (await command.ExecuteAsync(request.ToCommandArgs())).ToResponse();
