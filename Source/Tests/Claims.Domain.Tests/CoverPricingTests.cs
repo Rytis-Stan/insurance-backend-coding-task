@@ -1,5 +1,6 @@
 ﻿using BuildingBlocks.Testing;
 using Xunit;
+using static BuildingBlocks.Testing.TestData;
 using static BuildingBlocks.Testing.TestValueBuilder;
 
 namespace Claims.Domain.Tests;
@@ -182,7 +183,7 @@ public class CoverPricingTests
 
     private void AssertReturnsCorrectPremium(CoverType coverType, int periodDurationInDays, decimal expectedPremium)
     {
-        var (startDate, endDate) = TestData.RandomFixedLengthPeriod(periodDurationInDays);
+        var (startDate, endDate) = RandomFixedLengthPeriod(periodDurationInDays);
         Assert.Equal(
             expectedPremium,
             _coverPricing.Premium(startDate, endDate, coverType)
