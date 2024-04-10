@@ -3,7 +3,7 @@ using Claims.Api.Contracts.Messages;
 
 namespace Claims.Api.Tests;
 
-// This partial class segment contains methods for calling all possible API endpoints.
+// This partial class segment that contains methods for calling all possible API endpoints.
 //
 // The reasons for having dedicated methods:
 // 1. It makes the endpoint calls slightly shorter, especially if some DTO objects need to be passed in;
